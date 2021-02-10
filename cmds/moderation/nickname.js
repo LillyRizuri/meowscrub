@@ -14,7 +14,7 @@ module.exports = class SetNickCommand extends Commando.Command {
             format: '<@user> <string>',
             examples: ['nick @frockles ManagedNIckname.mp4'],
             argsType: 'multiple',
-            clientPermissions: ['MANAGE_NICKNAMES', 'CHANGE_NICKNAME'],
+            clientPermissions: ['MANAGE_NICKNAMES'],
             userPermissions: ['MANAGE_NICKNAMES', 'CHANGE_NICKNAME'],
             guildOnly: true
         })
