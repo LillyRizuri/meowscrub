@@ -33,6 +33,25 @@ module.exports = class SetNickCommand extends Commando.Command {
             return
         }
 
+        switch (target) {
+            case message.author:
+                const banningYourselfEmbed = new Discord.MessageEmbed()
+                    .setColor(red)
+                    .setDescription("<:scrubred:797476323169533963> Change your nickname yourself. Don't rely on me.")
+                    .setFooter("e")
+                    .setTimestamp()
+                message.reply(banningYourselfEmbed)
+                return
+            case this.client.user:
+                const banningItselfEmbed = new Discord.MessageEmbed()
+                    .setColor(red)
+                    .setDescription("<:scrubred:797476323169533963> Did you ask me to change my nickname?")
+                    .setFooter("you can't change mine in commands")
+                    .setTimestamp()
+                message.reply(banningItselfEmbed)
+                return
+        }
+
         const member = message.guild.members.cache.get(target.id)
 
         args.shift()
@@ -53,7 +72,7 @@ module.exports = class SetNickCommand extends Commando.Command {
 
             const nickchangeEmbed = new Discord.MessageEmbed()
                 .setColor(green)
-                .setDescription(`<:scrubgreen:797476323316465676> Successfully changed **${target.tag}**'s nickname to:\n**${nickname}**`)
+                .setDescription(`<:scrubgreen:797476323316465676> Successfully changed **${target.tag}**'s nickname to:\n"**${nickname}**".`)
                 .setFooter("hope they aren't abusing unicode characters")
                 .setTimestamp()
             message.reply(nickchangeEmbed)
