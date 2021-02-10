@@ -89,7 +89,7 @@ module.exports = class KickCommand extends Commando.Command {
             } catch (err) {
                 message.channel.send("Can't send the reason to the offender. Maybe they have their DM disabled.")
             }
-            user.kick()
+            user.kick(`from ${message.author.tag}: ${reason}`)
             const kickConfirmEmbed = new Discord.MessageEmbed()
                 .setColor(green)
                 .setDescription(`<:scrubgreen:797476323316465676> Successfully kicked <@${target.id}>.`)

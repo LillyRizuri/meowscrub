@@ -89,7 +89,7 @@ module.exports = class BanCommand extends Commando.Command {
             } catch (err) {
                 message.channel.send("Can't send the reason to the offender. Maybe they have their DM disabled.")
             }
-            user.ban()
+            user.ban({ days: 1, reason: `from ${message.author.tag}: ${reason}` })
             const banConfirmEmbed = new Discord.MessageEmbed()
                 .setColor(green)
                 .setDescription(`<:scrubgreen:797476323316465676> Successfully banned <@${target.id}>.`)
