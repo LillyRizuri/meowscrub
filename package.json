@@ -1,0 +1,37 @@
+{
+  "name": "meowscrub",
+  "version": "2.1.0",
+  "description": "General bot. But it's very lacking.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "scrubthispie#1512",
+  "license": "ISC",
+  "dependencies": {
+    "@discordjs/opus": "^0.3.3",
+    "alexa-bot-api": "^0.2.1",
+    "axios": "^0.21.1",
+    "commando-provider-mongo": "^2.0.2",
+    "covidtracker": "^2.0.1",
+    "discord.js": "^12.5.1",
+    "discord.js-commando": "git+https://github.com/discordjs/Commando.git",
+    "dotenv": "^8.2.0",
+    "ffmpeg-static": "^4.2.7",
+    "genius-lyrics-api": "^3.0.6",
+    "mathjs": "^9.2.0",
+    "moment": "^2.29.1",
+    "mongodb": "^3.6.4",
+    "mongoose": "^5.11.15",
+    "ms": "^2.1.3",
+    "node-fetch": "^2.6.1",
+    "querystring": "^0.2.0",
+    "reconlx": "^1.0.8",
+    "request": "^2.88.2",
+    "utf8": "^3.0.0",
+    "weather-js": "^2.0.0",
+    "yt-search": "^2.7.3",
+    "ytdl-core": "^4.4.5"
+  }
+}
