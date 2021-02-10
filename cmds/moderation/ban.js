@@ -92,7 +92,7 @@ module.exports = class BanCommand extends Commando.Command {
             user.ban({ days: 1, reason: `from ${message.author.tag}: ${reason}` })
             const banConfirmEmbed = new Discord.MessageEmbed()
                 .setColor(green)
-                .setDescription(`<:scrubgreen:797476323316465676> Successfully banned <@${target.id}>.`)
+                .setDescription(`<:scrubgreen:797476323316465676> Successfully banned **${target.tag}**.`)
                 .addFields({
                     name: "Performed By",
                     value: `${message.author.tag} (${message.author.id})`

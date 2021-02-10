@@ -1,7 +1,7 @@
 const Commando = require('discord.js-commando')
 const Discord = require('discord.js')
 
-const { green, what } = require('../../colors.json')
+const { red, green, what } = require('../../colors.json')
 
 module.exports = class SetNickCommand extends Commando.Command {
     constructor(client) {
@@ -20,7 +20,7 @@ module.exports = class SetNickCommand extends Commando.Command {
         })
     }
 
-    run(message, args) {
+    async run(message, args) {
         const target = message.mentions.users.first()
 
         if (!target) {
@@ -34,7 +34,7 @@ module.exports = class SetNickCommand extends Commando.Command {
         }
 
         const member = message.guild.members.cache.get(target.id)
-        
+
         args.shift()
         const nickname = args.join(' ')
 
@@ -48,18 +48,23 @@ module.exports = class SetNickCommand extends Commando.Command {
             return
         }
 
-        member.setNickname(nickname)
+        try {
+            await member.setNickname(nickname)
 
-        const nickchangeEmbed = new Discord.MessageEmbed()
-            .setColor(what)
-            .setDescription(`<:scrubnull:797476323533783050> Successfully changed <@${target.id}>'s nickname...?`)
-            .setFooter("i hope that they aren't abusing unicode characters")
-            .setTimestamp()
-        message.reply(nickchangeEmbed)
-
-
-
-
-
+            const nickchangeEmbed = new Discord.MessageEmbed()
+                .setColor(green)
+                .setDescription(`<:scrubgreen:797476323316465676> Successfully changed **${target.tag}**'s nickname to:\n**${nickname}**`)
+                .setFooter("hope they aren't abusing unicode characters")
+                .setTimestamp()
+            message.reply(nickchangeEmbed)
+        } catch (err) {
+            const cannotChangeEmbed = new Discord.MessageEmbed()
+                .setColor(red)
+                .setDescription("<:scrubred:797476323169533963> Well, how am I supposed to change the nickname for that person?")
+                .setFooter("dumbass")
+                .setTimestamp()
+            message.reply(cannotChangeEmbed)
+            return
+        }
     }
 }

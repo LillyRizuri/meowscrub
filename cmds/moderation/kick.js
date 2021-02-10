@@ -92,7 +92,7 @@ module.exports = class KickCommand extends Commando.Command {
             user.kick(`from ${message.author.tag}: ${reason}`)
             const kickConfirmEmbed = new Discord.MessageEmbed()
                 .setColor(green)
-                .setDescription(`<:scrubgreen:797476323316465676> Successfully kicked <@${target.id}>.`)
+                .setDescription(`<:scrubgreen:797476323316465676> Successfully kicked **${target.tag}**.`)
                 .addFields({
                     name: "Performed By",
                     value: `${message.author.tag} (${message.author.id})`
