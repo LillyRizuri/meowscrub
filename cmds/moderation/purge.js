@@ -63,21 +63,20 @@ module.exports = class BanCommand extends Commando.Command {
         }
 
         const fetched = await message.channel.messages.fetch({
-            limit: amountToDelete
+            limit: amountToDelete + 1 // To include the command usage aswell
         })
 
         try {
-            await message.channel.bulkDelete(fetched)
+            await message.channel.bulkDelete(fetched) 
                 .then(messages => {
                     const purgeOKEmbed = new Discord.MessageEmbed()
                         .setColor(green)
-                        .setDescription(`<:scrubgreen:797476323316465676> Successfully purged off **${messages.size}** messages.`)
+                        .setDescription(`<:scrubgreen:797476323316465676> Successfully purged off **${amountToDelete}** messages.`)
                         .setFooter("hmmmmmmm")
                         .setTimestamp()
                     message.reply(purgeOKEmbed)
                 })
         } catch (err) {
-            console.log(err)
             const daysLimitEmbed = new Discord.MessageEmbed()
                 .setColor(red)
                 .setDescription("<:scrubred:797476323169533963> Message older than 14 days can't be cleaned off due to how Discord API works.")
