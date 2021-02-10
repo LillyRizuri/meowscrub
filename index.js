@@ -132,10 +132,3 @@ client.on('ready', async () => {
 })
 
 client.login(process.env.TOKEN)
-
-const http = require('http')
-const server = http.createServer((req, res) => {
-  res.writeHead(200)
-  res.end('ok')
-});
-server.listen(3000)
