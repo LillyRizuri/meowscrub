@@ -102,7 +102,7 @@ module.exports = class KickCommand extends Commando.Command {
                 })
                 .setFooter("what now?")
                 .setTimestamp()
-            message.reply(kickConfirmEmbed)
+            message.channel.send(kickConfirmEmbed)
         } else {
             const kickBruhEmbed = new Discord.MessageEmbed()
                 .setColor(red)
