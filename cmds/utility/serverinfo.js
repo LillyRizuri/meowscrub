@@ -35,7 +35,7 @@ module.exports = class ServerInfoCommand extends Commando.Command {
             inline: true
         }, {
             name: 'All Members',
-            value: message.guild.memberCount,
+            value: message.guild.memberCount - message.guild.members.cache.filter(m => m.user.bot).size,
             inline: true
         }, {
             name: 'No. of Roles',
@@ -70,7 +70,7 @@ module.exports = class ServerInfoCommand extends Commando.Command {
             value: message.guild.features.join('\n') || 'No Community Features',
             inline: true
         })
-        .setFooter(`ID: ${message.guild.id}`)
+        .setFooter(`ID: ${message.guild.id} | member count does exclude bots`)
         .setTimestamp()
         message.channel.send(serverInfoEmbed)
     }
