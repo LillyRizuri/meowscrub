@@ -30,12 +30,13 @@ module.exports = class AvatarCommand extends Commando.Command {
                 user = message.author
             }
 
-            const avatar = user.displayAvatarURL({ size: 2048, dynamic: false })
+            const avatar = user.displayAvatarURL({ format: 'png', size: 4096, dynamic: true })
 
             const avatarEmbed = new Discord.MessageEmbed()
                 .setColor(embedcolor)
                 .setAuthor(`${user.tag}'s Profile Picture`)
                 .setImage(avatar)
+                .setFooter(`Requested by ${message.author.tag}`, message.author.displayAvatarURL({ dynamic: true }))
             message.channel.send(avatarEmbed)
         } catch (err) {
             console.log(err)
