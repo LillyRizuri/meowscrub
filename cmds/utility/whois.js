@@ -1,5 +1,6 @@
 const Commando = require('discord.js-commando')
 const Discord = require('discord.js')
+const moment = require('moment')
 
 const { red, embedcolor } = require('../../colors.json')
 
@@ -34,36 +35,47 @@ module.exports = class WhoIsCommand extends Commando.Command {
 
             const member = guild.members.cache.get(user.id)
 
+            let rolemap = member.roles.cache
+                .sort((a, b) => b.position - a.position)
+                .map(r => r)
+                .join(', ')
+            if (rolemap.length > 1000) rolemap = 'Too many roles to display.'
+            if (!rolemap) rolemap = 'No roles.'
+
+            const thenJoin = moment(member.joinedTimestamp)
+            const timeJoin = thenJoin.from(moment())
+            const joinedAt = thenJoin.format("MMM Do, YYYY")
+            const joinedaAtHM = thenJoin.format("HH:MM")
+
+            const thenRegister = moment(user.createdTimestamp)
+            const timeRegister = thenRegister.from(moment())
+            const RegisteredAt = thenRegister.format("MMM Do, YYYY")
+            const RegisteredAtHM = thenRegister.format("HH:MM")
+
             const infoEmbed = new Discord.MessageEmbed()
                 .setColor(embedcolor)
-                .setAuthor(`Information for ${user.username}`, user.displayAvatarURL())
+                .setAuthor(`Information for ${user.username}` , user.displayAvatarURL())
                 .setThumbnail(user.displayAvatarURL())
+                .setDescription(`[<@${user.id}>]`)
                 .addFields({
-                    name: 'Username & Tag',
-                    value: user.tag,
-                    inline: true
+                    name: 'Member Details',
+                    value:
+`
+• Nickname: \`${member.nickname || 'None'}\`
+• Roles [${member.roles.cache.size}]: ${rolemap}            
+• Joined: \`${joinedAt} ${joinedaAtHM} (${timeJoin})\`      
+                    `
                 }, {
-                    name: 'NIckname',
-                    value: member.nickname || 'None',
-                    inline: true
-                }, {
-                    name: 'Bot Status',
-                    value: user.bot,
-                    inline: true
-                }, {
-                    name: 'Joined Since',
-                    value: new Date(member.joinedTimestamp).toLocaleDateString(),
-                    inline: true
-                }, {
-                    name: 'Registered Since',
-                    value: new Date(user.createdTimestamp).toLocaleDateString(),
-                    inline: true
-                }, {
-                    name: 'Role Count',
-                    value: member.roles.cache.size - 1,
-                    inline: true
+                    name: 'User Details',
+                    value:
+`
+• ID: \`${user.id}\`
+• Username: \`${user.tag}\`
+• Created: \`${RegisteredAt} ${RegisteredAtHM} (${timeRegister})\`
+• Is Bot: \`${(user.bot)}\`
+`
                 })
-                .setFooter(`User ID: ${user.id}`)
+                .setFooter(`Requested by ${message.author.tag}`, message.author.displayAvatarURL({ dynamic: true }))
                 .setTimestamp()
             channel.send(infoEmbed)
         } catch (err) {
