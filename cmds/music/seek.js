@@ -26,6 +26,7 @@ module.exports = class SeekMusicCommand extends Commando.Command {
 
     async run(message, args) {
         const seekValue = args
+        let actualSeekValue = seekValue.split(':')
         const voiceChannel = message.member.voice.channel
 
         if (!voiceChannel) {
@@ -60,13 +61,7 @@ module.exports = class SeekMusicCommand extends Commando.Command {
         }
 
         let milliseconds = Number
-        if (isNaN(milliseconds) || !Number.isInteger(milliseconds)) {
-            message.reply(invalidEmbed)
-            return
-        }
-
         // Now converting the value into milliseconds
-        let actualSeekValue = seekValue.split(':')
         if (seekValue.length < 3) {
             milliseconds = seekValue * 1000
         } else if (seekValue.length < 6) {
@@ -81,6 +76,11 @@ module.exports = class SeekMusicCommand extends Commando.Command {
             }
         }
 
+        if (isNaN(milliseconds) || !Number.isInteger(milliseconds)) {
+            message.reply(invalidEmbed)
+            return
+        }
+
         this.client.distube.seek(message, Number(milliseconds))
         const seekEmbed = new Discord.MessageEmbed()
             .setColor(green)
@@ -88,3 +88,4 @@ module.exports = class SeekMusicCommand extends Commando.Command {
         message.channel.send(seekEmbed)
     }
 }
+
