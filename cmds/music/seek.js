@@ -59,6 +59,7 @@ module.exports = class SeekMusicCommand extends Commando.Command {
             return
         }
 
+        let milliseconds = Number
         if (isNaN(milliseconds) || !Number.isInteger(milliseconds)) {
             message.reply(invalidEmbed)
             return
@@ -66,7 +67,6 @@ module.exports = class SeekMusicCommand extends Commando.Command {
 
         // Now converting the value into milliseconds
         let actualSeekValue = seekValue.split(':')
-        let milliseconds = Number
         if (seekValue.length < 3) {
             milliseconds = seekValue * 1000
         } else if (seekValue.length < 6) {
