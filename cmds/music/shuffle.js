@@ -1,7 +1,7 @@
 const Commando = require('discord.js-commando')
 const Discord = require('discord.js')
 
-const { red, what } = require('../../colors.json')
+const { red, what, green } = require('../../colors.json')
 
 module.exports = class ShuffleMusicCommand extends Commando.Command {
     constructor(client) {
@@ -21,7 +21,7 @@ module.exports = class ShuffleMusicCommand extends Commando.Command {
         if (!voiceChannel) {
             const notinvcEmbed = new Discord.MessageEmbed()
                 .setColor(what)
-                .setDescription(`<:scrubnull:797476323533783050> Go to the same VC that I'm blasting music out to stop me.`)
+                .setDescription(`<:scrubnull:797476323533783050> Go to the same VC that I'm blasting music out to shuffle the entire queue.`)
                 .setFooter("this is e")
                 .setTimestamp()
             message.reply(notinvcEmbed)

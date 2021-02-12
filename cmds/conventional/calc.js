@@ -11,7 +11,7 @@ module.exports = class AddCommand extends Commando.Command {
             aliases: ['calculate', 'math'],
             group: 'conventional',
             memberName: 'calc',
-            description: 'You can do calculation with Math.js. Check https://mathjs.org/ for more information.',
+            description: 'You can do calculation with Math.js. Check mathjs.org for more information.',
             argsType: 'single',
         })
     }
