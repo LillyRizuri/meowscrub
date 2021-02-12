@@ -3,6 +3,12 @@ const Discord = require('discord.js')
 
 const { red, what, green } = require('../../colors.json')
 
+const invalidEmbed = new Discord.MessageEmbed()
+    .setColor(red)
+    .setDescription("<:scrubred:797476323169533963> THAT is not a valid number")
+    .setFooter("bruh what")
+    .setTimestamp()
+
 module.exports = class SeekMusicCommand extends Commando.Command {
     constructor(client) {
         super(client, {
@@ -11,15 +17,15 @@ module.exports = class SeekMusicCommand extends Commando.Command {
             group: 'music',
             memberName: 'seek',
             argsType: 'single',
-            description: 'Seek the playhead by providing the timestamp. (in milliseconds)',
-            format: '<string>',
-            examples: ['seek 5200'],
+            description: 'Seek the playhead by providing the timestamp.',
+            format: '<hh:mm:ss> | <mm:ss> | <ss>',
+            examples: ['seek 26', 'seek 10:40', 'seek 01:25:40'],
             guildOnly: true
         })
     }
 
-    run(message, args) {
-        const seekValue = Number(args)
+    async run(message, args) {
+        const seekValue = args
         const voiceChannel = message.member.voice.channel
 
         if (!voiceChannel) {
@@ -27,6 +33,17 @@ module.exports = class SeekMusicCommand extends Commando.Command {
                 .setColor(what)
                 .setDescription(`<:scrubnull:797476323533783050> Join an appropriate voice channel to seek.`)
                 .setFooter("now.")
+                .setTimestamp()
+            message.reply(notInVCEmbed)
+            return
+        }
+
+        const isPlaying = await this.client.distube.isPlaying(message)
+        if (!isPlaying) {
+            const notInVCEmbed = new Discord.MessageEmbed()
+                .setColor(what)
+                .setDescription(`<:scrubnull:797476323533783050> There's no music playing. How am I supposed to seek?`)
+                .setFooter("play some music or smth")
                 .setTimestamp()
             message.reply(notInVCEmbed)
             return
@@ -42,20 +59,32 @@ module.exports = class SeekMusicCommand extends Commando.Command {
             return
         }
 
-        if (isNaN(seekValue) || !Number.isInteger(seekValue) || seekValue < 0) {
-            const noValueEmbed = new Discord.MessageEmbed()
-                .setColor(red)
-                .setDescription("<:scrubred:797476323169533963> THAT is not a valid number")
-                .setFooter("bruh what")
-                .setTimestamp()
-            message.reply(noValueEmbed)
+        if (isNaN(milliseconds) || !Number.isInteger(milliseconds)) {
+            message.reply(invalidEmbed)
             return
         }
 
-        this.client.distube.seek(message, Number(seekValue))
+        // Now converting the value into milliseconds
+        let actualSeekValue = seekValue.split(':')
+        let milliseconds = Number
+        if (seekValue.length < 3) {
+            milliseconds = seekValue * 1000
+        } else if (seekValue.length < 6) {
+            milliseconds = (+actualSeekValue[0]) * 60000 + (+actualSeekValue[1]) * 1000
+            if ((+actualSeekValue[0]) > 59 || (+actualSeekValue[1]) > 59) {
+                return message.reply(invalidEmbed)
+            }
+        } else {
+            milliseconds = (+actualSeekValue[0]) * 3600000 + (+actualSeekValue[1]) * 60000 + (+actualSeekValue[2]) * 1000
+            if ((+actualSeekValue[0]) > 23 || (+actualSeekValue[1]) > 59 || (+actualSeekValue[2]) > 59) {
+                return message.reply(invalidEmbed)
+            }
+        }
+
+        this.client.distube.seek(message, Number(milliseconds))
         const seekEmbed = new Discord.MessageEmbed()
             .setColor(green)
-            .setDescription(`<:scrubgreen:797476323316465676> Moved the playhead to **${seekValue}** milliseconds.`)
+            .setDescription(`<:scrubgreen:797476323316465676> Moved the playhead to **${seekValue}**.`)
         message.channel.send(seekEmbed)
     }
 }
