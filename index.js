@@ -1,4 +1,4 @@
-// const Discord = require('discord.js')
+const Discord = require('discord.js')
 // const client = new Discord.Client()
 require('dotenv').config()
 
@@ -6,12 +6,14 @@ const MongoClient = require('mongodb').MongoClient
 const MongoDBProvider = require('commando-provider-mongo').MongoDBProvider
 const path = require('path')
 const Commando = require('discord.js-commando')
+const DisTube = require('distube')
 
 const config = require('./config.json')
 const poll = require('./auto-poll')
 const mongo = require('./mongo')
 const autoPublish = require('./auto-publish')
 const chatbot = require('./auto-chatbot')
+const { green, what } = require('./colors.json')
 
 const client = new Commando.CommandoClient({
   owner: '692346139093106738',
@@ -30,6 +32,44 @@ client.setProvider(
 
 client.on('ready', async () => {
   console.log('ping pong, meowscrub is online.')
+  // Support for music playback
+  client.distube = new DisTube(client, { searchSongs: false, emitNewSongOnly: true, leaveOnFinish: true })
+  client.distube
+    .on('playSong', async (message, queue, song) => {
+      queue.autoplay = false // To prevent suggested songs provided by the bot
+      const playingEmbed = new Discord.MessageEmbed()
+        .setColor(green)
+        .setDescription(`
+<:scrubgreen:797476323316465676> **Now Playing:**
+[${song.name}](${song.url}) - **${song.formattedDuration}**
+`)
+        .setFooter(`Requested by: ${song.user.tag}`)
+        .setTimestamp()
+      message.channel.send(playingEmbed)
+    })
+    .on('addSong', (message, queue, song) => {
+      const playingEmbed = new Discord.MessageEmbed()
+        .setColor(green)
+        .setDescription(`
+<:scrubgreen:797476323316465676> **Added to the queue.**
+[${song.name}](${song.url}) - **${song.formattedDuration}**
+`)
+        .setFooter(`Added by: ${song.user.tag}`)
+        .setTimestamp()
+      message.channel.send(playingEmbed)
+    })
+    .on('empty', (message) => {
+      const emptyChannelEmbed = new Discord.MessageEmbed()
+        .setColor(what)
+        .setDescription("<:scrubnull:797476323533783050> **VC Empty. Leaving the channel...**")
+      message.channel.send(emptyChannelEmbed)
+    })
+    .on('finish', (message) => {
+      const endQueueEmbed = new Discord.MessageEmbed()
+        .setColor(what)
+        .setDescription("<:scrubnull:797476323533783050> **No more songs in queue. Leaving...**")
+      message.channel.send(endQueueEmbed)
+    })
   // Bot Status
     function presence() {
     let status = [

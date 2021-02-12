@@ -1,23 +1,21 @@
 const Commando = require('discord.js-commando')
 const Discord = require('discord.js')
 
-const { what, red } = require('../../colors.json')
+const { red, what } = require('../../colors.json')
 
-module.exports = class StopMusicCommand extends Commando.Command {
+module.exports = class ShuffleMusicCommand extends Commando.Command {
     constructor(client) {
         super(client, {
-            name: 'leave',
-            aliases: ['dis', 'disconnect', 'fuckoff', 'stop', 'stahp'],
+            name: 'shuffle',
             group: 'music',
-            memberName: 'leave',
-            description: 'Stop playing music for you.',
+            memberName: 'shuffle',
+            description: "Shuffle all music from the existing queue.",
             guildOnly: true
         })
     }
 
     async run(message) {
         let queue = await this.client.distube.getQueue(message)
-
         const voiceChannel = message.member.voice.channel
 
         if (!voiceChannel) {
@@ -31,16 +29,16 @@ module.exports = class StopMusicCommand extends Commando.Command {
         }
 
         if (queue) {
-            this.client.distube.stop(message)
-            const stoppedEmbed = new Discord.MessageEmbed()
-                .setColor(what)
-                .setDescription('<:scrubnull:797476323533783050> **Stopped the track.**')
-            message.channel.send(stoppedEmbed)
+            this.client.distube.shuffle(message)
+            const shuffleEmbed = new Discord.MessageEmbed()
+                .setColor(green)
+                .setDescription(`<:scrubgreen:797476323316465676> **Shuffled the entire music queue.**`)
+            message.channel.send(shuffleEmbed)
         } else if (!queue) {
             const noMusicEmbed = new Discord.MessageEmbed()
                 .setColor(red)
-                .setDescription("<:scrubred:797476323169533963> There's no music to play.")
-                .setFooter('lol')
+                .setDescription("<:scrubred:797476323169533963> There's no queue to even shuffle.")
+                .setFooter('reeeeeee')
                 .setTimestamp()
             message.reply(noMusicEmbed)
             return

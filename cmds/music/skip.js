@@ -1,16 +1,16 @@
 const Commando = require('discord.js-commando')
 const Discord = require('discord.js')
 
-const { what, red } = require('../../colors.json')
+const { red, what } = require('../../colors.json')
 
-module.exports = class StopMusicCommand extends Commando.Command {
+module.exports = class SkipMusicCommand extends Commando.Command {
     constructor(client) {
         super(client, {
-            name: 'leave',
-            aliases: ['dis', 'disconnect', 'fuckoff', 'stop', 'stahp'],
+            name: 'skip',
             group: 'music',
-            memberName: 'leave',
-            description: 'Stop playing music for you.',
+            memberName: 'skip',
+            description: "Attempt to skip a song if there's more than 1 song in the queue.",
+            clientPermissions: ['CONNECT', 'SPEAK'],
             guildOnly: true
         })
     }
@@ -31,19 +31,17 @@ module.exports = class StopMusicCommand extends Commando.Command {
         }
 
         if (queue) {
-            this.client.distube.stop(message)
-            const stoppedEmbed = new Discord.MessageEmbed()
-                .setColor(what)
-                .setDescription('<:scrubnull:797476323533783050> **Stopped the track.**')
-            message.channel.send(stoppedEmbed)
+            this.client.distube.skip(message)
+            message.channel.send('⏩ **Skipped!**')
         } else if (!queue) {
             const noMusicEmbed = new Discord.MessageEmbed()
                 .setColor(red)
-                .setDescription("<:scrubred:797476323169533963> There's no music to play.")
-                .setFooter('lol')
+                .setDescription("<:scrubred:797476323169533963> There's no music to play next.")
+                .setFooter('xd')
                 .setTimestamp()
             message.reply(noMusicEmbed)
             return
         }
+
     }
 }
