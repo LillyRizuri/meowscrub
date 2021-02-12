@@ -34,7 +34,7 @@ module.exports = class StopMusicCommand extends Commando.Command {
             this.client.distube.stop(message)
             const stoppedEmbed = new Discord.MessageEmbed()
                 .setColor(what)
-                .setDescription('<:scrubnull:797476323533783050> **Stopped the track.**')
+                .setDescription('<:scrubnull:797476323533783050> **Stopped the track, and cleaned the queue.**')
             message.channel.send(stoppedEmbed)
         } else if (!queue) {
             const noMusicEmbed = new Discord.MessageEmbed()
