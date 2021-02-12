@@ -64,6 +64,9 @@ module.exports = class SeekMusicCommand extends Commando.Command {
         // Now converting the value into milliseconds
         if (seekValue.length < 3) {
             milliseconds = seekValue * 1000
+            if (seekValue > 59) {
+                return message.reply(invalidEmbed)
+            }
         } else if (seekValue.length < 6) {
             milliseconds = (+actualSeekValue[0]) * 60000 + (+actualSeekValue[1]) * 1000
             if ((+actualSeekValue[0]) > 59 || (+actualSeekValue[1]) > 59) {
