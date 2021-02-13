@@ -38,8 +38,8 @@ module.exports = class StopMusicCommand extends Commando.Command {
             message.channel.send(stoppedEmbed)
         } else if (!queue) {
             const noMusicEmbed = new Discord.MessageEmbed()
-                .setColor(red)
-                .setDescription("<:scrubred:797476323169533963> There's no music to play.")
+                .setColor(what)
+                .setDescription("<:scrubnull:797476323533783050> There's no music to play.")
                 .setFooter('lol')
                 .setTimestamp()
             message.reply(noMusicEmbed)
