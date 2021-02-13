@@ -39,8 +39,8 @@ module.exports = class ListQueueCommand extends Commando.Command {
             message.channel.send(currentQueueEmbed)
         } else if (!queue) {
             const noMusicEmbed = new Discord.MessageEmbed()
-                .setColor(red)
-                .setDescription("<:scrubred:797476323169533963> There's no queue.")
+                .setColor(what)
+                .setDescription("<:scrubnull:797476323533783050> There's no queue.")
                 .setFooter('xd')
                 .setTimestamp()
             message.reply(noMusicEmbed)

@@ -39,6 +39,7 @@ client.on('ready', async () => {
       queue.autoplay = false // To prevent suggested songs provided by the bot
       const playingEmbed = new Discord.MessageEmbed()
         .setColor(green)
+        .setThumbnail(song.thumbnail)
         .setDescription(`
 <:scrubgreen:797476323316465676> **Now Playing:**
 [${song.name}](${song.url}) - **${song.formattedDuration}**
@@ -50,6 +51,7 @@ client.on('ready', async () => {
     .on('addSong', (message, queue, song) => {
       const playingEmbed = new Discord.MessageEmbed()
         .setColor(green)
+        .setThumbnail(song.thumbnail)
         .setDescription(`
 <:scrubgreen:797476323316465676> **Added to the queue.**
 [${song.name}](${song.url}) - **${song.formattedDuration}**
@@ -71,7 +73,7 @@ client.on('ready', async () => {
       message.channel.send(endQueueEmbed)
     })
   // Bot Status
-    function presence() {
+  function presence() {
     let status = [
       "your entire existence",
       "the spinning circle",
@@ -136,7 +138,7 @@ client.on('ready', async () => {
     })
   }
   setInterval(presence, 30000)
-  
+
   poll(client)
   autoPublish(client)
   chatbot(client)

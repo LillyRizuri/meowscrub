@@ -35,8 +35,8 @@ module.exports = class SkipMusicCommand extends Commando.Command {
             message.channel.send('⏩ **Skipped!**')
         } else if (!queue) {
             const noMusicEmbed = new Discord.MessageEmbed()
-                .setColor(red)
-                .setDescription("<:scrubred:797476323169533963> There's no music to play next.")
+                .setColor(what)
+                .setDescription("<:scrubnull:797476323533783050> There's no music to play next.")
                 .setFooter('xd')
                 .setTimestamp()
             message.reply(noMusicEmbed)

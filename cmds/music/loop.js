@@ -18,7 +18,8 @@ module.exports = class LoopMusicCommand extends Commando.Command {
         })
     }
 
-    run(message, args) {
+    async run(message, args) {
+        let queue = await this.client.distube.getQueue(message)
         const loopValue = Number(args)
         const voiceChannel = message.member.voice.channel
 
@@ -29,6 +30,16 @@ module.exports = class LoopMusicCommand extends Commando.Command {
                 .setFooter("now.")
                 .setTimestamp()
             message.reply(notInVCEmbed)
+            return
+        }
+
+        if (!queue) {
+            const noQueueEmbed = new Discord.MessageEmbed()
+                .setColor(what)
+                .setDescription(`<:scrubnull:797476323533783050> Must confirm that there's a queue first.`)
+                .setFooter("reeee")
+                .setTimestamp()
+            message.reply(noQueueEmbed)
             return
         }
 

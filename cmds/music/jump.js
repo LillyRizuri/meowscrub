@@ -17,7 +17,8 @@ module.exports = class JumpMusicCommand extends Commando.Command {
         })
     }
 
-    run(message, args) {
+    async run(message, args) {
+        let queue = await this.client.distube.getQueue(message)
         const musicNumber = Number(args)
         const voiceChannel = message.member.voice.channel
 
@@ -28,6 +29,16 @@ module.exports = class JumpMusicCommand extends Commando.Command {
                 .setFooter("this is e")
                 .setTimestamp()
             message.reply(notinvcEmbed)
+            return
+        }
+
+        if (!queue) {
+            const noQueueEmbed = new Discord.MessageEmbed()
+                .setColor(what)
+                .setDescription(`<:scrubnull:797476323533783050> There's no queue to jump.`)
+                .setFooter("reeee")
+                .setTimestamp()
+            message.reply(noQueueEmbed)
             return
         }
 

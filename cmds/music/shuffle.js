@@ -36,8 +36,8 @@ module.exports = class ShuffleMusicCommand extends Commando.Command {
             message.channel.send(shuffleEmbed)
         } else if (!queue) {
             const noMusicEmbed = new Discord.MessageEmbed()
-                .setColor(red)
-                .setDescription("<:scrubred:797476323169533963> There's no queue to even shuffle.")
+                .setColor(what)
+                .setDescription("<:scrubnull:797476323533783050> There's no queue to even shuffle.")
                 .setFooter('reeeeeee')
                 .setTimestamp()
             message.reply(noMusicEmbed)
