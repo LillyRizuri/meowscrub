@@ -11,7 +11,7 @@ module.exports = class AvatarCommand extends Commando.Command {
             group: 'utility',
             memberName: 'avatar',
             description: "Return your/someone else's avatar.",
-            argsType: 'multiple',
+            argsType: 'single',
             format: '[@user]',
             examples: ['avatar', 'avatar @frockles'],
             guildOnly: true
@@ -24,8 +24,8 @@ module.exports = class AvatarCommand extends Commando.Command {
         try {
             if (message.mentions.users.first()) {
                 user = message.mentions.users.first()
-            } else if (args[0]) {
-                user = message.guild.members.cache.get(args[0]).user
+            } else if (args) {
+                user = message.guild.members.cache.get(args).user
             } else {
                 user = message.author
             }
@@ -39,7 +39,6 @@ module.exports = class AvatarCommand extends Commando.Command {
                 .setFooter(`Requested by ${message.author.tag}`, message.author.displayAvatarURL({ dynamic: true }))
             message.channel.send(avatarEmbed)
         } catch (err) {
-            console.log(err)
             const notValidIDEmbed = new Discord.MessageEmbed()
                 .setColor(red)
                 .setDescription('<:scrubred:797476323169533963> What are you trying to do with that invalid user ID?')

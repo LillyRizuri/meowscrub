@@ -8,7 +8,7 @@ module.exports = class DocsCommand extends Commando.Command {
             name: 'docs',
             group: 'utility',
             memberName: 'docs',
-            argsType: 'multiple',
+            argsType: 'single',
             description: 'Documentation of discord.js.',
         })
     }
@@ -16,7 +16,7 @@ module.exports = class DocsCommand extends Commando.Command {
     async run(message, args) {
         const uri = `https://djsdocs.sorta.moe/v2/embed?src=stable&q=${encodeURIComponent(args)}`
 
-        if (!args[0]) {
+        if (!args) {
             const noArgsEmbed = new Discord.MessageEmbed()
                 .setColor('#2296F3')
                 .setAuthor('Discord.js Docs (stable)', 'https://images-ext-1.discordapp.net/external/5T4uh_keplxixt9k8Rnivq5dMvrLOW2Z11k-OXn-3io/https/discord.js.org/favicon.ico')

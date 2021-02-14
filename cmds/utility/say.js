@@ -54,7 +54,7 @@ module.exports = class SayCommand extends Commando.Command {
         }
 
         try {
-            textChannel.send(content)
+            textChannel.send(`${content}\n\n- ${message.author.tag}`)
                 .then(message.react('✅'))
         } catch (err) {
             const invalidChannelEmbed = new Discord.MessageEmbed()

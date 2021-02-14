@@ -38,8 +38,8 @@ module.exports = class WhoIsCommand extends Commando.Command {
             let rolemap = member.roles.cache
                 .sort((a, b) => b.position - a.position)
                 .map(r => r)
-                .join(', ')
-            if (rolemap.length > 1000) rolemap = 'Too many roles to display.'
+                .join(' ')
+            if (rolemap.length > 800) rolemap = 'Too many roles to display.'
             if (!rolemap) rolemap = 'No roles.'
 
             const thenJoin = moment(member.joinedTimestamp)
@@ -63,7 +63,7 @@ module.exports = class WhoIsCommand extends Commando.Command {
 `
 • Nickname: \`${member.nickname || 'None'}\`
 • Roles [${member.roles.cache.size}]: ${rolemap}            
-• Joined: \`${joinedAt} ${joinedaAtHM} (${timeJoin})\`      
+• Joined: \`${joinedAt} ${joinedaAtHM} (${timeJoin})\`
                     `
                 }, {
                     name: 'User Details',
@@ -72,6 +72,7 @@ module.exports = class WhoIsCommand extends Commando.Command {
 • ID: \`${user.id}\`
 • Username: \`${user.tag}\`
 • Created: \`${RegisteredAt} ${RegisteredAtHM} (${timeRegister})\`
+• Activity: \`${(user.presence.status).toProperCase()}\`   
 • Is Bot: \`${(user.bot)}\`
 `
                 })
