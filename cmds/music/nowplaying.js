@@ -23,7 +23,7 @@ module.exports = class NowPlayingCommand extends Commando.Command {
         if (!voiceChannel) {
             const notinvcEmbed = new Discord.MessageEmbed()
                 .setColor(what)
-                .setDescription(`<:scrubnull:797476323533783050> Go to the same VC that I'm blasting music out to stop me.`)
+                .setDescription(`<:scrubnull:797476323533783050> Go to the same VC that I'm blasting music out to see what I am playing.`)
                 .setFooter("this is e")
                 .setTimestamp()
             message.reply(notinvcEmbed)
