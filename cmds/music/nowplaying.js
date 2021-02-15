@@ -42,13 +42,14 @@ module.exports = class NowPlayingCommand extends Commando.Command {
         }
 
         const npEmbed = new Discord.MessageEmbed()
-        .setColor(embedcolor)
-        .setTitle(queue.songs[0].name)
-        .setURL(queue.songs[0].url)
-        .addFields({
-            name: `Requested by ${queue.songs[0].user.tag}`,
-            value: `Current Playhead: **[${queue.formattedCurrentTime}/${queue.songs[0].formattedDuration}]**`
-        })
+            .setColor(embedcolor)
+            .setTitle(`Now Playing: ${queue.songs[0].name}`)
+            .setURL(queue.songs[0].url)
+            .setThumbnail(queue.songs[0].thumbnail)
+            .setDescription(`
+• **Requested by:** \`${queue.songs[0].user.tag}\`
+• **Current Playhead:** \`${queue.formattedCurrentTime}/${queue.songs[0].formattedDuration}\`
+            `)
         message.channel.send(npEmbed)
     }
 }
