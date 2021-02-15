@@ -64,6 +64,7 @@ module.exports = class WhoIsCommand extends Commando.Command {
 • Nickname: \`${member.nickname || 'None'}\`
 • Roles [${member.roles.cache.size}]: ${rolemap}            
 • Joined: \`${joinedAt} ${joinedaAtHM} (${timeJoin})\`
+• Activity: \`${user.presence.activities[0] ? user.presence.activities[0].name : 'None'}\`
                     `
                 }, {
                     name: 'User Details',
@@ -72,8 +73,8 @@ module.exports = class WhoIsCommand extends Commando.Command {
 • ID: \`${user.id}\`
 • Username: \`${user.tag}\`
 • Created: \`${RegisteredAt} ${RegisteredAtHM} (${timeRegister})\`
-• Activity: \`${(user.presence.status).toProperCase()}\`   
-• Is Bot: \`${(user.bot)}\`
+• Status: \`${(user.presence.status).replace('dnd', 'Do Not Disturb').toProperCase()}\`   
+• Is Bot: \`${(user.bot).toString().replace('true', 'Yes').replace('false', 'No')}\`
 `
                 })
                 .setFooter(`Requested by ${message.author.tag}`, message.author.displayAvatarURL({ dynamic: true }))
