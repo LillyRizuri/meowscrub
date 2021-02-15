@@ -7,7 +7,7 @@ module.exports = class StopMusicCommand extends Commando.Command {
     constructor(client) {
         super(client, {
             name: 'leave',
-            aliases: ['dis', 'disconnect', 'fuckoff', 'stop', 'stahp'],
+            aliases: ['dis', 'disconnect', 'fuckoff'],
             group: 'music',
             memberName: 'leave',
             description: 'Stop playing music for you.',
