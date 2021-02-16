@@ -32,11 +32,6 @@ client.setProvider(
     })
 )
 
-const { GiveawayCreator } = require('discord-giveaway')
-const Creator = new GiveawayCreator(client, process.env.MONGO);
-
-client.giveaways = Creator
-
 client.on('ready', async () => {
   console.log('ping pong, meowscrub is online.')
   // Support for music playback
