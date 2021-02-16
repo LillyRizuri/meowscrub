@@ -9,15 +9,16 @@ const Commando = require('discord.js-commando')
 const DisTube = require('distube')
 
 const config = require('./config.json')
-const poll = require('./auto-poll')
+const poll = require('./events/auto-poll')
 const mongo = require('./mongo')
-const autoPublish = require('./auto-publish')
-const chatbot = require('./auto-chatbot')
+const autoPublish = require('./events/auto-publish')
+const chatbot = require('./events/auto-chatbot')
 const { green, what } = require('./colors.json')
 
 const client = new Commando.CommandoClient({
   owner: '692346139093106738',
-  commandPrefix: config.prefix
+  commandPrefix: config.prefix,
+  disableMentions: 'everyone'
 })
 
 client.setProvider(
