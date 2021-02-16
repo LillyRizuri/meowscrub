@@ -139,7 +139,7 @@ client.on('ready', async () => {
       }
     })
   }
-  setInterval(presence, 3600000)
+  setInterval(presence, 1800000)
 
   poll(client)
   autoPublish(client)
