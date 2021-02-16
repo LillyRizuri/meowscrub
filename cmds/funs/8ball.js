@@ -41,7 +41,7 @@ module.exports = class rpsCommand extends Commando.Command {
     run(message, args) {
         const question = args
         if (!question) {
-            message.reply('specify your question.')
+            message.channel.send(`🎱 | Specify a question first, **${message.author.username}**.`)
             return
         }
 
