@@ -12,7 +12,7 @@ module.exports = class WeatherCommand extends Commando.Command {
             group: 'conventional',
             memberName: 'weather',
             argsType: 'multiple',
-            description: 'Shows weather report for a specific location.)',
+            description: 'Shows weather report for a specific location.',
             format: '<location>',
             examples: ['weather hanoi']
         })
