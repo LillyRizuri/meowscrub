@@ -13,6 +13,7 @@ const poll = require('./events/auto-poll')
 const mongo = require('./mongo')
 const autoPublish = require('./events/auto-publish')
 const chatbot = require('./events/auto-chatbot')
+const welcomeMsg = require('./events/welcome-msg')
 const { green, what } = require('./colors.json')
 
 const client = new Commando.CommandoClient({
@@ -30,6 +31,11 @@ client.setProvider(
       console.error(err)
     })
 )
+
+const { GiveawayCreator } = require('discord-giveaway')
+const Creator = new GiveawayCreator(client, process.env.MONGO);
+
+client.giveaways = Creator
 
 client.on('ready', async () => {
   console.log('ping pong, meowscrub is online.')
@@ -143,6 +149,7 @@ client.on('ready', async () => {
   poll(client)
   autoPublish(client)
   chatbot(client)
+  welcomeMsg(client)
 
   const connectToMongoDB = async () => {
     await mongo().then((mongoose) => {
@@ -168,7 +175,8 @@ client.on('ready', async () => {
       ['funs', 'Some Really Simple Fun Stuff'],
       ['images', 'Pictures Retrieval'],
       ['encoders', 'Message Encoders'],
-      ['covid-related', 'COVID-19 Related Commands']
+      ['covid-related', 'COVID-19 Related Commands'],
+      ['giveaway', 'Giveaway Tools']
     ])
     .registerDefaults()
     .registerCommandsIn(path.join(__dirname, 'cmds'))
