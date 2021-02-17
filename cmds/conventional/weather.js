@@ -46,39 +46,22 @@ module.exports = class WeatherCommand extends Commando.Command {
 
             const tempF = Math.round((result[0].current.temperature * 1.8) + 32)
             const feelsLikeF = Math.round((result[0].current.feelslike * 1.8) + 32)
+            const windDisplaySplit = result[0].current.winddisplay.split('km/h')
+            const windDisplayMph = Math.round(windDisplaySplit[0] * 0.62137119223733) + ' mph' + windDisplaySplit[1]
 
 
             const weatherinfo = new Discord.MessageEmbed()
-                .setTitle(`**${current.skytext}**`)
+                .setTitle(`**UTC${location.timezone} - ${current.skytext}**`)
                 .setAuthor(`Weather report for ${current.observationpoint}`)
                 .setThumbnail(current.imageUrl)
                 .setColor(embedcolor)
-                .addFields({
-                    name: 'Timezone',
-                    value: `UTC${location.timezone}`,
-                    inline: true
-                }, {
-                    name: 'Degree Type',
-                    value: 'Celsius\nFahrenheit',
-                    inline: true
-                }, {
-                    name: 'Temperature',
-                    value: `${current.temperature}°C\n${tempF}°F`,
-                    inline: true
-                }, {
-                    name: 'Wind',
-                    value: `${current.winddisplay}`,
-                    inline: true
-                }, {
-                    name: 'Feels like',
-                    value: `${current.feelslike}°C\n${feelsLikeF}°F`,
-                    inline: true
-                }, {
-                    name: 'Humidity',
-                    value: `${current.humidity}%`,
-                    inline: true
-                })
-                .setFooter('Weather Data from MSN')
+                .setDescription(`
+• Temperature: \`${current.temperature}°C (${tempF}°F)\`                    
+• Feels Like: \`${current.feelslike}°C (${feelsLikeF}°F)\`           
+• Wind: \`${current.winddisplay} (${windDisplayMph})\`
+• Humidity: \`${current.humidity}%\`      
+`)
+                .setFooter('weather.service.msn.com')
                 .setTimestamp()
             message.channel.send(weatherinfo)
         })
