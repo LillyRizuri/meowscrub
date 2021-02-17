@@ -65,6 +65,15 @@ module.exports = class PlayMusicCommand extends Commando.Command {
             return
         }
 
-        this.client.distube.play(message, music)
+        try {
+            this.client.distube.play(message, music)
+        } catch (err) {
+            const noResultsEmbed = new Discord.MessageEmbed()
+                .setColor(red)
+                .setDescription("<:scrubred:797476323169533963> I can't find any results for this, even with my power.")
+                .setFooter("what the heck are you searching")
+                .setTimestamp()
+            return message.reply(noResultsEmbed)
+        }
     }
 }
