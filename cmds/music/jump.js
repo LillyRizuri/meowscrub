@@ -53,12 +53,12 @@ module.exports = class JumpMusicCommand extends Commando.Command {
         }
 
         if (musicNumber < 0 || isNaN(musicNumber) || !Number.isInteger(musicNumber)) {
-            const noValueEmbed = new Discord.MessageEmbed()
+            const invalidEmbed = new Discord.MessageEmbed()
                 .setColor(red)
                 .setDescription(`<:scrubred:797476323169533963> Right off the bat, I can see that the value isn't valid.`)
                 .setFooter("jeebus")
                 .setTimestamp()
-            message.reply(noValueEmbed)
+            message.reply(invalidEmbed)
             return
         }
 
