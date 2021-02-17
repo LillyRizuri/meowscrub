@@ -22,7 +22,6 @@ module.exports = class PlayMusicCommand extends Commando.Command {
     async run(message, args) {
         const music = args
         const voiceChannel = message.member.voice.channel
-
         if (!voiceChannel) {
             const notInVCEmbed = new Discord.MessageEmbed()
                 .setColor(what)
@@ -65,15 +64,6 @@ module.exports = class PlayMusicCommand extends Commando.Command {
             return
         }
 
-        try {
-            this.client.distube.play(message, music)
-        } catch (err) {
-            const noResultsEmbed = new Discord.MessageEmbed()
-                .setColor(red)
-                .setDescription("<:scrubred:797476323169533963> I can't find any results for this, even with my power.")
-                .setFooter("what the heck are you searching")
-                .setTimestamp()
-            return message.reply(noResultsEmbed)
-        }
+        this.client.distube.play(message, music)
     }
 }

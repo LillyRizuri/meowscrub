@@ -74,6 +74,13 @@ client.on('ready', async () => {
         .setDescription("<:scrubnull:797476323533783050> **No more songs in queue. Leaving...**")
       message.channel.send(endQueueEmbed)
     })
+    .on("error", (message, err) => {
+      const errorEmbed = new Discord.MessageEmbed()
+        .setColor('#ff0000')
+        .setTitle('(Un)expected Error Occurred.')
+        .setDescription(`\`\`\`${err}\`\`\``)
+      message.channel.send(errorEmbed)
+    })
   // Bot Status
   function presence() {
     let status = [
