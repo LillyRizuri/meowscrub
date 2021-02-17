@@ -15,6 +15,8 @@ const autoPublish = require('./events/auto-publish')
 const chatbot = require('./events/auto-chatbot')
 const welcomeMsg = require('./events/welcome-msg')
 const { green, what } = require('./colors.json')
+const snipes = require("./snipe.json")
+const snip = require("./events/msg-snipe")
 
 const client = new Commando.CommandoClient({
   owner: '692346139093106738',
@@ -31,6 +33,15 @@ client.setProvider(
       console.error(err)
     })
 )
+
+client.on('messageDelete', async message => {
+  const args = message.content.split(" ")
+  const author = message.author.id
+  const tag = message.author.tag
+  const time = message.createdAt
+  const icon = message.author.displayAvatarURL()
+  snip.run(message, args, client, author, tag, time, icon)
+})
 
 client.on('ready', async () => {
   console.log('ping pong, meowscrub is online.')
