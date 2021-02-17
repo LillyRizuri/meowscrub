@@ -14,14 +14,14 @@ module.exports = class LyricsCommand extends Commando.Command {
             group: 'music',
             memberName: 'lyrics',
             description: 'Lyrics from a song given.',
-            argsType: 'multiple',
+            argsType: 'single',
             format: '<string>',
             examples: ['lyrics here comes the sun']
         })
     }
 
     async run(message, args) {
-        const songInput = args.slice(0).join(' ')
+        const songInput = args
         const trim = (str, max) => ((str.length > max) ? `${str.slice(0, max - 3)}...` : str)
 
         const options = {

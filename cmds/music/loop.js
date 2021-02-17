@@ -20,7 +20,7 @@ module.exports = class LoopMusicCommand extends Commando.Command {
 
     async run(message, args) {
         let queue = await this.client.distube.getQueue(message)
-        const loopValue = Number(args)
+        let mode = null
         const voiceChannel = message.member.voice.channel
 
         if (!voiceChannel) {
@@ -43,31 +43,43 @@ module.exports = class LoopMusicCommand extends Commando.Command {
             return
         }
 
-        if (!loopValue) {
+        if (!args) {
             const noValueEmbed = new Discord.MessageEmbed()
                 .setColor(what)
-                .setDescription(`<:scrubnull:797476323533783050> There's no value to set.`)
-                .setFooter("0 = Disable | 1 = Loop a song | 3 = Loop the queue")
+                .setDescription("<:scrubnull:797476323533783050> There's no value to set.\nEither it's `queue`, `song`, or turn `off`.")
+                .setFooter("wgat the")
                 .setTimestamp()
             message.reply(noValueEmbed)
             return
         }
-        if (loopValue > 2 || loopValue < 0 || isNaN(loopValue) || !Number.isInteger(loopValue)) {
+
+        switch (args) {
+            case "off":
+                mode = 0
+                break
+            case "song":
+                mode = 1
+                break
+            case "queue":
+                mode = 2
+                break
+        }
+
+        try {
+            mode = this.client.distube.setRepeatMode(message, mode)
+            mode = mode ? mode == 2 ? "Repeat Queue" : "Repeat Song" : "Off"
+            const selLoopEmbed = new Discord.MessageEmbed()
+                .setColor(green)
+                .setDescription(`<:scrubgreen:797476323316465676> Set repeat option to: **${mode}**`)
+            message.channel.send(selLoopEmbed)
+        } catch (err) {
             const invalidValueEmbed = new Discord.MessageEmbed()
                 .setColor(red)
-                .setDescription(`<:scrubred:797476323169533963> Your value isn't valid.`)
-                .setFooter("0 = Disable | 1 = Loop a song | 3 = Loop the queue")
+                .setDescription("<:scrubred:797476323169533963> THAT is not a valid value.\nEither it's `queue`, `song`, or turn `off`.")
+                .setFooter("i got shock by accident once, don't do that")
                 .setTimestamp()
             message.reply(invalidValueEmbed)
             return
         }
-
-        let mode = this.client.distube.setRepeatMode(message, parseInt(loopValue))
-        mode = mode ? mode == 2 ? "Repeat Queue" : "Repeat Song" : "Off"
-        const selLoopEmbed = new Discord.MessageEmbed()
-            .setColor(green)
-            .setDescription(`<:scrubgreen:797476323316465676> Set repeat option to: **${mode}**`)
-        message.channel.send(selLoopEmbed)
-
     }
 }

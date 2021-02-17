@@ -12,7 +12,7 @@ module.exports = class CovidStates extends Commando.Command {
             name: 'covidstate',
             group: 'covid-related',
             memberName: 'covidstate',
-            argsType: 'multiple',
+            argsType: 'single',
             description: 'Display stats about COVID-19 in an US state.',
             format: '<state>',
             examples: ['state texas']
@@ -20,7 +20,7 @@ module.exports = class CovidStates extends Commando.Command {
     }
 
     async run(message, args) {
-        if (!args[0]) {
+        if (!args) {
             const noInputEmbed = new Discord.MessageEmbed()
                 .setColor(what)
                 .setDescription("<:scrubnull:797476323533783050> Are you gonna type in a state's name or not?")
@@ -32,7 +32,7 @@ module.exports = class CovidStates extends Commando.Command {
         
         message.channel.send('Retrieving Informations, I guess...')
 
-        const stateInput = args.join(' ').toProperCase()
+        const stateInput = args.toProperCase()
 
         const state = await covid.getState({ state: stateInput })
         if (!state) {

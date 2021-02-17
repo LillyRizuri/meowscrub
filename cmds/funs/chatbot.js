@@ -10,7 +10,7 @@ module.exports = class chatCommand extends Commando.Command {
             aliases: ['cb', 'c'],
             group: 'funs',
             memberName: 'chatbot',
-            argsType: 'multiple',
+            argsType: 'single',
             description: "Chat with a dumb self.",
             format: '<input>',
             examples: ['chatbot How are you?'],
@@ -18,7 +18,7 @@ module.exports = class chatCommand extends Commando.Command {
     }
 
     run(message, args) {
-        const input = args.join(' ')
+        const input = args
         if (!input) return message.reply("You ain't gonna reply to me?")
         
         ai.getReply(input).then(reply => {

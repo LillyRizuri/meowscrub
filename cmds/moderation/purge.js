@@ -12,7 +12,7 @@ module.exports = class BanCommand extends Commando.Command {
             description: "Purge messages in an easy way.",
             format: '<number>',
             examples: ['purge 25'],
-            argsType: 'multiple',
+            argsType: 'single',
             clientPermissions: ['MANAGE_MESSAGES', 'READ_MESSAGE_HISTORY'],
             userPermissions: ['MANAGE_MESSAGES', 'READ_MESSAGE_HISTORY'],
             guildOnly: true
@@ -20,7 +20,7 @@ module.exports = class BanCommand extends Commando.Command {
     }
 
     async run(message, args) {
-        if (!args[0]) {
+        if (!args) {
             const noValueEmbed = new Discord.MessageEmbed()
                 .setColor(what)
                 .setDescription("<:scrubnull:797476323533783050> No valid numbers of messages that you want to clean...")
@@ -30,7 +30,7 @@ module.exports = class BanCommand extends Commando.Command {
             return
         }
 
-        const amountToDelete = Number(args[0], 10)
+        const amountToDelete = Number(args, 10)
 
         if (isNaN(amountToDelete)) {
             const purgeNanEmbed = new Discord.MessageEmbed()

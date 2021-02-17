@@ -11,7 +11,7 @@ module.exports = class WeatherCommand extends Commando.Command {
             aliases: ['w'],
             group: 'conventional',
             memberName: 'weather',
-            argsType: 'multiple',
+            argsType: 'single',
             description: 'Shows weather report for a specific location.',
             format: '<location>',
             examples: ['weather hanoi']
@@ -19,9 +19,9 @@ module.exports = class WeatherCommand extends Commando.Command {
     }
 
     run(message, args) {
-        weather.find({ search: args.join(" "), degreeType: 'C' }, function (error, result) {
+        weather.find({ search: args, degreeType: 'C' }, function (error, result) {
             // 'C' can be changed to 'F' for farneheit results
-            if (!args[0]) {
+            if (!args) {
                 const noLocationEmbed = new Discord.MessageEmbed()
                     .setColor(what)
                     .setDescription('<:scrubnull:797476323533783050> Specify a location in order to continue.')
@@ -51,16 +51,16 @@ module.exports = class WeatherCommand extends Commando.Command {
 
 
             const weatherinfo = new Discord.MessageEmbed()
-                .setTitle(`**UTC${location.timezone} - ${current.skytext}**`)
+                .setTitle(`**UTC${location.timezone} | ${current.skytext}**`)
                 .setAuthor(`Weather report for ${current.observationpoint}`)
                 .setThumbnail(current.imageUrl)
                 .setColor(embedcolor)
-                .setDescription(`
-• Temperature: \`${current.temperature}°C (${tempF}°F)\`                    
-• Feels Like: \`${current.feelslike}°C (${feelsLikeF}°F)\`           
-• Wind: \`${current.winddisplay} (${windDisplayMph})\`
-• Humidity: \`${current.humidity}%\`      
-`)
+                .setDescription(`\`\`\`
+• Temperature: ${current.temperature}°C (${tempF}°F)               
+• Feels Like: ${current.feelslike}°C (${feelsLikeF}°F)         
+• Wind: ${current.winddisplay} (${windDisplayMph})
+• Humidity: ${current.humidity}%
+\`\`\``)
                 .setFooter('weather.service.msn.com')
                 .setTimestamp()
             message.channel.send(weatherinfo)
