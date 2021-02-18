@@ -142,10 +142,15 @@ client.on('ready', async () => {
       "discord.py's quality",
       "the dogecoin",
       "the sea",
-      "the bullshit man bullshiting",
+      "the bullshit man bullshitting",
       "the chemist testing chemicals",
       "someone hiking",
-      "someone turning into blue"
+      "someone turning into blue",
+      "online classes",
+      "vsauce i guess",
+      "an old computer from nowhere",
+      "neighbor's house",
+      "the clock ticking"
     ]
     let randomStatus = Math.floor(Math.random() * status.length)
 

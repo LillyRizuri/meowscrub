@@ -13,7 +13,7 @@ module.exports = {
             icon: icon
         }
         let snipez = JSON.stringify(snipe);
-        fs.writeFile("../snipe.json", snipez, (err) => console.error)
+        fs.writeFile("./snipe.json", snipez, (err) => console.error)
         console.log('Noticed a deleted message.')
     }
 }
