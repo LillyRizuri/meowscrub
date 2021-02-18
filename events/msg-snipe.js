@@ -1,4 +1,4 @@
-const fs = require("fs")
+const fs = require("fs");
 const snipe = require("../snipe.json")
 module.exports = {
     run(message, args, client, author, tag, time, icon) {
@@ -12,8 +12,13 @@ module.exports = {
             time: time,
             icon: icon
         }
-        let snipez = JSON.stringify(snipe);
-        fs.writeFile("./snipe.json", snipez, (err) => console.error)
-        console.log('Noticed a deleted message.')
+
+        // To log deleted messages into snipe.json
+        // let snipez = JSON.stringify(snipe)
+        // fs.writeFile("./snipe.json", snipez, (err) => console.error) 
+        
+        setTimeout(function () {
+            delete(snipe[message.channel.id])
+        }, 60000)
     }
 }
