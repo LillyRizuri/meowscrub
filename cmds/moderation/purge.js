@@ -8,6 +8,7 @@ module.exports = class BanCommand extends Commando.Command {
         super(client, {
             name: 'purge',
             group: 'moderation',
+            aliases: ['clean'],
             memberName: 'purge',
             description: "Purge messages in an easy way.",
             format: '<number>',
@@ -67,7 +68,7 @@ module.exports = class BanCommand extends Commando.Command {
         })
 
         try {
-            await message.channel.bulkDelete(fetched) 
+            await message.channel.bulkDelete(fetched)
                 .then(messages => {
                     const purgeOKEmbed = new Discord.MessageEmbed()
                         .setColor(green)
@@ -75,6 +76,9 @@ module.exports = class BanCommand extends Commando.Command {
                         .setFooter("hmmmmmmm")
                         .setTimestamp()
                     message.reply(purgeOKEmbed)
+                    .then(msg => {
+                        msg.delete({ timeout: 5000 })
+                    })
                 })
         } catch (err) {
             const daysLimitEmbed = new Discord.MessageEmbed()
