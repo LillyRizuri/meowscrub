@@ -6,7 +6,7 @@ const MongoClient = require('mongodb').MongoClient
 const MongoDBProvider = require('commando-provider-mongo').MongoDBProvider
 const path = require('path')
 const Commando = require('discord.js-commando')
-const DisTube = require('distube')
+// const DisTube = require('distube')
 
 const config = require('./config.json')
 const poll = require('./events/auto-poll')
@@ -46,52 +46,52 @@ client.on('messageDelete', async message => {
 client.on('ready', async () => {
   console.log('ping pong, meowscrub is online.')
   // Support for music playback
-  client.distube = new DisTube(client, { searchSongs: false, emitNewSongOnly: true, leaveOnFinish: true })
-  client.distube
-    .on('playSong', async (message, queue, song) => {
-      queue.autoplay = false // To prevent suggested songs provided by the bot
-      const playingEmbed = new Discord.MessageEmbed()
-        .setColor(green)
-        .setThumbnail(song.thumbnail)
-        .setDescription(`
-<:scrubgreen:797476323316465676> **Now Playing:**
-[${song.name}](${song.url}) - **${song.formattedDuration}**
-`)
-        .setFooter(`Requested by: ${song.user.tag}`)
-        .setTimestamp()
-      message.channel.send(playingEmbed)
-    })
-    .on('addSong', (message, queue, song) => {
-      const playingEmbed = new Discord.MessageEmbed()
-        .setColor(green)
-        .setThumbnail(song.thumbnail)
-        .setDescription(`
-<:scrubgreen:797476323316465676> **Added to the queue.**
-[${song.name}](${song.url}) - **${song.formattedDuration}**
-`)
-        .setFooter(`Added by: ${song.user.tag}`)
-        .setTimestamp()
-      message.channel.send(playingEmbed)
-    })
-    .on('empty', (message) => {
-      const emptyChannelEmbed = new Discord.MessageEmbed()
-        .setColor(what)
-        .setDescription("<:scrubnull:797476323533783050> **VC Empty. Leaving the channel...**")
-      message.channel.send(emptyChannelEmbed)
-    })
-    .on('finish', (message) => {
-      const endQueueEmbed = new Discord.MessageEmbed()
-        .setColor(what)
-        .setDescription("<:scrubnull:797476323533783050> **No more songs in queue. Leaving...**")
-      message.channel.send(endQueueEmbed)
-    })
-    .on("error", (message, err) => {
-      const errorEmbed = new Discord.MessageEmbed()
-        .setColor('#ff0000')
-        .setTitle('(Un)expected Error Occurred.')
-        .setDescription(`\`\`\`${err}\`\`\``)
-      message.channel.send(errorEmbed)
-    })
+  //   client.distube = new DisTube(client, { searchSongs: false, emitNewSongOnly: true, leaveOnFinish: true })
+  //   client.distube
+  //     .on('playSong', async (message, queue, song) => {
+  //       queue.autoplay = false // To prevent suggested songs provided by the bot
+  //       const playingEmbed = new Discord.MessageEmbed()
+  //         .setColor(green)
+  //         .setThumbnail(song.thumbnail)
+  //         .setDescription(`
+  // <:scrubgreen:797476323316465676> **Now Playing:**
+  // [${song.name}](${song.url}) - **${song.formattedDuration}**
+  // `)
+  //         .setFooter(`Requested by: ${song.user.tag}`)
+  //         .setTimestamp()
+  //       message.channel.send(playingEmbed)
+  //     })
+  //     .on('addSong', (message, queue, song) => {
+  //       const playingEmbed = new Discord.MessageEmbed()
+  //         .setColor(green)
+  //         .setThumbnail(song.thumbnail)
+  //         .setDescription(`
+  // <:scrubgreen:797476323316465676> **Added to the queue.**
+  // [${song.name}](${song.url}) - **${song.formattedDuration}**
+  // `)
+  //         .setFooter(`Added by: ${song.user.tag}`)
+  //         .setTimestamp()
+  //       message.channel.send(playingEmbed)
+  //     })
+  //     .on('empty', (message) => {
+  //       const emptyChannelEmbed = new Discord.MessageEmbed()
+  //         .setColor(what)
+  //         .setDescription("<:scrubnull:797476323533783050> **VC Empty. Leaving the channel...**")
+  //       message.channel.send(emptyChannelEmbed)
+  //     })
+  //     .on('finish', (message) => {
+  //       const endQueueEmbed = new Discord.MessageEmbed()
+  //         .setColor(what)
+  //         .setDescription("<:scrubnull:797476323533783050> **No more songs in queue. Leaving...**")
+  //       message.channel.send(endQueueEmbed)
+  //     })
+  //     .on("error", (message, err) => {
+  //       const errorEmbed = new Discord.MessageEmbed()
+  //         .setColor('#ff0000')
+  //         .setTitle('(Un)expected Error Occurred.')
+  //         .setDescription(`\`\`\`${err}\`\`\``)
+  //       message.channel.send(errorEmbed)
+  //     })
   // Bot Status
   function presence() {
     let status = [
