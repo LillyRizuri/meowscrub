@@ -15,6 +15,7 @@
     "axios": "^0.21.1",
     "commando-provider-mongo": "^2.0.2",
     "covidtracker": "^2.0.1",
+    "discord-giveaways": "^4.2.1",
     "discord.js": "^12.5.1",
     "discord.js-commando": "git+https://github.com/discordjs/Commando.git",
     "distube": "^2.8.8",
