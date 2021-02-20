@@ -11,7 +11,7 @@ module.exports = class KickCommand extends Commando.Command {
             memberName: 'kick',
             description: "Kick a member. It's that easy.",
             argsType: 'multiple',
-            format: '<@user> [reason]',
+            format: '<@user/userID> [reason]',
             examples: ['kick @frockles get out pls'],
             clientPermissions: ['KICK_MEMBERS'],
             userPermissions: ['KICK_MEMBERS'],
@@ -20,7 +20,7 @@ module.exports = class KickCommand extends Commando.Command {
     }
 
     async run(message, args) {
-        const target = message.mentions.users.first()
+        const target = message.mentions.users.first() || message.guild.members.cache.get(args[0]).user
         let reason
 
         if (!target) {

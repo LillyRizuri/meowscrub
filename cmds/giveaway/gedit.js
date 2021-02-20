@@ -30,7 +30,7 @@ module.exports = class EditGiveawayCommand extends Commando.Command {
             const notEnoughEmbed = new Discord.MessageEmbed()
                 .setColor(what)
                 .setDescription("<:scrubnull:797476323533783050> You didn't provide all of the arguments.")
-                .setFooter('example: gedit 812294604249628692 30m 5 Awesome T-Shirt')
+                .setFooter(`example: ${message.guild.commandPrefix}gedit 812294604249628692 30m 5 Awesome T-Shirt`)
                 .setTimestamp()
             message.reply(notEnoughEmbed)
             return

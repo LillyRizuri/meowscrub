@@ -11,7 +11,7 @@ module.exports = class BanCommand extends Commando.Command {
             memberName: 'ban',
             description: "Ban a member in the current guild. Yes.",
             argsType: 'multiple',
-            format: '<@user> [reason]',
+            format: '<@user/userID> [reason]',
             examples: ['ban @frockles not complying to the rules'],
             clientPermissions: ['BAN_MEMBERS'],
             userPermissions: ['BAN_MEMBERS'],
@@ -20,7 +20,7 @@ module.exports = class BanCommand extends Commando.Command {
     }
 
     async run(message, args) {
-        let target = message.mentions.users.first()
+        let target = message.mentions.users.first() || message.guild.members.cache.get(args[0]).user
         let reason
 
         if (!target) {
