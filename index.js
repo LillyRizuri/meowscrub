@@ -14,7 +14,7 @@ const mongo = require('./mongo')
 const autoPublish = require('./events/auto-publish')
 const chatbot = require('./events/auto-chatbot')
 const welcomeMsg = require('./events/welcome-msg')
-const { green, what } = require('./colors.json')
+const { green, what, embedcolor } = require('./colors.json')
 const snip = require("./events/msg-snipe")
 
 const client = new Commando.CommandoClient({
@@ -33,15 +33,16 @@ client.setProvider(
     })
 )
 
-// please use discord-giveaways@4.2.1 instead
 const { GiveawaysManager } = require("discord-giveaways")
 
 const manager = new GiveawaysManager(client, {
   storage: "./giveaways.json",
   updateCountdownEvery: 10000,
+  endedGiveawaysLifetime: 604800000,
   default: {
     botsCanWin: false,
-    embedColor: "#FF0000",
+    embedColor: "#DD2E44",
+    embedColorEnd: embedcolor,
     reaction: "🎉"
   }
 })

@@ -31,7 +31,12 @@ module.exports = class RerollGiveawayCommand extends Commando.Command {
             return
         }
 
-        this.client.giveawaysManager.reroll(messageID)
+        this.client.giveawaysManager.reroll(messageID, {
+            messages: {
+                congrat: 'New winner(s): {winners}! Congratulations!\n{messageURL}',
+                error: 'No valid participations entry, so no winners can be chosen.'
+            }
+        })
             .then(() => {
                 const confirmEmbed = new Discord.MessageEmbed()
                     .setColor(green)
