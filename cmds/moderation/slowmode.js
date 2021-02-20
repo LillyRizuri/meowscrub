@@ -65,7 +65,7 @@ module.exports = class SlowModeCommand extends Commando.Command {
             return
         }
 
-        channel.setRateLimitPerUser(args[0])
+        channel.setRateLimitPerUser(args[0], `Operation done by ${message.author.tag}`)
 
         const slowModeOKEmbed = new Discord.MessageEmbed()
             .setColor(green)

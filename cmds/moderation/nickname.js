@@ -68,7 +68,7 @@ module.exports = class SetNickCommand extends Commando.Command {
         }
 
         try {
-            await member.setNickname(nickname)
+            await member.setNickname(nickname, `Operation done by ${message.author.tag}`)
 
             const nickchangeEmbed = new Discord.MessageEmbed()
                 .setColor(green)
