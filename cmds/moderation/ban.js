@@ -20,10 +20,7 @@ module.exports = class BanCommand extends Commando.Command {
     }
 
     async run(message, args) {
-        let target = message.mentions.users.first() || message.guild.members.cache.get(args[0]).user
-        let reason
-
-        if (!target) {
+        if (!args[0]) {
             const noTargetEmbed = new Discord.MessageEmbed()
                 .setColor(what)
                 .setDescription("<:scrubnull:797476323533783050> Who do you want to ban? Get it right.")
@@ -32,6 +29,9 @@ module.exports = class BanCommand extends Commando.Command {
             message.reply(noTargetEmbed)
             return
         }
+
+        let reason
+        let target = message.mentions.users.first() || message.guild.members.cache.get(args[0]).user
 
         switch (target) {
             case message.author:
