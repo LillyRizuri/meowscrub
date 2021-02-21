@@ -64,15 +64,16 @@ module.exports = class BanCommand extends Commando.Command {
         }
 
         const fetched = await message.channel.messages.fetch({
-            limit: amountToDelete + 1 // To include the command usage aswell
+            limit: amountToDelete
         })
 
         try {
+            message.delete()
             await message.channel.bulkDelete(fetched)
                 .then(messages => {
                     const purgeOKEmbed = new Discord.MessageEmbed()
                         .setColor(green)
-                        .setDescription(`<:scrubgreen:797476323316465676> Successfully purged off **${amountToDelete}** messages.`)
+                        .setDescription(`<:scrubgreen:797476323316465676> Successfully purged off **${messages.size}** messages.`)
                         .setFooter("hmmmmmmm")
                         .setTimestamp()
                     message.reply(purgeOKEmbed)
