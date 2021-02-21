@@ -23,16 +23,6 @@ module.exports = class HackBanCommand extends Commando.Command {
         let userId = args[0]
         let reason
 
-        if (!userId || isNaN(userId)) {
-            const noTargetEmbed = new Discord.MessageEmbed()
-                .setColor(what)
-                .setDescription("<:scrubnull:797476323533783050> Who do you want to ban outside the server? Get it right.")
-                .setFooter("hackbanning for good reason?")
-                .setTimestamp()
-            message.reply(noTargetEmbed)
-            return
-        }
-
         if (message.mentions.users.first()) {
             const noMentionsEmbed = new Discord.MessageEmbed()
                 .setColor(red)
@@ -43,8 +33,18 @@ module.exports = class HackBanCommand extends Commando.Command {
             return
         }
 
+        if (!userId || isNaN(userId)) {
+            const noTargetEmbed = new Discord.MessageEmbed()
+                .setColor(what)
+                .setDescription("<:scrubnull:797476323533783050> Who do you want to ban outside the server? Get it right.")
+                .setFooter("hackbanning for good reason?")
+                .setTimestamp()
+            message.reply(noTargetEmbed)
+            return
+        }
+
         switch (userId) {
-            case message.author.setDescription:
+            case message.author.id:
                 const banningYourselfEmbed = new Discord.MessageEmbed()
                     .setColor(red)
                     .setDescription("<:scrubred:797476323169533963> Banning yourself with your ID? Keep dreaming.")
