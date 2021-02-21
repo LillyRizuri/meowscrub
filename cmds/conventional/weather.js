@@ -55,12 +55,12 @@ module.exports = class WeatherCommand extends Commando.Command {
                 .setAuthor(`Weather report for ${current.observationpoint}`)
                 .setThumbnail(current.imageUrl)
                 .setColor(embedcolor)
-                .setDescription(`\`\`\`
-• Temperature: ${current.temperature}°C (${tempF}°F)               
-• Feels Like: ${current.feelslike}°C (${feelsLikeF}°F)         
-• Wind: ${current.winddisplay} (${windDisplayMph})
-• Humidity: ${current.humidity}%
-\`\`\``)
+                .setDescription(`
+• **Temperature:** ${current.temperature}°C (${tempF}°F)               
+• **Feels Like:** ${current.feelslike}°C (${feelsLikeF}°F)         
+• **Wind:** ${current.winddisplay} (${windDisplayMph})
+• **Humidity:** ${current.humidity}%
+`)
                 .setFooter('weather.service.msn.com')
                 .setTimestamp()
             message.channel.send(weatherinfo)
