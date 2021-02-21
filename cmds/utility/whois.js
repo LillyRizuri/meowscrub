@@ -64,8 +64,8 @@ module.exports = class WhoIsCommand extends Commando.Command {
 
             const infoEmbed = new Discord.MessageEmbed()
                 .setColor(embedcolor)
-                .setAuthor(`Information for ${user.username}`, user.displayAvatarURL())
-                .setThumbnail(user.displayAvatarURL())
+                .setAuthor(`Information for ${user.username}`, user.displayAvatarURL({ dynamic: true }))
+                .setThumbnail(user.displayAvatarURL({ dynamic: true }))
                 .setDescription(`[<@${user.id}>]`)
                 .addFields({
                     name: 'Member Details',
@@ -105,8 +105,8 @@ module.exports = class WhoIsCommand extends Commando.Command {
 
                         const infoEmbed = new Discord.MessageEmbed()
                             .setColor(embedcolor)
-                            .setAuthor(`Information for ${user.username}`, user.displayAvatarURL())
-                            .setThumbnail(user.displayAvatarURL())
+                            .setAuthor(`Information for ${user.username}`, user.displayAvatarURL({ dynamic: true }))
+                            .setThumbnail(user.displayAvatarURL({ dynamic: true }))
                             .setDescription(`[<@${user.id}>]`)
                             .addFields({
                                 name: 'User Details',
@@ -149,8 +149,8 @@ module.exports = class WhoIsCommand extends Commando.Command {
 
                     const infoEmbed = new Discord.MessageEmbed()
                         .setColor(embedcolor)
-                        .setAuthor(`Information for ${user.username}`, user.displayAvatarURL())
-                        .setThumbnail(user.displayAvatarURL())
+                        .setAuthor(`Information for ${user.username}`, user.displayAvatarURL({ dynamic: true }))
+                        .setThumbnail(user.displayAvatarURL({ dynamic: true }))
                         .setDescription(`[<@${user.id}>]`)
                         .addFields({
                             name: 'Member Details',
@@ -203,8 +203,8 @@ module.exports = class WhoIsCommand extends Commando.Command {
 
             const infoEmbed = new Discord.MessageEmbed()
                 .setColor(embedcolor)
-                .setAuthor(`Information for ${user.username}`, user.displayAvatarURL())
-                .setThumbnail(user.displayAvatarURL())
+                .setAuthor(`Information for ${user.username}`, user.displayAvatarURL({ dynamic: true }))
+                .setThumbnail(user.displayAvatarURL({ dynamic: true }))
                 .setDescription(`[<@${user.id}>]`)
                 .addFields({
                     name: 'Member Details',
