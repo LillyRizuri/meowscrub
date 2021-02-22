@@ -120,7 +120,9 @@ client.on('ready', async () => {
       }
     })
   }
-  setInterval(presence, 1800000)
+  
+  const randomTimerStatus = Math.floor(Math.random() * 600000 + 30000)
+  setInterval(presence, randomTimerStatus)
 
   poll(client)
   autoPublish(client)
