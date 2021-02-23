@@ -46,7 +46,7 @@ module.exports = class WikipediaCommand extends Commando.Command {
                     .setURL(response.content_urls.desktop.page) // URL Of Searched Topic
                     .setDescription([`
 ${response.extract}
-Links For Topic You Searched [Link](${response.content_urls.desktop.page}).`])
+[Check this link to see what can ${response.title} also refers to](${response.content_urls.desktop.page}).`])
                 message.channel.send(tooManyResultsEmbed)
             } else {
                 const definedEmbed = new Discord.MessageEmbed()

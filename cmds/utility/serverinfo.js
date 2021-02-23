@@ -35,7 +35,10 @@ module.exports = class ServerInfoCommand extends Commando.Command {
             .replace('VANITY_URL', 'Vanity URL')
             .replace('VERIFIED', 'Verified')
             .replace('VIP_REGIONS', 'VIP Regions')
-            .replace('WELCOME_SCREEN_ENABLED', 'Welcome Screen Enabled') || 'No Community Features'
+            .replace('WELCOME_SCREEN_ENABLED', 'Welcome Screen Enabled')
+            .replace('PREVIEW_ENABLED', 'Preview Enabled')
+            .replace('MEMBER_VERIFICATION_GATE_ENABLED', 'Member Verification Gate Enabled')
+            || 'No Community Features'
 
         const serverInfoEmbed = new Discord.MessageEmbed()
             .setColor(embedcolor)
