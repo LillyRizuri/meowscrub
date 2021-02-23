@@ -61,7 +61,14 @@ client.on('messageDelete', async message => {
 client.on('ready', async () => {
   console.log('ping pong, meowscrub is online.')
   // Support for music playback
-  client.distube = new DisTube(client, { searchSongs: false, emitNewSongOnly: true, leaveOnFinish: true })
+  client.distube = new DisTube(client, { searchSongs: false, emitNewSongOnly: true, leaveOnFinish: true, youtubeCookie: process.env.YTCOOKIE })
+  // To get your YouTube cookie
+  // - navigate to YouTube in a web browser
+  // - open up dev tools (opt+cmd+j on mac, ctrl+shift+j on windows)
+  // - go to the network tab
+  // - click on a request on the left
+  // - scroll down to "Request Headers"
+  // - find the "cookie" header and copy its entire contents
   client.distube
     .on('playSong', async (message, queue, song) => {
       queue.autoplay = false // To prevent suggested songs provided by the bot
@@ -120,7 +127,7 @@ client.on('ready', async () => {
       }
     })
   }
-  
+
   const randomTimerStatus = Math.floor(Math.random() * 600000 + 30000)
   setInterval(presence, randomTimerStatus)
 
