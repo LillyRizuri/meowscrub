@@ -1,6 +1,5 @@
 const Commando = require('discord.js-commando')
 const Discord = require('discord.js')
-const moment = require('moment')
 
 const { red, embedcolor } = require('../../colors.json')
 
@@ -28,17 +27,10 @@ module.exports = class WhoIsCommand extends Commando.Command {
     async run(message, args) {
         // worst code ever
         let guild = this.client.guilds.cache.get(message.guild.id)
+        const dateTimeOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', timeZoneName: 'short' }
         let user
         let member
         let rolemap
-        let thenJoin
-        let timeJoin
-        let joinedAt
-        let joinedaAtHM
-        let thenRegister
-        let timeRegister
-        let registeredAt
-        let registeredAtHM
 
         if (message.mentions.users.first()) {
             // if the input was an user mention
@@ -52,16 +44,6 @@ module.exports = class WhoIsCommand extends Commando.Command {
             if (rolemap.length > 800) rolemap = 'Too many roles to display.'
             if (!rolemap) rolemap = 'No roles.'
 
-            thenJoin = moment(member.joinedTimestamp)
-            timeJoin = thenJoin.from(moment())
-            joinedAt = thenJoin.format("MMM Do, YYYY")
-            joinedaAtHM = thenJoin.format("HH:MM")
-
-            thenRegister = moment(user.createdTimestamp)
-            timeRegister = thenRegister.from(moment())
-            registeredAt = thenRegister.format("MMM Do, YYYY")
-            registeredAtHM = thenRegister.format("HH:MM")
-
             const infoEmbed = new Discord.MessageEmbed()
                 .setColor(embedcolor)
                 .setAuthor(`Information for ${user.username}`, user.displayAvatarURL({ dynamic: true }))
@@ -73,7 +55,7 @@ module.exports = class WhoIsCommand extends Commando.Command {
                         `
 • Nickname: \`${member.nickname || 'None'}\`
 • Roles [${member.roles.cache.size}]: ${rolemap}            
-• Joined: \`${joinedAt} ${joinedaAtHM} (${timeJoin})\`
+• Joined: \`${new Date(member.joinedTimestamp).toLocaleDateString('en-US', dateTimeOptions)}\`
 • Activity: \`${user.presence.activities[0] ? user.presence.activities[0].name : 'None'}\`
                     `
                 }, {
@@ -82,7 +64,7 @@ module.exports = class WhoIsCommand extends Commando.Command {
                         `
 • ID: \`${user.id}\`
 • Username: \`${user.tag}\`
-• Created: \`${registeredAt} ${registeredAtHM} (${timeRegister})\`
+• Created: \`${new Date(user.createdTimestamp).toLocaleDateString('en-US', dateTimeOptions)}\`
 • Status: \`${(user.presence.status).replace('dnd', 'Do Not Disturb').toProperCase()}\`   
 • Is Bot: \`${(user.bot).toString().replace('true', 'Yes').replace('false', 'No')}\`
 `
@@ -98,11 +80,6 @@ module.exports = class WhoIsCommand extends Commando.Command {
                     .then(async user => {
                         member = message.guild.members.cache.get(user.id)
 
-                        thenRegister = moment(user.createdTimestamp)
-                        timeRegister = thenRegister.from(moment())
-                        registeredAt = thenRegister.format("MMM Do, YYYY")
-                        registeredAtHM = thenRegister.format("HH:MM")
-
                         const infoEmbed = new Discord.MessageEmbed()
                             .setColor(embedcolor)
                             .setAuthor(`Information for ${user.username}`, user.displayAvatarURL({ dynamic: true }))
@@ -114,7 +91,7 @@ module.exports = class WhoIsCommand extends Commando.Command {
                                     `
 • ID: \`${user.id}\`
 • Username: \`${user.tag}\`
-• Created: \`${registeredAt} ${registeredAtHM} (${timeRegister})\`
+• Created: \`${new Date(user.createdTimestamp).toLocaleDateString('en-US', dateTimeOptions)}\`
 • Is Bot: \`${(user.bot).toString().replace('true', 'Yes').replace('false', 'No')}\`
 `
                             })
@@ -137,16 +114,6 @@ module.exports = class WhoIsCommand extends Commando.Command {
                     if (rolemap.length > 800) rolemap = 'Too many roles to display.'
                     if (!rolemap) rolemap = 'No roles.'
 
-                    thenJoin = moment(member.joinedTimestamp)
-                    timeJoin = thenJoin.from(moment())
-                    joinedAt = thenJoin.format("MMM Do, YYYY")
-                    joinedaAtHM = thenJoin.format("HH:MM")
-
-                    thenRegister = moment(user.createdTimestamp)
-                    timeRegister = thenRegister.from(moment())
-                    registeredAt = thenRegister.format("MMM Do, YYYY")
-                    registeredAtHM = thenRegister.format("HH:MM")
-
                     const infoEmbed = new Discord.MessageEmbed()
                         .setColor(embedcolor)
                         .setAuthor(`Information for ${user.username}`, user.displayAvatarURL({ dynamic: true }))
@@ -158,7 +125,7 @@ module.exports = class WhoIsCommand extends Commando.Command {
                                 `
 • Nickname: \`${member.nickname || 'None'}\`
 • Roles [${member.roles.cache.size}]: ${rolemap}            
-• Joined: \`${joinedAt} ${joinedaAtHM} (${timeJoin})\`
+• Joined: \`${new Date(member.joinedTimestamp).toLocaleDateString('en-US', dateTimeOptions)}\`
 • Activity: \`${user.presence.activities[0] ? user.presence.activities[0].name : 'None'}\`
                     `
                         }, {
@@ -167,7 +134,7 @@ module.exports = class WhoIsCommand extends Commando.Command {
                                 `
 • ID: \`${user.id}\`
 • Username: \`${user.tag}\`
-• Created: \`${registeredAt} ${registeredAtHM} (${timeRegister})\`
+• Created: \`${new Date(user.createdTimestamp).toLocaleDateString('en-US', dateTimeOptions)}\`
 • Status: \`${(user.presence.status).replace('dnd', 'Do Not Disturb').toProperCase()}\`   
 • Is Bot: \`${(user.bot).toString().replace('true', 'Yes').replace('false', 'No')}\`
 `
@@ -191,16 +158,6 @@ module.exports = class WhoIsCommand extends Commando.Command {
             if (rolemap.length > 800) rolemap = 'Too many roles to display.'
             if (!rolemap) rolemap = 'No roles.'
 
-            thenJoin = moment(member.joinedTimestamp)
-            timeJoin = thenJoin.from(moment())
-            joinedAt = thenJoin.format("MMM Do, YYYY")
-            joinedaAtHM = thenJoin.format("HH:MM")
-
-            thenRegister = moment(user.createdTimestamp)
-            timeRegister = thenRegister.from(moment())
-            registeredAt = thenRegister.format("MMM Do, YYYY")
-            registeredAtHM = thenRegister.format("HH:MM")
-
             const infoEmbed = new Discord.MessageEmbed()
                 .setColor(embedcolor)
                 .setAuthor(`Information for ${user.username}`, user.displayAvatarURL({ dynamic: true }))
@@ -212,7 +169,7 @@ module.exports = class WhoIsCommand extends Commando.Command {
                         `
 • Nickname: \`${member.nickname || 'None'}\`
 • Roles [${member.roles.cache.size}]: ${rolemap}            
-• Joined: \`${joinedAt} ${joinedaAtHM} (${timeJoin})\`
+• Joined: \`${new Date(member.joinedTimestamp).toLocaleDateString('en-US', dateTimeOptions)}\`
 • Activity: \`${user.presence.activities[0] ? user.presence.activities[0].name : 'None'}\`
                     `
                 }, {
@@ -221,7 +178,7 @@ module.exports = class WhoIsCommand extends Commando.Command {
                         `
 • ID: \`${user.id}\`
 • Username: \`${user.tag}\`
-• Created: \`${registeredAt} ${registeredAtHM} (${timeRegister})\`
+• Created: \`${new Date(user.createdTimestamp).toLocaleDateString('en-US', dateTimeOptions)}\`
 • Status: \`${(user.presence.status).replace('dnd', 'Do Not Disturb').toProperCase()}\`   
 • Is Bot: \`${(user.bot).toString().replace('true', 'Yes').replace('false', 'No')}\`
 `
