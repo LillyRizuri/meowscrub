@@ -52,7 +52,7 @@ module.exports = class DictionaryCommand extends Commando.Command {
                     name: 'Example',
                     value: trim(answer.example, 1024)
                 })
-                .setFooter(`👍${answer.thumbs_up} | 👎${answer.thumbs_down}`)
+                .setFooter(`👍${answer.thumbs_up} | 👎${answer.thumbs_down} | Definition by ${answer.author}`)
                 .setTimestamp()
             message.channel.send(embed)
         } catch (err) {
