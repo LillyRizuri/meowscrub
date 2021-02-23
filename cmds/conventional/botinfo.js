@@ -47,7 +47,7 @@ module.exports = class BotInfoCommand extends Commando.Command {
                 inline: true
             }, {
                 name: 'Invite the Bot',
-                value: '[Test Bot Invite](https://discord.com/oauth2/authorize?client_id=794604500111327242&scope=bot&permissions=2083911167)',
+                value: `[Official Client Invite](https://discord.com/oauth2/authorize?client_id=${this.client.user.id}&scope=bot&permissions=2083911167)`,
                 inline: true
             }, {
                 name: 'Support/Community',
