@@ -7,9 +7,10 @@ const { embedcolor } = require('../../colors.json')
 module.exports = class TopCovidCasesCommand extends Commando.Command {
     constructor(client) {
         super(client, {
-            name: 'covidtop',
+            name: 'ctop',
+            aliases: ['covidtop'],
             group: 'covid-related',
-            memberName: 'covidtop',
+            memberName: 'ctop',
             description: 'Shows the top 10 countries with the most cases of COVID-19.'
         })
     }
@@ -29,7 +30,7 @@ module.exports = class TopCovidCasesCommand extends Commando.Command {
             .setColor(embedcolor)
             .setAuthor('Top 10 Countries with most cases of COVID-19')
             .setDescription(topCountries)
-            .setFooter('bruh momento')
+            .setFooter('certified bruh moment')
             .setTimestamp()
         message.channel.send(top10Embed)
     }

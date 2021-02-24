@@ -7,17 +7,20 @@ const { what, red, embedcolor } = require('../../colors.json')
 module.exports = class CovidProvinceCommand extends Commando.Command {
     constructor(client) {
         super(client, {
-            name: 'covidprovince',
+            name: 'cprovince',
+            aliases: ['covidprovince'],
             group: 'covid-related',
-            memberName: 'covidprovince',
+            memberName: 'cprovince',
             argsType: 'multiple',
-            description: 'Display stats about COVID-19 in a region/province/state.',
+            description: 'Display stats about COVID-19 in a specified province.',
             format: '<country> <province>',
-            examples: ['province canada ontario']
+            examples: ['cprovince canada ontario']
         })
     }
 
     async run(message, args) {
+        const dateTimeOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', timeZoneName: 'short' }
+
         if (!args[0] || !args[1]) {
             const noInputEmbed = new Discord.MessageEmbed()
                 .setColor(what)
@@ -35,6 +38,7 @@ module.exports = class CovidProvinceCommand extends Commando.Command {
 
         const prov = await covid.getJHU({ country, province })
         const obj = prov[0]
+        const updatedTime = new Date(obj.updatedAt).toLocaleDateString('en-US', dateTimeOptions)
 
         if (!obj) {
             const noResultEmbed = new Discord.MessageEmbed()
@@ -66,7 +70,7 @@ module.exports = class CovidProvinceCommand extends Commando.Command {
                 value: `${obj.stats.recovered.toLocaleString()} (${((obj.stats.recovered / obj.stats.confirmed) * 100).toFixed(2)}%)`,
                 inline: true
             })
-            .setFooter(`Last Updated: ${obj.updatedAt}`)
+            .setFooter(`Last Updated: ${updatedTime}`)
         message.channel.send(embed)
     }
 }

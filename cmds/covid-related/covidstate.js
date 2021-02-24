@@ -9,17 +9,19 @@ const { what, red, embedcolor } = require('../../colors.json')
 module.exports = class CovidStates extends Commando.Command {
     constructor(client) {
         super(client, {
-            name: 'covidstate',
+            name: 'cstate',
+            aliases: ['covidstate'],
             group: 'covid-related',
-            memberName: 'covidstate',
+            memberName: 'cstate',
             argsType: 'single',
             description: 'Display stats about COVID-19 in an US state.',
             format: '<state>',
-            examples: ['state texas']
+            examples: ['cstate texas']
         })
     }
 
     async run(message, args) {
+        const dateTimeOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', timeZoneName: 'short' }
         if (!args) {
             const noInputEmbed = new Discord.MessageEmbed()
                 .setColor(what)
@@ -35,6 +37,7 @@ module.exports = class CovidStates extends Commando.Command {
         const stateInput = args.toProperCase()
 
         const state = await covid.getState({ state: stateInput })
+        const updatedTime = new Date(state.updated).toLocaleDateString('en-US', dateTimeOptions)
         if (!state) {
             const noResultsEmbed = new Discord.MessageEmbed()
                 .setColor(red)
@@ -91,6 +94,7 @@ module.exports = class CovidStates extends Commando.Command {
                 value: state.tests.toLocaleString(),
                 inline: true
             })
+            .setFooter(`Last Updated: ${updatedTime}`)
         if (imageLink) covidStatesEmbed.setImage(imageLink)
         message.channel.send(covidStatesEmbed)
     }

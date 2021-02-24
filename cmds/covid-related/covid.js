@@ -18,21 +18,23 @@ module.exports = class CovidCommand extends Commando.Command {
             aliases: ['corona'],
             group: 'covid-related',
             memberName: 'covid',
-            argsType: 'multiple',
-            description: 'Display stats about COVID-19.',
+            argsType: 'single',
+            description: 'Display stats about COVID-19 globally, or for a specified country.',
             format: '[country]',
             examples: ['covid', 'covid usa']
         })
     }
 
     async run(message, args) {
+        const dateTimeOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', timeZoneName: 'short' }
+
         try {
-            if (!args[0]) {
+            if (!args) {
                 message.channel.send('Retrieving Informations, I guess...')
 
                 const totalStats = await covid.getAll()
 
-                const updatedTime = new Date(totalStats.updated)
+                const updatedTime = new Date(totalStats.updated).toLocaleDateString('en-US', dateTimeOptions)
 
                 const globalCasesEmbed = new Discord.MessageEmbed()
                     .setColor(embedcolor)
@@ -55,7 +57,7 @@ module.exports = class CovidCommand extends Commando.Command {
                         inline: true
                     }, {
                         name: 'Recovered',
-                        value: `${totalStats.recovered.toLocaleString()} (${((totalStats.recovered / totalStats.cases) * 100).toFixed(2)}%)`,
+                        value: `${totalStats.recovered.toLocaleString()} (${((totalStats.recovered / totalStats.cases) * 100).toFixed(2)}%`,
                         inline: true
                     }, {
                         name: 'Deaths',
@@ -81,7 +83,7 @@ module.exports = class CovidCommand extends Commando.Command {
             else {
                 message.channel.send('Retrieving Informations, I guess...')
 
-                let countryInput = args.join(' ').toProperCase()
+                let countryInput = args.toProperCase()
                 if (countryInput.toLowerCase() == 'netherlands') countryInput = 'nl'
                 if (countryInput.toLowerCase() == 'laos') countryInput = 'Lao People\'s Democratic Republic'
                 const country = await covid.getCountry({ country: countryInput })
@@ -116,7 +118,7 @@ module.exports = class CovidCommand extends Commando.Command {
                     wikiImage = imageLink
                 }
 
-                const updatedTime = new Date(country.updated)
+                const updatedTime = new Date(country.updated).toLocaleDateString('en-US', dateTimeOptions)
 
                 const setCountryEmbed = new Discord.MessageEmbed()
                     .setColor(embedcolor)
