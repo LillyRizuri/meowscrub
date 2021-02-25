@@ -63,12 +63,13 @@ module.exports = class BanCommand extends Commando.Command {
             return
         }
 
+        message.delete()
+
         const fetched = await message.channel.messages.fetch({
             limit: amountToDelete
         })
 
         try {
-            message.delete()
             await message.channel.bulkDelete(fetched)
                 .then(messages => {
                     const purgeOKEmbed = new Discord.MessageEmbed()
