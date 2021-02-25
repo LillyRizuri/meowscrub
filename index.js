@@ -18,11 +18,12 @@ const { green, what, embedcolor } = require('./colors.json')
 const snip = require("./events/msg-snipe")
 
 const client = new Commando.CommandoClient({
-  owner: '692346139093106738',
+  owner: config.ownerId,
   commandPrefix: config.prefix,
   disableMentions: 'everyone'
 })
 
+// Saving configurations to MongoDB
 client.setProvider(
   MongoClient.connect(process.env.MONGO)
     .then((client) => {
@@ -32,11 +33,40 @@ client.setProvider(
       console.error(err)
     })
 )
+////////////////////////////////////////////////////////
 
-const { GiveawaysManager } = require("discord-giveaways")
+// Giveaway Stuff
+const db = require('quick.db')
+if (!db.get('giveaways')) db.set('giveaways', []);
 
-const manager = new GiveawaysManager(client, {
-  storage: "./giveaways.json",
+const { GiveawaysManager } = require('discord-giveaways');
+const GiveawayManagerWithOwnDatabase = class extends GiveawaysManager {
+  async getAllGiveaways() {
+    return db.get('giveaways');
+  }
+
+  async saveGiveaway(messageID, giveawayData) {
+    db.push('giveaways', giveawayData);
+    return true;
+  }
+
+  async editGiveaway(messageID, giveawayData) {
+    const giveaways = db.get('giveaways');
+    const newGiveawaysArray = giveaways.filter((giveaway) => giveaway.messageID !== messageID);
+    newGiveawaysArray.push(giveawayData);
+    db.set('giveaways', newGiveawaysArray);
+    return true;
+  }
+
+  async deleteGiveaway(messageID) {
+    const newGiveawaysArray = db.get('giveaways').filter((giveaway) => giveaway.messageID !== messageID);
+    db.set('giveaways', newGiveawaysArray);
+    return true;
+  }
+}
+
+const manager = new GiveawayManagerWithOwnDatabase(client, {
+  storage: false,
   updateCountdownEvery: 10000,
   endedGiveawaysLifetime: 604800000,
   default: {
@@ -48,6 +78,7 @@ const manager = new GiveawaysManager(client, {
 })
 
 client.giveawaysManager = manager
+////////////////////////////////////////////////////////
 
 client.on('messageDelete', async message => {
   const args = message.content.split(" ")
@@ -59,16 +90,15 @@ client.on('messageDelete', async message => {
 })
 
 client.on('ready', async () => {
-  console.log('ping pong, meowscrub is online.')
   // Support for music playback
   client.distube = new DisTube(client, { searchSongs: false, emitNewSongOnly: true, leaveOnFinish: true, youtubeCookie: process.env.YTCOOKIE })
-  // To get your YouTube cookie
-  // - navigate to YouTube in a web browser
-  // - open up dev tools (opt+cmd+j on mac, ctrl+shift+j on windows)
-  // - go to the network tab
-  // - click on a request on the left
-  // - scroll down to "Request Headers"
-  // - find the "cookie" header and copy its entire contents
+  //// To get your YouTube cookie
+  //// - navigate to YouTube in a web browser
+  //// - open up dev tools (opt+cmd+j on mac, ctrl+shift+j on windows)
+  //// - go to the network tab
+  //// - click on a request on the left
+  //// - scroll down to "Request Headers"
+  //// - find the "cookie" header and copy its entire contents
   client.distube
     .on('playSong', async (message, queue, song) => {
       queue.autoplay = false // To prevent suggested songs provided by the bot
@@ -114,6 +144,8 @@ client.on('ready', async () => {
         .setDescription(`\`\`\`${err}\`\`\``)
       message.channel.send(errorEmbed)
     })
+  ////////////////////////////////////////////////////////
+
   // Bot Status
   function presence() {
     let status = require('./assets/json/bot-status.json')
@@ -128,14 +160,17 @@ client.on('ready', async () => {
     })
   }
 
+  //// changing status varying from 30 seconds to 10 minutes
   const randomTimerStatus = Math.floor(Math.random() * 600000 + 30000)
   setInterval(presence, randomTimerStatus)
+  ////////////////////////////////////////////////////////
 
   poll(client)
   autoPublish(client)
   chatbot(client)
   welcomeMsg(client)
 
+  // Connecting to MongoDB 
   const connectToMongoDB = async () => {
     await mongo().then((mongoose) => {
       try {
@@ -145,8 +180,8 @@ client.on('ready', async () => {
       }
     })
   }
-
   connectToMongoDB()
+  ////////////////////////////////////////////////////////
 
   client.registry
     .registerGroups([
@@ -165,6 +200,8 @@ client.on('ready', async () => {
     ])
     .registerDefaults()
     .registerCommandsIn(path.join(__dirname, 'cmds'))
+
+    console.log("Initialized frockles (meowscrub) successfully.")
 })
 
 client.login(process.env.TOKEN)
