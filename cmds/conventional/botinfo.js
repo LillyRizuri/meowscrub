@@ -17,6 +17,15 @@ module.exports = class BotInfoCommand extends Commando.Command {
     async run(message) {
         let totalMembers = 0
 
+        let totalSeconds = (this.client.uptime / 1000);
+        let days = Math.floor(totalSeconds / 86400);
+        totalSeconds %= 86400;
+        let hours = Math.floor(totalSeconds / 3600);
+        totalSeconds %= 3600;
+        let minutes = Math.floor(totalSeconds / 60);
+        let seconds = Math.floor(totalSeconds % 60);
+
+
         for (const guild of this.client.guilds.cache) {
             totalMembers += (await guild[1].members.fetch()).size
         }
@@ -54,7 +63,7 @@ module.exports = class BotInfoCommand extends Commando.Command {
                 value: '[Server Invite](https://discord.gg/fqE2yrA)',
                 inline: true
             })
-            .setFooter(`Time since last restart: ${process.uptime().toFixed(2)}s`)
+            .setFooter(`Current Uptime: ${days} days, ${hours} hrs, ${minutes} min, ${seconds} sec`)
         message.channel.send(botinfoEmbed)
     }
 }
