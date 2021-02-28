@@ -1,7 +1,7 @@
 const Commando = require('discord.js-commando')
 const Discord = require('discord.js')
 
-const { red, what, green } = require('../../colors.json')
+const { red, what, green } = require('../../assets/json/colors.json')
 
 module.exports = class ShuffleMusicCommand extends Commando.Command {
     constructor(client) {

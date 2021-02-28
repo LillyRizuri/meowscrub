@@ -2,7 +2,7 @@ const Commando = require('discord.js-commando')
 const Discord = require('discord.js')
 const fetch = require('node-fetch')
 
-const { dog } = require('../../colors.json')
+const { dog } = require('../../assets/json/colors.json')
 
 module.exports = class CatCommand extends Commando.Command {
     constructor(client) {

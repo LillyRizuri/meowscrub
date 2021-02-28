@@ -1,7 +1,7 @@
 const Commando = require('discord.js-commando')
 const Discord = require('discord.js')
 
-const { red, embedcolor } = require('../../colors.json')
+const { red, embedcolor } = require('../../assets/json/colors.json')
 
 const notValidIDEmbed = new Discord.MessageEmbed()
     .setColor(red)

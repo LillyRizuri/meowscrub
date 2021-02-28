@@ -1,7 +1,7 @@
 const Commando = require('discord.js-commando')
 const Discord = require('discord.js')
 
-const { red, green, what, embedcolor } = require('../../colors.json')
+const { red, green, what, embedcolor } = require('../../assets/json/colors.json')
 
 module.exports = class KickCommand extends Commando.Command {
     constructor(client) {

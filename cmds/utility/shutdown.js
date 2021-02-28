@@ -1,7 +1,7 @@
 const Commando = require('discord.js-commando')
 const Discord = require('discord.js')
 
-const { embedcolor, red } = require('../../colors.json')
+const { embedcolor, red } = require('../../assets/json/colors.json')
 const checkMark = '<:scrubgreenlarge:797816509967368213>'
 const cross = '<:scrubredlarge:797816510579998730>'
 const { ownerId } = require('../../config.json')

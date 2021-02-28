@@ -2,7 +2,7 @@ const Commando = require('discord.js-commando')
 const Discord = require('discord.js')
 const { parse } = require('twemoji-parser')
 
-const { what, red, embedcolor } = require('../../colors.json')
+const { what, red, embedcolor } = require('../../assets/json/colors.json')
 
 const invalidEmojiEmbed = new Discord.MessageEmbed()
     .setColor(red)

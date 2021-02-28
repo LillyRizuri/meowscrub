@@ -4,7 +4,7 @@ const covid = require('covidtracker')
 const fetch = require('node-fetch')
 const statesJson = require('../../assets/json/states.json')
 
-const { what, red, embedcolor } = require('../../colors.json')
+const { what, red, embedcolor } = require('../../assets/json/colors.json')
 
 module.exports = class CovidStates extends Commando.Command {
     constructor(client) {

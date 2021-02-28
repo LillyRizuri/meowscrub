@@ -3,7 +3,7 @@ const Discord = require('discord.js')
 
 const economy = require('../../economy')
 
-const { red, green, what } = require('../../colors.json')
+const { red, green, what } = require('../../assets/json/colors.json')
 
 module.exports = class AddbalCommand extends Commando.Command {
     constructor(client) {

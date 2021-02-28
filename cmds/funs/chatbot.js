@@ -1,7 +1,6 @@
 const Commando = require('discord.js-commando')
 const alexa = require('alexa-bot-api')
 const ai = new alexa()
-// const { chatBot } = require('reconlx')
 
 module.exports = class chatCommand extends Commando.Command {
     constructor(client) {
@@ -24,7 +23,5 @@ module.exports = class chatCommand extends Commando.Command {
         ai.getReply(input).then(reply => {
             message.channel.send((reply).toLowerCase())
         })
-
-        // chatBot(message, input)
     }
 }

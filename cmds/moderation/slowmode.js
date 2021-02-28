@@ -1,7 +1,7 @@
 const Commando = require('discord.js-commando')
 const Discord = require('discord.js')
 
-const { what, green, red } = require('../../colors.json')
+const { what, green, red } = require('../../assets/json/colors.json')
 
 module.exports = class SlowModeCommand extends Commando.Command {
     constructor(client) {

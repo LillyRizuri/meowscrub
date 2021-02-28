@@ -2,7 +2,7 @@ const Commando = require('discord.js-commando')
 const Discord = require('discord.js')
 const { version, author } = require('../../package.json')
 
-const { embedcolor } = require('../../colors.json')
+const { embedcolor } = require('../../assets/json/colors.json')
 
 module.exports = class BotInfoCommand extends Commando.Command {
     constructor(client) {

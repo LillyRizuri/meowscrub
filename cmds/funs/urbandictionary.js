@@ -4,7 +4,7 @@ const fetch = require('node-fetch')
 const utf8 = require('utf8')
 const querystring = require('querystring')
 
-const { urbandictionary, what, red } = require('../../colors.json')
+const { urbandictionary, what, red } = require('../../assets/json/colors.json')
 
 module.exports = class DictionaryCommand extends Commando.Command {
     constructor(client) {

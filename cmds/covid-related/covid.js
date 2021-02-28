@@ -3,7 +3,7 @@ const Discord = require('discord.js')
 const covid = require('covidtracker')
 const fetch = require('node-fetch')
 
-const { red, embedcolor } = require('../../colors.json')
+const { red, embedcolor } = require('../../assets/json/colors.json')
 
 Object.defineProperty(String.prototype, 'toProperCase', {
     value: function () {

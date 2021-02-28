@@ -2,8 +2,6 @@ const { MessageEmbed } = require('discord.js')
 const Commando = require('discord.js-commando')
 const Discord = require('discord.js')
 
-const { embedcolor } = require('../../colors.json')
-
 const responses = [
     "It is certain",
     "It is decidedly so",

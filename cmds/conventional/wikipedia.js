@@ -2,7 +2,7 @@ const Commando = require('discord.js-commando')
 const Discord = require('discord.js')
 const fetch = require('node-fetch')
 
-const { red, what, embedcolor } = require('../../colors.json')
+const { red, what, embedcolor } = require('../../assets/json/colors.json')
 
 module.exports = class WikipediaCommand extends Commando.Command {
     constructor(client) {

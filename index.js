@@ -14,7 +14,7 @@ const mongo = require('./mongo')
 const chatbot = require('./events/auto-chatbot')
 const welcomeMsg = require('./events/welcome-msg')
 const afkStatus = require('./events/afk-status')
-const { green, what, embedcolor } = require('./colors.json')
+const { green, what, embedcolor } = require('./assets/json/colors.json')
 const snip = require("./events/msg-snipe")
 
 const client = new Commando.CommandoClient({
@@ -68,7 +68,6 @@ const GiveawayManagerWithOwnDatabase = class extends GiveawaysManager {
 const manager = new GiveawayManagerWithOwnDatabase(client, {
   storage: false,
   updateCountdownEvery: 10000,
-  endedGiveawaysLifetime: 604800000,
   default: {
     botsCanWin: false,
     embedColor: "#DD2E44",
@@ -170,7 +169,7 @@ client.on('ready', async () => {
   const connectToMongoDB = async () => {
     await mongo().then((mongoose) => {
       try {
-        console.log('Successfully Connected To Mongo!')
+        console.log('Successfully Connected to MongoDB Atlas.')
       } finally {
         mongoose.connection.close()
       }
@@ -202,7 +201,7 @@ client.on('ready', async () => {
   chatbot(client)
   welcomeMsg(client)
 
-  console.log("Initialized frockles (meowscrub) successfully.")
+  console.log("Initialized frockles (meowscrub) successfully. Give it a warm welcome.")
 })
 
 client.on('message', message => {

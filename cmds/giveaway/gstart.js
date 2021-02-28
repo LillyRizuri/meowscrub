@@ -2,7 +2,7 @@ const Commando = require('discord.js-commando')
 const Discord = require('discord.js')
 const ms = require('ms')
 
-const { red, what, green } = require('../../colors.json')
+const { red, what, green } = require('../../assets/json/colors.json')
 
 module.exports = class CreateGiveawayCommand extends Commando.Command {
     constructor(client) {
@@ -26,7 +26,7 @@ module.exports = class CreateGiveawayCommand extends Commando.Command {
         const giveawayWinners = Number(args[2])
         const giveawayPrize = args.slice(3).join(" ")
 
-        if (!channel || !giveawayDuration || !giveawayWinners || !giveawayPrize) {
+        if (args.length < 4) {
             const notEnoughEmbed = new Discord.MessageEmbed()
                 .setColor(what)
                 .setDescription("<:scrubnull:797476323533783050> You didn't provide all of the arguments.")

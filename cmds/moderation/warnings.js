@@ -4,7 +4,7 @@ const Discord = require('discord.js')
 const mongo = require('../../mongo')
 const warnSchema = require('../../schemas/warn-schema')
 
-const { what } = require('../../colors.json')
+const { what } = require('../../assets/json/colors.json')
 
 module.exports = class WarningsCommand extends Commando.Command {
     constructor(client) {

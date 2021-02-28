@@ -2,7 +2,7 @@ const Commando = require('discord.js-commando')
 const Discord = require('discord.js')
 const math = require('mathjs')
 
-const { what, red, embedcolor } = require('../../colors.json')
+const { what, red, embedcolor } = require('../../assets/json/colors.json')
 
 module.exports = class AddCommand extends Commando.Command {
     constructor(client) {

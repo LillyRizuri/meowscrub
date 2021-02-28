@@ -2,7 +2,7 @@ const Commando = require('discord.js-commando')
 const Discord = require('discord.js')
 const moment = require('moment')
 
-const { embedcolor } = require('../../colors.json')
+const { embedcolor } = require('../../assets/json/colors.json')
 
 module.exports = class ServerInfoCommand extends Commando.Command {
     constructor(client) {

@@ -2,7 +2,7 @@ const Commando = require('discord.js-commando')
 const Discord = require('discord.js')
 const process = require('child_process')
 
-const { red, what } = require('../../colors.json')
+const { red, what } = require('../../assets/json/colors.json')
 const { ownerId } = require('../../config.json')
 
 module.exports = class AvatarCommand extends Commando.Command {

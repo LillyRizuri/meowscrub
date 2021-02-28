@@ -1,7 +1,7 @@
 const Commando = require('discord.js-commando')
 const Discord = require('discord.js')
 
-const { embedcolor } = require('../../colors.json')
+const { embedcolor } = require('../../assets/json/colors.json')
 
 module.exports = class BotUptimeCommand extends Commando.Command {
     constructor(client) {

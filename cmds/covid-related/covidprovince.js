@@ -2,7 +2,7 @@ const Commando = require('discord.js-commando')
 const Discord = require('discord.js')
 const covid = require('covidtracker')
 
-const { what, red, embedcolor } = require('../../colors.json')
+const { what, red, embedcolor } = require('../../assets/json/colors.json')
 
 module.exports = class CovidProvinceCommand extends Commando.Command {
     constructor(client) {

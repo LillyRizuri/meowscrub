@@ -2,7 +2,7 @@ const Commando = require('discord.js-commando')
 const Discord = require('discord.js')
 const axios = require('axios')
 
-const { cat } = require('../../colors.json')
+const { cat } = require('../../assets/json/colors.json')
 
 module.exports = class CatCommand extends Commando.Command {
     constructor(client) {

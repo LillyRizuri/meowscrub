@@ -2,7 +2,7 @@ const Commando = require('discord.js-commando')
 const Discord = require('discord.js')
 const { tictactoe } = require('reconlx')
 
-const { what, red } = require('../../colors.json')
+const { what, red } = require('../../assets/json/colors.json')
 
 module.exports = class TicTacToeCommand extends Commando.Command {
     constructor(client) {

@@ -2,7 +2,7 @@ const Commando = require('discord.js-commando')
 const Discord = require('discord.js')
 const request = require('request')
 
-const { what, red } = require('../../colors.json')
+const { what, red } = require('../../assets/json/colors.json')
 
 module.exports = class AsciiCommand extends Commando.Command {
     constructor(client) {

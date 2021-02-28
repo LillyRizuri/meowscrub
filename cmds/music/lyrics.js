@@ -4,7 +4,7 @@ const Commando = require('discord.js-commando')
 const Discord = require('discord.js')
 const { getSong } = require('genius-lyrics-api')
 
-const { red, what, music } = require('../../colors.json')
+const { red, what, music } = require('../../assets/json/colors.json')
 
 module.exports = class LyricsCommand extends Commando.Command {
     constructor(client) {
