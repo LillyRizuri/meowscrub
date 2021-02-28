@@ -8,7 +8,7 @@ module.exports = class AvatarCommand extends Commando.Command {
         super(client, {
             name: 'avatar',
             aliases: ['av', 'pfp', 'icon'],
-            group: 'utility',
+            group: 'misc',
             memberName: 'avatar',
             description: "Return your/someone else's avatar.",
             argsType: 'single',

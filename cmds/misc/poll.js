@@ -1,12 +1,11 @@
 const Commando = require('discord.js-commando')
-const Discord = require('discord.js')
 
 module.exports = class PollCommand extends Commando.Command {
     constructor(client) {
         super(client, {
             name: 'poll',
             aliases: ['vote'],
-            group: 'utility',
+            group: 'misc',
             memberName: 'poll',
             description: "Create yourself reactions to set a poll.",
             examples: ['poll'],

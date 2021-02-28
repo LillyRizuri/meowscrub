@@ -11,9 +11,9 @@ const DisTube = require('distube')
 const config = require('./config.json')
 const poll = require('./events/auto-poll')
 const mongo = require('./mongo')
-const autoPublish = require('./events/auto-publish')
 const chatbot = require('./events/auto-chatbot')
 const welcomeMsg = require('./events/welcome-msg')
+const afkStatus = require('./events/afk-status')
 const { green, what, embedcolor } = require('./colors.json')
 const snip = require("./events/msg-snipe")
 
@@ -27,7 +27,7 @@ const client = new Commando.CommandoClient({
 client.setProvider(
   MongoClient.connect(process.env.MONGO)
     .then((client) => {
-      return new MongoDBProvider(client, 'scrubthispie')
+      return new MongoDBProvider(client, 'FrocklesDatabases')
     })
     .catch((err) => {
       console.error(err)
@@ -88,6 +88,7 @@ client.on('messageDelete', async message => {
   const icon = message.author.displayAvatarURL()
   snip.run(message, args, client, author, tag, time, icon)
 })
+
 
 client.on('ready', async () => {
   // Support for music playback
@@ -165,11 +166,6 @@ client.on('ready', async () => {
   setInterval(presence, randomTimerStatus)
   ////////////////////////////////////////////////////////
 
-  poll(client)
-  autoPublish(client)
-  chatbot(client)
-  welcomeMsg(client)
-
   // Connecting to MongoDB 
   const connectToMongoDB = async () => {
     await mongo().then((mongoose) => {
@@ -187,21 +183,30 @@ client.on('ready', async () => {
     .registerGroups([
       ['conventional', 'Conventional Commands'],
       ['moderation', 'Moderation Commands'],
-      ['utility', 'Extra Utilities'],
       ['economy', 'Economy System'],
-      ['music', 'Music Controller'],
-      ['soundboard', 'Soundboard!'],
-      ['music-library', "Frockle's Music Library"],
-      ['funs', 'Some Really Simple Fun Stuff'],
       ['images', 'Pictures Retrieval'],
       ['encoders', 'Message Encoders'],
       ['covid-related', 'COVID-19 Related Commands'],
-      ['giveaway', 'Giveaway Tools']
+      ['funs', 'Some Really Simple Fun Stuff'],
+      ['soundboard', 'Soundboard!'],
+      ['music-library', "Frockle's Music Library"],
+      ['music', 'Music Controller'],
+      ['giveaway', 'Giveaway Tools'],
+      ['misc', 'Miscellaneous Stuff'],
+      ['utility', 'Extra Utilities'],
     ])
     .registerDefaults()
     .registerCommandsIn(path.join(__dirname, 'cmds'))
 
-    console.log("Initialized frockles (meowscrub) successfully.")
+  poll(client)
+  chatbot(client)
+  welcomeMsg(client)
+
+  console.log("Initialized frockles (meowscrub) successfully.")
+})
+
+client.on('message', message => {
+  afkStatus(client, message)
 })
 
 client.login(process.env.TOKEN)

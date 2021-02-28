@@ -56,8 +56,5 @@ Please confirm with a check mark or with a red cross.
                         message.channel.send('No reaction after 30 seconds, operation canceled.');
                     })
             })
-
-
-
     }
 }
