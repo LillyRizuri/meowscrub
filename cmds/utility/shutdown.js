@@ -18,7 +18,7 @@ module.exports = class ShutdownCommand extends Commando.Command {
         })
     }
 
-    async run(message, args) {
+    async run(message) {
         if (message.author.id !== ownerId) {
             const notBotOwnerEmbed = new Discord.MessageEmbed()
                 .setColor(red)
@@ -30,7 +30,7 @@ module.exports = class ShutdownCommand extends Commando.Command {
 
         const confirmationEmbed = new Discord.MessageEmbed()
             .setColor(embedcolor)
-            .setAuthor(`Initiated by ${message.author.tag}, the Owner`, message.author.displayAvatarURL({ dynamic: true }))
+            .setAuthor(`Initiated by ${message.author.tag}`, message.author.displayAvatarURL({ dynamic: true }))
             .setDescription(`
 The entire client seesion will be destroyed.
 Please confirm with a check mark or with a red cross.        
