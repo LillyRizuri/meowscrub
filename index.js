@@ -193,12 +193,12 @@ client.on('ready', async () => {
       ['giveaway', 'Giveaway Tools'],
       ['misc', 'Miscellaneous Stuff'],
       ['utility', 'Extra Utilities'],
+      ['settings', 'Guild Settings']
     ])
     .registerDefaults()
     .registerCommandsIn(path.join(__dirname, 'cmds'))
 
   poll(client)
-  chatbot(client)
   welcomeMsg(client)
 
   console.log("Initialized frockles (meowscrub) successfully. Give it a warm welcome.")
@@ -206,6 +206,7 @@ client.on('ready', async () => {
 
 client.on('message', message => {
   afkStatus(client, message)
+  chatbot(client, message)
 })
 
 client.login(process.env.TOKEN)

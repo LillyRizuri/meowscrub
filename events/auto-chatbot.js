@@ -1,20 +1,36 @@
-// Official Server Only
+const fetch = require('node-fetch')
+const settingsSchema = require('../schemas/settings-schema')
+const mongo = require('../mongo')
 
-const alexa = require('alexa-bot-api')
-const ai = new alexa()
+module.exports = async (client, message) => {
+    const guildId = message.guild.id
+    const input = encodeURIComponent(message.content)
 
-module.exports = (client) => {
-    const channelId = [
-        '807218230464217088'
-    ]
+    try {
+        await mongo().then(async (mongoose) => {
+            try {
+                let results = await settingsSchema.find({
+                    guildId
+                })
 
-    client.on('message', message => {
-        const input = message.content
-        if (message.author.bot) return
-        if (channelId.includes(message.channel.id)) {
-            ai.getReply(input).then(reply => {
-                message.channel.send((reply).toLowerCase())
-            })
-        }
-    })
+                if (results) {
+                    for (let i = 0; i < results.length; i++) {
+                        let { chatbotChannel } = results[i]
+                        if (message.author.bot) return
+                        if (chatbotChannel.includes(message.channel.id)) {
+                            message.channel.startTyping()
+                            const response = await fetch(`${process.env.BRAINSHOP}&uid=1&msg=${input}`)
+                            const json = await response.json()
+                            message.channel.send(json.cnt.toLowerCase())
+                            return message.channel.stopTyping(true)
+                        }
+                    }
+                }
+            } finally {
+                mongoose.connection.close()
+            }
+        })
+    } catch (err) {
+
+    }
 }
