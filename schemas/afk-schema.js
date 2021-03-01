@@ -15,11 +15,16 @@ const afkSchema = mongoose.Schema({
     },
     timestamp: {
         type: Number,
+        required: true
+    },
+    pingCount: {
+        type: Number,
         required: true,
+        default: 0
     },
     username: {
         type: String,
-        required: true,
+        required: true
     }
 })
 

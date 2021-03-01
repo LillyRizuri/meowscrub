@@ -15,13 +15,16 @@ module.exports = async (client, message) => {
 
                     if (results) {
                         for (let i = 0; i < results.length; i++) {
-                            let { userId, afk, timestamp } = results[i]
+                            let { userId, afk, timestamp, pingCount } = results[i]
                             switch (message.mentions.members.first().id) {
                                 case message.author.id:
                                     return
                                 case userId:
                                     let user = message.guild.members.cache.get(userId).user
-                                    return message.channel.send(`${user.username} is currently AFK: ${afk} - ${moment(timestamp).fromNow()}`)
+                                    message.channel.send(`${user.username} is currently AFK: ${afk} - ${moment(timestamp).fromNow()}`)
+                                    await afkSchema.findOneAndUpdate({
+                                        pingCount: pingCount + 1
+                                    })
                             }
                         }
                     }
@@ -33,7 +36,7 @@ module.exports = async (client, message) => {
 
                 if (afkResults) {
                     for (let i = 0; i < afkResults.length; i++) {
-                        let { userId, timestamp, username } = afkResults[i]
+                        let { userId, timestamp, username, pingCount } = afkResults[i]
 
                         if (timestamp + (1000 * 30) <= new Date().getTime()) {
 
@@ -41,12 +44,25 @@ module.exports = async (client, message) => {
                                 await afkSchema.findOneAndDelete({
                                     guildId,
                                     userId
+                                }, {
+                                    useFindAndModify: false
                                 })
 
+                                const defaultMsg = `Welcome back, <@${userId}>, I removed your AFK status.`
                                 message.member.setNickname(`${username}`)
                                     .catch(err => { })
 
-                                return message.channel.send(`Welcome back, <@${userId}>, I removed your AFK status.`)
+                                switch (pingCount) {
+                                    case 0:
+                                        message.channel.send(`${defaultMsg}\nYou haven't been pinged.`)
+                                        break
+                                    case 1:
+                                        message.channel.send(`${defaultMsg}\nYou have been pinged one time.`)
+                                        break
+                                    default:
+                                        message.channel.send(`${defaultMsg}\nYou have been pinged ${pingCount} times.`)
+                                        break
+                                }
                             }
                         }
                     }
@@ -55,9 +71,7 @@ module.exports = async (client, message) => {
                 mongoose.connection.close()
             }
         })
-    } catch (err) {
-
-    }
+    } catch (err) { }
 }
 
 
