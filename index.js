@@ -18,16 +18,17 @@ const { green, what, embedcolor } = require('./assets/json/colors.json')
 const snip = require("./events/msg-snipe")
 
 const client = new Commando.CommandoClient({
-  owner: config.ownerId,
-  commandPrefix: config.prefix,
-  disableMentions: 'everyone'
+  owner: config.ownerId, // Bot Owner ID goes here
+  commandPrefix: config.prefix, // Default Bot Prefix goes here
+  invite: `<${process.env.DISCORDINVITE}>`, // Discord Support Server Invite surrounded with "<>" goes here
+  disableMentions: 'everyone' // Do not modify this for safety purposes
 })
 
 // Saving configurations to MongoDB
 client.setProvider(
   MongoClient.connect(process.env.MONGO)
     .then((client) => {
-      return new MongoDBProvider(client, 'FrocklesDatabases')
+      return new MongoDBProvider(client, 'FrocklesDatabases' /* Rename your Database Name */)
     })
     .catch((err) => {
       console.error(err)

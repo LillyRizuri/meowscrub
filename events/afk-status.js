@@ -25,6 +25,7 @@ module.exports = async (client, message) => {
                                     await afkSchema.findOneAndUpdate({
                                         pingCount: pingCount + 1
                                     })
+                                    return
                             }
                         }
                     }

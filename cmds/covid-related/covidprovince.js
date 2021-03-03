@@ -33,14 +33,33 @@ module.exports = class CovidProvinceCommand extends Commando.Command {
 
         message.channel.send('Retrieving Informations, I guess...')
 
-        const country = args[0].toProperCase()
-        const province = args.slice(1).join(' ').toProperCase()
+        try {
+            const country = args[0].toProperCase()
+            const province = args.slice(1).join(' ').toProperCase()
 
-        const prov = await covid.getJHU({ country, province })
-        const obj = prov[0]
-        const updatedTime = new Date(obj.updatedAt).toLocaleDateString('en-US', dateTimeOptions)
+            const prov = await covid.getJHU({ country, province })
+            const obj = prov[0]
+            const updatedTime = new Date(obj.updatedAt).toLocaleDateString('en-US', dateTimeOptions)
 
-        if (!obj) {
+            const covidProvinceEmbed = new Discord.MessageEmbed()
+                .setColor(embedcolor)
+                .setAuthor(`${obj.province}, ${obj.country}`)
+                .addFields({
+                    name: 'Confirmed Cases',
+                    value: `**${obj.stats.confirmed.toLocaleString()}**`,
+                    inline: true
+                }, {
+                    name: 'Deaths',
+                    value: `${obj.stats.deaths.toLocaleString()} (${((obj.stats.deaths / obj.stats.confirmed) * 100).toFixed(2)}%)`,
+                    inline: true
+                }, {
+                    name: 'Recovered',
+                    value: `${obj.stats.recovered.toLocaleString()} (${((obj.stats.recovered / obj.stats.confirmed) * 100).toFixed(2)}%)`,
+                    inline: true
+                })
+                .setFooter(`Last Updated: ${updatedTime}`)
+            message.channel.send(covidProvinceEmbed)
+        } catch (err) {
             const noResultEmbed = new Discord.MessageEmbed()
                 .setColor(red)
                 .setDescription(`
@@ -51,26 +70,6 @@ module.exports = class CovidProvinceCommand extends Commando.Command {
                 .setFooter("check again.")
                 .setTimestamp()
             message.reply(noResultEmbed)
-            return
         }
-
-        const embed = new Discord.MessageEmbed()
-            .setColor(embedcolor)
-            .setAuthor(`${obj.province}, ${obj.country}`)
-            .addFields({
-                name: 'Confirmed Cases',
-                value: `**${obj.stats.confirmed.toLocaleString()}**`,
-                inline: true
-            }, {
-                name: 'Deaths',
-                value: `${obj.stats.deaths.toLocaleString()} (${((obj.stats.deaths / obj.stats.confirmed) * 100).toFixed(2)}%)`,
-                inline: true
-            }, {
-                name: 'Recovered',
-                value: `${obj.stats.recovered.toLocaleString()} (${((obj.stats.recovered / obj.stats.confirmed) * 100).toFixed(2)}%)`,
-                inline: true
-            })
-            .setFooter(`Last Updated: ${updatedTime}`)
-        message.channel.send(embed)
     }
 }

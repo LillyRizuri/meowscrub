@@ -31,14 +31,61 @@ module.exports = class CovidStates extends Commando.Command {
             message.reply(noInputEmbed)
             return
         }
-        
+
         message.channel.send('Retrieving Informations, I guess...')
 
-        const stateInput = args.toProperCase()
+        try {
+            const stateInput = args.toProperCase()
 
-        const state = await covid.getState({ state: stateInput })
-        const updatedTime = new Date(state.updated).toLocaleDateString('en-US', dateTimeOptions)
-        if (!state) {
+            const state = await covid.getState({ state: stateInput })
+            const updatedTime = new Date(state.updated).toLocaleDateString('en-US', dateTimeOptions)
+
+            const wikiName = state.state
+
+            const WikiPage = await fetch(`https://en.wikipedia.org/wiki/2020_coronavirus_pandemic_in_${wikiName.replace(' ', '_').replace(' ', '_').replace(' ', '_').replace(' ', '_').replace(' ', '_').replace(' ', '_').replace(' ', '_').replace(' ', '_')}`).then(res => res.text())
+            const ImageRegex = /<meta property="og:image" content="([^<]*)"\/>/
+            const ImageLink = ImageRegex.exec(WikiPage)
+            let imageLink
+            if (ImageLink) imageLink = ImageLink[1]
+
+            let flagURL = ''
+            for (let i = 0; i < statesJson.length; i++) {
+                if (state.state == statesJson[i].state) flagURL = statesJson[i].state_flag_url
+            }
+
+            const covidStatesEmbed = new Discord.MessageEmbed()
+                .setColor(embedcolor)
+                .setAuthor(state.state)
+                .setThumbnail(flagURL)
+                .addFields({
+                    name: 'Confirmed Cases',
+                    value: `**${state.cases.toLocaleString()}**`,
+                    inline: true
+                }, {
+                    name: 'Today Cases',
+                    value: `+${state.todayCases.toLocaleString()}`,
+                    inline: true
+                }, {
+                    name: 'Today Deaths',
+                    value: `+${state.todayDeaths.toLocaleString()}`,
+                    inline: true
+                }, {
+                    name: 'Active',
+                    value: `${state.active.toLocaleString()} (${((state.active / state.cases) * 100).toFixed(2)}%)`,
+                    inline: true
+                }, {
+                    name: 'Deaths',
+                    value: `${state.deaths.toLocaleString()} (${((state.deaths / state.cases) * 100).toFixed(2)}%)`,
+                    inline: true
+                }, {
+                    name: 'Tests',
+                    value: state.tests.toLocaleString(),
+                    inline: true
+                })
+                .setFooter(`Last Updated: ${updatedTime}`)
+            if (imageLink) covidStatesEmbed.setImage(imageLink)
+            message.channel.send(covidStatesEmbed)
+        } catch (err) {
             const noResultsEmbed = new Discord.MessageEmbed()
                 .setColor(red)
                 .setDescription(`
@@ -49,53 +96,6 @@ module.exports = class CovidStates extends Commando.Command {
                 .setFooter("brhmmmuh")
                 .setTimestamp()
             message.reply(noResultsEmbed)
-            return
         }
-
-        const wikiName = state.state
-
-        const WikiPage = await fetch(`https://en.wikipedia.org/wiki/2020_coronavirus_pandemic_in_${wikiName.replace(' ', '_').replace(' ', '_').replace(' ', '_').replace(' ', '_').replace(' ', '_').replace(' ', '_').replace(' ', '_').replace(' ', '_')}`).then(res => res.text())
-        const ImageRegex = /<meta property="og:image" content="([^<]*)"\/>/
-        const ImageLink = ImageRegex.exec(WikiPage)
-        let imageLink
-        if (ImageLink) imageLink = ImageLink[1]
-
-        let flagURL = ''
-        for (let i = 0; i < statesJson.length; i++) {
-            if (state.state == statesJson[i].state) flagURL = statesJson[i].state_flag_url
-        }
-
-        const covidStatesEmbed = new Discord.MessageEmbed()
-            .setColor(embedcolor)
-            .setAuthor(state.state)
-            .setThumbnail(flagURL)
-            .addFields({
-                name: 'Confirmed Cases',
-                value: `**${state.cases.toLocaleString()}**`,
-                inline: true
-            }, {
-                name: 'Today Cases',
-                value: `+${state.todayCases.toLocaleString()}`,
-                inline: true
-            }, {
-                name: 'Today Deaths',
-                value: `+${state.todayDeaths.toLocaleString()}`,
-                inline: true
-            }, {
-                name: 'Active',
-                value: `${state.active.toLocaleString()} (${((state.active / state.cases) * 100).toFixed(2)}%)`,
-                inline: true
-            }, {
-                name: 'Deaths',
-                value: `${state.deaths.toLocaleString()} (${((state.deaths / state.cases) * 100).toFixed(2)}%)`,
-                inline: true
-            }, {
-                name: 'Tests',
-                value: state.tests.toLocaleString(),
-                inline: true
-            })
-            .setFooter(`Last Updated: ${updatedTime}`)
-        if (imageLink) covidStatesEmbed.setImage(imageLink)
-        message.channel.send(covidStatesEmbed)
     }
 }

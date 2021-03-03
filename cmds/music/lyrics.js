@@ -68,7 +68,6 @@ module.exports = class LyricsCommand extends Commando.Command {
                     })
                     message.channel.send(lyricsEmbed)
                 } catch (err) {
-                    console.log(err)
                     const noResultsEmbed = new Discord.MessageEmbed()
                         .setColor(red)
                         .setDescription(`<:scrubred:797476323169533963> No results for: **${songInput}**.`)
@@ -78,8 +77,6 @@ module.exports = class LyricsCommand extends Commando.Command {
                     return
                 }
             })
-
-
     }
 }
 
