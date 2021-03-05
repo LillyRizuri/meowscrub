@@ -5,7 +5,6 @@ const mongo = require('../../mongo')
 const settingsSchema = require('../../schemas/settings-schema')
 
 const { green, what } = require('../../assets/json/colors.json')
-const { re } = require('mathjs')
 
 module.exports = class SetChatbotChannelCommand extends Commando.Command {
     constructor(client) {
@@ -80,7 +79,7 @@ module.exports = class SetChatbotChannelCommand extends Commando.Command {
                         }, {
                             guildId,
                             $set: {
-                                chatbotChannel: ''
+                                chatbotChannel: null
                             }
                         }, {
                             upsert: true,
