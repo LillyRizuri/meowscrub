@@ -9,7 +9,6 @@ const Commando = require('discord.js-commando')
 const DisTube = require('distube')
 
 const config = require('./config.json')
-const poll = require('./events/auto-poll')
 const mongo = require('./mongo')
 const chatbot = require('./events/auto-chatbot')
 const welcomeMsg = require('./events/welcome-msg')
@@ -199,7 +198,6 @@ client.on('ready', async () => {
     .registerDefaults()
     .registerCommandsIn(path.join(__dirname, 'cmds'))
 
-  poll(client)
   welcomeMsg(client)
 
   console.log("Initialized frockles (meowscrub) successfully. Give it a warm welcome.")
