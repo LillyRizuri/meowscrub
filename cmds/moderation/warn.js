@@ -24,18 +24,18 @@ module.exports = class WarnCommand extends Commando.Command {
     }
 
     async run(message, args) {
+        if (!args[0]) {
+            const notargetEmbed = new Discord.MessageEmbed()
+                .setColor(what)
+                .setDescription("<:scrubnull:797476323533783050> At least provide at least one user to warn.")
+                .setFooter("bruh")
+                .setTimestamp()
+            message.reply(notargetEmbed)
+            return
+        }
+
         try {
             const target = message.mentions.users.first() || message.guild.members.cache.get(args[0]).user
-            if (!args[0]) {
-                const notargetEmbed = new Discord.MessageEmbed()
-                    .setColor(what)
-                    .setDescription("<:scrubnull:797476323533783050> At least provide at least one user to warn.")
-                    .setFooter("bruh")
-                    .setTimestamp()
-                message.reply(notargetEmbed)
-                return
-            }
-
             switch (target) {
                 case message.author:
                     const WarningYourselfEmbed = new Discord.MessageEmbed()

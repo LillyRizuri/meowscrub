@@ -6,6 +6,12 @@ const warnSchema = require('../../schemas/warn-schema')
 
 const { what, red, embedcolor } = require('../../assets/json/colors.json')
 
+const noValidUserEmbed = new Discord.MessageEmbed()
+    .setColor(red)
+    .setDescription("<:scrubred:797476323169533963> THAT'S not a valid user.")
+    .setFooter("lazyyyyyy")
+    .setTimestamp()
+
 module.exports = class WarningsCommand extends Commando.Command {
     constructor(client) {
         super(client, {
@@ -24,6 +30,8 @@ module.exports = class WarningsCommand extends Commando.Command {
     }
 
     async run(message, args) {
+        const dateTimeOptions = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric' }
+
         if (!args) {
             const nospecEmbed = new Discord.MessageEmbed()
                 .setColor(what)
@@ -54,7 +62,7 @@ module.exports = class WarningsCommand extends Commando.Command {
                         for (const warning of results.warnings) {
                             const { author, timestamp, warnId, reason } = warning
 
-                            reply += `+ **ID: ${warnId} | ${author}**\n"${reason}" - ${new Date(timestamp).toLocaleDateString()}\n\n`
+                            reply += `+ **ID: ${warnId} | ${author}**\n"${reason}" - ${new Date(timestamp).toLocaleDateString('en-US', dateTimeOptions)}\n\n`
                         }
 
                         const warnlistEmbed = new Discord.MessageEmbed()
@@ -78,11 +86,7 @@ module.exports = class WarningsCommand extends Commando.Command {
                 }
             })
         } catch (err) {
-            const noValidUserEmbed = new Discord.MessageEmbed()
-                .setColor(red)
-                .setDescription("<:scrubred:797476323169533963> THAT'S not a valid user.")
-                .setFooter("lazyyyyyy")
-                .setTimestamp()
+            // if there's no first warning for the user
             message.reply(noValidUserEmbed)
         }
     }
