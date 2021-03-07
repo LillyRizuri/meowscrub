@@ -1,5 +1,6 @@
 const Commando = require('discord.js-commando')
 const fetch = require('node-fetch')
+const utf8 = require('utf8')
 
 module.exports = class chatCommand extends Commando.Command {
     constructor(client) {
@@ -23,7 +24,7 @@ module.exports = class chatCommand extends Commando.Command {
         }
 
         message.channel.startTyping()
-        const response = await fetch(`${process.env.BRAINSHOP}&uid=1&msg=${input}`)
+        const response = await fetch(utf8.encode(`http://api.brainshop.ai/get?bid=${process.env.BRAINSHOP_BRAIN_ID}&key=${process.env.BRAINSHOP_API_KEY}&uid=${message.author.id}&msg=${input}`))
         const json = await response.json()
         message.channel.send(json.cnt.toLowerCase())
         return message.channel.stopTyping(true)
