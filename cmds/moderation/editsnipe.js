@@ -3,13 +3,13 @@ const Discord = require('discord.js')
 
 const { embedcolor, what, red } = require('../../assets/json/colors.json')
 
-module.exports = class SnipeCommand extends Commando.Command {
+module.exports = class EditSnipeCommand extends Commando.Command {
     constructor(client) {
         super(client, {
-            name: 'snipe',
+            name: 'editsnipe',
             group: 'moderation',
-            memberName: 'snipe',
-            description: "Reveals the latest deleted message.",
+            memberName: 'editsnipe',
+            description: "Reveals the latest before-edited message.",
             details: "Leave the argument blank to check for the channel the command was run in.",
             argsType: 'single',
             format: '[#channel/channelID]',
@@ -39,29 +39,30 @@ module.exports = class SnipeCommand extends Commando.Command {
             return message.reply(notValidChannelEmbed)
         }
 
-        const snipe = this.client.snipe.get(selectedChannel)
-        if (!snipe) {
+        const editsnipe = this.client.editsnipe.get(selectedChannel)
+        if (!editsnipe) {
             const noMsgEmbed = new Discord.MessageEmbed()
                 .setColor(what)
-                .setDescription("<:scrubnull:797476323533783050> There's no latest deleted message.")
+                .setDescription("<:scrubnull:797476323533783050> There's no latest edited message.")
                 .setFooter('lol')
                 .setTimestamp()
             return message.reply(noMsgEmbed)
         }
 
-        const snipedEmbed = new Discord.MessageEmbed()
+        const editSnipedEmbed = new Discord.MessageEmbed()
             .setColor(embedcolor)
-            .setAuthor(snipe.authorTag, snipe.avatar)
-            .setFooter(`UserID: ${snipe.authorId}`)
-            .setTimestamp(snipe.createdAt)
-        if (snipe.attachments) {
-            snipedEmbed
-                .setImage(snipe.attachments)
-                .setDescription(`${snipe.content}\n[Attachment](${snipe.attachments})`)
+            .setAuthor(editsnipe.authorTag, editsnipe.avatar)
+            .setDescription(editsnipe.content)
+            .setFooter(`UserID: ${editsnipe.authorId}`)
+            .setTimestamp(editsnipe.createdAt)
+        if (editsnipe.attachments) {
+            editSnipedEmbed
+                .setImage(editsnipe.attachments)
+                .setDescription(`${editsnipe.content}\n[Attachment](${editsnipe.attachments})`)
         } else {
-            snipedEmbed
-                .setDescription(snipe.content)
+            editSnipedEmbed
+                .setDescription(editsnipe.content)
         }
-        message.channel.send(snipedEmbed)
+        message.channel.send(editSnipedEmbed)
     }
 }

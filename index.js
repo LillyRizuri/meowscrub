@@ -14,7 +14,6 @@ const chatbot = require('./events/auto-chatbot')
 const welcomeMsg = require('./events/welcome-msg')
 const afkStatus = require('./events/afk-status')
 const { green, what, embedcolor } = require('./assets/json/colors.json')
-const snip = require("./events/msg-snipe")
 
 const client = new Commando.CommandoClient({
   owner: config.ownerId, // Bot Owner ID goes here
@@ -78,16 +77,6 @@ const manager = new GiveawayManagerWithOwnDatabase(client, {
 
 client.giveawaysManager = manager
 ////////////////////////////////////////////////////////
-
-client.on('messageDelete', async message => {
-  const args = message.content.split(" ")
-  const author = message.author.id
-  const tag = message.author.tag
-  const time = message.createdAt
-  const icon = message.author.displayAvatarURL()
-  snip.run(message, args, client, author, tag, time, icon)
-})
-
 
 client.on('ready', async () => {
   // Support for music playback
@@ -206,6 +195,30 @@ client.on('ready', async () => {
 client.on('message', message => {
   afkStatus(client, message)
   chatbot(client, message)
+})
+
+client.snipe = new Map()
+client.on('messageDelete', function (message, channel) {
+  client.snipe.set(message.channel.id, {
+    content: message.content,
+    authorId: message.author.id,
+    authorTag: message.author.tag,
+    createdAt: message.createdAt,
+    avatar: message.author.displayAvatarURL(),
+    attachments: message.attachments.first() ? message.attachments.first().proxyURL : null
+  })
+})
+
+client.editsnipe = new Map()
+client.on('messageUpdate', function (message, channel) {
+  client.editsnipe.set(message.channel.id, {
+    content: message.content,
+    authorId: message.author.id,
+    authorTag: message.author.tag,
+    createdAt: message.createdAt,
+    avatar: message.author.displayAvatarURL(),
+    attachments: message.attachments.first() ? message.attachments.first().proxyURL : null
+  })
 })
 
 client.login(process.env.TOKEN)
