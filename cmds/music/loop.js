@@ -11,7 +11,8 @@ module.exports = class LoopMusicCommand extends Commando.Command {
             group: 'music',
             memberName: 'loop',
             argsType: 'single',
-            description: 'Loop `1`: A song, `2`: Repeat all the queue; or `0`: Disable.',
+            description: 'Loop your music or queue',
+            details: "There's 3 values to choose: `song`, `queue`, or turn it `off`.",
             format: '<value>',
             examples: ['loop 1'],
             guildOnly: true
@@ -63,23 +64,21 @@ module.exports = class LoopMusicCommand extends Commando.Command {
             case "queue":
                 mode = 2
                 break
+            default:
+                const invalidValueEmbed = new Discord.MessageEmbed()
+                    .setColor(red)
+                    .setDescription("<:scrubred:797476323169533963> THAT is not a valid value.\nEither it's `queue`, `song`, or turn `off`.")
+                    .setFooter("i got shock by accident once, don't do that")
+                    .setTimestamp()
+                message.reply(invalidValueEmbed)
+                return
         }
 
-        try {
-            mode = this.client.distube.setRepeatMode(message, mode)
-            mode = mode ? mode == 2 ? "Repeat Queue" : "Repeat Song" : "Off"
-            const selLoopEmbed = new Discord.MessageEmbed()
-                .setColor(green)
-                .setDescription(`<:scrubgreen:797476323316465676> Set repeat option to: **${mode}**`)
-            message.channel.send(selLoopEmbed)
-        } catch (err) {
-            const invalidValueEmbed = new Discord.MessageEmbed()
-                .setColor(red)
-                .setDescription("<:scrubred:797476323169533963> THAT is not a valid value.\nEither it's `queue`, `song`, or turn `off`.")
-                .setFooter("i got shock by accident once, don't do that")
-                .setTimestamp()
-            message.reply(invalidValueEmbed)
-            return
-        }
+        mode = this.client.distube.setRepeatMode(message, mode)
+        mode = mode ? mode == 2 ? "Repeat Queue" : "Repeat Song" : "Off"
+        const selLoopEmbed = new Discord.MessageEmbed()
+            .setColor(green)
+            .setDescription(`<:scrubgreen:797476323316465676> Set repeat option to: **${mode}**`)
+        message.channel.send(selLoopEmbed)
     }
 }

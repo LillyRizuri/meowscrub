@@ -1,6 +1,6 @@
 const Commando = require('discord.js-commando')
 const Discord = require('discord.js')
-const request = require('request')
+const figlet = require('figlet')
 
 const { what, red } = require('../../assets/json/colors.json')
 
@@ -16,7 +16,7 @@ module.exports = class AsciiCommand extends Commando.Command {
         })
     }
 
-    run(message, args) {
+    async run(message, args) {
         const input = args
 
         if (!input) {
@@ -37,12 +37,16 @@ module.exports = class AsciiCommand extends Commando.Command {
             return message.reply(inputOverLimitEmbed)
         }
 
-        request("https://artii.herokuapp.com/make?text=" + input, function (error, response, body) {
-            if (!error && response.statusCode == 200) {
-                message.channel.send(`\`\`\`${body}\`\`\``)
-            } else {
-                message.reply("An error from the API side has occured. Try something else or try again later.")
+        figlet.text(
+            args,
+            {
+                font: ""
+            },
+            async (err, data) => {
+                if (err) return message.reply(`An error from the dependency has occured. \`${err}\``)
+                if (!data) return message.channel.send(`\`\`\`No Output. Please Try Again.\`\`\``)
+                message.channel.send(`\`\`\`${data}\`\`\``)
             }
-        })
+        )
     }
 }

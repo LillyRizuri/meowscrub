@@ -87,7 +87,7 @@ module.exports = class SeekMusicCommand extends Commando.Command {
         this.client.distube.seek(message, Number(milliseconds))
         const seekEmbed = new Discord.MessageEmbed()
             .setColor(green)
-            .setDescription(`<:scrubgreen:797476323316465676> Moved the playhead to **${seekValue}**.`)
+            .setDescription(`<:scrubgreen:797476323316465676> Moved the playhead to **${new Date(milliseconds).toISOString().substr(11, 8)}**.`)
         message.channel.send(seekEmbed)
     }
 }
