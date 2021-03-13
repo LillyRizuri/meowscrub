@@ -1,5 +1,6 @@
 const Commando = require('discord.js-commando')
 const Discord = require('discord.js')
+const utf8 = require('utf8')
 
 const { red, what, embedcolor } = require('../../assets/json/colors.json')
 
@@ -10,6 +11,7 @@ module.exports = class BinaryCommand extends Commando.Command {
             group: 'encoders',
             memberName: 'binary',
             description: 'To binaries. And reverse.',
+            details: 'All text output will be encoded in UTF-8.',
             argsType: 'multiple',
             format: '<encode/decode> <string>',
             examples: ['binary never', 'binary decode 01101110 01100101 01110110 01100101 01110010']
@@ -50,36 +52,51 @@ module.exports = class BinaryCommand extends Commando.Command {
             return char.split(' ').map(str => String.fromCharCode(Number.parseInt(str, 2))).join('')
         }
 
-        if (encode(input).length > 2042 || decode(input).length > 2042) {
-            const tooMuchEmbed = new Discord.MessageEmbed()
-                .setColor(red)
-                .setDescription('<:scrubred:797476323169533963> Your provided input is probably too much.')
-                .setFooter('try again')
-                .setTimestamp()
-            return message.reply(tooMuchEmbed)
-        }
-
         switch (param) {
             case 'encode':
+                const formattedInput = utf8.encode(input)
+                const encoded = encode(formattedInput)
+
+                if (encoded.length > 2042) {
+                    const tooMuchEmbed = new Discord.MessageEmbed()
+                        .setColor(red)
+                        .setDescription('<:scrubred:797476323169533963> Your provided input is probably too much.')
+                        .setFooter('try again')
+                        .setTimestamp()
+                    return message.reply(tooMuchEmbed)
+                }
+
                 const encodedEmbed = new Discord.MessageEmbed()
                     .setColor(embedcolor)
                     .setAuthor('Encoded to:')
-                    .setDescription(`\`\`\`${encode(input)}\`\`\``)
+                    .setDescription(`\`\`\`${encoded}\`\`\``)
                     .setTimestamp()
                 message.channel.send(encodedEmbed)
                 return
             case 'decode':
+                const decoded = decode(input)
+                const formattedOutput = utf8.decode(decoded)
+
+                if (formattedOutput.length > 2042) {
+                    const tooMuchEmbed = new Discord.MessageEmbed()
+                        .setColor(red)
+                        .setDescription('<:scrubred:797476323169533963> Your provided input is probably too much.')
+                        .setFooter('try again')
+                        .setTimestamp()
+                    return message.reply(tooMuchEmbed)
+                }
+
                 const decodedEmbed = new Discord.MessageEmbed()
                     .setColor(embedcolor)
                     .setAuthor('Decoded to:')
-                    .setDescription(`\`\`\`${decode(input)}\`\`\``)
+                    .setDescription(`\`\`\`${formattedOutput}\`\`\``)
                     .setTimestamp()
                 message.channel.send(decodedEmbed)
                 return
             default:
                 const invalidParamEmbed = new Discord.MessageEmbed()
                     .setColor(red)
-                    .setDescription("<:scrubnull:797476323533783050> THAT'S not a valid parameter.\nEither it's by `encode`, or `decode`.")
+                    .setDescription("<:scrubred:797476323169533963> THAT'S not a valid parameter.\nEither it's by `encode`, or `decode`.")
                     .setFooter('try again')
                     .setTimestamp()
                 message.reply(invalidParamEmbed)
