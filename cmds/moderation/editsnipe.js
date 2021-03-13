@@ -24,11 +24,11 @@ module.exports = class EditSnipeCommand extends Commando.Command {
 
         try {
             if (message.mentions.channels.first()) {
-                selectedChannel = message.mentions.channels.first().id
+                selectedChannel = message.mentions.channels.first()
             } else if (args) {
-                selectedChannel = message.guild.channels.cache.get(args).id
+                selectedChannel = message.guild.channels.cache.get(args)
             } else {
-                selectedChannel = message.channel.id
+                selectedChannel = message.channel
             }
         } catch (err) {
             const notValidChannelEmbed = new Discord.MessageEmbed()
@@ -39,7 +39,16 @@ module.exports = class EditSnipeCommand extends Commando.Command {
             return message.reply(notValidChannelEmbed)
         }
 
-        const editsnipe = this.client.editsnipe.get(selectedChannel)
+        if (selectedChannel.nsfw === true) {
+            const isNsfwEmbed = new Discord.MessageEmbed()
+                .setColor(red)
+                .setDescription("<:scrubred:797476323169533963> Editsniping in an NSFW channel is prohibited.")
+                .setFooter("don't even think about it")
+                .setTimestamp()
+            return message.reply(isNsfwEmbed)
+        }
+
+        const editsnipe = this.client.editsnipe.get(selectedChannel.id)
         if (!editsnipe) {
             const noMsgEmbed = new Discord.MessageEmbed()
                 .setColor(what)
@@ -52,16 +61,15 @@ module.exports = class EditSnipeCommand extends Commando.Command {
         const editSnipedEmbed = new Discord.MessageEmbed()
             .setColor(embedcolor)
             .setAuthor(editsnipe.authorTag, editsnipe.avatar)
-            .setDescription(editsnipe.content)
             .setFooter(`UserID: ${editsnipe.authorId}`)
             .setTimestamp(editsnipe.createdAt)
         if (editsnipe.attachments) {
             editSnipedEmbed
                 .setImage(editsnipe.attachments)
-                .setDescription(`${editsnipe.content}\n[Attachment](${editsnipe.attachments})`)
+                .setDescription(`${editsnipe.content}\n[\`Attachment\`](${editsnipe.attachments}) | [\`Referred Message\`](${editsnipe.url})\``)
         } else {
             editSnipedEmbed
-                .setDescription(editsnipe.content)
+            .setDescription(`${editsnipe.content}\n[\`Referred Message\`](${editsnipe.url})`)
         }
         message.channel.send(editSnipedEmbed)
     }

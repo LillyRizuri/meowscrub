@@ -24,11 +24,11 @@ module.exports = class SnipeCommand extends Commando.Command {
 
         try {
             if (message.mentions.channels.first()) {
-                selectedChannel = message.mentions.channels.first().id
+                selectedChannel = message.mentions.channels.first()
             } else if (args) {
-                selectedChannel = message.guild.channels.cache.get(args).id
+                selectedChannel = message.guild.channels.cache.get(args)
             } else {
-                selectedChannel = message.channel.id
+                selectedChannel = message.channel
             }
         } catch (err) {
             const notValidChannelEmbed = new Discord.MessageEmbed()
@@ -39,7 +39,16 @@ module.exports = class SnipeCommand extends Commando.Command {
             return message.reply(notValidChannelEmbed)
         }
 
-        const snipe = this.client.snipe.get(selectedChannel)
+        if (selectedChannel.nsfw === true) {
+            const isNsfwEmbed = new Discord.MessageEmbed()
+                .setColor(red)
+                .setDescription("<:scrubred:797476323169533963> Sniping in an NSFW channel is prohibited.")
+                .setFooter('what the hell')
+                .setTimestamp()
+            return message.reply(isNsfwEmbed)
+        }
+
+        const snipe = this.client.snipe.get(selectedChannel.id)
         if (!snipe) {
             const noMsgEmbed = new Discord.MessageEmbed()
                 .setColor(what)
@@ -57,7 +66,7 @@ module.exports = class SnipeCommand extends Commando.Command {
         if (snipe.attachments) {
             snipedEmbed
                 .setImage(snipe.attachments)
-                .setDescription(`${snipe.content}\n[Attachment](${snipe.attachments})`)
+                .setDescription(`${snipe.content}\n[\`Attachment\`](${snipe.attachments})`)
         } else {
             snipedEmbed
                 .setDescription(snipe.content)
