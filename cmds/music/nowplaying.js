@@ -43,7 +43,8 @@ module.exports = class NowPlayingCommand extends Commando.Command {
 
         const npEmbed = new Discord.MessageEmbed()
             .setColor(embedcolor)
-            .setTitle(`Now Playing: ${queue.songs[0].name}`)
+            .setAuthor('Now Playing')
+            .setTitle(queue.songs[0].name)
             .setURL(queue.songs[0].url)
             .setThumbnail(queue.songs[0].thumbnail)
             .setDescription(`
