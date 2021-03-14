@@ -11,8 +11,8 @@ module.exports = class LoopMusicCommand extends Commando.Command {
             group: 'music',
             memberName: 'loop',
             argsType: 'single',
-            description: 'Loop your music or queue',
-            details: "There's 3 values to choose: `song`, `queue`, or turn it `off`.",
+            description: 'Loop your music or queue.',
+            details: "There are 3 values to choose: `song`, `queue`, or turn it `off`.",
             format: '<value>',
             examples: ['loop 1'],
             guildOnly: true

@@ -42,7 +42,7 @@ module.exports = class JumpMusicCommand extends Commando.Command {
             return
         }
 
-        if (!musicNumber) {
+        if (!args) {
             const noValueEmbed = new Discord.MessageEmbed()
                 .setColor(what)
                 .setDescription(`<:scrubnull:797476323533783050> Music number in the queue has to be found.`)
@@ -52,7 +52,7 @@ module.exports = class JumpMusicCommand extends Commando.Command {
             return
         }
 
-        if (musicNumber < 0 || isNaN(musicNumber) || !Number.isInteger(musicNumber)) {
+        if (musicNumber <= 0 || isNaN(musicNumber) || !Number.isInteger(musicNumber)) {
             const invalidEmbed = new Discord.MessageEmbed()
                 .setColor(red)
                 .setDescription(`<:scrubred:797476323169533963> Right off the bat, I can see that the value isn't valid.`)
@@ -63,7 +63,7 @@ module.exports = class JumpMusicCommand extends Commando.Command {
         }
 
         try {
-            this.client.distube.jump(message, parseInt(musicNumber) - 1)
+            this.client.distube.jump(message, parseInt(musicNumber))
             message.channel.send(`⏩ Jumped to a music with the song number: **${musicNumber}**.`)
         } catch (err) {
             const incorrectValueEmbed = new Discord.MessageEmbed()

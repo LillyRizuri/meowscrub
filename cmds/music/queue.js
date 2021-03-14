@@ -16,7 +16,6 @@ module.exports = class ListQueueCommand extends Commando.Command {
 
     async run(message) {
         let queue = await this.client.distube.getQueue(message)
-
         const voiceChannel = message.member.voice.channel
 
         if (!voiceChannel) {
@@ -29,13 +28,27 @@ module.exports = class ListQueueCommand extends Commando.Command {
             return
         }
 
+        const loopSetting = queue.repeatMode
+            .toString()
+            .replace('0', 'Disabled')
+            .replace('1', 'Song')
+            .replace('2', 'Queue')
+
+        const autoplaySetting = queue.autoplay
+            .toString()
+            .replace('true', 'On')
+            .replace('false', 'Off')
+
+        const queueList = queue.songs.map((song, id) =>
+            `**${id}**. [${song.name}](${song.url}) - \`${song.formattedDuration}\``
+        ).join("\n")
+
         if (queue) {
             const currentQueueEmbed = new Discord.MessageEmbed()
                 .setColor(embedcolor)
                 .setAuthor('Current queue for this Guild')
-                .setDescription(queue.songs.map((song, id) =>
-                    `**${id + 1}**. [${song.name}](${song.url}) - \`${song.formattedDuration}\``
-                ).join("\n"))
+                .setDescription(queueList)
+                .setFooter(`Loop: ${loopSetting} | Volume: ${queue.volume}% | Autoplay: ${autoplaySetting}`)
             message.channel.send(currentQueueEmbed)
         } else if (!queue) {
             const noMusicEmbed = new Discord.MessageEmbed()

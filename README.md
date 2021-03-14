@@ -4,3 +4,35 @@ Yes, I know it's called meowscrub in the repository's name.
 This bot is a fairly simple one, it also utilizes discord.js-commando framework.
 
 The source code is provided here for transparency about how the bot works and how it won't spread virus into your workspace. Respect the license when you decides to edit, compile or use the code in any way.
+
+## To setup the bot properly:
+- You may want to fill some stuff in `config.json`:
+```
+{
+    "prefix": "Your Default Prefix",
+    "ownerId": "Your ID"
+}
+```
+- And in your `.env` file too:
+```
+DISCORDINVITE=
+TOKEN=
+GENIUS=
+MONGO=
+YTCOOKIE=
+BRAINSHOP_BRAIN_ID=
+BRAINSHOP_API_KEY=
+```
+ - `DISCORDINVITE` is your invite link to your server (surround it with these: <>)
+ - `TOKEN` is your Discord Bot Token
+ - `GENIUS` is for the lyrics command. Obtain it here: http://genius.com/api-clients
+ - `MONGO` is your connection string to your MongoDB database, cloud or local.
+ - `YTCOOKIE` can be obtainable by doing these:
+   - Navigate to YouTube in a web browser
+   - Open up Developer Tools (opt+cmd+j on mac, ctrl+shift+j on windows)
+   - Go to the Network Tab
+   - Click on `sw.js_data` when it appears
+   - Scroll down to "Request Headers"
+   - Find the "cookie" header and copy its entire contents
+ - `BRAINSHOP_BRAIN_ID` and `BRAINSHOP_API_KEY` can be obtainable by creating a brain in http://brainshop.ai/
+

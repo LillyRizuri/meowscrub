@@ -89,14 +89,17 @@ client.on('ready', async () => {
   //// - scroll down to "Request Headers"
   //// - find the "cookie" header and copy its entire contents
   client.distube
+    .on("initQueue", queue => {
+      queue.autoplay = false
+      queue.volume = 100
+    })
     .on('playSong', async (message, queue, song) => {
-      queue.autoplay = false // To prevent suggested songs provided by the bot
       const playingEmbed = new Discord.MessageEmbed()
         .setColor(green)
         .setThumbnail(song.thumbnail)
         .setDescription(`
-  <:scrubgreen:797476323316465676> **Now Playing:**
-  [${song.name}](${song.url}) - **${song.formattedDuration}**
+<:scrubgreen:797476323316465676> **Now Playing:**
+[${song.name}](${song.url}) - **${song.formattedDuration}**
   `)
         .setFooter(`Requested by: ${song.user.tag}`)
         .setTimestamp()
@@ -107,8 +110,8 @@ client.on('ready', async () => {
         .setColor(green)
         .setThumbnail(song.thumbnail)
         .setDescription(`
-  <:scrubgreen:797476323316465676> **Added to the queue.**
-  [${song.name}](${song.url}) - **${song.formattedDuration}**
+<:scrubgreen:797476323316465676> **Added to the queue.**
+[${song.name}](${song.url}) - **${song.formattedDuration}**
   `)
         .setFooter(`Added by: ${song.user.tag}`)
         .setTimestamp()
@@ -119,6 +122,12 @@ client.on('ready', async () => {
         .setColor(what)
         .setDescription("<:scrubnull:797476323533783050> **VC Empty. Leaving the channel...**")
       message.channel.send(emptyChannelEmbed)
+    })
+    .on('noRelated', (message) => {
+      const noRelatedMusicEmbed = new Discord.MessageEmbed()
+      .setColor(what)
+      .setDescription("<:scrubnull:797476323533783050> **No related music can be found. Leaving the VC...**")
+      message.channel.send(noRelatedMusicEmbed)
     })
     .on('finish', (message) => {
       const endQueueEmbed = new Discord.MessageEmbed()

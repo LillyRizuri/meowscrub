@@ -1,6 +1,7 @@
 const Commando = require('discord.js-commando')
 const Discord = require('discord.js')
-const { version, author } = require('../../package.json')
+const { version } = require('../../package.json')
+const { ownerId } = require('../../config.json')
 
 const { embedcolor } = require('../../assets/json/colors.json')
 
@@ -16,6 +17,7 @@ module.exports = class BotInfoCommand extends Commando.Command {
 
     async run(message) {
         let totalMembers = 0
+        let author
 
         let totalSeconds = (this.client.uptime / 1000)
         let days = Math.floor(totalSeconds / 86400)
@@ -25,9 +27,15 @@ module.exports = class BotInfoCommand extends Commando.Command {
         let minutes = Math.floor(totalSeconds / 60)
         let seconds = Math.floor(totalSeconds % 60)
 
+        this.client.users.fetch(ownerId)
+            .then(async user => {
+                author = user.tag
+            })
+
         for (const guild of this.client.guilds.cache) {
             totalMembers += (await guild[1].members.fetch()).size
         }
+
         const botinfoEmbed = new Discord.MessageEmbed()
             .setColor(embedcolor)
             .setAuthor(`${this.client.user.username}`,
@@ -38,8 +46,12 @@ module.exports = class BotInfoCommand extends Commando.Command {
                 value: version,
                 inline: true
             }, {
-                name: 'Cmd. Framework',
-                value: 'Commando',
+                name: 'Library',
+                value: 'discord.js',
+                inline: true
+            }, {
+                name: 'Framework',
+                value: 'discord.js-commando',
                 inline: true
             }, {
                 name: 'Bot Creator',
