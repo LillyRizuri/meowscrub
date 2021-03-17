@@ -43,7 +43,7 @@ module.exports = class DictionaryCommand extends Commando.Command {
 
             const embed = new Discord.MessageEmbed()
                 .setColor(urbandictionary)
-                .setAuthor('Definition for:')
+                .setAuthor('Definition for:', 'https://i.imgur.com/RFm5zMt.png')
                 .setTitle(answer.word)
                 // .setURL(answer.permalink)
                 .setDescription(trim(answer.definition, 2048))
