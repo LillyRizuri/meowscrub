@@ -22,9 +22,9 @@ module.exports = class PlayAudioCommand extends Commando.Command {
         }
 
         voice.channel.join().then((connection) => {
-            connection.play(path.join(__dirname, 'soi.ogg'))
+            connection.play('./assets/ogg/soi.ogg')
             .on('finish', () => {
-                voiceChannel.leave();
+                voiceChannel.leave()
             })
         })
 

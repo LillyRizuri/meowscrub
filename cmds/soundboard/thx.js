@@ -4,10 +4,10 @@ const path = require('path')
 module.exports = class PlayAudioCommand extends Commando.Command {
     constructor(client) {
         super(client, {
-            name: 'criminalscum',
+            name: 'thx',
             group: 'soundboard',
-            memberName: 'criminalscum',
-            description: 'Stop right there, criminal scum!',
+            memberName: 'thx',
+            description: 'It blares.',
             guildOnly: true
         })
     }
@@ -22,7 +22,7 @@ module.exports = class PlayAudioCommand extends Commando.Command {
         }
 
         voice.channel.join().then((connection) => {
-            connection.play('./assets/ogg/criminalscum.ogg')
+            connection.play('./assets/ogg/thx.ogg')
             .on('finish', () => {
                 voiceChannel.leave()
             })

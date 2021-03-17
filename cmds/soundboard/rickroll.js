@@ -23,9 +23,9 @@ module.exports = class PlayAudioCommand extends Commando.Command {
         }
 
         voice.channel.join().then((connection) => {
-            connection.play(path.join(__dirname, 'rickroll.ogg'))
+            connection.play('./assets/ogg/rickroll.ogg')
                 .on('finish', () => {
-                    voiceChannel.leave();
+                    voiceChannel.leave()
                 })
         })
 
