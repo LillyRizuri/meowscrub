@@ -3,7 +3,6 @@ const Discord = require('discord.js')
 const process = require('child_process')
 
 const { red, what } = require('../../assets/json/colors.json')
-const { ownerId } = require('../../config.json')
 
 module.exports = class AvatarCommand extends Commando.Command {
     constructor(client) {
@@ -20,7 +19,7 @@ module.exports = class AvatarCommand extends Commando.Command {
     }
 
     run(message, args) {
-        if (message.author.id !== ownerId) {
+        if (message.author.id !== process.env.OWNERID) {
             const notBotOwnerEmbed = new Discord.MessageEmbed()
                 .setColor(what)
                 .setDescription('<:scrubnull:797476323533783050> You are not a bot owner. Stop.')

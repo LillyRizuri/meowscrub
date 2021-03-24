@@ -24,14 +24,24 @@ module.exports = class GiveCommand extends Commando.Command {
     async run(message, args) {
         const { guild, member } = message
 
-        const target = message.mentions.users.first()
-        if (!target) {
+        if (!args[0]) {
             const nouserEmbed = new Discord.MessageEmbed()
                 .setColor(what)
                 .setDescription("<:scrubnull:797476323533783050> Please specify someone to give coins to.")
                 .setFooter("are you planning on making a payment")
                 .setTimestamp()
             message.reply(nouserEmbed)
+            return
+        }
+
+        const target = message.mentions.users.first() || message.guild.members.cache.get(args).user || message.author
+        if (target.bot === true) {
+            const isBotEmbed = new Discord.MessageEmbed()
+                .setColor(red)
+                .setDescription("<:scrubred:797476323169533963> Neither can you check a bot's balance, or give money to them.")
+                .setFooter('dinkus')
+                .setTimestamp()
+            message.reply(isBotEmbed)
             return
         }
 
@@ -82,7 +92,6 @@ module.exports = class GiveCommand extends Commando.Command {
             .setColor(green)
             .setDescription(`
 <:scrubgreen:797476323316465676> <@${target.id}> has received **¢${coinsToGive}** from you!
-
 <@${target.id}>'s Current Balance: **¢${newBalance}**
 Your Current Balance: **¢${remainingCoins}**`)
             .setFooter("hmmmmmm")

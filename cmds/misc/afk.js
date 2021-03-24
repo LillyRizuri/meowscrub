@@ -27,30 +27,25 @@ module.exports = class AFKCommand extends Commando.Command {
             afkMessage = 'AFK'
         }
 
-        await mongo().then(async (mongoose) => {
-            try {
-                await afkSchema.findOneAndUpdate({ 
-                    guildId,
-                    userId
-                }, {
-                    guildId,
-                    userId,
-                    $set: {
-                        afk: afkMessage,
-                        timestamp: new Date().getTime(),
-                        username: message.member.nickname === null ? message.author.username : message.member.nickname 
-                    }
-                }, {
-                    upsert: true,
-                    useFindAndModify: true
-                })
-            } finally {
-                mongoose.connection.close()
+        await afkSchema.findOneAndUpdate({
+            guildId,
+            userId
+        }, {
+            guildId,
+            userId,
+            $set: {
+                afk: afkMessage,
+                timestamp: new Date().getTime(),
+                username: message.member.nickname === null ? message.author.username : message.member.nickname
             }
+        }, {
+            upsert: true,
+            useFindAndModify: false
         })
 
+
         await message.member.setNickname(`[AFK] ${message.member.nickname === null ? `${message.author.username}` : `${message.member.nickname}`}`)
-        .catch(err => {})
+            .catch(err => { })
         return message.reply(`I set your AFK status to: ${afkMessage}`)
     }
 }

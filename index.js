@@ -8,7 +8,6 @@ const path = require('path')
 const Commando = require('discord.js-commando')
 const DisTube = require('distube')
 
-const config = require('./config.json')
 const mongo = require('./mongo')
 const chatbot = require('./events/auto-chatbot')
 const welcomeMsg = require('./events/welcome-msg')
@@ -16,8 +15,8 @@ const afkStatus = require('./events/afk-status')
 const { green, what, embedcolor } = require('./assets/json/colors.json')
 
 const client = new Commando.CommandoClient({
-  owner: config.ownerId, // Bot Owner ID goes here
-  commandPrefix: config.prefix, // Default Bot Prefix goes here
+  owner: process.env.OWNERID, // Bot Owner ID goes here
+  commandPrefix: process.env.PREFIX, // Default Bot Prefix goes here
   invite: `<${process.env.DISCORDINVITE}>`, // Discord Support Server Invite surrounded with "<>" goes here
   disableMentions: 'everyone' // Do not modify this for safety purposes
 })
@@ -125,8 +124,8 @@ client.on('ready', async () => {
     })
     .on('noRelated', (message) => {
       const noRelatedMusicEmbed = new Discord.MessageEmbed()
-      .setColor(what)
-      .setDescription("<:scrubnull:797476323533783050> **No related music can be found. Leaving the VC...**")
+        .setColor(what)
+        .setDescription("<:scrubnull:797476323533783050> **No related music can be found. Leaving the VC...**")
       message.channel.send(noRelatedMusicEmbed)
     })
     .on('finish', (message) => {
@@ -166,11 +165,7 @@ client.on('ready', async () => {
   // Connecting to MongoDB 
   const connectToMongoDB = async () => {
     await mongo().then((mongoose) => {
-      try {
-        console.log('Successfully Connected to MongoDB Atlas.')
-      } finally {
-        mongoose.connection.close()
-      }
+      console.log('Successfully Connected to MongoDB Atlas.')
     })
   }
   connectToMongoDB()

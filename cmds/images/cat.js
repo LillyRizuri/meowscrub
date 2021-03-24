@@ -19,7 +19,6 @@ module.exports = class CatCommand extends Commando.Command {
             axios
             .get('https://api.thecatapi.com/v1/images/search')
             .then((res) => {
-                console.log('RES:', res.data[0].url)
                 const catEmbed = new Discord.MessageEmbed()
                     .setColor(cat)
                     .setTitle('🐱 Meow.....')

@@ -39,9 +39,7 @@ module.exports = class DeleteWarnCommand extends Commando.Command {
             const guildId = message.guild.id
             const userId = target.id
 
-            const warnId = args[1]
-
-            if (!warnId) {
+            if (!args[1]) {
                 const noIdEmbed = new Discord.MessageEmbed()
                     .setColor(what)
                     .setDescription(`<:scrubnull:797476323533783050> You need a Warn ID assigned for ${target}.`)
@@ -50,8 +48,14 @@ module.exports = class DeleteWarnCommand extends Commando.Command {
                 return message.reply(noIdEmbed)
             }
 
-            await mongo().then(async (mongoose) => {
-                try {
+            const results = await warnSchema.findOne({
+                guildId,
+                userId
+            })
+
+            for (const warning of results.warnings) {
+                const { warnId } = warning
+                if (args[1] === warnId) {
                     await warnSchema.updateOne({
                         guildId,
                         userId,
@@ -65,13 +69,11 @@ module.exports = class DeleteWarnCommand extends Commando.Command {
                     const confirmationEmbed = new Discord.MessageEmbed()
                         .setColor(green)
                         .setDescription(`<:scrubgreen:797476323316465676> Deleted a warn with this ID:\n**\`${warnId}\` for ${target}.**`)
-                        .setFooter(`is this fine? is this a valid id? i can't check.`)
+                        .setFooter(`is this fine?`)
                         .setTimestamp()
                     message.channel.send(confirmationEmbed)
-                } finally {
-                    mongoose.connection.close()
                 }
-            })
+            }
         } catch (err) {
             const noValidUserEmbed = new Discord.MessageEmbed()
                 .setColor(red)

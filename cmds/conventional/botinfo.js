@@ -1,7 +1,6 @@
 const Commando = require('discord.js-commando')
 const Discord = require('discord.js')
 const { version } = require('../../package.json')
-const { ownerId } = require('../../config.json')
 
 const { embedcolor } = require('../../assets/json/colors.json')
 
@@ -27,7 +26,7 @@ module.exports = class BotInfoCommand extends Commando.Command {
         let minutes = Math.floor(totalSeconds / 60)
         let seconds = Math.floor(totalSeconds % 60)
 
-        this.client.users.fetch(ownerId)
+        this.client.users.fetch(process.env.OWNERID)
             .then(async user => {
                 author = user.tag
             })

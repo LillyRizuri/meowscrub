@@ -6,15 +6,10 @@ This bot is a fairly simple one, it also utilizes discord.js-commando framework.
 The source code is provided here for transparency about how the bot works and how it won't spread virus into your workspace. Respect the license when you decides to edit, compile or use the code in any way.
 
 ## To setup the bot properly:
-- You may want to fill some stuff in `config.json`:
+- You may want to fill some stuff in your `.env` file:
 ```
-{
-    "prefix": "Your Default Prefix",
-    "ownerId": "Your ID"
-}
-```
-- And in your `.env` file too:
-```
+PREFIX=
+OWNERID=
 DISCORDINVITE=
 TOKEN=
 GENIUS=
@@ -23,6 +18,8 @@ YTCOOKIE=
 BRAINSHOP_BRAIN_ID=
 BRAINSHOP_API_KEY=
 ```
+ - `PREFIX` is your bot's prefix
+ - `OWNERID` is your User ID. Or someone else's ID if you'd like.
  - `DISCORDINVITE` is your invite link to your server (surround it with these: <>)
  - `TOKEN` is your Discord Bot Token
  - `GENIUS` is for the lyrics command. Obtain it here: http://genius.com/api-clients

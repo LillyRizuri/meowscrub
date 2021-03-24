@@ -101,37 +101,30 @@ module.exports = class WarnCommand extends Commando.Command {
                 reason
             }
 
-            await mongo().then(async (mongoose) => {
-                try {
-                    await warnSchema.findOneAndUpdate(
-                        {
-                            guildId,
-                            userId,
-                        },
-                        {
-                            guildId,
-                            userId,
-                            $push: {
-                                warnings: warning,
-                            },
-                        },
-                        {
-                            upsert: true,
-                        }
-                    )
-
-                    const warnedEmbed = new Discord.MessageEmbed()
-                        .setColor(green)
-                        .setDescription(`<:scrubgreen:797476323316465676> **<@${userId}> has been warned.**`)
-                        .setFooter(`WarnID: ${warnId}`)
-                        .setTimestamp()
-                    message.channel.send(warnedEmbed)
-                } finally {
-                    mongoose.connection.close()
+            await warnSchema.findOneAndUpdate(
+                {
+                    guildId,
+                    userId,
+                },
+                {
+                    guildId,
+                    userId,
+                    $push: {
+                        warnings: warning,
+                    },
+                },
+                {
+                    upsert: true,
                 }
-            })
+            )
+
+            const warnedEmbed = new Discord.MessageEmbed()
+                .setColor(green)
+                .setDescription(`<:scrubgreen:797476323316465676> **<@${userId}> has been warned.**`)
+                .setFooter(`WarnID: ${warnId}`)
+                .setTimestamp()
+            message.channel.send(warnedEmbed)
         } catch (err) {
-            console.log(err)
             const notargetEmbed = new Discord.MessageEmbed()
                 .setColor(red)
                 .setDescription("<:scrubred:797476323169533963> THAT'S not a valid user.")

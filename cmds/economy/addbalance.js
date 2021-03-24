@@ -23,15 +23,24 @@ module.exports = class AddbalCommand extends Commando.Command {
         })
     }
     async run(message, args) {
-        const mention = message.mentions.users.first()
-
-        if (!mention) {
+        if (!args[0]) {
             const balerrorEmbed = new Discord.MessageEmbed()
                 .setColor(what)
                 .setDescription("<:scrubnull:797476323533783050> Do tag a user to give them money.")
                 .setFooter("bleh")
                 .setTimestamp()
             message.reply(balerrorEmbed)
+            return
+        }
+
+        const target = message.mentions.users.first() || message.guild.members.cache.get(args).user || message.author
+        if (target.bot === true) {
+            const isBotEmbed = new Discord.MessageEmbed()
+                .setColor(red)
+                .setDescription("<:scrubred:797476323169533963> Neither can you check a bot's balance, or give money to them.")
+                .setFooter('dinkus')
+                .setTimestamp()
+            message.reply(isBotEmbed)
             return
         }
 
@@ -66,7 +75,6 @@ module.exports = class AddbalCommand extends Commando.Command {
             .setColor(green)
             .setDescription(`
 <:scrubgreen:797476323316465676> Successfully added <@${userId}> **¢${coins}**
-
 <@${userId}>'s Current Balance: **¢${newCoins}**`)
             .setFooter("hmmmmmm")
             .setTimestamp()

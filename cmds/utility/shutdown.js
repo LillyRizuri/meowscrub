@@ -4,13 +4,12 @@ const Discord = require('discord.js')
 const { embedcolor, red } = require('../../assets/json/colors.json')
 const checkMark = '<:scrubgreenlarge:797816509967368213>'
 const cross = '<:scrubredlarge:797816510579998730>'
-const { ownerId } = require('../../config.json')
 
 module.exports = class ShutdownCommand extends Commando.Command {
     constructor(client) {
         super(client, {
             name: 'shutdown',
-            aliases: ['destroy', 'terminate'],
+            aliases: ['destroy', 'terminate', "poweroff"],
             group: 'utility',
             memberName: 'shutdown',
             description: "Shut the actual bot down. No joke.",
@@ -19,7 +18,7 @@ module.exports = class ShutdownCommand extends Commando.Command {
     }
 
     async run(message) {
-        if (message.author.id !== ownerId) {
+        if (message.author.id !== process.env.OWNERID) {
             const notBotOwnerEmbed = new Discord.MessageEmbed()
                 .setColor(red)
                 .setDescription('<:scrubred:797476323169533963> THIS COMMAND IS VERY DANGEROUS AND IT WILL MAKE THE CLIENT SHUT DOWN.')

@@ -49,42 +49,36 @@ module.exports = class WarningsCommand extends Commando.Command {
             const userAvatar = target.displayAvatarURL({ dynamic: true })
             const userId = target.id
 
-            await mongo().then(async (mongoose) => {
-                try {
-                    try {
-                        const results = await warnSchema.findOne({
-                            guildId,
-                            userId,
-                        })
+            try {
+                const results = await warnSchema.findOne({
+                    guildId,
+                    userId,
+                })
 
-                        let reply = ''
+                let reply = ''
 
-                        for (const warning of results.warnings) {
-                            const { author, timestamp, warnId, reason } = warning
+                for (const warning of results.warnings) {
+                    const { author, timestamp, warnId, reason } = warning
 
-                            reply += `+ **ID: ${warnId} | ${author}**\n"${reason}" - ${new Date(timestamp).toLocaleDateString('en-US', dateTimeOptions)}\n\n`
-                        }
-
-                        const warnlistEmbed = new Discord.MessageEmbed()
-                            .setColor(embedcolor)
-                            .setAuthor(`Previous warnings for ${userTag}`, userAvatar)
-                            .setDescription(reply)
-                            .setFooter("wow")
-                            .setTimestamp()
-                        message.channel.send(warnlistEmbed)
-                    } catch (err) {
-                        const noWarningsEmbed = new Discord.MessageEmbed()
-                            .setColor(red)
-                            .setDescription("<:scrubred:797476323169533963> There's no warnings for that user.")
-                            .setFooter("bruh")
-                            .setTimestamp()
-                        return message.reply(noWarningsEmbed)
-
-                    }
-                } finally {
-                    mongoose.connection.close()
+                    reply += `+ **ID: ${warnId} | ${author}**\n"${reason}" - ${new Date(timestamp).toLocaleDateString('en-US', dateTimeOptions)}\n\n`
                 }
-            })
+
+                const warnlistEmbed = new Discord.MessageEmbed()
+                    .setColor(embedcolor)
+                    .setAuthor(`Previous warnings for ${userTag}`, userAvatar)
+                    .setDescription(reply)
+                    .setFooter("wow")
+                    .setTimestamp()
+                message.channel.send(warnlistEmbed)
+            } catch (err) {
+                const noWarningsEmbed = new Discord.MessageEmbed()
+                    .setColor(red)
+                    .setDescription("<:scrubred:797476323169533963> There's no warnings for that user.")
+                    .setFooter("bruh")
+                    .setTimestamp()
+                return message.reply(noWarningsEmbed)
+
+            }
         } catch (err) {
             // if there's no first warning for the user
             message.reply(noValidUserEmbed)
