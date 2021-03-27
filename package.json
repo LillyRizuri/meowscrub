@@ -2,7 +2,7 @@
   "name": "meowscrub",
   "version": "2.1.0",
   "description": "General bot. But it's very lacking.",
-  "main": "index.js",
+  "main": "./src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
