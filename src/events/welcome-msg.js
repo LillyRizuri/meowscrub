@@ -1,5 +1,5 @@
 const Discord = require("discord.js");
-const { embedcolor } = require("../../assets/json/colors.json");
+const { embedcolor } = require("../assets/json/colors.json");
 
 module.exports = (client, message) => {
   let author;
