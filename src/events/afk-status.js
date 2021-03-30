@@ -1,5 +1,5 @@
 const moment = require("moment");
-const afkSchema = require("../schemas/afk-schema");
+const afkSchema = require("../models/afk-schema");
 
 module.exports = async (client, message) => {
   const guildId = message.guild.id;

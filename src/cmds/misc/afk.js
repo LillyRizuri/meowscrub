@@ -4,7 +4,7 @@ const Discord = require("discord.js");
 const { green, red } = require("../../assets/json/colors.json");
 
 const mongo = require("../../mongo");
-const afkSchema = require("../../schemas/afk-schema");
+const afkSchema = require("../../models/afk-schema");
 
 module.exports = class AFKCommand extends Commando.Command {
   constructor(client) {

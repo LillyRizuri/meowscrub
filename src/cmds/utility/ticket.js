@@ -1,7 +1,7 @@
 const Commando = require("discord.js-commando");
 const Discord = require("discord.js");
 
-const settingsSchema = require("../../schemas/settings-schema");
+const settingsSchema = require("../../models/settings-schema");
 
 const {
   red,

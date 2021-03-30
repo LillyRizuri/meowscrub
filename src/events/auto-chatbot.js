@@ -1,6 +1,6 @@
 const fetch = require("node-fetch");
 const utf8 = require("utf8");
-const settingsSchema = require("../schemas/settings-schema");
+const settingsSchema = require("../models/settings-schema");
 
 module.exports = async (client, message) => {
   let channel;

@@ -1,7 +1,7 @@
 const Commando = require("discord.js-commando");
 const Discord = require("discord.js");
 
-const settingsSchema = require("../../schemas/settings-schema");
+const settingsSchema = require("../../models/settings-schema");
 
 const { green, what, red } = require("../../assets/json/colors.json");
 
@@ -113,7 +113,7 @@ module.exports = class SetChatbotChannelCommand extends Commando.Command {
               )
               .setFooter("set one")
               .setTimestamp();
-            return message.channel.send(noSetEmbed);
+            return message.reply(noSetEmbed);
           } else if (suggestionsChannel) {
             const channelEmbed = new Discord.MessageEmbed()
               .setColor(what)

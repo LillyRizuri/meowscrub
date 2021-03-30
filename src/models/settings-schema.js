@@ -10,6 +10,11 @@ const settingsSchema = mongoose.Schema({
   chatbotChannel: reqString,
   suggestionsChannel: reqString,
   ticketCategory: reqString,
+  ghostPingSetting: {
+    type: Boolean,
+    required: true,
+    default: false
+  }
 });
 
 module.exports = mongoose.model("guildSettings", settingsSchema);
