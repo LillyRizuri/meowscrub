@@ -21,41 +21,20 @@ module.exports = class TicTacToeCommand extends Commando.Command {
   run(message) {
     const member = message.mentions.users.first();
 
-    if (!member) {
-      const zeroTargetEmbed = new Discord.MessageEmbed()
-        .setColor(what)
-        .setDescription(
-          "<:scrubnull:797476323533783050> Please request an user to play with you."
-        )
-        .setFooter("are you going to play it or not")
-        .setTimestamp();
-      message.reply(zeroTargetEmbed);
-      return;
-    }
+    if (!member)
+      return message.reply(
+        "<:scrubnull:797476323533783050> Please request an user to play with you."
+      );
 
-    if (member.bot === true) {
-      const isBotEmbed = new Discord.MessageEmbed()
-        .setColor(red)
-        .setDescription(
-          "<:scrubred:797476323169533963> You cannot play with bots. They can't respond."
-        )
-        .setFooter("you should know it better")
-        .setTimestamp();
-      message.reply(isBotEmbed);
-      return;
-    }
+    if (member.bot === true)
+      return message.reply(
+        "<:scrubred:797476323169533963> You cannot play with bots. They can't respond."
+      );
 
-    if (member === message.author) {
-      const withYourselfEmbed = new Discord.MessageEmbed()
-        .setColor(red)
-        .setDescription(
-          "<:scrubred:797476323169533963> You can't be alone like that."
-        )
-        .setFooter("you should know it better")
-        .setTimestamp();
-      message.reply(withYourselfEmbed);
-      return;
-    }
+    if (member === message.author)
+      return message.reply(
+        "<:scrubred:797476323169533963> You can't be alone like that."
+      );
 
     new tictactoe({
       player_two: member,

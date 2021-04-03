@@ -18,29 +18,18 @@ module.exports = class AddCommand extends Commando.Command {
   }
 
   run(message, args) {
-    if (!args) {
-      const noInputEmbed = new Discord.MessageEmbed()
-        .setColor(what)
-        .setDescription(
-          "<:scrubnull:797476323533783050> Provide a question in order to continue."
-        )
-        .setFooter("don't want to do math? go away.")
-        .setTimestamp();
-      return message.reply(noInputEmbed);
-    }
+    if (!args)
+      return message.reply(
+        "<:scrubnull:797476323533783050> Provide a question in order to continue."
+      );
 
     let response;
     try {
       response = math.evaluate(args);
     } catch (err) {
-      const notValidEmbed = new Discord.MessageEmbed()
-        .setColor(red)
-        .setDescription(
-          "<:scrubred:797476323169533963> THAT is not a valid question."
-        )
-        .setFooter("go away please")
-        .setTimestamp();
-      return message.reply(notValidEmbed);
+      return message.reply(
+        "<:scrubred:797476323169533963> THAT is not a valid question. Go away please."
+      );
     }
 
     const validAnswerEmbed = new Discord.MessageEmbed()

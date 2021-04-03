@@ -22,24 +22,18 @@ module.exports = class DictionaryCommand extends Commando.Command {
 
   async run(message, args) {
     const input = encodeURIComponent(args);
+    const url = utf8.encode(
+      `https://api.urbandictionary.com/v0/define?term=${input}`
+    );
 
-    if (!args) {
-      const noResultsEmbed = new Discord.MessageEmbed()
-        .setColor(what)
-        .setDescription(
-          `<:scrubnull:797476323533783050> Erm, can you type something in the search box, please?`
-        )
-        .setFooter("bluh")
-        .setTimestamp();
-      message.reply(noResultsEmbed);
-      return;
-    }
+    if (!args)
+      return message.reply(
+        "<:scrubnull:797476323533783050> Erm, can you type something for the query, please?"
+      );
 
     message.channel.send("Searching, I guess...");
 
-    const { list } = await fetch(
-      utf8.encode(`https://api.urbandictionary.com/v0/define?term=${input}`)
-    ).then((response) => response.json());
+    const { list } = await fetch(url).then((res) => res.json());
 
     try {
       const [answer] = list;
@@ -62,15 +56,9 @@ module.exports = class DictionaryCommand extends Commando.Command {
         .setTimestamp();
       message.channel.send(embed);
     } catch (err) {
-      const noResultsEmbed = new Discord.MessageEmbed()
-        .setColor(red)
-        .setDescription(
-          `<:scrubred:797476323169533963> No results for: **${args}**.`
-        )
-        .setFooter("it doesn't exist alright")
-        .setTimestamp();
-      message.reply(noResultsEmbed);
-      return;
+      message.reply(
+        `<:scrubred:797476323169533963> No results for: **${args}**.`
+      );
     }
   }
 };

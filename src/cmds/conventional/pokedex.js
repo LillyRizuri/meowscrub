@@ -17,21 +17,12 @@ module.exports = class PokeDexCommand extends Commando.Command {
   }
 
   run(message, args) {
-    const pokemon = args;
+    if (!args)
+      return message.reply(
+        "<:scrubred:797476323169533963> Provide a specific Pokémon in order to continue."
+      );
 
-    if (!pokemon) {
-      const noArgsEmbed = new Discord.MessageEmbed()
-        .setColor(red)
-        .setDescription(
-          "<:scrubred:797476323169533963> Provide a specific Pokémon in order to continue"
-        )
-        .setFooter("otherwise no data for you")
-        .setTimestamp();
-      message.reply(noArgsEmbed);
-      return;
-    }
-
-    fetch(`https://some-random-api.ml/pokedex?pokemon=${pokemon}`)
+    fetch(`https://some-random-api.ml/pokedex?pokemon=${args}`)
       .then((res) => res.json())
       .then((json) => {
         try {
@@ -81,15 +72,9 @@ module.exports = class PokeDexCommand extends Commando.Command {
             .setTimestamp();
           message.channel.send(embed);
         } catch (err) {
-          const noResultsEmbed = new Discord.MessageEmbed()
-            .setColor(red)
-            .setDescription(
-              `<:scrubred:797476323169533963> No results for: **${pokemon}**.`
-            )
-            .setFooter("does it exists in any pokémon game?")
-            .setTimestamp();
-          message.reply(noResultsEmbed);
-          return;
+          message.reply(
+            `<:scrubred:797476323169533963> No results for: **${args}**. Does it exist?`
+          );
         }
       });
   }

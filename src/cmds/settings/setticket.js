@@ -29,27 +29,15 @@ module.exports = class SetTicketCategoryCommand extends Commando.Command {
 
     switch (args) {
       default:
-        if (!channel) {
-          const noValidCategoryEmbed = new Discord.MessageEmbed()
-            .setColor(what)
-            .setDescription(
-              "<:scrubnull:797476323533783050> No valid category found for the configuration."
-            )
-            .setFooter("can you try again once more?")
-            .setTimestamp();
-          return message.reply(noValidCategoryEmbed);
-        }
+        if (!channel)
+          return message.reply(
+            "<:scrubnull:797476323533783050> No valid category ID found for the configuration."
+          );
 
-        if (channel.type !== "category") {
-          const notCategoryEmbed = new Discord.MessageEmbed()
-            .setColor(red)
-            .setDescription(
-              "<:scrubred:797476323169533963> It isn't a valid category ID."
-            )
-            .setFooter("what is that supposed to mean")
-            .setTimestamp();
-          return message.reply(notCategoryEmbed);
-        }
+        if (channel.type !== "category")
+          return message.reply(
+            "<:scrubred:797476323169533963> It isn't a valid category ID."
+          );
 
         await settingsSchema.findOneAndUpdate(
           {
@@ -104,14 +92,9 @@ module.exports = class SetTicketCategoryCommand extends Commando.Command {
         for (let i = 0; i < results.length; i++) {
           let { ticketCategory } = results[i];
           if (!ticketCategory) {
-            const noSetEmbed = new Discord.MessageEmbed()
-              .setColor(what)
-              .setDescription(
-                "<:scrubnull:797476323533783050> The category hasn't been set yet."
-              )
-              .setFooter("set one with id")
-              .setTimestamp();
-            return message.reply(noSetEmbed);
+            return message.reply(
+              "<:scrubnull:797476323533783050> The category ID hasn't been set yet."
+            );
           } else if (ticketCategory) {
             const ticketCategoryName = message.guild.channels.cache.get(
               ticketCategory

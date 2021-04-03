@@ -14,20 +14,16 @@ module.exports = class ShutdownCommand extends Commando.Command {
       memberName: "shutdown",
       description: "Shut the actual bot down. No joke.",
       details: "Only the bot owner(s) may use this command.",
+      // guarded: true,
     });
   }
 
   async run(message) {
-    if (message.author.id !== process.env.OWNERID) {
-      const notBotOwnerEmbed = new Discord.MessageEmbed()
-        .setColor(red)
-        .setDescription(
-          "<:scrubred:797476323169533963> THIS COMMAND IS VERY DANGEROUS AND IT WILL MAKE THE CLIENT SHUT DOWN."
-        )
-        .setFooter("YOU CAN'T TAMPER. THIS IS NO JOKE.")
-        .setTimestamp();
-      return message.reply(notBotOwnerEmbed);
-    }
+    if (message.author.id !== process.env.OWNERID) 
+      return message.reply(
+        "<:scrubred:797476323169533963> THIS COMMAND IS VERY DANGEROUS AND IT WILL MAKE THE CLIENT SHUT DOWN.\nTHIS IS NO JOKE."
+      );
+    
 
     const confirmationEmbed = new Discord.MessageEmbed()
       .setColor(embedcolor)

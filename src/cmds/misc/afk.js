@@ -30,16 +30,10 @@ module.exports = class AFKCommand extends Commando.Command {
       afkMessage = "No reason provided.";
     }
 
-    if (afkMessage.length > 256) {
-      const tooMuchEmbed = new Discord.MessageEmbed()
-        .setColor(red)
-        .setDescription(
-          "<:scrubred:797476323169533963> The reason is way beyond limit of 256 characters."
-        )
-        .setFooter("try again")
-        .setTimestamp();
-      return message.reply(tooMuchEmbed);
-    }
+    if (afkMessage.length > 256)
+      return message.reply(
+        "<:scrubred:797476323169533963> The reason is way beyond limit of 256 characters."
+      );
 
     const results = await afkSchema.find({
       guildId,
@@ -81,7 +75,7 @@ module.exports = class AFKCommand extends Commando.Command {
 
     await message.member
       .setNickname(
-        `[AFK] ${
+        `AFK | ${
           message.member.nickname === null
             ? `${message.author.username}`
             : `${message.member.nickname}`
@@ -94,7 +88,7 @@ module.exports = class AFKCommand extends Commando.Command {
         `<:scrubgreen:797476323316465676> **${message.author.tag}'s AFK status has been set.**\n\`${afkMessage}\``
       )
       .setFooter("other members, don't disturb")
-      .setTimestamp()
-    message.channel.send(afkSetEmbed)
+      .setTimestamp();
+    message.channel.send(afkSetEmbed);
   }
 };

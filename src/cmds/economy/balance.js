@@ -14,7 +14,7 @@ module.exports = class BalCommand extends Commando.Command {
       memberName: "balance",
       description: "Check your/someone else's pocket.",
       argsType: "single",
-      format: "[@user]",
+      format: "[@user/userID]",
       examples: ["balance", "balance @frockles"],
       guildOnly: true,
     });
@@ -22,26 +22,24 @@ module.exports = class BalCommand extends Commando.Command {
 
   async run(message, args) {
     let target;
-
-    if (message.mentions.users.first()) {
-      target = message.mentions.users.first();
-    } else if (args) {
-      target = message.guild.members.cache.get(args).user;
-    } else {
-      target = message.author;
+    
+    try {
+      if (message.mentions.users.first()) {
+        target = message.mentions.users.first();
+      } else if (args) {
+        target = message.guild.members.cache.get(args).user;
+      } else {
+        target = message.author;
+      }
+    } catch (err) {
+      return message.reply(
+        "<:scrubred:797476323169533963> What is that User ID."
+      );
     }
-
-    if (target.bot === true) {
-      const isBotEmbed = new Discord.MessageEmbed()
-        .setColor(red)
-        .setDescription(
-          "<:scrubred:797476323169533963> Neither can you check a bot's balance, or give money to them."
-        )
-        .setFooter("dinkus")
-        .setTimestamp();
-      message.reply(isBotEmbed);
-      return;
-    }
+    if (target.bot === true)
+      return message.reply(
+        "<:scrubred:797476323169533963> Neither can you check a bot's balance, or give money to them."
+      );
 
     const targetTag = target.tag;
 

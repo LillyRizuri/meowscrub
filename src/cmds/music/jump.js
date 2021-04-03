@@ -23,57 +23,29 @@ module.exports = class JumpMusicCommand extends Commando.Command {
     const musicNumber = Number(args);
     const voiceChannel = message.member.voice.channel;
 
-    if (!voiceChannel) {
-      const notinvcEmbed = new Discord.MessageEmbed()
-        .setColor(what)
-        .setDescription(
-          `<:scrubnull:797476323533783050> Go to the same VC that I'm blasting music out to jump through.`
-        )
-        .setFooter("this is e")
-        .setTimestamp();
-      message.reply(notinvcEmbed);
-      return;
-    }
+    if (!voiceChannel)
+      return message.reply(
+        "<:scrubnull:797476323533783050> Go to the same VC that I'm blasting music out to jump through."
+      );
 
-    if (!queue) {
-      const noQueueEmbed = new Discord.MessageEmbed()
-        .setColor(what)
-        .setDescription(
-          `<:scrubnull:797476323533783050> There's no queue to jump.`
-        )
-        .setFooter("reeee")
-        .setTimestamp();
-      message.reply(noQueueEmbed);
-      return;
-    }
+    if (!queue)
+      return message.reply(
+        "<:scrubnull:797476323533783050> There's no queue to commit that action."
+      );
 
-    if (!args) {
-      const noValueEmbed = new Discord.MessageEmbed()
-        .setColor(what)
-        .setDescription(
-          `<:scrubnull:797476323533783050> Music number in the queue has to be found.`
-        )
-        .setFooter("use the queue command")
-        .setTimestamp();
-      message.reply(noValueEmbed);
-      return;
-    }
+    if (!args)
+      return message.reply(
+        "<:scrubnull:797476323533783050> There's no music no. in your argument."
+      );
 
     if (
       musicNumber <= 0 ||
       isNaN(musicNumber) ||
       !Number.isInteger(musicNumber)
-    ) {
-      const invalidEmbed = new Discord.MessageEmbed()
-        .setColor(red)
-        .setDescription(
-          `<:scrubred:797476323169533963> Right off the bat, I can see that the value isn't valid.`
-        )
-        .setFooter("jeebus")
-        .setTimestamp();
-      message.reply(invalidEmbed);
-      return;
-    }
+    )
+      return message.reply(
+        "<:scrubred:797476323169533963> Right off the bat, I can see that the value isn't valid."
+      );
 
     try {
       this.client.distube.jump(message, parseInt(musicNumber));
@@ -81,14 +53,9 @@ module.exports = class JumpMusicCommand extends Commando.Command {
         `⏩ Jumped to a music with the song number: **${musicNumber}**.`
       );
     } catch (err) {
-      const incorrectValueEmbed = new Discord.MessageEmbed()
-        .setColor(red)
-        .setDescription(
-          `<:scrubred:797476323169533963> Completely invalid song number.`
-        )
-        .setFooter("sike?")
-        .setTimestamp();
-      message.reply(incorrectValueEmbed);
+      message.reply(
+        "<:scrubred:797476323169533963> Completely invalid song number."
+      );
     }
   }
 };

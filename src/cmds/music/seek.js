@@ -3,11 +3,8 @@ const Discord = require("discord.js");
 
 const { red, what, green } = require("../../assets/json/colors.json");
 
-const invalidEmbed = new Discord.MessageEmbed()
-  .setColor(red)
-  .setDescription("<:scrubred:797476323169533963> THAT is not a valid number")
-  .setFooter("bruh what")
-  .setTimestamp();
+const notTimestampMsg =
+  "<:scrubred:797476323169533963> THAT is not a valid timestamp.";
 
 module.exports = class SeekMusicCommand extends Commando.Command {
   constructor(client) {
@@ -29,54 +26,34 @@ module.exports = class SeekMusicCommand extends Commando.Command {
     let actualSeekValue = seekValue.split(":");
     const voiceChannel = message.member.voice.channel;
 
-    if (!voiceChannel) {
-      const notInVCEmbed = new Discord.MessageEmbed()
-        .setColor(what)
-        .setDescription(
-          `<:scrubnull:797476323533783050> Join an appropriate voice channel to seek.`
-        )
-        .setFooter("now.")
-        .setTimestamp();
-      message.reply(notInVCEmbed);
-      return;
-    }
+    if (!voiceChannel)
+      return message.reply(
+        "<:scrubnull:797476323533783050> Join an appropriate voice channel to seek."
+      );
 
     const isPlaying = await this.client.distube.isPlaying(message);
-    if (!isPlaying) {
-      const notInVCEmbed = new Discord.MessageEmbed()
-        .setColor(what)
-        .setDescription(
-          `<:scrubnull:797476323533783050> There's no music playing. How am I supposed to seek?`
-        )
-        .setFooter("play some music or smth")
-        .setTimestamp();
-      message.reply(notInVCEmbed);
-      return;
-    }
 
-    if (!seekValue) {
-      const noValueEmbed = new Discord.MessageEmbed()
-        .setColor(what)
-        .setDescription(
-          "<:scrubnull:797476323533783050> There's no value provided to seek."
-        )
-        .setFooter("what are you going to do")
-        .setTimestamp();
-      message.reply(noValueEmbed);
-      return;
-    }
+    if (!isPlaying)
+      return message.reply(
+        "<:scrubnull:797476323533783050> There's no music playing. How am I supposed to seek?"
+      );
+
+    if (!seekValue)
+      return message.reply(
+        "<:scrubnull:797476323533783050> There's no timestamp provided to seek."
+      );
 
     let milliseconds = Number;
     // Now converting the value into milliseconds
     if (seekValue.length < 3) {
       milliseconds = seekValue * 1000;
       if (seekValue > 59) {
-        return message.reply(invalidEmbed);
+        return message.reply(notTimestampMsg);
       }
     } else if (seekValue.length < 6) {
       milliseconds = +actualSeekValue[0] * 60000 + +actualSeekValue[1] * 1000;
       if (+actualSeekValue[0] > 59 || +actualSeekValue[1] > 59) {
-        return message.reply(invalidEmbed);
+        return message.reply(notTimestampMsg);
       }
     } else {
       milliseconds =
@@ -88,12 +65,12 @@ module.exports = class SeekMusicCommand extends Commando.Command {
         +actualSeekValue[1] > 59 ||
         +actualSeekValue[2] > 59
       ) {
-        return message.reply(invalidEmbed);
+        return message.reply(notTimestampMsg);
       }
     }
 
     if (isNaN(milliseconds) || !Number.isInteger(milliseconds)) {
-      message.reply(invalidEmbed);
+      message.reply(notTimestampMsg);
       return;
     }
 

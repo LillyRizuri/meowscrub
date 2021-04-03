@@ -23,39 +23,20 @@ module.exports = class SetNickCommand extends Commando.Command {
   async run(message, args) {
     const target = message.mentions.users.first();
 
-    if (!target) {
-      const noTargetEmbed = new Discord.MessageEmbed()
-        .setColor(what)
-        .setDescription(
-          "<:scrubnull:797476323533783050> No user has to be found for nickname change."
-        )
-        .setFooter("h")
-        .setTimestamp();
-      message.reply(noTargetEmbed);
-      return;
-    }
+    if (!target)
+      return message.reply(
+        "<:scrubnull:797476323533783050> No user has to be found for nickname change."
+      );
 
     switch (target) {
       case message.author:
-        const banningYourselfEmbed = new Discord.MessageEmbed()
-          .setColor(red)
-          .setDescription(
-            "<:scrubred:797476323169533963> Change your nickname yourself. Don't rely on me."
-          )
-          .setFooter("e")
-          .setTimestamp();
-        message.reply(banningYourselfEmbed);
-        return;
+        return message.reply(
+          "<:scrubred:797476323169533963> Change your nickname yourself. Don't rely on me."
+        );
       case this.client.user:
-        const banningItselfEmbed = new Discord.MessageEmbed()
-          .setColor(red)
-          .setDescription(
-            "<:scrubred:797476323169533963> Did you ask me to change my nickname?"
-          )
-          .setFooter("you can't change mine in commands")
-          .setTimestamp();
-        message.reply(banningItselfEmbed);
-        return;
+        return message.reply(
+          "<:scrubred:797476323169533963> Did you ask me to change my nickname? I won't let you change mine using commands."
+        );
     }
 
     const member = message.guild.members.cache.get(target.id);
@@ -64,15 +45,9 @@ module.exports = class SetNickCommand extends Commando.Command {
     const nickname = args.join(" ");
 
     if (!nickname) {
-      const noNickNameEmbed = new Discord.MessageEmbed()
-        .setColor(what)
-        .setDescription(
-          "<:scrubnull:797476323533783050> Another argument requires a nickname of some sort."
-        )
-        .setFooter("try again")
-        .setTimestamp();
-      message.reply(noNickNameEmbed);
-      return;
+      return message.reply(
+        "<:scrubnull:797476323533783050> Another argument requires a nickname of some sort."
+      );
     }
 
     try {
@@ -90,15 +65,9 @@ module.exports = class SetNickCommand extends Commando.Command {
         .setTimestamp();
       message.reply(nickchangeEmbed);
     } catch (err) {
-      const cannotChangeEmbed = new Discord.MessageEmbed()
-        .setColor(red)
-        .setDescription(
-          "<:scrubred:797476323169533963> Well, how am I supposed to change the nickname for that person?"
-        )
-        .setFooter("dumbass")
-        .setTimestamp();
-      message.reply(cannotChangeEmbed);
-      return;
+      message.reply(
+        "<:scrubred:797476323169533963> Well, how am I supposed to change the nickname for that person?"
+      );
     }
   }
 };

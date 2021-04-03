@@ -60,6 +60,11 @@ module.exports = class ServerInfoCommand extends Commando.Command {
           inline: true,
         },
         {
+          name: "All Bots",
+          value: message.guild.members.cache.filter((m) => m.user.bot).size,
+          inline: true,
+        },
+        {
           name: "All Members",
           value:
             message.guild.memberCount -

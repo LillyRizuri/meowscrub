@@ -40,79 +40,78 @@ module.exports = class CovidCommand extends Commando.Command {
       timeZoneName: "short",
     };
 
-    try {
-      if (!args) {
-        message.channel.send("Retrieving Informations, I guess...");
+    if (!args) {
+      message.channel.send("Retrieving Informations, I guess...");
 
-        const totalStats = await covid.getAll();
+      const totalStats = await covid.getAll();
+      const updatedTime = new Date(totalStats.updated).toLocaleDateString(
+        "en-US",
+        dateTimeOptions
+      );
 
-        const updatedTime = new Date(totalStats.updated).toLocaleDateString(
-          "en-US",
-          dateTimeOptions
-        );
-
-        const globalCasesEmbed = new Discord.MessageEmbed()
-          .setColor(embedcolor)
-          .setAuthor("Coronavirus Stats")
-          .addFields(
-            {
-              name: "Confirmed Cases",
-              value: `**${totalStats.cases.toLocaleString()}**`,
-              inline: true,
-            },
-            {
-              name: "Today Cases",
-              value: `+${totalStats.todayCases.toLocaleString()}`,
-              inline: true,
-            },
-            {
-              name: "Today Deaths",
-              value: `+${totalStats.todayDeaths.toLocaleString()}`,
-              inline: true,
-            },
-            {
-              name: "Active",
-              value: totalStats.active.toLocaleString(),
-              inline: true,
-            },
-            {
-              name: "Recovered",
-              value: `${totalStats.recovered.toLocaleString()} (${(
-                (totalStats.recovered / totalStats.cases) *
-                100
-              ).toFixed(2)}%`,
-              inline: true,
-            },
-            {
-              name: "Deaths",
-              value: `${totalStats.deaths.toLocaleString()} (${(
-                (totalStats.deaths / totalStats.cases) *
-                100
-              ).toFixed(2)}%)`,
-              inline: true,
-            },
-            {
-              name: "Tests",
-              value: totalStats.tests.toLocaleString(),
-              inline: true,
-            },
-            {
-              name: "Cases Per Mil.",
-              value: totalStats.casesPerOneMillion.toLocaleString(),
-              inline: true,
-            },
-            {
-              name: "Deaths Per Mil.",
-              value: totalStats.deathsPerOneMillion.toLocaleString(),
-              inline: true,
-            }
-          )
-          .setImage(
-            `https://xtrading.io/static/layouts/qK98Z47ptC-embed.png?newest=${Date.now()}`
-          )
-          .setFooter(`Last Updated: ${updatedTime}`);
-        message.channel.send(globalCasesEmbed);
-      } else {
+      const globalCasesEmbed = new Discord.MessageEmbed()
+        .setColor(embedcolor)
+        .setAuthor("Coronavirus Stats")
+        .addFields(
+          {
+            name: "Confirmed Cases",
+            value: `**${totalStats.cases.toLocaleString()}**`,
+            inline: true,
+          },
+          {
+            name: "Today Cases",
+            value: `+${totalStats.todayCases.toLocaleString()}`,
+            inline: true,
+          },
+          {
+            name: "Today Deaths",
+            value: `+${totalStats.todayDeaths.toLocaleString()}`,
+            inline: true,
+          },
+          {
+            name: "Active",
+            value: totalStats.active.toLocaleString(),
+            inline: true,
+          },
+          {
+            name: "Recovered",
+            value: `${totalStats.recovered.toLocaleString()} (${(
+              (totalStats.recovered / totalStats.cases) *
+              100
+            ).toFixed(2)}%`,
+            inline: true,
+          },
+          {
+            name: "Deaths",
+            value: `${totalStats.deaths.toLocaleString()} (${(
+              (totalStats.deaths / totalStats.cases) *
+              100
+            ).toFixed(2)}%)`,
+            inline: true,
+          },
+          {
+            name: "Tests",
+            value: totalStats.tests.toLocaleString(),
+            inline: true,
+          },
+          {
+            name: "Cases Per Mil.",
+            value: totalStats.casesPerOneMillion.toLocaleString(),
+            inline: true,
+          },
+          {
+            name: "Deaths Per Mil.",
+            value: totalStats.deathsPerOneMillion.toLocaleString(),
+            inline: true,
+          }
+        )
+        .setImage(
+          `https://xtrading.io/static/layouts/qK98Z47ptC-embed.png?newest=${Date.now()}`
+        )
+        .setFooter(`Last Updated: ${updatedTime}`);
+      message.channel.send(globalCasesEmbed);
+    } else {
+      try {
         message.channel.send("Retrieving Informations, I guess...");
 
         let countryInput = args.toProperCase();
@@ -235,23 +234,21 @@ module.exports = class CovidCommand extends Commando.Command {
           .setFooter(`Last Updated: ${updatedTime}`);
         if (wikiImage) setCountryEmbed.setImage(wikiImage);
         message.channel.send(setCountryEmbed);
-      }
-    } catch (err) {
-      console.log(err);
-      const noResultsEmbed = new Discord.MessageEmbed()
-        .setColor(red)
-        .setDescription(
-          `
+      } catch (err) {
+        const noResultsEmbed = new Discord.MessageEmbed()
+          .setColor(red)
+          .setDescription(
+            `
 <:scrubred:797476323169533963> No fetched information for your specified country. It can be due to:
 **+ The country does not exist.**
 **+ It was typed incorrectly.**
 **+ Or the country has no confirmed cases.**
 `
-        )
-        .setFooter("bruh")
-        .setTimestamp();
-      message.reply(noResultsEmbed);
-      return;
+          )
+          .setFooter("bruh")
+          .setTimestamp();
+        return message.reply(noResultsEmbed);
+      }
     }
   }
 };

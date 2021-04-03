@@ -15,30 +15,15 @@ module.exports = class AvatarCommand extends Commando.Command {
       details: "Only the bot owner(s) may use this command.",
       argsType: "single",
       format: "<input>",
+      // guarded: true
     });
   }
 
   run(message, args) {
     if (message.author.id !== process.env.OWNERID) {
-      const notBotOwnerEmbed = new Discord.MessageEmbed()
-        .setColor(what)
-        .setDescription(
-          "<:scrubnull:797476323533783050> You are not a bot owner. Stop."
-        )
-        .setFooter("this can allow people to tamper with me")
-        .setTimestamp();
-      return message.reply(notBotOwnerEmbed);
-    }
-
-    if (args.startsWith("node")) {
-      const runningNodeEmbed = new Discord.MessageEmbed()
-        .setColor(red)
-        .setDescription(
-          "<:scrubred:797476323169533963> Please don't initialize any **node.js**-related commands."
-        )
-        .setFooter("please")
-        .setTimestamp();
-      return message.reply(runningNodeEmbed);
+      return message.reply(
+        "<:scrubnull:797476323533783050> You are not a bot owner. Stop.\nThis can allow people to tamper with me."
+      );
     }
 
     message.channel.send(`\`\`\`Initializing the Terminal...\`\`\``);

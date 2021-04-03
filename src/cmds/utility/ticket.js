@@ -30,22 +30,17 @@ module.exports = class TicketCommand extends Commando.Command {
 
   async run(message, args) {
     const guildId = message.guild.id;
-    const channelNameCache = message.guild.channels.cache.find(
-      (channel) => channel.name === `ticket-${message.author.id}`
-    );
     let parentChannel;
     let channel;
 
-    if (!args) {
-      const noReasonEmbed = new Discord.MessageEmbed()
-        .setColor(what)
-        .setDescription(
-          "<:scrubnull:797476323533783050> There's no reason for opening your ticket."
-        )
-        .setFooter("please try again.")
-        .setTimestamp();
-      return message.reply(noReasonEmbed);
-    }
+    const channelNameCache = message.guild.channels.cache.find(
+      (channel) => channel.name === `ticket-${message.author.id}`
+    );
+
+    if (!args)
+      return message.reply(
+        "<:scrubnull:797476323533783050> There's no reason for opening your ticket."
+      );
 
     message.delete().then(() => {
       message.channel
@@ -55,27 +50,15 @@ module.exports = class TicketCommand extends Commando.Command {
         });
     });
 
-    if (args.length > 512) {
-      const tooMuchEmbed = new Discord.MessageEmbed()
-        .setColor(red)
-        .setDescription(
-          "<:scrubred:797476323169533963> Limit your reason to just 512 characters only."
-        )
-        .setFooter("mate what the")
-        .setTimestamp();
-      return message.reply(tooMuchEmbed);
-    }
+    if (args.length > 512)
+      return message.reply(
+        "<:scrubred:797476323169533963> Limit your reason to just 512 characters only."
+      );
 
-    if (channelNameCache) {
-      const alreadyOpenTicketEmbed = new Discord.MessageEmbed()
-        .setColor(red)
-        .setDescription(
-          "<:scrubred:797476323169533963> Your ticket is already open."
-        )
-        .setFooter("bruh")
-        .setTimestamp();
-      return message.reply(alreadyOpenTicketEmbed);
-    }
+    if (channelNameCache)
+      return message.reply(
+        "<:scrubred:797476323169533963> Your ticket is already open. Check again."
+      );
 
     const results = await settingsSchema.find({
       guildId,
@@ -86,16 +69,10 @@ module.exports = class TicketCommand extends Commando.Command {
       parentChannel = message.guild.channels.cache.get(ticketCategory);
     }
 
-    if (!parentChannel) {
-      const noTicketCategoryEmbed = new Discord.MessageEmbed()
-        .setColor(what)
-        .setDescription(
-          "<:scrubnull:797476323533783050> There's no ticket category config. set."
-        )
-        .setFooter("what now")
-        .setTimestamp();
-      return message.reply(noTicketCategoryEmbed);
-    }
+    if (!parentChannel)
+      return message.reply(
+        "<:scrubnull:797476323533783050> There's no ticket category config. set. This is important to keep your ticket channel organized."
+      );
 
     try {
       channel = await message.guild.channels.create(

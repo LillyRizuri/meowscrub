@@ -18,36 +18,22 @@ module.exports = class ShuffleMusicCommand extends Commando.Command {
     let queue = await this.client.distube.getQueue(message);
     const voiceChannel = message.member.voice.channel;
 
-    if (!voiceChannel) {
-      const notinvcEmbed = new Discord.MessageEmbed()
-        .setColor(what)
-        .setDescription(
-          `<:scrubnull:797476323533783050> Go to the same VC that I'm blasting music out to shuffle the entire queue.`
-        )
-        .setFooter("this is e")
-        .setTimestamp();
-      message.reply(notinvcEmbed);
-      return;
-    }
+    if (!voiceChannel)
+      return message.reply(
+        "<:scrubnull:797476323533783050> Go to the same VC that I'm blasting music out to shuffle the entire queue."
+      );
 
-    if (queue) {
-      this.client.distube.shuffle(message);
-      const shuffleEmbed = new Discord.MessageEmbed()
-        .setColor(green)
-        .setDescription(
-          `<:scrubgreen:797476323316465676> **Shuffled the entire music queue.**`
-        );
-      message.channel.send(shuffleEmbed);
-    } else if (!queue) {
-      const noMusicEmbed = new Discord.MessageEmbed()
-        .setColor(what)
-        .setDescription(
-          "<:scrubnull:797476323533783050> There's no queue to even shuffle."
-        )
-        .setFooter("reeeeeee")
-        .setTimestamp();
-      message.reply(noMusicEmbed);
-      return;
-    }
+    if (!queue)
+      return message.reply(
+        "<:scrubnull:797476323533783050> There's no queue to even shuffle."
+      );
+
+    this.client.distube.shuffle(message);
+    const shuffleEmbed = new Discord.MessageEmbed()
+      .setColor(green)
+      .setDescription(
+        `<:scrubgreen:797476323316465676> **Shuffled the entire music queue.**`
+      );
+    message.channel.send(shuffleEmbed);
   }
 };

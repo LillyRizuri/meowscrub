@@ -25,41 +25,20 @@ module.exports = class LoopMusicCommand extends Commando.Command {
     let mode = null;
     const voiceChannel = message.member.voice.channel;
 
-    if (!voiceChannel) {
-      const notInVCEmbed = new Discord.MessageEmbed()
-        .setColor(what)
-        .setDescription(
-          `<:scrubnull:797476323533783050> Join an appropriate voice channel to loop the music.`
-        )
-        .setFooter("now.")
-        .setTimestamp();
-      message.reply(notInVCEmbed);
-      return;
-    }
+    if (!voiceChannel)
+      return message.reply(
+        "<:scrubnull:797476323533783050> Join an appropriate voice channel to loop the music."
+      );
 
-    if (!queue) {
-      const noQueueEmbed = new Discord.MessageEmbed()
-        .setColor(what)
-        .setDescription(
-          `<:scrubnull:797476323533783050> Must confirm that there's a queue first.`
-        )
-        .setFooter("reeee")
-        .setTimestamp();
-      message.reply(noQueueEmbed);
-      return;
-    }
+    if (!queue)
+      return message.reply(
+        "<:scrubnull:797476323533783050> Must confirm that there's a queue first."
+      );
 
-    if (!args) {
-      const noValueEmbed = new Discord.MessageEmbed()
-        .setColor(what)
-        .setDescription(
-          "<:scrubnull:797476323533783050> There's no value to set.\nEither it's `queue`, `song`, or turn `off`."
-        )
-        .setFooter("wgat the")
-        .setTimestamp();
-      message.reply(noValueEmbed);
-      return;
-    }
+    if (!args)
+      return message.reply(
+        "<:scrubnull:797476323533783050> There's no value to set.\nEither it's `queue`, `song`, or turn `off`."
+      );
 
     switch (args) {
       case "off":
@@ -72,15 +51,9 @@ module.exports = class LoopMusicCommand extends Commando.Command {
         mode = 2;
         break;
       default:
-        const invalidValueEmbed = new Discord.MessageEmbed()
-          .setColor(red)
-          .setDescription(
-            "<:scrubred:797476323169533963> THAT is not a valid value.\nEither it's `queue`, `song`, or turn `off`."
-          )
-          .setFooter("i got shock by accident once, don't do that")
-          .setTimestamp();
-        message.reply(invalidValueEmbed);
-        return;
+        return message.reply(
+          "<:scrubred:797476323169533963> THAT is not a valid value.\nEither it's `queue`, `song`, or turn `off`."
+        );
     }
 
     mode = this.client.distube.setRepeatMode(message, mode);

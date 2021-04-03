@@ -10,7 +10,7 @@ module.exports = class DuckCommand extends Commando.Command {
       name: "duck",
       group: "images",
       memberName: "duck",
-      description: 'Duck says: "Quack!"',
+      description: 'q u a c k',
     });
   }
 

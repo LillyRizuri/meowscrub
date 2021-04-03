@@ -1,5 +1,6 @@
 const Commando = require("discord.js-commando");
 const Discord = require("discord.js");
+const ms = require("ms");
 
 const { what, green, red } = require("../../assets/json/colors.json");
 
@@ -11,8 +12,12 @@ module.exports = class SlowModeCommand extends Commando.Command {
       group: "moderation",
       memberName: "slowmode",
       description: "Set cooldown for a channel.",
-      format: "<time> [#channel]",
-      examples: ["slowmode 10 #general"],
+      format: "<s/m/h> [#channel/channelID]",
+      examples: [
+        "slowmode 10s #general",
+        "slowmode 1m #vote",
+        "slowmode 6h #test-lol",
+      ],
       argsType: "multiple",
       clientPermissions: ["MANAGE_CHANNELS"],
       userPermissions: ["MANAGE_CHANNELS"],
@@ -26,68 +31,39 @@ module.exports = class SlowModeCommand extends Commando.Command {
       message.guild.channels.cache.get(args[1]) ||
       message.channel;
 
-    if (!args[0]) {
-      const noTimeSetEmbed = new Discord.MessageEmbed()
-        .setColor(what)
+    if (!args[0])
+      return message.reply(
+        "<:scrubnull:797476323533783050> What do you want the slowmode to be set to?\nPlease use the format: `s/m/h`."
+      );
+
+    const cooldownValue = ms(args[0]) / 1000;
+
+    if (isNaN(cooldownValue))
+      return message.reply(
+        "<:scrubred:797476323169533963> What the hell are you trying to do with that?"
+      );
+
+    if (cooldownValue < 0 || cooldownValue > 21600)
+      return message.reply(
+        "<:scrubred:797476323169533963> The cooldown value should be in-between 0 seconds and 6 hours."
+      );
+
+    try {
+      await channel.setRateLimitPerUser(
+        cooldownValue,
+        `Operation done by ${message.author.tag}`
+      );
+
+      const slowModeOKEmbed = new Discord.MessageEmbed()
+        .setColor(green)
         .setDescription(
-          "<:scrubnull:797476323533783050> What do you want the slowmode to be set to?"
+          `<:scrubgreen:797476323316465676> Slowmode for ${channel} has been set to **${args[0]}**.`
         )
-        .setFooter("otherwise no slowmode for you")
+        .setFooter("is this slowmode good enough")
         .setTimestamp();
-      message.reply(noTimeSetEmbed);
-      return;
+      message.reply(slowModeOKEmbed);
+    } catch (err) {
+      console.log(err);
     }
-
-    const cooldownValue = Number(args[0], 10);
-
-    if (isNaN(cooldownValue)) {
-      const notValidTimeEmbed = new Discord.MessageEmbed()
-        .setColor(red)
-        .setDescription(
-          "<:scrubred:797476323169533963> Breaking me using value like that? No."
-        )
-        .setFooter("heh.")
-        .setTimestamp();
-      message.reply(notValidTimeEmbed);
-      return;
-    }
-
-    if (!Number.isInteger(cooldownValue)) {
-      const notIntegerEmbed = new Discord.MessageEmbed()
-        .setColor(red)
-        .setDescription(
-          "<:scrubred:797476323169533963> Cooldown can't be applied if the value isn't an integer."
-        )
-        .setFooter("ya bafoon")
-        .setTimestamp();
-      message.reply(notIntegerEmbed);
-      return;
-    }
-
-    if (args[0] < 0 || args[0] > 21600) {
-      const notInBetweenEmbed = new Discord.MessageEmbed()
-        .setColor(red)
-        .setDescription(
-          "<:scrubred:797476323169533963> The cooldown value should be in-between 0 and 21600."
-        )
-        .setFooter("try again.")
-        .setTimestamp();
-      message.reply(notInBetweenEmbed);
-      return;
-    }
-
-    channel.setRateLimitPerUser(
-      args[0],
-      `Operation done by ${message.author.tag}`
-    );
-
-    const slowModeOKEmbed = new Discord.MessageEmbed()
-      .setColor(green)
-      .setDescription(
-        `<:scrubgreen:797476323316465676> Slowmode for ${channel} has been set to **${args[0]}** second(s).`
-      )
-      .setFooter("is this slowmode good enough")
-      .setTimestamp();
-    message.reply(slowModeOKEmbed);
   }
 };

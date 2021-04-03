@@ -23,62 +23,33 @@ module.exports = class HackBanCommand extends Commando.Command {
     let userId = args[0];
     let reason;
 
-    if (message.mentions.users.first()) {
-      const noMentionsEmbed = new Discord.MessageEmbed()
-        .setColor(red)
-        .setDescription(
-          `<:scrubred:797476323169533963> Use \`${message.guild.commandPrefix}ban\` or something if you want to ban using mentions.`
-        )
-        .setFooter("huh.")
-        .setTimestamp();
-      message.reply(noMentionsEmbed);
-      return;
-    }
+    if (message.mentions.users.first())
+      return message.reply(
+        `<:scrubred:797476323169533963> Use \`${message.guild.commandPrefix}ban\` or something if you want to ban using mentions.`
+      );
 
-    if (!userId || isNaN(userId)) {
-      const noTargetEmbed = new Discord.MessageEmbed()
-        .setColor(what)
-        .setDescription(
-          "<:scrubnull:797476323533783050> Who do you want to ban outside the server? Get it right."
-        )
-        .setFooter("hackbanning for good reason?")
-        .setTimestamp();
-      message.reply(noTargetEmbed);
-      return;
-    }
+    if (!userId || isNaN(userId))
+      return message.reply(
+        "<:scrubnull:797476323533783050> Who do you want to ban outside the server? Get it right."
+      );
 
     switch (userId) {
       case message.author.id:
-        const banningYourselfEmbed = new Discord.MessageEmbed()
-          .setColor(red)
-          .setDescription(
-            "<:scrubred:797476323169533963> Banning yourself with your ID? Keep dreaming."
-          )
-          .setFooter("heh.")
-          .setTimestamp();
-        message.reply(banningYourselfEmbed);
-        return;
+        return message.reply(
+          "<:scrubred:797476323169533963> Banning yourself with your ID? Keep dreaming."
+        );
       case this.client.user.id:
-        const banningItselfEmbed = new Discord.MessageEmbed()
-          .setColor(red)
-          .setDescription("<:scrubred:797476323169533963> Banning myself? Why?")
-          .setFooter("what are you doing.")
-          .setTimestamp();
-        message.reply(banningItselfEmbed);
-        return;
+        return message.reply(
+          "<:scrubred:797476323169533963> Banning myself? Why?"
+        );
     }
 
-    if (args.slice(1).join(" ").length > 1000) {
-      const tooMuchReason = new Discord.MessageEmbed()
-        .setColor(red)
-        .setDescription(
-          "<:scrubred:797476323169533963> Consider lowering your reason's length to be just under 1000 characters."
-        )
-        .setFooter("for legal reason, it's not a joke")
-        .setTimestamp();
-      message.reply(tooMuchReason);
-      return;
-    }
+    const reasonMessage = args.slice(1).join(" ");
+
+    if (reasonMessage.length > 1000)
+      return message.reply(
+        "<:scrubred:797476323169533963> Consider lowering your reason's length to be just under 1000 characters."
+      );
 
     if (args[1]) {
       reason = args.slice(1).join(" ");
@@ -88,15 +59,17 @@ module.exports = class HackBanCommand extends Commando.Command {
 
     this.client.users
       .fetch(userId)
-      .then(async (user) => {
-        await message.guild.members.ban(user.id, {
+      .then(async (target) => {
+        const user = message.guild.members.cache.get(target.id);
+
+        await user.ban(target.id, {
           days: 1,
-          reason: `from ${message.author.tag}: ${reason}`,
+          reason: `From ${message.author.tag}: ${reason}`,
         });
         const banConfirmEmbed = new Discord.MessageEmbed()
           .setColor(green)
           .setDescription(
-            `<:scrubgreen:797476323316465676> Successfully banned **${user.tag}**.`
+            `<:scrubgreen:797476323316465676> Successfully banned **${target.tag}**.`
           )
           .addFields(
             {
@@ -113,14 +86,9 @@ module.exports = class HackBanCommand extends Commando.Command {
         message.channel.send(banConfirmEmbed);
       })
       .catch((err) => {
-        const banBruhEmbed = new Discord.MessageEmbed()
-          .setColor(red)
-          .setDescription(
-            "<:scrubred:797476323169533963> What is that user? God."
-          )
-          .setFooter("heckaroo")
-          .setTimestamp();
-        message.reply(banBruhEmbed);
+        return message.reply(
+          "<:scrubred:797476323169533963> What is that user? God heckaroo."
+        );
       });
   }
 };

@@ -18,17 +18,10 @@ module.exports = class ListQueueCommand extends Commando.Command {
     let queue = await this.client.distube.getQueue(message);
     const voiceChannel = message.member.voice.channel;
 
-    if (!voiceChannel) {
-      const notinvcEmbed = new Discord.MessageEmbed()
-        .setColor(what)
-        .setDescription(
-          `<:scrubnull:797476323533783050> Go to the same VC that I'm blasting music out to list the queue.`
-        )
-        .setFooter("this is e")
-        .setTimestamp();
-      message.reply(notinvcEmbed);
-      return;
-    }
+    if (!voiceChannel)
+      return message.reply(
+        "<:scrubnull:797476323533783050> Go to the same VC that I'm blasting music out to list the queue."
+      );
 
     const loopSetting = queue.repeatMode
       .toString()
@@ -48,23 +41,16 @@ module.exports = class ListQueueCommand extends Commando.Command {
       )
       .join("\n");
 
-    if (queue) {
-      const currentQueueEmbed = new Discord.MessageEmbed()
-        .setColor(embedcolor)
-        .setAuthor("Current queue for this Guild")
-        .setDescription(queueList)
-        .setFooter(
-          `Loop: ${loopSetting} | Volume: ${queue.volume}% | Autoplay: ${autoplaySetting}`
-        );
-      message.channel.send(currentQueueEmbed);
-    } else if (!queue) {
-      const noMusicEmbed = new Discord.MessageEmbed()
-        .setColor(what)
-        .setDescription("<:scrubnull:797476323533783050> There's no queue.")
-        .setFooter("xd")
-        .setTimestamp();
-      message.reply(noMusicEmbed);
-      return;
-    }
+    if (!queue)
+      return message.reply("<:scrubnull:797476323533783050> There's no queue.");
+      
+    const currentQueueEmbed = new Discord.MessageEmbed()
+      .setColor(embedcolor)
+      .setAuthor("Current queue for this Guild")
+      .setDescription(queueList)
+      .setFooter(
+        `Loop: ${loopSetting} | Volume: ${queue.volume}% | Autoplay: ${autoplaySetting}`
+      );
+    message.channel.send(currentQueueEmbed);
   }
 };

@@ -15,35 +15,23 @@ module.exports = class Base64Command extends Commando.Command {
       details: "All text output will be encoded in UTF-8.",
       argsType: "multiple",
       format: "<encode/decode> <string>",
-      examples: ["base64 encode never gonna give you up"],
+      examples: [
+        "base64 encode never gonna give you up",
+        "base64 decode bmV2ZXIgZ29ubmEgZ2l2ZSB5b3UgdXA=",
+      ],
     });
   }
 
   run(message, args) {
-    const text = args;
+    if (!args[0])
+      return message.reply(
+        "<:scrubnull:797476323533783050> The parameter is blank.\nEither you need to `encode`, or `decode`."
+      );
 
-    if (!args[0]) {
-      const noArgsEmbed = new Discord.MessageEmbed()
-        .setColor(what)
-        .setDescription(
-          "<:scrubnull:797476323533783050> The parameter is blank.\nEither you need to `encode`, or `decode`."
-        )
-        .setFooter("otherwise get out")
-        .setTimestamp();
-      message.reply(noArgsEmbed);
-      return;
-    }
-
-    if (!args[1]) {
-      const noInputEmbed = new Discord.MessageEmbed()
-        .setColor(what)
-        .setDescription(
-          "<:scrubnull:797476323533783050> I can't do anything without some text."
-        )
-        .setFooter("go type something")
-        .setTimestamp();
-      return message.reply(noInputEmbed);
-    }
+    if (!args[1])
+      return message.reply(
+        "<:scrubnull:797476323533783050> I can't do anything without some text."
+      );
 
     const param = args[0].toLowerCase();
     const input = args.slice(1).join(" ");
@@ -53,16 +41,10 @@ module.exports = class Base64Command extends Commando.Command {
         const formattedInput = utf8.encode(input);
         const encoded = base64.encode(formattedInput);
 
-        if (encoded.length > 2042) {
-          const tooMuchEmbed = new Discord.MessageEmbed()
-            .setColor(red)
-            .setDescription(
-              "<:scrubred:797476323169533963> Your provided input is probably too much."
-            )
-            .setFooter("try again")
-            .setTimestamp();
-          return message.reply(tooMuchEmbed);
-        }
+        if (encoded.length > 2042)
+          return message.reply(
+            "<:scrubred:797476323169533963> Your provided input is probably too much."
+          );
 
         const encodedEmbed = new Discord.MessageEmbed()
           .setColor(embedcolor)
@@ -75,16 +57,10 @@ module.exports = class Base64Command extends Commando.Command {
         const decoded = base64.decode(input);
         const formattedOutput = utf8.decode(decoded);
 
-        if (formattedOutput.length > 2042) {
-          const tooMuchEmbed = new Discord.MessageEmbed()
-            .setColor(red)
-            .setDescription(
-              "<:scrubred:797476323169533963> Your provided input is probably too much."
-            )
-            .setFooter("try again")
-            .setTimestamp();
-          return message.reply(tooMuchEmbed);
-        }
+        if (formattedOutput.length > 2042)
+          return message.reply(
+            "<:scrubred:797476323169533963> Your provided input is probably too much."
+          );
 
         const decodedEmbed = new Discord.MessageEmbed()
           .setColor(embedcolor)
@@ -94,15 +70,9 @@ module.exports = class Base64Command extends Commando.Command {
         message.channel.send(decodedEmbed);
         return;
       default:
-        const invalidParamEmbed = new Discord.MessageEmbed()
-          .setColor(red)
-          .setDescription(
-            "<:scrubred:797476323169533963> THAT'S not a valid parameter.\nEither it's by `encode`, or `decode`."
-          )
-          .setFooter("try again")
-          .setTimestamp();
-        message.reply(invalidParamEmbed);
-        return;
+        return message.reply(
+          "<:scrubred:797476323169533963> THAT'S not a valid parameter.\nEither it's by `encode`, or `decode`."
+        );
     }
   }
 };

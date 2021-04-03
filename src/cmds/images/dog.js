@@ -16,7 +16,7 @@ module.exports = class CatCommand extends Commando.Command {
 
   async run(message) {
     try {
-      fetch(`https://dog.ceo/api/breeds/image/random`)
+      fetch("https://dog.ceo/api/breeds/image/random")
         .then((res) => res.json())
         .then((json) => {
           const dogEmbed = new Discord.MessageEmbed()

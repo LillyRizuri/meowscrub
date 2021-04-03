@@ -1,5 +1,4 @@
 const Commando = require("discord.js-commando");
-const Discord = require("discord.js");
 const fetch = require("node-fetch");
 
 const { cat } = require("../../assets/json/colors.json");
@@ -19,13 +18,7 @@ module.exports = class CatFactsCommand extends Commando.Command {
       fetch("https://some-random-api.ml/facts/cat")
         .then((res) => res.json())
         .then((json) => {
-          const factsEmbed = new Discord.MessageEmbed()
-            .setColor(cat)
-            .setAuthor("Everyday Cat Facts")
-            .setDescription(`**${json.fact}**`)
-            .setFooter("cool stuff by Some Random Api")
-            .setTimestamp();
-          message.channel.send(factsEmbed);
+          message.channel.send(json.fact);
         });
     } catch (err) {
       message.reply(

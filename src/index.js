@@ -13,7 +13,6 @@ const welcomeMsg = require("./events/welcome-msg");
 const afkStatus = require("./events/afk-status");
 const msgSnipe = require("./events/msg-snipe");
 const editSnipe = require("./events/edit-snipe");
-const ghostPingDetector = require("./events/ghostping-detector");
 
 const mongo = require("./mongo");
 const { green, what, embedcolor } = require("./assets/json/colors.json");
@@ -226,9 +225,21 @@ client.on("ready", async () => {
   );
 });
 
-client.on("message", (message) => {
-  afkStatus(client, message);
-  chatbot(client, message);
-});
+client
+  .on("debug", console.log)
+  .on("warn", console.log)
+  .on("message", (message) => {
+    afkStatus(client, message);
+    chatbot(client, message);
+  });
 
 client.login(process.env.TOKEN);
+
+// repl.it stuff
+const http = require("http");
+const server = http.createServer((req, res) => {
+  res.writeHead(200);
+  res.end("ok");
+});
+
+server.listen(3000);

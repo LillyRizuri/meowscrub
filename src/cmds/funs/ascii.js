@@ -20,27 +20,15 @@ module.exports = class AsciiCommand extends Commando.Command {
   async run(message, args) {
     const input = args;
 
-    if (!input) {
-      const noInputEmbed = new Discord.MessageEmbed()
-        .setColor(what)
-        .setDescription(
-          "<:scrubnull:797476323533783050> Input some texts to advance."
-        )
-        .setFooter("it's not ascii when there isn't text")
-        .setTimestamp();
-      return message.reply(noInputEmbed);
-    }
+    if (!input)
+      return message.reply(
+        "<:scrubnull:797476323533783050> Input some texts to advance."
+      );
 
-    if (input.length > 20) {
-      const inputOverLimitEmbed = new Discord.MessageEmbed()
-        .setColor(red)
-        .setDescription(
-          "<:scrubred:797476323169533963> Exceeding the 20 characters limit can be... **Dangerous.**"
-        )
-        .setFooter("for legal reasons")
-        .setTimestamp();
-      return message.reply(inputOverLimitEmbed);
-    }
+    if (input.length > 20)
+      return message.reply(
+        "<:scrubred:797476323169533963> Exceeding the 20 characters limit can be... **Dangerous.**"
+      );
 
     figlet.text(
       args,

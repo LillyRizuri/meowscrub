@@ -23,58 +23,31 @@ module.exports = class AddbalCommand extends Commando.Command {
     });
   }
   async run(message, args) {
-    if (!args[0]) {
-      const balerrorEmbed = new Discord.MessageEmbed()
-        .setColor(what)
-        .setDescription(
-          "<:scrubnull:797476323533783050> Do tag a user to give them money."
-        )
-        .setFooter("bleh")
-        .setTimestamp();
-      message.reply(balerrorEmbed);
-      return;
-    }
+    if (!args[0])
+      return message.reply(
+        "<:scrubnull:797476323533783050> Do tag a user to give them money."
+      );
 
     const target =
       message.mentions.users.first() ||
       message.guild.members.cache.get(args).user ||
       message.author;
-    if (target.bot === true) {
-      const isBotEmbed = new Discord.MessageEmbed()
-        .setColor(red)
-        .setDescription(
-          "<:scrubred:797476323169533963> Neither can you check a bot's balance, or give money to them."
-        )
-        .setFooter("dinkus")
-        .setTimestamp();
-      message.reply(isBotEmbed);
-      return;
-    }
+      
+    if (target.bot === true)
+      return message.reply(
+        "<:scrubred:797476323169533963> Neither can you check a bot's balance, or give money to them."
+      );
 
     const coins = args[1];
-    if (isNaN(coins)) {
-      const balnanEmbed = new Discord.MessageEmbed()
-        .setColor(red)
-        .setDescription(
-          "<:scrubred:797476323169533963> Do you want to give them text instead of money?"
-        )
-        .setFooter("wtf")
-        .setTimestamp();
-      message.reply(balnanEmbed);
-      return;
-    }
+    if (isNaN(coins))
+      return message.reply(
+        "<:scrubred:797476323169533963> Do you want to give them text instead of money?"
+      );
 
-    if (coins < 0) {
-      const negacoinsEmbed = new Discord.MessageEmbed()
-        .setColor(red)
-        .setDescription(
-          "<:scrubred:797476323169533963> Don't even try breaking me using a simple negative value."
-        )
-        .setFooter("fool")
-        .setTimestamp();
-      message.reply(negacoinsEmbed);
-      return;
-    }
+    if (coins < 0)
+      return message.reply(
+        "<:scrubred:797476323169533963> Don't even try breaking me using a simple negative value."
+      );
 
     const guildId = message.guild.id;
     const userId = mention.id;

@@ -52,7 +52,7 @@ module.exports = class UserPermissionsCommand extends Commando.Command {
       memberName: "permissions",
       description: "Shows your, or a specified user's permission.",
       argsType: "single",
-      format: "[@user]",
+      format: "[@user/userID]",
       examples: ["permissions @frockles"],
       guildOnly: true,
     });
@@ -116,15 +116,9 @@ module.exports = class UserPermissionsCommand extends Commando.Command {
       permListEmbed.setDescription(x + description + x);
       message.channel.send(permListEmbed);
     } catch (err) {
-      const notValidIDEmbed = new Discord.MessageEmbed()
-        .setColor(red)
-        .setDescription(
-          "<:scrubred:797476323169533963> What are you trying to do with that invalid user ID?"
-        )
-        .setFooter("you fool")
-        .setTimestamp();
-      message.reply(notValidIDEmbed);
-      return;
+      message.reply(
+        "<:scrubred:797476323169533963> What are you trying to do with that invalid user ID?"
+      );
     }
   }
 };

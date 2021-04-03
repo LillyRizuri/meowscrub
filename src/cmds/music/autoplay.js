@@ -22,29 +22,15 @@ module.exports = class AutoPlayMusicCommand extends Commando.Command {
     let queue = await this.client.distube.getQueue(message);
     const voiceChannel = message.member.voice.channel;
 
-    if (!voiceChannel) {
-      const notInVCEmbed = new Discord.MessageEmbed()
-        .setColor(what)
-        .setDescription(
-          `<:scrubnull:797476323533783050> Join an appropriate voice channel to commit the action.`
-        )
-        .setFooter("now.")
-        .setTimestamp();
-      message.reply(notInVCEmbed);
-      return;
-    }
+    if (!voiceChannel)
+      return message.reply(
+        "<:scrubnull:797476323533783050> Join an appropriate voice channel to commit the action."
+      );
 
-    if (!queue) {
-      const noQueueEmbed = new Discord.MessageEmbed()
-        .setColor(what)
-        .setDescription(
-          `<:scrubnull:797476323533783050> Must confirm that there's a queue first.`
-        )
-        .setFooter("reeee")
-        .setTimestamp();
-      message.reply(noQueueEmbed);
-      return;
-    }
+    if (!queue)
+      return message.reply(
+        "<:scrubnull:797476323533783050> Must confirm that there's a queue first."
+      );
 
     mode = this.client.distube.toggleAutoplay(message);
     mode = mode ? "On" : "Off";

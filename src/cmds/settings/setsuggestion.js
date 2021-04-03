@@ -31,27 +31,15 @@ module.exports = class SetChatbotChannelCommand extends Commando.Command {
 
     switch (args) {
       default:
-        if (!channel) {
-          const noValidChannelEmbed = new Discord.MessageEmbed()
-            .setColor(what)
-            .setDescription(
-              "<:scrubnull:797476323533783050> No valid channel found for the configuration."
-            )
-            .setFooter("can you try again once more?")
-            .setTimestamp();
-          return message.reply(noValidChannelEmbed);
-        }
+        if (!channel)
+          return message.reply(
+            "<:scrubnull:797476323533783050> No valid channel found for the configuration."
+          );
 
-        if (channel.type !== "text") {
-          const notCategoryEmbed = new Discord.MessageEmbed()
-            .setColor(red)
-            .setDescription(
-              "<:scrubred:797476323169533963> It isn't a valid text channel."
-            )
-            .setFooter("what is that supposed to mean")
-            .setTimestamp();
-          return message.reply(notCategoryEmbed);
-        }
+        if (channel.type !== "text")
+          return message.reply(
+            "<:scrubred:797476323169533963> It isn't a valid text channel."
+          );
 
         await settingsSchema.findOneAndUpdate(
           {
@@ -106,14 +94,9 @@ module.exports = class SetChatbotChannelCommand extends Commando.Command {
         for (let i = 0; i < results.length; i++) {
           let { suggestionsChannel } = results[i];
           if (!suggestionsChannel) {
-            const noSetEmbed = new Discord.MessageEmbed()
-              .setColor(what)
-              .setDescription(
-                "<:scrubnull:797476323533783050> The text channel hasn't been set yet."
-              )
-              .setFooter("set one")
-              .setTimestamp();
-            return message.reply(noSetEmbed);
+            return message.reply(
+              "<:scrubnull:797476323533783050> The text channel hasn't been set yet."
+            );
           } else if (suggestionsChannel) {
             const channelEmbed = new Discord.MessageEmbed()
               .setColor(what)

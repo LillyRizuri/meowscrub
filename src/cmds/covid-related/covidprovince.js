@@ -29,24 +29,17 @@ module.exports = class CovidProvinceCommand extends Commando.Command {
       timeZoneName: "short",
     };
 
-    if (!args[0] || !args[1]) {
-      const noInputEmbed = new Discord.MessageEmbed()
-        .setColor(what)
-        .setDescription(
-          "<:scrubnull:797476323533783050> You must provide a country and province name. In that order."
-        )
-        .setFooter("aeeeee")
-        .setTimestamp();
-      message.reply(noInputEmbed);
-      return;
-    }
+    if (!args[0] || !args[1])
+      return message.reply(
+        "<:scrubnull:797476323533783050> You must provide a country and province name. In that order."
+      );
 
     message.channel.send("Retrieving Informations, I guess...");
 
-    try {
-      const country = args[0].toProperCase();
-      const province = args.slice(1).join(" ").toProperCase();
+    const country = args[0].toProperCase();
+    const province = args.slice(1).join(" ").toProperCase();
 
+    try {
       const prov = await covid.getJHU({ country, province });
       const obj = prov[0];
       const updatedTime = new Date(obj.updatedAt).toLocaleDateString(

@@ -1,5 +1,8 @@
+const Discord = require("discord.js");
 const moment = require("moment");
 const afkSchema = require("../models/afk-schema");
+
+const { red, green } = require("../assets/json/colors.json");
 
 module.exports = async (client, message) => {
   const guildId = message.guild.id;
@@ -27,12 +30,16 @@ module.exports = async (client, message) => {
           }
         );
 
-        let user = message.guild.members.cache.get(userId).user;
-        message.channel.send(
-          `${user.username} is currently AFK: ${afk} - ${moment(
-            timestamp
-          ).fromNow()}`
-        );
+        const user = message.guild.members.cache.get(userId).user;
+        const afkTimestamp = moment(timestamp).fromNow();
+        const IsAfkEmbed = new Discord.MessageEmbed()
+          .setColor(red)
+          .setDescription(
+            `**${user.tag} is currently AFK for the following reason:**\n\`"${afk}" - ${afkTimestamp}\``
+          )
+          .setFooter("don't disturb them again.")
+          .setTimestamp();
+        message.channel.send(IsAfkEmbed);
         return;
       }
     }
@@ -52,24 +59,37 @@ module.exports = async (client, message) => {
           userId,
         });
 
-        const defaultMsg = `Welcome back, <@${userId}>, I removed your AFK status.`;
+        const user = message.guild.members.cache.get(userId).user;
+        const afkRemovalEmbed = new Discord.MessageEmbed()
+          .setColor(green)
+          .setTimestamp();
+        const defaultMsg = `**Welcome back ${user.tag}, I removed your AFK status.**`;
         await message.member.setNickname(`${username}`).catch((err) => {});
 
         switch (pingCount) {
           case 0:
-            message.channel.send(
-              `${defaultMsg}\nYou haven't been directly pinged.`
-            );
+            afkRemovalEmbed
+              .setDescription(
+                `${defaultMsg}\n\`You haven't been directly pinged.\``
+              )
+              .setFooter("nice");
+            message.channel.send(afkRemovalEmbed);
             return;
           case 1:
-            message.channel.send(
-              `${defaultMsg}\nYou've been directly pinged one time.`
-            );
+            afkRemovalEmbed
+              .setDescription(
+                `${defaultMsg}\n\`You've been directly pinged one time.\``
+              )
+              .setFooter("hmmmmm");
+            message.channel.send(afkRemovalEmbed);
             return;
           default:
-            message.channel.send(
-              `${defaultMsg}\nYou've been directly pinged ${pingCount} times.`
-            );
+            afkRemovalEmbed
+              .setDescription(
+                `${defaultMsg}\n\`You've been directly pinged ${pingCount} times.\``
+              )
+              .setFooter("two times or higher isn't good");
+            message.channel.send(afkRemovalEmbed);
             return;
         }
       }

@@ -32,17 +32,10 @@ module.exports = class LyricsCommand extends Commando.Command {
       optimizeQuery: false,
     };
 
-    if (!songInput) {
-      const noSearchEmbed = new Discord.MessageEmbed()
-        .setColor(what)
-        .setDescription(
-          "<:scrubnull:797476323533783050> The name input is blank."
-        )
-        .setFooter("interesting")
-        .setTimestamp();
-      message.reply(noSearchEmbed);
-      return;
-    }
+    if (!songInput)
+      return message.reply(
+        "<:scrubnull:797476323533783050> The name query is blank."
+      );
 
     message.channel.send("Searching, I guess...");
 
@@ -70,15 +63,9 @@ module.exports = class LyricsCommand extends Commando.Command {
         });
         message.channel.send(lyricsEmbed);
       } catch (err) {
-        const noResultsEmbed = new Discord.MessageEmbed()
-          .setColor(red)
-          .setDescription(
-            `<:scrubred:797476323169533963> No results for: **${songInput}**.`
-          )
-          .setFooter("it doesn't exist in Genius")
-          .setTimestamp();
-        message.reply(noResultsEmbed);
-        return;
+        return message.reply(
+          `<:scrubred:797476323169533963> No results for: **${songInput}**.`
+        );
       }
     });
   }

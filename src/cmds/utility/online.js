@@ -17,6 +17,24 @@ module.exports = class OnlineStatsCommand extends Commmando.Command {
   }
 
   run(message) {
+    const online = message.guild.members.cache.filter(
+      (m) => m.user.presence.status === "online" && !m.user.bot
+    ).size;
+
+    const idle = message.guild.members.cache.filter(
+      (m) => m.user.presence.status === "idle" && !m.user.bot
+    ).size;
+
+    const dnd = message.guild.members.cache.filter(
+      (m) => m.user.presence.status === "dnd" && !m.user.bot
+    ).size;
+
+    const offline = message.guild.members.cache.filter(
+      (m) => m.user.presence.status === "offline" && !m.user.bot
+    ).size;
+
+    const bots = message.guild.members.cache.filter((m) => m.user.bot).size;
+
     const memberStatEmbed = new Discord.MessageEmbed()
       .setColor(embedcolor)
       .setAuthor(`Member Statistics`, message.guild.iconURL())
@@ -24,27 +42,11 @@ module.exports = class OnlineStatsCommand extends Commmando.Command {
       .setThumbnail(message.guild.iconURL())
       .setDescription(
         `
-• **Online:** ${
-          message.guild.members.cache.filter(
-            (m) => m.user.presence.status === "online" && !m.user.bot
-          ).size
-        }
-• **Idle:** ${
-          message.guild.members.cache.filter(
-            (m) => m.user.presence.status === "idle" && !m.user.bot
-          ).size
-        }
-• **DND:** ${
-          message.guild.members.cache.filter(
-            (m) => m.user.presence.status === "dnd" && !m.user.bot
-          ).size
-        }
-• **Offline**: ${
-          message.guild.members.cache.filter(
-            (m) => m.user.presence.status === "offline" && !m.user.bot
-          ).size
-        }
-• **Bots:** ${message.guild.members.cache.filter((m) => m.user.bot).size}
+• **Online:** ${online}
+• **Idle:** ${idle}
+• **DND:** ${dnd}
+• **Offline**: ${offline}
+• **Bots:** ${bots}
         `
       )
       .setFooter(`in ${message.guild.name}`)

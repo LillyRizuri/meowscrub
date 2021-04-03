@@ -23,32 +23,18 @@ module.exports = class StopTrackEmbed extends Commando.Command {
   run(message) {
     const voiceChannel = message.member.voice.channel;
 
-    if (!voiceChannel) {
-      const notInVCEmbed = new Discord.MessageEmbed()
-        .setColor(what)
-        .setDescription(
-          `<:scrubnull:797476323533783050> Join an appropriate voice channel to do that action.`
-        )
-        .setFooter("now.")
-        .setTimestamp();
-      message.reply(notInVCEmbed);
-      return;
-    }
+    if (!voiceChannel) 
+    return message.reply(
+      "<:scrubnull:797476323533783050> Join an appropriate voice channel to do that action."
+    );
 
     const paused = this.client.distube.isPaused(message);
     const playing = this.client.distube.isPlaying(message);
 
-    if (paused === true) {
-      const alreadyPausedEmbed = new Discord.MessageEmbed()
-        .setColor(red)
-        .setDescription(
-          `<:scrubred:797476323169533963> It's already paused. Jeez.`
-        )
-        .setFooter("what's even the point")
-        .setTimestamp();
-      message.reply(alreadyPausedEmbed);
-      return;
-    }
+    if (paused === true)
+    return message.reply(
+      "<:scrubred:797476323169533963> It's already paused. Jeez."
+    );
 
     switch (playing) {
       case true:
@@ -61,15 +47,9 @@ module.exports = class StopTrackEmbed extends Commando.Command {
         message.channel.send(stoppedEmbed);
         break;
       case false:
-        const isNotPlayingEmbed = new Discord.MessageEmbed()
-          .setColor(what)
-          .setDescription(
-            `<:scrubnull:797476323533783050> There's nothing playing.`
-          )
-          .setFooter("huh.")
-          .setTimestamp();
-        message.reply(isNotPlayingEmbed);
-        break;
+        return message.reply(
+          "<:scrubnull:797476323533783050> There's nothing playing."
+        );
     }
   }
 };

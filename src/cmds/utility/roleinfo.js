@@ -3,12 +3,6 @@ const Discord = require("discord.js");
 
 const { red, what, embedcolor } = require("../../assets/json/colors.json");
 
-const invalidEmbed = new Discord.MessageEmbed()
-  .setColor(red)
-  .setDescription("<:scrubred:797476323169533963> THAT is not a valid role.")
-  .setFooter("try again")
-  .setTimestamp();
-
 module.exports = class RoleInfoCommand extends Commando.Command {
   constructor(client) {
     super(client, {
@@ -36,23 +30,21 @@ module.exports = class RoleInfoCommand extends Commando.Command {
       role = message.guild.roles.cache.find(
         (e) => e.name.toLowerCase().trim() == args.toLowerCase().trim()
       );
-      if (!role) return message.reply(invalidEmbed);
+      if (!role) return message.reply(
+        "<:scrubred:797476323169533963> THAT is not a valid role."
+      );
     } else if (args && !isNaN(args)) {
       role = message.guild.roles.cache.find((e) => e.id == args);
       if (!message.guild.roles.cache.has(args))
-        return message.reply(invalidEmbed);
+        return message.reply(
+          "<:scrubred:797476323169533963> THAT is not a valid role."
+        );
     }
 
-    if (!role) {
-      const noValueEmbed = new Discord.MessageEmbed()
-        .setColor(what)
-        .setDescription(
-          "<:scrubnull:797476323533783050> Insert a role name or equivalent to continue."
-        )
-        .setFooter("wow what a lazy person")
-        .setTimestamp();
-      return message.reply(noValueEmbed);
-    }
+    if (!role)
+      return message.reply(
+        "<:scrubnull:797476323533783050> Insert a role name or equivalent to continue."
+      );
 
     const roleInfoEmbed = new Discord.MessageEmbed()
       .setTitle(role.name)

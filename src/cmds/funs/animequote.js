@@ -15,31 +15,37 @@ module.exports = class AnimeQuoteCommand extends Commando.Command {
   }
 
   run(message) {
-    fetch("https://some-random-api.ml/animu/quote")
-      .then((res) => res.json())
-      .then((json) => {
-        const quotesEmbed = new Discord.MessageEmbed()
-          .setColor(embedcolor)
-          .setAuthor("Random Anime Quote")
-          .addFields(
-            {
-              name: "Quote",
-              value: json.sentence,
-            },
-            {
-              name: "By",
-              value: json.characther,
-              inline: true,
-            },
-            {
-              name: "Existed In",
-              value: json.anime,
-              inline: true,
-            }
-          )
-          .setFooter("cool stuff by Some Random Api")
-          .setTimestamp();
-        message.channel.send(quotesEmbed);
-      });
+    try {
+      fetch("https://some-random-api.ml/animu/quote")
+        .then((res) => res.json())
+        .then((json) => {
+          const quotesEmbed = new Discord.MessageEmbed()
+            .setColor(embedcolor)
+            .setAuthor("Random Anime Quote")
+            .addFields(
+              {
+                name: "Quote",
+                value: json.sentence,
+              },
+              {
+                name: "By",
+                value: json.characther,
+                inline: true,
+              },
+              {
+                name: "Existed In",
+                value: json.anime,
+                inline: true,
+              }
+            )
+            .setFooter("cool stuff by Some Random Api")
+            .setTimestamp();
+          message.channel.send(quotesEmbed);
+        });
+    } catch (err) {
+      message.reply(
+        "An error from the API side has occured. Please try again later."
+      );
+    }
   }
 };

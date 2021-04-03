@@ -31,5 +31,5 @@ BRAINSHOP_API_KEY=
    - Click on `sw.js_data` when it appears
    - Scroll down to "Request Headers"
    - Find the "cookie" header and copy its entire contents
- - `BRAINSHOP_BRAIN_ID` and `BRAINSHOP_API_KEY` can be obtainable by creating a brain in http://brainshop.ai/
+ - `BRAINSHOP_BRAIN_ID` and `BRAINSHOP_API_KEY` can be obtained by creating a brain in http://brainshop.ai/
 

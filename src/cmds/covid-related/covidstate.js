@@ -30,23 +30,17 @@ module.exports = class CovidStates extends Commando.Command {
       minute: "numeric",
       timeZoneName: "short",
     };
-    if (!args) {
-      const noInputEmbed = new Discord.MessageEmbed()
-        .setColor(what)
-        .setDescription(
-          "<:scrubnull:797476323533783050> Are you gonna type in a state's name or not?"
-        )
-        .setFooter("h")
-        .setTimestamp();
-      message.reply(noInputEmbed);
-      return;
-    }
+
+    if (!args)
+      return message.reply(
+        "<:scrubnull:797476323533783050> Are you gonna type in a state's name or not?"
+      );
 
     message.channel.send("Retrieving Informations, I guess...");
 
-    try {
-      const stateInput = args.toProperCase();
+    const stateInput = args.toProperCase();
 
+    try {
       const state = await covid.getState({ state: stateInput });
       const updatedTime = new Date(state.updated).toLocaleDateString(
         "en-US",

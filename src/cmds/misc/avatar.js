@@ -29,6 +29,7 @@ module.exports = class AvatarCommand extends Commando.Command {
         size: 4096,
         dynamic: true,
       });
+
       const avatarEmbed = new Discord.MessageEmbed()
         .setColor(embedcolor)
         .setAuthor(`${user.tag}'s Profile Picture`)
@@ -48,6 +49,7 @@ module.exports = class AvatarCommand extends Commando.Command {
             size: 4096,
             dynamic: true,
           });
+
           const avatarEmbed = new Discord.MessageEmbed()
             .setColor(embedcolor)
             .setAuthor(`${user.tag}'s Profile Picture`)
@@ -60,15 +62,9 @@ module.exports = class AvatarCommand extends Commando.Command {
           return;
         })
         .catch((err) => {
-          const notValidIDEmbed = new Discord.MessageEmbed()
-            .setColor(red)
-            .setDescription(
-              "<:scrubred:797476323169533963> What are you trying to do with that invalid user ID?"
-            )
-            .setFooter("you fool")
-            .setTimestamp();
-          message.reply(notValidIDEmbed);
-          return;
+          return message.reply(
+            "<:scrubred:797476323169533963> What are you trying to do with that invalid user ID?"
+          );
         });
     } else {
       user = message.author;
@@ -77,6 +73,7 @@ module.exports = class AvatarCommand extends Commando.Command {
         size: 4096,
         dynamic: true,
       });
+      
       const avatarEmbed = new Discord.MessageEmbed()
         .setColor(embedcolor)
         .setAuthor(`${user.tag}'s Profile Picture`)

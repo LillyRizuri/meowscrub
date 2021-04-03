@@ -21,30 +21,16 @@ module.exports = class NowPlayingCommand extends Commando.Command {
 
     const voiceChannel = message.member.voice.channel;
 
-    if (!voiceChannel) {
-      const notinvcEmbed = new Discord.MessageEmbed()
-        .setColor(what)
-        .setDescription(
-          `<:scrubnull:797476323533783050> Go to the same VC that I'm blasting music out to see what I am playing.`
-        )
-        .setFooter("this is e")
-        .setTimestamp();
-      message.reply(notinvcEmbed);
-      return;
-    }
+    if (!voiceChannel)
+      return message.reply(
+        "<:scrubnull:797476323533783050> Go to the same VC that I'm blasting music out to see what I am playing."
+      );
 
     const playing = this.client.distube.isPlaying(message);
-    if (playing === false) {
-      const noSongsEmbed = new Discord.MessageEmbed()
-        .setColor(red)
-        .setDescription(
-          `<:scrubred:797476323169533963> There's nothing playing.`
-        )
-        .setFooter("reeeeee")
-        .setTimestamp();
-      message.reply(noSongsEmbed);
-      return;
-    }
+    if (playing === false)
+      return message.reply(
+        "<:scrubred:797476323169533963> There's nothing playing."
+      );
 
     const npEmbed = new Discord.MessageEmbed()
       .setColor(embedcolor)

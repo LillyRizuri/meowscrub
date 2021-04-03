@@ -4,14 +4,6 @@ const { parse } = require("twemoji-parser");
 
 const { what, red, embedcolor } = require("../../assets/json/colors.json");
 
-const invalidEmojiEmbed = new Discord.MessageEmbed()
-  .setColor(red)
-  .setDescription(
-    "<:scrubred:797476323169533963> Invalid emoji found. Try again."
-  )
-  .setFooter("will ya?")
-  .setTimestamp();
-
 module.exports = class StealEmojiCommand extends Commando.Command {
   constructor(client) {
     super(client, {
@@ -27,16 +19,10 @@ module.exports = class StealEmojiCommand extends Commando.Command {
   }
 
   run(message, args) {
-    if (!args) {
-      const noEmojisEmbed = new Discord.MessageEmbed()
-        .setColor(what)
-        .setDescription(
-          "<:scrubnull:797476323533783050> Specify at least ONE emoji to advance."
-        )
-        .setFooter("do you expect me to steal every emojis from this guild")
-        .setTimestamp();
-      return message.reply(noEmojisEmbed);
-    }
+    if (!args)
+      return message.reply(
+        "<:scrubnull:797476323533783050> Specify at least ONE emoji to advance."
+      );
 
     try {
       const parsedEmoji = Discord.Util.parseEmoji(args);
@@ -58,7 +44,9 @@ module.exports = class StealEmojiCommand extends Commando.Command {
       } else {
         let parsed = parse(args, { assetType: "png" });
         if (!parsed[0]) {
-          return message.reply(invalidEmojiEmbed);
+          return message.reply(
+            "<:scrubred:797476323169533963> Invalid emoji found. Try again."
+          );
         }
 
         const builtInEmojiEmbed = new Discord.MessageEmbed()

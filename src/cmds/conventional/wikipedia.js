@@ -20,24 +20,18 @@ module.exports = class WikipediaCommand extends Commando.Command {
   }
 
   async run(message, args) {
-    const input = args;
+    const input = encodeURIComponent(args);
     const trim = (str, max) =>
       str.length > max ? `${str.slice(0, max - 3)}...` : str;
-    const url = `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(
-      input
-    )}`;
-    if (!input) {
-      const noInputEmbed = new Discord.MessageEmbed()
-        .setColor(what)
-        .setDescription(
-          "<:scrubnull:797476323533783050> Search something for me to find the entry."
-        )
-        .setFooter("i am not a toy")
-        .setTimestamp();
-      return message.reply(noInputEmbed);
-    }
+
+    const url = utf8.encode(`https://en.wikipedia.org/api/rest_v1/page/summary/${input}`);
+    if (!args)
+      return message.reply(
+        "<:scrubnull:797476323533783050> Please input a query to let me search for your stuff."
+      );
 
     let response;
+
     try {
       response = await fetch(url).then((res) => res.json());
     } catch (err) {
@@ -73,14 +67,9 @@ ${trim(response.extract, 1024)}
         message.channel.send(definedEmbed);
       }
     } catch (err) {
-      const noResultsEmbed = new Discord.MessageEmbed()
-        .setColor(red)
-        .setDescription(
-          "<:scrubred:797476323169533963> That search query is trash."
-        )
-        .setFooter("what are you even searching for")
-        .setTimestamp();
-      return message.reply(noResultsEmbed);
+      return message.reply(
+        "<:scrubred:797476323169533963> That search query is trash. Sigh."
+      );
     }
   }
 };

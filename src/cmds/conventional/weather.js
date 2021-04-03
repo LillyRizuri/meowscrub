@@ -21,29 +21,15 @@ module.exports = class WeatherCommand extends Commando.Command {
   run(message, args) {
     weather.find({ search: args, degreeType: "C" }, function (error, result) {
       // 'C' can be changed to 'F' for farneheit results
-      if (!args) {
-        const noLocationEmbed = new Discord.MessageEmbed()
-          .setColor(what)
-          .setDescription(
-            "<:scrubnull:797476323533783050> Specify a location in order to continue."
-          )
-          .setFooter("normie")
-          .setTimestamp();
-        message.reply(noLocationEmbed);
-        return;
-      }
+      if (!args)
+        return message.reply(
+          "<:scrubnull:797476323533783050> Specify a location in order to continue."
+        );
 
-      if (result === undefined || result.length === 0) {
-        const noLocationEmbed = new Discord.MessageEmbed()
-          .setColor(red)
-          .setDescription(
-            "<:scrubred:797476323169533963> THIS is not a location."
-          )
-          .setFooter("what the hell are you searching")
-          .setTimestamp();
-        message.reply(noLocationEmbed);
-        return;
-      }
+      if (result === undefined || result.length === 0)
+        return message.reply(
+          "<:scrubred:797476323169533963> THIS is not a location. What's that."
+        );
 
       var current = result[0].current;
       var location = result[0].location;
