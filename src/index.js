@@ -39,54 +39,6 @@ client.setProvider(
 );
 ////////////////////////////////////////////////////////
 
-// Giveaway Stuff
-const db = require("quick.db");
-if (!db.get("giveaways")) db.set("giveaways", []);
-
-const { GiveawaysManager } = require("discord-giveaways");
-const GiveawayManagerWithOwnDatabase = class extends GiveawaysManager {
-  async getAllGiveaways() {
-    return db.get("giveaways");
-  }
-
-  async saveGiveaway(messageID, giveawayData) {
-    db.push("giveaways", giveawayData);
-    return true;
-  }
-
-  async editGiveaway(messageID, giveawayData) {
-    const giveaways = db.get("giveaways");
-    const newGiveawaysArray = giveaways.filter(
-      (giveaway) => giveaway.messageID !== messageID
-    );
-    newGiveawaysArray.push(giveawayData);
-    db.set("giveaways", newGiveawaysArray);
-    return true;
-  }
-
-  async deleteGiveaway(messageID) {
-    const newGiveawaysArray = db
-      .get("giveaways")
-      .filter((giveaway) => giveaway.messageID !== messageID);
-    db.set("giveaways", newGiveawaysArray);
-    return true;
-  }
-};
-
-const manager = new GiveawayManagerWithOwnDatabase(client, {
-  storage: false,
-  updateCountdownEvery: 10000,
-  default: {
-    botsCanWin: false,
-    embedColor: "#DD2E44",
-    embedColorEnd: embedcolor,
-    reaction: "🎉",
-  },
-});
-
-client.giveawaysManager = manager;
-////////////////////////////////////////////////////////
-
 client.on("ready", async () => {
   // Support for music playback
   client.distube = new DisTube(client, {
@@ -208,7 +160,6 @@ client.on("ready", async () => {
       ["soundboard", "Soundboard!"],
       ["music-library", "Frockle's Music Library"],
       ["music", "Music Controller"],
-      ["giveaway", "Giveaway Tools"],
       ["misc", "Miscellaneous Stuff"],
       ["utility", "Extra Utilities"],
       ["settings", "Guild Settings"],

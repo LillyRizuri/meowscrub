@@ -16,13 +16,74 @@ module.exports = class ServerInfoCommand extends Commando.Command {
     });
   }
 
-  run(message) {
-    const then = moment(message.guild.createdAt);
-    const time = then.from(moment());
-    const createdAt = then.format("MMM Do, YYYY");
+  async run(message) {
+    const dateTimeOptions = {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "numeric",
+      minute: "numeric",
+      timeZoneName: "short",
+    };
+
+    const createdAt = new Date(message.guild.createdAt).toLocaleDateString(
+      "en-US",
+      dateTimeOptions
+    );
+
+    const serverOwner = await this.client.users.fetch(message.guild.ownerID);
+
+    const allRoles = message.guild.roles.cache.size - 1;
+
+    const allEmojis = message.guild.emojis.cache.size;
+
+    const serverTier = message.guild.premiumTier;
+
+    const memberCount =
+      message.guild.memberCount -
+      message.guild.members.cache.filter((m) => m.user.bot).size;
+
+    const botCount = message.guild.members.cache.filter((m) => m.user.bot).size;
+
+    const textChannels = message.guild.channels.cache.filter(
+      (channel) => channel.type == "text"
+    ).size;
+
+    const voiceChannels = message.guild.channels.cache.filter(
+      (channel) => channel.type == "voice"
+    ).size;
+
+    const parentChannels = message.guild.channels.cache.filter(
+      (channel) => channel.type == "category"
+    ).size;
+
+    const newsChannels = message.guild.channels.cache.filter(
+      (channel) => channel.type == "news"
+    ).size;
+
+    let afkChannel
+    try {
+      afkChannel = `"${message.guild.afkChannel.name}"`
+    } catch (err) {
+      afkChannel = "None"
+    }
+
+    const explicitContentFilter = message.guild.explicitContentFilter
+      .replace("DISABLED", "Disabled")
+      .replace("MEMBERS_WITHOUT_ROLES", "Members Without Roles")
+      .replace("ALL_MEMBERS", "All Members");
+
+    const verificationLevel = message.guild.verificationLevel
+      .replace("NONE", "None")
+      .replace("LOW", "Low")
+      .replace("MEDIUM", "Medium")
+      .replace("VERY_HIGH", "┻━┻ ﾐヽ(ಠ益ಠ)ノ彡┻━┻")
+      .replace("HIGH", "(╯°□°）╯︵ ┻━┻");
+
     const communityFeatures =
       message.guild.features
-        .join("\n")
+        .join(", ")
         .toString()
         .replace("ANIMATED_ICON", "Animated Icon")
         .replace("BANNER", "Banner")
@@ -50,87 +111,34 @@ module.exports = class ServerInfoCommand extends Commando.Command {
       .setThumbnail(message.guild.iconURL())
       .addFields(
         {
-          name: "Owner",
-          value: `<@${message.guild.ownerID}>`,
-          inline: true,
+          name: "Overview",
+          value: `
+• Owner: \`${serverOwner.tag} | ID: ${serverOwner.id}\`
+• Created At: \`${createdAt}\`       
+• \`${memberCount} Member(s) | ${botCount} Bot(s)\`
+• \`${allRoles} Role(s) | ${allEmojis} Emoji(s) | Tier ${serverTier}\`   
+          `,
         },
         {
-          name: "Created At",
-          value: `${createdAt}\n(${time})`,
-          inline: true,
+          name: "Server Protection",
+          value: `
+• Verification Level: \`${verificationLevel}\`
+• Explicit Content Filter: \`${explicitContentFilter}\`
+          `,
         },
         {
-          name: "All Bots",
-          value: message.guild.members.cache.filter((m) => m.user.bot).size,
-          inline: true,
-        },
-        {
-          name: "All Members",
-          value:
-            message.guild.memberCount -
-            message.guild.members.cache.filter((m) => m.user.bot).size,
-          inline: true,
-        },
-        {
-          name: "No. of Roles",
-          value: message.guild.roles.cache.size - 1,
-          inline: true,
-        },
-        {
-          name: "No. of Emojis",
-          value: message.guild.emojis.cache.size,
-          inline: true,
-        },
-        {
-          name: "Boosting Tier",
-          value: `Tier ${message.guild.premiumTier}`,
-          inline: true,
-        },
-        {
-          name: "Verification Level",
-          value: message.guild.verificationLevel.toProperCase(),
-          inline: true,
-        },
-        {
-          name: "Explicit Content Filter",
-          value: message.guild.explicitContentFilter
-            .replace("_", " ")
-            .toProperCase(),
-          inline: true,
-        },
-        {
-          name: "Server Region",
-          value: message.guild.region.replace("-", " ").toProperCase(),
-          inline: true,
-        },
-        {
-          name: "No. of Channels",
-          value: `⌨️ ${
-            message.guild.channels.cache.filter(
-              (channel) => channel.type == "text"
-            ).size
-          } | 🔈 ${
-            message.guild.channels.cache.filter(
-              (channel) => channel.type == "voice"
-            ).size
-          } | 📁 ${
-            message.guild.channels.cache.filter(
-              (channel) => channel.type == "category"
-            ).size
-          } | 📢 ${
-            message.guild.channels.cache.filter(
-              (channel) => channel.type == "news"
-            ).size
-          }`,
-          inline: true,
+          name: "All Channels",
+          value: `
+• AFK Voice Channel: \`${afkChannel}\`
+• \`${textChannels} Text | ${voiceChannels} Voice | ${parentChannels} Category | ${newsChannels} News\`
+          `,
         },
         {
           name: "Community Features",
-          value: communityFeatures,
-          inline: true,
+          value: `\`• ${communityFeatures}\``,
         }
       )
-      .setFooter(`ID: ${message.guild.id} | member count does exclude bots`)
+      .setFooter(`GuildID: ${message.guild.id}`)
       .setTimestamp();
     message.channel.send(serverInfoEmbed);
   }
