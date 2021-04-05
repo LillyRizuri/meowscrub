@@ -43,11 +43,10 @@ module.exports = class BanCommand extends Commando.Command {
         "<:scrubred:797476323169533963> The value must be somewhere in-between 2 and 100."
       );
 
-    let fetched;
-    message.delete().then(() => {
-      fetched = message.channel.messages.fetch({
-        limit: amountToDelete,
-      });
+    await message.delete();
+
+    let fetched = await message.channel.messages.fetch({
+      limit: amountToDelete,
     });
 
     try {
@@ -55,7 +54,7 @@ module.exports = class BanCommand extends Commando.Command {
         const purgeOKEmbed = new Discord.MessageEmbed()
           .setColor(green)
           .setDescription(
-            `<:scrubgreen:797476323316465676> Successfully purged off **${messages.size}** messages.\n(Message older than 14 days can't be cleaned off due to how Discord API works.)`
+            `<:scrubgreen:797476323316465676> Successfully purged off **${messages.size}** messages.\n\`(Message older than 14 days can't be cleaned off due to how Discord API works.)\``
           )
           .setFooter("hmmmmmmm")
           .setTimestamp();
