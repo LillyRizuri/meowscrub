@@ -24,7 +24,7 @@ module.exports = class PlayAudioCommand extends Commando.Command {
     }
 
     voice.channel.join().then((connection) => {
-      connection.play("./assets/ogg/obstacle.ogg").on("finish", () => {
+      connection.play("./src/assets/ogg/obstacle.ogg").on("finish", () => {
         voiceChannel.leave();
       });
     });
