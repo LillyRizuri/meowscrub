@@ -19,10 +19,15 @@ module.exports = async (client, message) => {
 
   const thisChannel = message.guild.channels.cache.get(guildChannelId);
   // If the user is blacklisted, return
-  if (guildChannelId.includes(message.channel.id)) {
-    if (userBlacklist.indexOf(message.author.id.toString()) !== -1)
-      return thisChannel.send(`${message.author}, You are blacklisted from using this functionality. For that, your message won't be delivered.`);
-  }
+  try {
+    if (guildChannelId.includes(message.channel.id)) {
+      if (userBlacklist.indexOf(message.author.id.toString()) !== -1)
+        return thisChannel.send(
+          `${message.author}, You are blacklisted from using this functionality. For that, your message won't be delivered.`
+        );
+    }
+  // eslint-disable-next-line no-empty
+  } catch (err) {}
 
   if (message.channel.id === guildChannelId && !message.author.bot) {
     client.guilds.cache.forEach(async (guild) => {
