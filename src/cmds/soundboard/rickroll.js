@@ -1,5 +1,4 @@
 const Commando = require("discord.js-commando");
-const path = require("path");
 const Discord = require("discord.js");
 
 module.exports = class PlayAudioCommand extends Commando.Command {
@@ -30,7 +29,7 @@ module.exports = class PlayAudioCommand extends Commando.Command {
       });
     });
 
-    await message.react(`🔊`);
+    await message.react("🔊");
     const RickrolldEmbed = new Discord.MessageEmbed()
       .setColor("RANDOM")
       .setAuthor("get rickroll'd ya dunce")

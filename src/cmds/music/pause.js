@@ -1,10 +1,8 @@
+/* eslint-disable no-case-declarations */
 const Commando = require("discord.js-commando");
 const Discord = require("discord.js");
 
 const {
-  embedcolor,
-  red,
-  what,
   green,
 } = require("../../assets/json/colors.json");
 
@@ -23,7 +21,7 @@ module.exports = class StopTrackEmbed extends Commando.Command {
   run(message) {
     const voiceChannel = message.member.voice.channel;
 
-    if (!voiceChannel) 
+    if (!voiceChannel)
     return message.reply(
       "<:scrubnull:797476323533783050> Join an appropriate voice channel to do that action."
     );

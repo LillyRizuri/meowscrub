@@ -12,6 +12,10 @@ const profileSchema = mongoose.Schema({
     type: Number,
     required: true,
   },
+  coinBank: {
+    type: Number,
+    required: true
+  }
 });
 
 module.exports = mongoose.model("profiles", profileSchema);

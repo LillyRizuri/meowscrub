@@ -41,7 +41,7 @@ const permissions = [
   "MANAGE_EMOJIS",
 ];
 
-const { red, embedcolor } = require("../../assets/json/colors.json");
+const { embedcolor } = require("../../assets/json/colors.json");
 
 module.exports = class UserPermissionsCommand extends Commando.Command {
   constructor(client) {

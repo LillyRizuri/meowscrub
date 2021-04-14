@@ -13,31 +13,34 @@ const welcomeMsg = require("./events/welcome-msg");
 const afkStatus = require("./events/afk-status");
 const msgSnipe = require("./events/msg-snipe");
 const editSnipe = require("./events/edit-snipe");
+const globalChat = require("./events/global-chat");
 
 const mongo = require("./mongo");
-const { green, what, embedcolor } = require("./assets/json/colors.json");
+const { green, what } = require("./assets/json/colors.json");
 
 const client = new Commando.CommandoClient({
-  owner: process.env.OWNERID, // Bot Owner ID goes here
-  commandPrefix: process.env.PREFIX, // Default Bot Prefix goes here
-  invite: `<${process.env.DISCORDINVITE}>`, // Discord Support Server Invite surrounded with "<>" goes here
-  disableMentions: "everyone", // Do not modify this for safety purposes
+  // Bot Owner ID goes here
+  owner: process.env.OWNERID,
+  // Default Bot Prefix goes here
+  commandPrefix: process.env.PREFIX,
+  // Discord Support Server Invite surrounded with "<>" goes here
+  invite: `<${process.env.DISCORDINVITE}>`,
+  // Do not modify this for safety purposes
+  disableMentions: "everyone",
 });
 
 // Saving configurations to MongoDB
 client.setProvider(
   MongoClient.connect(process.env.MONGO)
-    .then((client) => {
-      return new MongoDBProvider(
-        client,
-        "FrocklesDatabases" /* Rename your Database Name */
-      );
+    .then((clientSettings) => {
+      return new MongoDBProvider(clientSettings, "FrocklesDatabases");
     })
     .catch((err) => {
       console.error(err);
     })
 );
-////////////////////////////////////////////////////////
+
+// Please rename "FrocklesDatabases" to your collection's name
 
 client.on("ready", async () => {
   // Support for music playback
@@ -47,13 +50,15 @@ client.on("ready", async () => {
     leaveOnFinish: true,
     youtubeCookie: process.env.YTCOOKIE,
   });
-  //// To get your YouTube cookie
-  //// - navigate to YouTube in a web browser
-  //// - open up dev tools (opt+cmd+j on mac, ctrl+shift+j on windows)
-  //// - go to the network tab
-  //// - click on a request on the left
-  //// - scroll down to "Request Headers"
-  //// - find the "cookie" header and copy its entire contents
+  /* To get your YouTube Cookie:
+  / - Log in using your dummy channel (HIGHLY recommended because autoplay)
+  / - Navigate to YouTube in a web browser
+  / - Open up Developer Tools (opt+cmd+j on mac, ctrl+shift+j on windows)
+  / - Go to the Network Tab
+  / - Click on `sw.js_data` when it appears
+  / - Scroll down to "Request Headers"
+  / - Find the "cookie" header and copy its entire contents
+  */
   client.distube
     .on("initQueue", (queue) => {
       queue.autoplay = false;
@@ -118,12 +123,11 @@ client.on("ready", async () => {
         .setDescription(`\`\`\`${err}\`\`\``);
       message.channel.send(errorEmbed);
     });
-  ////////////////////////////////////////////////////////
 
   // Bot Status
   function presence() {
-    let status = require("./assets/json/bot-status.json");
-    let randomStatus = Math.floor(Math.random() * status.length);
+    const status = require("./assets/json/bot-status.json");
+    const randomStatus = Math.floor(Math.random() * status.length);
 
     client.user.setPresence({
       status: "online",
@@ -134,19 +138,17 @@ client.on("ready", async () => {
     });
   }
 
-  //// changing status varying from 30 seconds to 10 minutes
+  // changing status varying from 30 seconds to 10 minutes
   const randomTimerStatus = Math.floor(Math.random() * 600000 + 30000);
   setInterval(presence, randomTimerStatus);
-  ////////////////////////////////////////////////////////
 
   // Connecting to MongoDB
   const connectToMongoDB = async () => {
-    await mongo().then((mongoose) => {
+    await mongo().then(() => {
       console.log("Successfully Connected to MongoDB Atlas.");
     });
   };
   connectToMongoDB();
-  ////////////////////////////////////////////////////////
 
   client.registry
     .registerGroups([
@@ -182,6 +184,7 @@ client
   .on("message", (message) => {
     afkStatus(client, message);
     chatbot(client, message);
+    globalChat(client, message);
   });
 
 client.login(process.env.TOKEN);

@@ -1,12 +1,7 @@
 const Commando = require("discord.js-commando");
 const Discord = require("discord.js");
 
-const {
-  red,
-  green,
-  what,
-  embedcolor,
-} = require("../../assets/json/colors.json");
+const { green, embedcolor } = require("../../assets/json/colors.json");
 
 module.exports = class BanCommand extends Commando.Command {
   constructor(client) {
@@ -55,7 +50,7 @@ module.exports = class BanCommand extends Commando.Command {
     }
 
     const reasonMessage = args.slice(1).join(" ");
-    
+
     if (reasonMessage.length > 1000)
       return message.reply(
         "<:scrubred:797476323169533963> Consider lowering your reason's length to be just under 1000 characters."
@@ -90,7 +85,7 @@ module.exports = class BanCommand extends Commando.Command {
       )
       .setFooter("Sorry. Can't help out.")
       .setTimestamp();
-    await user.send(dmReasonEmbed).catch((err) => {
+    await user.send(dmReasonEmbed).catch(() => {
       message.channel.send(
         "Can't send the reason to the offender. Maybe they have their DM disabled."
       );

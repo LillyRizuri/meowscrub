@@ -3,7 +3,7 @@ const Discord = require("discord.js");
 
 const economy = require("../../economy");
 
-const { red, green, what } = require("../../assets/json/colors.json");
+const { green } = require("../../assets/json/colors.json");
 
 module.exports = class GiveCommand extends Commando.Command {
   constructor(client) {
@@ -29,11 +29,17 @@ module.exports = class GiveCommand extends Commando.Command {
         "<:scrubnull:797476323533783050> Please specify someone to give coins to."
       );
 
-    const target =
-      message.mentions.users.first() ||
-      message.guild.members.cache.get(args).user ||
-      message.author;
+    let target;
 
+    try {
+      target =
+        message.mentions.users.first() ||
+        message.guild.members.cache.get(args).user;
+    } catch (err) {
+      return message.reply(
+        "<:scrubred:797476323169533963> What is that User ID."
+      );
+    }
     if (target.bot === true)
       return message.reply(
         "<:scrubred:797476323169533963> Neither can you check a bot's balance, or give money to them."

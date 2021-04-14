@@ -1,6 +1,6 @@
 module.exports = (client) => {
   client.snipe = new Map();
-  client.on("messageDelete", function (message, channel) {
+  client.on("messageDelete", (message) => {
     switch (message.channel.nsfw) {
       case false:
         client.snipe.set(message.channel.id, {

@@ -1,7 +1,7 @@
 const Commando = require("discord.js-commando");
 const Discord = require("discord.js");
 
-const { what, green } = require("../../assets/json/colors.json");
+const { green } = require("../../assets/json/colors.json");
 
 module.exports = class StopMusicCommand extends Commando.Command {
   constructor(client) {
@@ -16,7 +16,7 @@ module.exports = class StopMusicCommand extends Commando.Command {
   }
 
   async run(message) {
-    let queue = await this.client.distube.getQueue(message);
+    const queue = await this.client.distube.getQueue(message);
 
     const voiceChannel = message.member.voice.channel;
 
@@ -29,7 +29,7 @@ module.exports = class StopMusicCommand extends Commando.Command {
       return message.reply(
         "<:scrubnull:797476323533783050> There's no music to play."
       );
-      
+
     this.client.distube.stop(message);
     const stoppedEmbed = new Discord.MessageEmbed()
       .setColor(green)

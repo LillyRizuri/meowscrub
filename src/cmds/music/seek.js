@@ -1,7 +1,7 @@
 const Commando = require("discord.js-commando");
 const Discord = require("discord.js");
 
-const { red, what, green } = require("../../assets/json/colors.json");
+const { green } = require("../../assets/json/colors.json");
 
 const notTimestampMsg =
   "<:scrubred:797476323169533963> THAT is not a valid timestamp.";
@@ -23,7 +23,7 @@ module.exports = class SeekMusicCommand extends Commando.Command {
 
   async run(message, args) {
     const seekValue = args;
-    let actualSeekValue = seekValue.split(":");
+    const actualSeekValue = seekValue.split(":");
     const voiceChannel = message.member.voice.channel;
 
     if (!voiceChannel)

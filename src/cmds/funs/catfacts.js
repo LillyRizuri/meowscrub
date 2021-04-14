@@ -1,8 +1,6 @@
 const Commando = require("discord.js-commando");
 const fetch = require("node-fetch");
 
-const { cat } = require("../../assets/json/colors.json");
-
 module.exports = class CatFactsCommand extends Commando.Command {
   constructor(client) {
     super(client, {

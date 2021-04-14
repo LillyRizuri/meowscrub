@@ -1,7 +1,7 @@
 const Commando = require("discord.js-commando");
 const Discord = require("discord.js");
 
-const { red, green, what } = require("../../assets/json/colors.json");
+const { green } = require("../../assets/json/colors.json");
 
 module.exports = class BanCommand extends Commando.Command {
   constructor(client) {
@@ -45,7 +45,7 @@ module.exports = class BanCommand extends Commando.Command {
 
     await message.delete();
 
-    let fetched = await message.channel.messages.fetch({
+    const fetched = await message.channel.messages.fetch({
       limit: amountToDelete,
     });
 

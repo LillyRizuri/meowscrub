@@ -1,8 +1,5 @@
 const Commando = require("discord.js-commando");
-const Discord = require("discord.js");
 const process = require("child_process");
-
-const { red, what } = require("../../assets/json/colors.json");
 
 module.exports = class AvatarCommand extends Commando.Command {
   constructor(client) {
@@ -15,7 +12,6 @@ module.exports = class AvatarCommand extends Commando.Command {
       details: "Only the bot owner(s) may use this command.",
       argsType: "single",
       format: "<input>",
-      // guarded: true
     });
   }
 
@@ -26,9 +22,9 @@ module.exports = class AvatarCommand extends Commando.Command {
       );
     }
 
-    message.channel.send(`\`\`\`Initializing the Terminal...\`\`\``);
+    message.channel.send("```Initializing the Terminal...```");
     process.exec(args, (error, stdout) => {
-      let result = stdout || error;
+      const result = stdout || error;
       message.channel
         .send(result, {
           code: "asciidoc",

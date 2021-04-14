@@ -1,10 +1,9 @@
 const Commando = require("discord.js-commando");
 const Discord = require("discord.js");
 
-const mongo = require("../../mongo");
 const warnSchema = require("../../models/warn-schema");
 
-const { what, red, embedcolor } = require("../../assets/json/colors.json");
+const { embedcolor } = require("../../assets/json/colors.json");
 
 module.exports = class WarningsCommand extends Commando.Command {
   constructor(client) {
@@ -41,9 +40,9 @@ module.exports = class WarningsCommand extends Commando.Command {
     let target;
     try {
       target =
-        message.mentions.users.first() ||
-        message.guild.members.cache.get(args).user;
+        message.mentions.users.first() || (await this.client.users.fetch(args));
     } catch (err) {
+      console.log(err);
       return message.reply(
         "<:scrubred:797476323169533963> THAT'S not a valid user."
       );

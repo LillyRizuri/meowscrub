@@ -1,7 +1,4 @@
 const Commando = require("discord.js-commando");
-const Discord = require("discord.js");
-
-const { red, what } = require("../../assets/json/colors.json");
 
 module.exports = class SkipMusicCommand extends Commando.Command {
   constructor(client) {
@@ -17,7 +14,7 @@ module.exports = class SkipMusicCommand extends Commando.Command {
   }
 
   async run(message) {
-    let queue = await this.client.distube.getQueue(message);
+    const queue = await this.client.distube.getQueue(message);
 
     const voiceChannel = message.member.voice.channel;
 

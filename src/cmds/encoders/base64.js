@@ -1,9 +1,10 @@
+/* eslint-disable no-case-declarations */
 const Commando = require("discord.js-commando");
 const Discord = require("discord.js");
 const utf8 = require("utf8");
 const base64 = require("base-64");
 
-const { red, what, embedcolor } = require("../../assets/json/colors.json");
+const { embedcolor } = require("../../assets/json/colors.json");
 
 module.exports = class Base64Command extends Commando.Command {
   constructor(client) {

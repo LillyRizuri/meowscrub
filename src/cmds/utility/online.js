@@ -37,7 +37,7 @@ module.exports = class OnlineStatsCommand extends Commmando.Command {
 
     const memberStatEmbed = new Discord.MessageEmbed()
       .setColor(embedcolor)
-      .setAuthor(`Member Statistics`, message.guild.iconURL())
+      .setAuthor("Member Statistics", message.guild.iconURL())
       .setTitle(`• Total Member(s): ${message.guild.members.cache.size}`)
       .setThumbnail(message.guild.iconURL())
       .setDescription(

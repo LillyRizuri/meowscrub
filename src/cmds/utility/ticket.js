@@ -3,12 +3,7 @@ const Discord = require("discord.js");
 
 const settingsSchema = require("../../models/settings-schema");
 
-const {
-  red,
-  what,
-  green,
-  embedcolor,
-} = require("../../assets/json/colors.json");
+const { red, green } = require("../../assets/json/colors.json");
 
 module.exports = class TicketCommand extends Commando.Command {
   constructor(client) {
@@ -34,8 +29,13 @@ module.exports = class TicketCommand extends Commando.Command {
     let channel;
 
     const channelNameCache = message.guild.channels.cache.find(
-      (channel) => channel.name === `ticket-${message.author.id}`
+      (ch) => ch.name === `ticket-${message.author.id}`
     );
+
+    if (channelNameCache)
+      return message.reply(
+        "<:scrubred:797476323169533963> Your ticket is already open. Check again."
+      );
 
     if (!args)
       return message.reply(
@@ -55,17 +55,12 @@ module.exports = class TicketCommand extends Commando.Command {
         "<:scrubred:797476323169533963> Limit your reason to just 512 characters only."
       );
 
-    if (channelNameCache)
-      return message.reply(
-        "<:scrubred:797476323169533963> Your ticket is already open. Check again."
-      );
-
     const results = await settingsSchema.find({
       guildId,
     });
 
     for (let i = 0; i < results.length; i++) {
-      let { ticketCategory } = results[i];
+      const { ticketCategory } = results[i];
       parentChannel = message.guild.channels.cache.get(ticketCategory);
     }
 
@@ -138,7 +133,7 @@ module.exports = class TicketCommand extends Commando.Command {
       }
     );
 
-    collector.on("collect", (reaction, user) => {
+    collector.on("collect", (reaction) => {
       switch (reaction.emoji.name) {
         case "🔒":
           channel.updateOverwrite(message.author, {

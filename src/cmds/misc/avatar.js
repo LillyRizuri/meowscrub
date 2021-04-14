@@ -1,7 +1,7 @@
 const Commando = require("discord.js-commando");
 const Discord = require("discord.js");
 
-const { embedcolor, red } = require("../../assets/json/colors.json");
+const { embedcolor } = require("../../assets/json/colors.json");
 
 module.exports = class AvatarCommand extends Commando.Command {
   constructor(client) {
@@ -18,71 +18,36 @@ module.exports = class AvatarCommand extends Commando.Command {
     });
   }
 
-  run(message, args) {
-    let user;
-    let avatar;
-
-    if (message.mentions.users.first()) {
-      user = message.mentions.users.first();
-      avatar = user.displayAvatarURL({
-        format: "png",
-        size: 4096,
-        dynamic: true,
-      });
-
-      const avatarEmbed = new Discord.MessageEmbed()
-        .setColor(embedcolor)
-        .setAuthor(`${user.tag}'s Profile Picture`)
-        .setImage(avatar)
-        .setFooter(
-          `Requested by ${message.author.tag}`,
-          message.author.displayAvatarURL({ dynamic: true })
-        );
-      message.channel.send(avatarEmbed);
-      return;
-    } else if (args) {
-      this.client.users
-        .fetch(args)
-        .then(async (user) => {
-          avatar = user.displayAvatarURL({
-            format: "png",
-            size: 4096,
-            dynamic: true,
-          });
-
-          const avatarEmbed = new Discord.MessageEmbed()
-            .setColor(embedcolor)
-            .setAuthor(`${user.tag}'s Profile Picture`)
-            .setImage(avatar)
-            .setFooter(
-              `Requested by ${message.author.tag}`,
-              message.author.displayAvatarURL({ dynamic: true })
-            );
-          message.channel.send(avatarEmbed);
-          return;
-        })
-        .catch((err) => {
-          return message.reply(
-            "<:scrubred:797476323169533963> What are you trying to do with that invalid user ID?"
-          );
-        });
-    } else {
-      user = message.author;
-      avatar = user.displayAvatarURL({
-        format: "png",
-        size: 4096,
-        dynamic: true,
-      });
-      
-      const avatarEmbed = new Discord.MessageEmbed()
-        .setColor(embedcolor)
-        .setAuthor(`${user.tag}'s Profile Picture`)
-        .setImage(avatar)
-        .setFooter(
-          `Requested by ${message.author.tag}`,
-          message.author.displayAvatarURL({ dynamic: true })
-        );
-      message.channel.send(avatarEmbed);
+  async run(message, args) {
+    let target;
+    try {
+      if (!args) {
+        target = message.author;
+      } else if (args) {
+        target =
+          message.mentions.users.first() ||
+          (await this.client.users.fetch(args));
+      }
+    } catch (err) {
+      console.log(err);
+      return message.reply(
+        "<:scrubred:797476323169533963> What are you trying to do with that invalid user ID?"
+      );
     }
+    const avatar = target.displayAvatarURL({
+      format: "png",
+      size: 4096,
+      dynamic: true,
+    });
+
+    const avatarEmbed = new Discord.MessageEmbed()
+      .setColor(embedcolor)
+      .setAuthor(`${target.tag}'s Profile Picture`)
+      .setImage(avatar)
+      .setFooter(
+        `Requested by ${message.author.tag}`,
+        message.author.displayAvatarURL({ dynamic: true })
+      );
+    message.channel.send(avatarEmbed);
   }
 };

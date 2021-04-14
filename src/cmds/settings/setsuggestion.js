@@ -1,9 +1,10 @@
+/* eslint-disable no-case-declarations */
 const Commando = require("discord.js-commando");
 const Discord = require("discord.js");
 
 const settingsSchema = require("../../models/settings-schema");
 
-const { green, what, red } = require("../../assets/json/colors.json");
+const { green, what } = require("../../assets/json/colors.json");
 
 module.exports = class SetChatbotChannelCommand extends Commando.Command {
   constructor(client) {
@@ -16,7 +17,7 @@ module.exports = class SetChatbotChannelCommand extends Commando.Command {
       details:
         "Replace the syntax with `disable` if you wish to remove the configuration.",
       argsType: "single",
-      format: "<channel/channelID>",
+      format: "<#channel/channelID>",
       examples: ["setsuggestion #chatbot", "setsuggestion disable"],
       userPermissions: ["ADMINISTRATOR"],
       guildOnly: true,
@@ -24,7 +25,7 @@ module.exports = class SetChatbotChannelCommand extends Commando.Command {
   }
 
   async run(message, args) {
-    let guildId = message.guild.id;
+    const guildId = message.guild.id;
     const channel =
       message.mentions.channels.first() ||
       message.guild.channels.cache.get(args);
@@ -87,12 +88,12 @@ module.exports = class SetChatbotChannelCommand extends Commando.Command {
         message.channel.send(confirmationRemovalEmbed);
         return;
       case "":
-        let results = await settingsSchema.find({
+        const results = await settingsSchema.find({
           guildId,
         });
 
         for (let i = 0; i < results.length; i++) {
-          let { suggestionsChannel } = results[i];
+          const { suggestionsChannel } = results[i];
           if (!suggestionsChannel) {
             return message.reply(
               "<:scrubnull:797476323533783050> The text channel hasn't been set yet."

@@ -14,15 +14,15 @@ module.exports = class PollCommand extends Commando.Command {
   }
 
   async run(message) {
-    const addReactions = (message) => {
-      message.react("<:scrubgreenlarge:797816509967368213>");
+    const addReactions = (msg) => {
+      msg.react("<:scrubgreenlarge:797816509967368213>");
 
       setTimeout(() => {
-        message.react("<:scrubredlarge:797816510579998730>");
+        msg.react("<:scrubredlarge:797816510579998730>");
       }, 750);
 
       setTimeout(() => {
-        message.react("<:scrubnulllarge:797816510298324992>");
+        msg.react("<:scrubnulllarge:797816510298324992>");
       }, 750);
     };
 

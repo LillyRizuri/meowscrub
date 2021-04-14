@@ -1,7 +1,7 @@
 const Commando = require("discord.js-commando");
 const Discord = require("discord.js");
 
-const { red, embedcolor } = require("../../assets/json/colors.json");
+const { embedcolor } = require("../../assets/json/colors.json");
 
 module.exports = class WhoIsCommand extends Commando.Command {
   constructor(client) {
@@ -20,7 +20,7 @@ module.exports = class WhoIsCommand extends Commando.Command {
 
   async run(message, args) {
     // worst code ever
-    let guild = this.client.guilds.cache.get(message.guild.id);
+    const guild = this.client.guilds.cache.get(message.guild.id);
 
     const dateTimeOptions = {
       weekday: "long",
@@ -35,9 +35,9 @@ module.exports = class WhoIsCommand extends Commando.Command {
     let target;
     let member;
     let rolemap;
-    var joinedTimestamp;
+    let joinedTimestamp;
     let userPresence;
-    var createdAt;
+    let createdAt;
     let userStatus;
     let isBot;
 
@@ -124,6 +124,7 @@ module.exports = class WhoIsCommand extends Commando.Command {
       // if the input was a string
       this.client.users
         .fetch(args)
+        // eslint-disable-next-line no-shadow
         .then((target) => {
           createdAt = new Date(target.createdTimestamp).toLocaleDateString(
             "en-US",
@@ -239,7 +240,7 @@ module.exports = class WhoIsCommand extends Commando.Command {
             message.channel.send(infoEmbed);
           }
         })
-        .catch((err) => {
+        .catch(() => {
           return message.reply(
             "<:scrubred:797476323169533963> What are you trying to do with that invalid user ID?"
           );

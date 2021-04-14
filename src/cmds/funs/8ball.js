@@ -1,6 +1,4 @@
-const { MessageEmbed } = require("discord.js");
 const Commando = require("discord.js-commando");
-const Discord = require("discord.js");
 
 const responses = [
   "It is certain",

@@ -1,7 +1,6 @@
 const Commando = require("discord.js-commando");
 const Discord = require("discord.js");
 const fetch = require("node-fetch");
-const axios = require("axios");
 
 const { cat } = require("../../assets/json/colors.json");
 

@@ -1,7 +1,7 @@
 const Commando = require("discord.js-commando");
 const Discord = require("discord.js");
 
-const { red, green, what } = require("../../assets/json/colors.json");
+const { green } = require("../../assets/json/colors.json");
 
 module.exports = class HackBanCommand extends Commando.Command {
   constructor(client) {
@@ -20,7 +20,7 @@ module.exports = class HackBanCommand extends Commando.Command {
   }
 
   async run(message, args) {
-    let userId = args[0];
+    const userId = args[0];
     let reason;
 
     if (message.mentions.users.first())
@@ -85,7 +85,7 @@ module.exports = class HackBanCommand extends Commando.Command {
           .setTimestamp();
         message.channel.send(banConfirmEmbed);
       })
-      .catch((err) => {
+      .catch(() => {
         return message.reply(
           "<:scrubred:797476323169533963> What is that user? God heckaroo."
         );

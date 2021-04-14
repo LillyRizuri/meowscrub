@@ -1,9 +1,8 @@
 const Commando = require("discord.js-commando");
 const Discord = require("discord.js");
 
-const { green, red } = require("../../assets/json/colors.json");
+const { green } = require("../../assets/json/colors.json");
 
-const mongo = require("../../mongo");
 const afkSchema = require("../../models/afk-schema");
 
 module.exports = class AFKCommand extends Commando.Command {
@@ -23,8 +22,8 @@ module.exports = class AFKCommand extends Commando.Command {
 
   async run(message, args) {
     let afkMessage = args;
-    let userId = message.author.id;
-    let guildId = message.guild.id;
+    const userId = message.author.id;
+    const guildId = message.guild.id;
 
     if (!afkMessage) {
       afkMessage = "No reason provided.";
@@ -40,6 +39,7 @@ module.exports = class AFKCommand extends Commando.Command {
     });
 
     for (let i = 0; i < results.length; i++) {
+      // eslint-disable-next-line no-shadow
       const { userId } = results[i];
 
       if (message.author.id === userId) {
@@ -81,7 +81,8 @@ module.exports = class AFKCommand extends Commando.Command {
             : `${message.member.nickname}`
         }`
       )
-      .catch((err) => {});
+      // eslint-disable-next-line no-empty-function
+      .catch(() => {});
     const afkSetEmbed = new Discord.MessageEmbed()
       .setColor(green)
       .setDescription(

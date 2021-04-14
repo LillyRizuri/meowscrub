@@ -17,7 +17,7 @@ module.exports = class chatCommand extends Commando.Command {
   }
 
   async run(message, args) {
-    let input = encodeURIComponent(args);
+    const input = encodeURIComponent(args);
     if (!input) {
       message.channel.send("You ain't gonna reply to me?");
       return;

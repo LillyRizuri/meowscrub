@@ -1,8 +1,6 @@
 const Commando = require("discord.js-commando");
 const Discord = require("discord.js");
 
-const { red, what, embedcolor } = require("../../assets/json/colors.json");
-
 module.exports = class RoleInfoCommand extends Commando.Command {
   constructor(client) {
     super(client, {

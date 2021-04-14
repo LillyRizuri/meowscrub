@@ -3,7 +3,7 @@ const Discord = require("discord.js");
 
 const warnSchema = require("../../models/warn-schema");
 
-const { green, what, red } = require("../../assets/json/colors.json");
+const { green } = require("../../assets/json/colors.json");
 
 module.exports = class DeleteWarnCommand extends Commando.Command {
   constructor(client) {
@@ -33,7 +33,7 @@ module.exports = class DeleteWarnCommand extends Commando.Command {
     try {
       target =
         message.mentions.users.first() ||
-        message.guild.members.cache.get(args[0]).user;
+        (await this.client.users.fetch(args[0]));
     } catch (err) {
       return message.reply(
         "<:scrubred:797476323169533963> THAT'S not a valid user."
@@ -71,7 +71,7 @@ module.exports = class DeleteWarnCommand extends Commando.Command {
           .setDescription(
             `<:scrubgreen:797476323316465676> Deleted a warn with this ID:\n**\`${warnId}\` for ${target.tag}.**`
           )
-          .setFooter(`is this fine?`)
+          .setFooter("is this fine?")
           .setTimestamp();
         message.channel.send(confirmationEmbed);
       } else {

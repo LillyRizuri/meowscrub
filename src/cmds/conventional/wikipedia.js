@@ -3,7 +3,6 @@ const Discord = require("discord.js");
 const fetch = require("node-fetch");
 const utf8 = require("utf8");
 
-const { red, what, embedcolor } = require("../../assets/json/colors.json");
 
 module.exports = class WikipediaCommand extends Commando.Command {
   constructor(client) {
@@ -60,8 +59,8 @@ ${trim(response.extract, 1024)}
             "Wikipedia",
             "https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Wikipedia-logo-v2.svg/200px-Wikipedia-logo-v2.svg.png"
           )
-          .setTitle(response.title) // Title Of Topic
-          .setURL(response.content_urls.desktop.page) // URL Of Searched Topic
+          .setTitle(response.title)
+          .setURL(response.content_urls.desktop.page)
           .setThumbnail(response.thumbnail.source)
           .setDescription(trim(response.extract, 2048));
         message.channel.send(definedEmbed);

@@ -1,6 +1,6 @@
 {
   "name": "meowscrub",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": "General bot. But it's very lacking.",
   "main": "./src/index.js",
   "scripts": {
@@ -24,6 +24,7 @@
     "ffmpeg-static": "^4.3.0",
     "figlet": "^1.5.0",
     "genius-lyrics-api": "^3.0.6",
+    "humanize-duration": "^3.25.1",
     "mathjs": "^9.3.0",
     "moment": "^2.29.1",
     "mongodb": "^3.6.5",
@@ -34,6 +35,7 @@
     "redis": "^3.1.0",
     "twemoji-parser": "^13.0.0",
     "utf8": "^3.0.0",
-    "weather-js": "^2.0.0"
+    "weather-js": "^2.0.0",
+    "weky": "^1.1.1"
   }
 }

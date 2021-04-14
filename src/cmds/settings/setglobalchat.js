@@ -6,19 +6,19 @@ const settingsSchema = require("../../models/settings-schema");
 
 const { green, what } = require("../../assets/json/colors.json");
 
-module.exports = class SetChatbotChannelCommand extends Commando.Command {
+module.exports = class SetGlobalChatChannelCommand extends Commando.Command {
   constructor(client) {
     super(client, {
-      name: "setchatbot",
-      aliases: ["setchatbotchannel"],
+      name: "setglobalchat",
+      aliases: ["setglobalchatchannel"],
       group: "settings",
-      memberName: "setchatbot",
-      description: "Set a chatbot channel.",
+      memberName: "setglobalchat",
+      description: "Set a Global Chat channel.",
       details:
         "Replace the syntax with `disable` if you wish to remove the configuration.",
       argsType: "single",
       format: "<channel/channelID>",
-      examples: ["setchatbot #chatbot", "setchatbot disable"],
+      examples: ["setglobalchat #global", "setglobalchat 830823819505303584"],
       userPermissions: ["ADMINISTRATOR"],
       guildOnly: true,
     });
@@ -49,7 +49,7 @@ module.exports = class SetChatbotChannelCommand extends Commando.Command {
           {
             guildId,
             $set: {
-              chatbotChannel: channel.id,
+              globalChat: channel.id,
             },
           },
           {
@@ -57,10 +57,11 @@ module.exports = class SetChatbotChannelCommand extends Commando.Command {
             useFindAndModify: false,
           }
         );
+        // eslint-disable-next-line no-case-declarations
         const confirmationEmbed = new Discord.MessageEmbed()
           .setColor(green)
           .setDescription(
-            `<:scrubgreen:797476323316465676> **Set the Chatbot Channel to:** ${channel}`
+            `<:scrubgreen:797476323316465676> **Set the Global Chat to:** ${channel}`
           );
         message.channel.send(confirmationEmbed);
         break;
@@ -72,7 +73,7 @@ module.exports = class SetChatbotChannelCommand extends Commando.Command {
           {
             guildId,
             $set: {
-              chatbotChannel: null,
+              globalChat: null,
             },
           },
           {
@@ -83,7 +84,7 @@ module.exports = class SetChatbotChannelCommand extends Commando.Command {
         const confirmationRemovalEmbed = new Discord.MessageEmbed()
           .setColor(green)
           .setDescription(
-            "<:scrubgreen:797476323316465676> **Removed the configuration for the Chatbot Channel.**"
+            "<:scrubgreen:797476323316465676> **Removed the configuration for the Global Chat.**"
           );
         message.channel.send(confirmationRemovalEmbed);
         return;
@@ -93,16 +94,16 @@ module.exports = class SetChatbotChannelCommand extends Commando.Command {
         });
 
         for (let i = 0; i < results.length; i++) {
-          const { chatbotChannel } = results[i];
-          if (!chatbotChannel) {
+          const { globalChat } = results[i];
+          if (!globalChat) {
             return message.reply(
               "<:scrubnull:797476323533783050> The text channel hasn't been set yet."
             );
-          } else if (chatbotChannel) {
+          } else if (globalChat) {
             const channelEmbed = new Discord.MessageEmbed()
               .setColor(what)
               .setDescription(
-                `<:scrubnull:797476323533783050> **Current Chatbot Channel Configuration:** <#${chatbotChannel}>`
+                `<:scrubnull:797476323533783050> **Current Global Chat Configuration:** <#${globalChat}>`
               );
             return message.channel.send(channelEmbed);
           }

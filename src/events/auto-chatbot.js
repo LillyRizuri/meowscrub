@@ -1,19 +1,23 @@
 const fetch = require("node-fetch");
 const utf8 = require("utf8");
 const settingsSchema = require("../models/settings-schema");
+const userBlacklist = require("../../user-blacklist.json");
 
 module.exports = async (client, message) => {
+  // If the user is blacklisted, return
+  if (userBlacklist.indexOf(message.author.id.toString()) !== -1) return;
+
   let channel;
   const guildId = message.guild.id;
   const input = encodeURIComponent(message.content);
 
   try {
-    let results = await settingsSchema.find({
+    const results = await settingsSchema.find({
       guildId,
     });
 
     for (let i = 0; i < results.length; i++) {
-      let { chatbotChannel } = results[i];
+      const { chatbotChannel } = results[i];
       channel = chatbotChannel;
     }
 
@@ -29,5 +33,6 @@ module.exports = async (client, message) => {
       message.channel.send(json.cnt.toLowerCase());
       return message.channel.stopTyping(true);
     }
+  // eslint-disable-next-line no-empty
   } catch (err) {}
 };

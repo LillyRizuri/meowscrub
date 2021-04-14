@@ -226,7 +226,7 @@ module.exports = class CovidCommand extends Commando.Command {
           )
           .setThumbnail(
             `https://www.countryflags.io/${
-              require("../../assets/json/countries_abbreviation.json")[
+              require("../../assets/json/countries-abbreviation.json")[
                 country.country
               ]
             }/flat/64.png`

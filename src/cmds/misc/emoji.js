@@ -2,7 +2,7 @@ const Commando = require("discord.js-commando");
 const Discord = require("discord.js");
 const { parse } = require("twemoji-parser");
 
-const { what, red, embedcolor } = require("../../assets/json/colors.json");
+const { embedcolor } = require("../../assets/json/colors.json");
 
 module.exports = class StealEmojiCommand extends Commando.Command {
   constructor(client) {
@@ -42,7 +42,7 @@ module.exports = class StealEmojiCommand extends Commando.Command {
           );
         message.channel.send(guildEmojiEmbed);
       } else {
-        let parsed = parse(args, { assetType: "png" });
+        const parsed = parse(args, { assetType: "png" });
         if (!parsed[0]) {
           return message.reply(
             "<:scrubred:797476323169533963> Invalid emoji found. Try again."

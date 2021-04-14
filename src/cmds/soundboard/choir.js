@@ -1,5 +1,4 @@
 const Commando = require("discord.js-commando");
-const path = require("path");
 
 module.exports = class PlayAudioCommand extends Commando.Command {
   constructor(client) {
@@ -29,6 +28,6 @@ module.exports = class PlayAudioCommand extends Commando.Command {
       });
     });
 
-    await message.react(`🔊`);
+    await message.react("🔊");
   }
 };

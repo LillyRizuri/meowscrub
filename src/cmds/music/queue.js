@@ -1,7 +1,7 @@
 const Commando = require("discord.js-commando");
 const Discord = require("discord.js");
 
-const { red, what, embedcolor } = require("../../assets/json/colors.json");
+const { embedcolor } = require("../../assets/json/colors.json");
 
 module.exports = class ListQueueCommand extends Commando.Command {
   constructor(client) {
@@ -15,7 +15,7 @@ module.exports = class ListQueueCommand extends Commando.Command {
   }
 
   async run(message) {
-    let queue = await this.client.distube.getQueue(message);
+    const queue = await this.client.distube.getQueue(message);
     const voiceChannel = message.member.voice.channel;
 
     if (!voiceChannel)
@@ -43,7 +43,7 @@ module.exports = class ListQueueCommand extends Commando.Command {
 
     if (!queue)
       return message.reply("<:scrubnull:797476323533783050> There's no queue.");
-      
+
     const currentQueueEmbed = new Discord.MessageEmbed()
       .setColor(embedcolor)
       .setAuthor("Current queue for this Guild")

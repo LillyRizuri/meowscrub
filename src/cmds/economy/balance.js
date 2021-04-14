@@ -1,7 +1,7 @@
 const Commando = require("discord.js-commando");
 const Discord = require("discord.js");
 
-const { embedcolor, red } = require("../../assets/json/colors.json");
+const { embedcolor } = require("../../assets/json/colors.json");
 
 const economy = require("../../economy");
 
@@ -22,14 +22,14 @@ module.exports = class BalCommand extends Commando.Command {
 
   async run(message, args) {
     let target;
-    
+
     try {
-      if (message.mentions.users.first()) {
-        target = message.mentions.users.first();
-      } else if (args) {
-        target = message.guild.members.cache.get(args).user;
-      } else {
+      if (!args) {
         target = message.author;
+      } else if (args) {
+        target =
+          message.mentions.users.first() ||
+          message.guild.members.cache.get(args).user;
       }
     } catch (err) {
       return message.reply(
@@ -47,11 +47,12 @@ module.exports = class BalCommand extends Commando.Command {
     const userId = target.id;
 
     const coins = await economy.getCoins(guildId, userId);
+    const coinBank = await economy.getCoinBank(guildId, userId);
 
     const balEmbed = new Discord.MessageEmbed()
       .setColor(embedcolor)
       .setTitle(`${targetTag}'s Balance`)
-      .setDescription(`**Balance:** ¢${coins}`)
+      .setDescription(`**Balance:** ¢${coins}\n**Bank:** ¢${coinBank}`)
       .setFooter("what a scrub")
       .setTimestamp();
     message.reply(balEmbed);

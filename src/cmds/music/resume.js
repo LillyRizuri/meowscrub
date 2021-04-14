@@ -1,10 +1,8 @@
+/* eslint-disable no-case-declarations */
 const Commando = require("discord.js-commando");
 const Discord = require("discord.js");
 
 const {
-  embedcolor,
-  red,
-  what,
   green,
 } = require("../../assets/json/colors.json");
 

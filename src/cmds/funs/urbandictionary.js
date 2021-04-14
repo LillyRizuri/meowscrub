@@ -3,7 +3,7 @@ const Discord = require("discord.js");
 const fetch = require("node-fetch");
 const utf8 = require("utf8");
 
-const { urbandictionary, what, red } = require("../../assets/json/colors.json");
+const { urbandictionary } = require("../../assets/json/colors.json");
 
 module.exports = class DictionaryCommand extends Commando.Command {
   constructor(client) {

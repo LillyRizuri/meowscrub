@@ -1,6 +1,6 @@
 module.exports = (client) => {
   client.editsnipe = new Map();
-  client.on("messageUpdate", function (message, channel) {
+  client.on("messageUpdate", (message) => {
     switch (message.channel.nsfw) {
       case false:
         client.editsnipe.set(message.channel.id, {

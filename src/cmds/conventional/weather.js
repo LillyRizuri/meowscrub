@@ -2,7 +2,7 @@ const Commando = require("discord.js-commando");
 const Discord = require("discord.js");
 const weather = require("weather-js");
 
-const { red, what, embedcolor } = require("../../assets/json/colors.json");
+const { embedcolor } = require("../../assets/json/colors.json");
 
 module.exports = class WeatherCommand extends Commando.Command {
   constructor(client) {
@@ -31,8 +31,8 @@ module.exports = class WeatherCommand extends Commando.Command {
           "<:scrubred:797476323169533963> THIS is not a location. What's that."
         );
 
-      var current = result[0].current;
-      var location = result[0].location;
+      const current = result[0].current;
+      const location = result[0].location;
 
       const tempF = Math.round(result[0].current.temperature * 1.8 + 32);
       const feelsLikeF = Math.round(result[0].current.feelslike * 1.8 + 32);

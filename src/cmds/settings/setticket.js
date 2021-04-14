@@ -1,9 +1,10 @@
+/* eslint-disable no-case-declarations */
 const Commando = require("discord.js-commando");
 const Discord = require("discord.js");
 
 const settingsSchema = require("../../models/settings-schema");
 
-const { green, what, red } = require("../../assets/json/colors.json");
+const { green, what } = require("../../assets/json/colors.json");
 
 module.exports = class SetTicketCategoryCommand extends Commando.Command {
   constructor(client) {
@@ -24,7 +25,7 @@ module.exports = class SetTicketCategoryCommand extends Commando.Command {
   }
 
   async run(message, args) {
-    let guildId = message.guild.id;
+    const guildId = message.guild.id;
     const channel = message.guild.channels.cache.get(args);
 
     switch (args) {
@@ -85,12 +86,12 @@ module.exports = class SetTicketCategoryCommand extends Commando.Command {
         message.channel.send(confirmationRemovalEmbed);
         return;
       case "":
-        let results = await settingsSchema.find({
+        const results = await settingsSchema.find({
           guildId,
         });
 
         for (let i = 0; i < results.length; i++) {
-          let { ticketCategory } = results[i];
+          const { ticketCategory } = results[i];
           if (!ticketCategory) {
             return message.reply(
               "<:scrubnull:797476323533783050> The category ID hasn't been set yet."

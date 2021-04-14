@@ -1,7 +1,4 @@
 const Commando = require("discord.js-commando");
-const Discord = require("discord.js");
-
-const { red, what } = require("../../assets/json/colors.json");
 
 module.exports = class SayCommand extends Commando.Command {
   constructor(client) {
@@ -32,12 +29,12 @@ module.exports = class SayCommand extends Commando.Command {
       "<:scrubred:797476323169533963> Really? Including @everyone/@here isn't cool."
     );
 
-    if (!args[0]) 
+    if (!args[0])
     return message.reply(
       "<:scrubnull:797476323533783050> Provide a channel before advancing."
     );
 
-    if (!args[1]) 
+    if (!args[1])
     return message.reply(
       "<:scrubnull:797476323533783050> Message content to send, where did it go?"
     );

@@ -7,7 +7,7 @@ module.exports = class JokeCommand extends Commando.Command {
       name: "joke",
       group: "funs",
       memberName: "joke",
-      description: '"Funny" joke transfer here.',
+      description: "\"Funny\" joke transfer here.",
     });
   }
 

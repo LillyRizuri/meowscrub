@@ -5,14 +5,14 @@ const { embedcolor } = require("../../assets/json/colors.json");
 const checkMark = "<:scrubgreenlarge:797816509967368213>";
 const cross = "<:scrubredlarge:797816510579998730>";
 
-module.exports = class ShutdownCommand extends Commando.Command {
+module.exports = class RestartCommand extends Commando.Command {
   constructor(client) {
     super(client, {
-      name: "shutdown",
-      aliases: ["destroy", "terminate", "poweroff"],
+      name: "restart",
+      aliases: ["reboot"],
       group: "utility",
-      memberName: "shutdown",
-      description: "Shut the actual bot down. No joke.",
+      memberName: "reboot",
+      description: "Restart me in case of emergencies.",
       details: "Only the bot owner(s) may use this command.",
     });
   }
@@ -20,16 +20,15 @@ module.exports = class ShutdownCommand extends Commando.Command {
   async run(message) {
     if (message.author.id !== process.env.OWNERID)
       return message.reply(
-        "<:scrubred:797476323169533963> THIS COMMAND IS VERY DANGEROUS AND IT WILL MAKE THE CLIENT SHUT DOWN.\nTHIS IS NO JOKE."
+        "<:scrubred:797476323169533963> THIS COMMAND IS VERY DANGEROUS AND IT WILL MAKE THE CLIENT REBOOT.\nTHIS IS NO JOKE."
       );
-
     const confirmationEmbed = new Discord.MessageEmbed()
       .setColor(embedcolor)
       .setAuthor(
         `Initiated by ${message.author.tag}`,
         message.author.displayAvatarURL({ dynamic: true })
       ).setDescription(`
-The entire client seesion will be destroyed.
+The entire client seesion will restart.
 Please confirm with a check mark or with a red cross.        
         `);
     message.reply(confirmationEmbed).then((msg) => {
@@ -49,11 +48,14 @@ Please confirm with a check mark or with a red cross.
         .then(async (collected) => {
           if (collected.first().emoji.name == "scrubgreenlarge") {
             try {
-              await message.channel.send("*The client has been put to rest.*");
+              await message.channel.send(
+                "*Restarted the client. Should be up at anytime now.*"
+              );
             } finally {
-              process.exit();
+              await this.client.destroy();
+              await this.client.login(process.env.TOKEN);
             }
-          } else message.channel.send("Operation canceled. Phew.");
+          } else message.channel.send("Operation canceled.");
         })
         .catch(() => {
           message.channel.send(

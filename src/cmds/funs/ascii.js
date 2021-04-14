@@ -1,8 +1,5 @@
 const Commando = require("discord.js-commando");
-const Discord = require("discord.js");
 const figlet = require("figlet");
-
-const { what, red } = require("../../assets/json/colors.json");
 
 module.exports = class AsciiCommand extends Commando.Command {
   constructor(client) {
@@ -42,7 +39,7 @@ module.exports = class AsciiCommand extends Commando.Command {
           );
         if (!data)
           return message.channel.send(
-            `\`\`\`No Output. Please Try Again.\`\`\``
+            "```No Output. Please Try Again.```"
           );
         message.channel.send(`\`\`\`${data}\`\`\``);
       }

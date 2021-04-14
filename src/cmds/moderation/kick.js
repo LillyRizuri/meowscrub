@@ -1,12 +1,7 @@
 const Commando = require("discord.js-commando");
 const Discord = require("discord.js");
 
-const {
-  red,
-  green,
-  what,
-  embedcolor,
-} = require("../../assets/json/colors.json");
+const { green, embedcolor } = require("../../assets/json/colors.json");
 
 module.exports = class KickCommand extends Commando.Command {
   constructor(client) {
@@ -90,7 +85,7 @@ module.exports = class KickCommand extends Commando.Command {
       )
       .setFooter("Well.")
       .setTimestamp();
-    await user.send(dmReasonEmbed).catch((err) => {
+    await user.send(dmReasonEmbed).catch(() => {
       message.channel.send(
         "Can't send the reason to the offender. Maybe they have their DM disabled."
       );
