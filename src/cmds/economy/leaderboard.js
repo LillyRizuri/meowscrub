@@ -23,7 +23,7 @@ module.exports = class LeaderboardCommand extends Commando.Command {
     await Promise.all(
       message.guild.members.cache.map(async (member) => {
         const id = member.id;
-        const bal = await economy.getCoinBank(message.guild.id, member.id);
+        const bal = await economy.getCoins(message.guild.id, member.id);
         return bal !== 0
           ? collection.set(id, {
               id,
@@ -33,7 +33,7 @@ module.exports = class LeaderboardCommand extends Commando.Command {
       })
     );
 
-    const data = collection.sort((a, b) => b.position - a.position).first(10);
+    const data = collection.sort((a, b) => b.bal - a.bal).first(10);
     const leaderboardMap = data.map((v, i) => {
       return `**${i + 1}.** ${this.client.users.cache.get(v.id).tag} • **¢${
         v.bal
@@ -43,7 +43,8 @@ module.exports = class LeaderboardCommand extends Commando.Command {
     const leaderboardEmbed = new Discord.MessageEmbed()
       .setColor(embedcolor)
       .setAuthor(`Top 10's in ${message.guild.name}`)
-      .setDescription(leaderboardMap);
+      .setDescription(leaderboardMap)
+      .setFooter("this is money ON HAND, not net worth");
     message.channel.send(leaderboardEmbed);
   }
 };
