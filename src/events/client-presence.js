@@ -3,12 +3,10 @@ module.exports = {
   async execute(client) {
     // first presence status before the interval starts
     client.user.setPresence({
-      activities: [
-        {
-          name: "me being awoken",
-          type: "WATCHING",
-        },
-      ],
+      activity: {
+        name: "with discord.js",
+        type: "WATCHING",
+      },
       status: "idle",
     });
 
@@ -18,14 +16,12 @@ module.exports = {
       const randomStatus = Math.floor(Math.random() * status.length);
 
       client.user.setPresence({
-        activities: [
-          {
-            name: status[randomStatus]
-              .replace("{servers}", client.guilds.cache.size)
-              .replace("{totalStatuses}", status.length),
-            type: "WATCHING",
-          },
-        ],
+        activity: {
+          name: status[randomStatus]
+            .replace("{servers}", client.guilds.cache.size)
+            .replace("{totalStatuses}", status.length),
+          type: "WATCHING",
+        },
       });
     }, 600000);
   },

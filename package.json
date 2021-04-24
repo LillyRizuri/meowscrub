@@ -16,7 +16,7 @@
     "commando-provider-mongo": "^2.1.0",
     "covidtracker": "^2.0.1",
     "discord-giveaways": "^4.4.3",
-    "discord.js": "github:discordjs/discord.js",
+    "discord.js": "^12.5.3",
     "discord.js-commando": "^0.12.3",
     "distube": "^2.8.9",
     "dotenv": "^8.2.0",
