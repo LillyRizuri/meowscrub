@@ -10,6 +10,10 @@ module.exports = class FightCommand extends Commando.Command {
       description: "Fight to begone.",
       format: "<@user>",
       examples: ["fight @frockles#4339"],
+      throttling: {
+        usages: 1,
+        duration: 5,
+      },
     });
   }
 

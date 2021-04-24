@@ -54,6 +54,10 @@ module.exports = class UserPermissionsCommand extends Commando.Command {
       argsType: "single",
       format: "[@user/userID]",
       examples: ["permissions @frockles"],
+      throttling: {
+        usages: 1,
+        duration: 5,
+      },
       guildOnly: true,
     });
   }

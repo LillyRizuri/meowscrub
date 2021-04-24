@@ -18,7 +18,7 @@ module.exports = class ShutdownCommand extends Commando.Command {
   }
 
   async run(message) {
-    if (message.author.id !== process.env.OWNERID)
+    if (this.client.isOwner(message.author) === false)
       return message.reply(
         "<:scrubred:797476323169533963> THIS COMMAND IS VERY DANGEROUS AND IT WILL MAKE THE CLIENT SHUT DOWN.\nTHIS IS NO JOKE."
       );

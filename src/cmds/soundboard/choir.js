@@ -7,6 +7,10 @@ module.exports = class PlayAudioCommand extends Commando.Command {
       group: "soundboard",
       memberName: "choir",
       description: "First thing you hear when you go to heaven",
+      throttling: {
+        usages: 1,
+        duration: 5,
+      },
       guildOnly: true,
     });
   }

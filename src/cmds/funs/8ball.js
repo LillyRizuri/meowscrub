@@ -31,6 +31,10 @@ module.exports = class rpsCommand extends Commando.Command {
       memberName: "8ball",
       argsType: "single",
       description: "Ask the 8-ball.",
+      throttling: {
+        usages: 1,
+        duration: 5,
+      },
     });
   }
 

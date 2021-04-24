@@ -19,6 +19,10 @@ module.exports = class TicketCommand extends Commando.Command {
         "ticket ok someone is constantly pinging everyone and i can't handle it",
       ],
       clientPermissions: ["MANAGE_CHANNELS", "ADD_REACTIONS"],
+      throttling: {
+        usages: 1,
+        duration: 5,
+      },
       guildOnly: true,
     });
   }
@@ -90,7 +94,6 @@ module.exports = class TicketCommand extends Commando.Command {
         VIEW_CHANNEL: true,
       });
     } catch (err) {
-      console.log(err);
       const missingPermissionsEmbed = new Discord.MessageEmbed()
         .setColor(red)
         .setDescription(
@@ -155,7 +158,7 @@ module.exports = class TicketCommand extends Commando.Command {
       .setFooter("good luck.")
       .setTimestamp();
 
-    await message.channel.send(ticketCreatedEmbed).then((msg) => {
+    message.channel.send(ticketCreatedEmbed).then((msg) => {
       setTimeout(() => {
         msg.delete();
       }, 7000);

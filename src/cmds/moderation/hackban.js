@@ -15,6 +15,10 @@ module.exports = class HackBanCommand extends Commando.Command {
       examples: ["hackban @frockles illegal stuff spotted"],
       clientPermissions: ["BAN_MEMBERS", "ADMINISTRATOR"],
       userPermissions: ["BAN_MEMBERS", "ADMINISTRATOR"],
+      throttling: {
+        usages: 1,
+        duration: 5,
+      },
       guildOnly: true,
     });
   }

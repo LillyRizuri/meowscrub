@@ -12,6 +12,10 @@ module.exports = class SayCommand extends Commando.Command {
       format: "<#channel/channelID> <content>",
       examples: ["say #test hello"],
       userPermissions: ["MANAGE_MESSAGES"],
+      throttling: {
+        usages: 1,
+        duration: 5,
+      },
       guildOnly: true,
     });
   }

@@ -15,6 +15,10 @@ module.exports = class StealEmojiCommand extends Commando.Command {
       argsType: "single",
       format: "<emojiname>",
       examples: ["emoji :what:"],
+      throttling: {
+        usages: 1,
+        duration: 5,
+      },
     });
   }
 
@@ -33,8 +37,6 @@ module.exports = class StealEmojiCommand extends Commando.Command {
         }`;
         const guildEmojiEmbed = new Discord.MessageEmbed()
           .setColor(embedcolor)
-          .setAuthor(`Emoji Extracted! [${parsedEmoji.name}]`)
-          .setTitle(`ID: ${parsedEmoji.id}`)
           .setImage(url)
           .setFooter(
             `Requested by ${message.author.tag}`,
@@ -51,7 +53,6 @@ module.exports = class StealEmojiCommand extends Commando.Command {
 
         const builtInEmojiEmbed = new Discord.MessageEmbed()
           .setColor(embedcolor)
-          .setAuthor(`Emoji Extracted! [${args}]`)
           .setImage(parsed[0].url)
           .setFooter(
             `Requested by ${message.author.tag}`,

@@ -15,6 +15,10 @@ module.exports = class BanCommand extends Commando.Command {
       examples: ["ban @frockles not complying to the rules"],
       clientPermissions: ["BAN_MEMBERS"],
       userPermissions: ["BAN_MEMBERS"],
+      throttling: {
+        usages: 1,
+        duration: 5,
+      },
       guildOnly: true,
     });
   }

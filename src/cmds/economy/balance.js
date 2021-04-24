@@ -52,7 +52,7 @@ module.exports = class BalCommand extends Commando.Command {
     const balEmbed = new Discord.MessageEmbed()
       .setColor(embedcolor)
       .setTitle(`${targetTag}'s Balance`)
-      .setDescription(`**Balance:** ¢${coins}\n**Bank:** ¢${coinBank}`)
+      .setDescription(`**Wallet:** ¢${coins}\n**Bank:** ¢${coinBank}`)
       .setFooter("what a scrub")
       .setTimestamp();
     message.reply(balEmbed);

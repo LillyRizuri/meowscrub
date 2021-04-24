@@ -11,6 +11,10 @@ module.exports = class StopMusicCommand extends Commando.Command {
       group: "music",
       memberName: "leave",
       description: "Stop playing music for you.",
+      throttling: {
+        usages: 1,
+        duration: 5,
+      },
       guildOnly: true,
     });
   }

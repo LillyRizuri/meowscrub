@@ -9,12 +9,16 @@ module.exports = class KickCommand extends Commando.Command {
       name: "kick",
       group: "moderation",
       memberName: "kick",
-      description: "Kick a member. It's that easy.",
+      description: "Kick a member in the current guild. Hmmmm...",
       argsType: "multiple",
       format: "<@user/userID> [reason]",
-      examples: ["kick @frockles get out pls"],
+      examples: ["kick @frockles broken a rule"],
       clientPermissions: ["KICK_MEMBERS"],
       userPermissions: ["KICK_MEMBERS"],
+      throttling: {
+        usages: 1,
+        duration: 5,
+      },
       guildOnly: true,
     });
   }
@@ -22,7 +26,7 @@ module.exports = class KickCommand extends Commando.Command {
   async run(message, args) {
     if (!args[0])
       return message.reply(
-        "<:scrubnull:797476323533783050> Who do you want to ban? Get it right."
+        "<:scrubnull:797476323533783050> Who do you want to kick? Get it right."
       );
 
     let reason;
@@ -41,11 +45,11 @@ module.exports = class KickCommand extends Commando.Command {
     switch (target) {
       case message.author:
         return message.reply(
-          "<:scrubred:797476323169533963> Banning yourself? Keep dreaming."
+          "<:scrubred:797476323169533963> Kicking yourself? Why not leaving by yourself?"
         );
       case this.client.user:
         return message.reply(
-          "<:scrubred:797476323169533963> Banning myself? Why?"
+          "<:scrubred:797476323169533963> Kicking myself? What the..."
         );
     }
 
@@ -67,7 +71,7 @@ module.exports = class KickCommand extends Commando.Command {
     const user = guild.members.cache.get(target.id);
     if (!user.kickable)
       return message.reply(
-        "<:scrubred:797476323169533963> How in the world can I kick the user you specified, huh?"
+        "<:scrubred:797476323169533963> How the heck can I kick the user you specified? Jesus."
       );
 
     const dmReasonEmbed = new Discord.MessageEmbed()
@@ -108,7 +112,7 @@ module.exports = class KickCommand extends Commando.Command {
           value: reason,
         }
       )
-      .setFooter("what now?")
+      .setFooter("hmmm...")
       .setTimestamp();
     message.channel.send(kickConfirmEmbed);
   }

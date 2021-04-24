@@ -62,7 +62,7 @@ module.exports = class WithdrawCommand extends Commando.Command {
       .setDescription(
         `
 <:scrubgreen:797476323316465676> Successfully withdrew your **¢${coinsToWithdraw}**.
-**Your Balance: ¢${remainingCoins}**
+**Your Wallet: ¢${remainingCoins}**
 **Your Bank Account: ¢${currentBankAcc}**`
       )
       .setFooter("hmmmmmm")

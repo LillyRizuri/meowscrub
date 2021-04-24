@@ -7,6 +7,10 @@ module.exports = class PlayAudioCommand extends Commando.Command {
       group: "soundboard",
       memberName: "thx",
       description: "It blares.",
+      throttling: {
+        usages: 1,
+        duration: 5,
+      },
       guildOnly: true,
     });
   }

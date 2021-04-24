@@ -7,6 +7,10 @@ module.exports = class PlayAudioCommand extends Commando.Command {
       group: "music-library",
       memberName: "obstacle",
       description: "Type in quick! [15 Seconds]",
+      throttling: {
+        usages: 1,
+        duration: 5,
+      },
       guildOnly: true,
     });
   }

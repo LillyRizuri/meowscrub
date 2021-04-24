@@ -9,10 +9,14 @@ module.exports = class PokeDexCommand extends Commando.Command {
     super(client, {
       name: "pokedex",
       aliases: ["pokemon", "pkmn"],
-      group: "conventional",
+      group: "misc",
       memberName: "pokedex",
-      description: "Search for a Pokémon.",
+      description: "Search for a Pokémon's data.",
       argsType: "single",
+      throttling: {
+        usages: 1,
+        duration: 5,
+      },
     });
   }
 

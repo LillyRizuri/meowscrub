@@ -8,13 +8,17 @@ module.exports = class WeatherCommand extends Commando.Command {
   constructor(client) {
     super(client, {
       name: "weather",
-      aliases: ["w"],
+      aliases: ["wt"],
       group: "conventional",
       memberName: "weather",
       argsType: "single",
       description: "Shows weather report for a specific location.",
       format: "<location>",
       examples: ["weather hanoi"],
+      throttling: {
+        usages: 1,
+        duration: 5,
+      },
     });
   }
 

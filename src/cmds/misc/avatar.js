@@ -14,7 +14,10 @@ module.exports = class AvatarCommand extends Commando.Command {
       argsType: "single",
       format: "[@user/userID]",
       examples: ["avatar", "avatar @frockles", "avatar 693832549943869493"],
-      guildOnly: true,
+      throttling: {
+        usages: 1,
+        duration: 5,
+      },
     });
   }
 
@@ -29,7 +32,6 @@ module.exports = class AvatarCommand extends Commando.Command {
           (await this.client.users.fetch(args));
       }
     } catch (err) {
-      console.log(err);
       return message.reply(
         "<:scrubred:797476323169533963> What are you trying to do with that invalid user ID?"
       );

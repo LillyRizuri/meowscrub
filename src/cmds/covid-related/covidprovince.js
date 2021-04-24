@@ -15,6 +15,10 @@ module.exports = class CovidProvinceCommand extends Commando.Command {
       description: "Display stats about COVID-19 in a specified province.",
       format: "<country> <province>",
       examples: ["cprovince canada ontario"],
+      throttling: {
+        usages: 1,
+        duration: 5,
+      },
     });
   }
 

@@ -61,7 +61,7 @@ module.exports = class DepositCommand extends Commando.Command {
       .setDescription(
         `
 <:scrubgreen:797476323316465676> Successfully deposited your **¢${coinsToDeposit}**.
-**Your Balance: ¢${remainingCoins}**
+**Your Wallet: ¢${remainingCoins}**
 **Your Bank Account: ¢${currentBankAcc}**`
       )
       .setFooter("hmmmmmm")

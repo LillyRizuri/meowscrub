@@ -5,9 +5,13 @@ module.exports = class CatFactsCommand extends Commando.Command {
   constructor(client) {
     super(client, {
       name: "catfacts",
-      group: "funs",
+      group: "misc",
       memberName: "catfacts",
-      description: "Shows random facts about cat.",
+      description: "Sends random facts about cat.",
+      throttling: {
+        usages: 1,
+        duration: 5,
+      },
     });
   }
 

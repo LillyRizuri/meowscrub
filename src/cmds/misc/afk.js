@@ -16,6 +16,10 @@ module.exports = class AFKCommand extends Commando.Command {
       argsType: "single",
       format: "[reason]",
       examples: ["afk coding time"],
+      throttling: {
+        usages: 1,
+        duration: 30,
+      },
       guildOnly: true,
     });
   }

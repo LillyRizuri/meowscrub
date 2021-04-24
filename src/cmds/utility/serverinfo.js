@@ -11,6 +11,10 @@ module.exports = class ServerInfoCommand extends Commando.Command {
       group: "utility",
       memberName: "serverinfo",
       description: "Shows some informations about this very guild.",
+      throttling: {
+        usages: 1,
+        duration: 5,
+      },
       guildOnly: true,
     });
   }

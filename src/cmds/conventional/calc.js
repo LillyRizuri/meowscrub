@@ -12,8 +12,12 @@ module.exports = class AddCommand extends Commando.Command {
       group: "conventional",
       memberName: "calc",
       description:
-        "You can do calculation with Math.js. Check mathjs.org for more information.",
+        "You can do calculation with Math.js. Check <https://mathjs.org> for more information.",
       argsType: "single",
+      throttling: {
+        usages: 1,
+        duration: 5,
+      },
     });
   }
 

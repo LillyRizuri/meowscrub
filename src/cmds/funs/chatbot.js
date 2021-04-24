@@ -2,6 +2,8 @@ const Commando = require("discord.js-commando");
 const fetch = require("node-fetch");
 const utf8 = require("utf8");
 
+const userBlacklist = require("../../../user-blacklist.json");
+
 module.exports = class chatCommand extends Commando.Command {
   constructor(client) {
     super(client, {
@@ -17,6 +19,11 @@ module.exports = class chatCommand extends Commando.Command {
   }
 
   async run(message, args) {
+    if (userBlacklist.indexOf(message.author.id) !== -1)
+      return message.reply(
+        "You are blacklisted from using this functionality. For that, your message won't be accepted."
+      );
+
     const input = encodeURIComponent(args);
     if (!input) {
       message.channel.send("You ain't gonna reply to me?");

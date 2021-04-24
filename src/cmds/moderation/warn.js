@@ -18,6 +18,10 @@ module.exports = class WarnCommand extends Commando.Command {
       examples: ["warn @frockles spamming"],
       clientPermissions: ["BAN_MEMBERS"],
       userPermissions: ["BAN_MEMBERS"],
+      throttling: {
+        usages: 1,
+        duration: 5,
+      },
       guildOnly: true,
     });
   }
@@ -73,9 +77,9 @@ module.exports = class WarnCommand extends Commando.Command {
         `<:scrubnull:797476323533783050> State why do you want to warn ${target.tag}.`
       );
 
-    if (reason.length > 32)
+    if (reason.length > 128)
       return message.reply(
-        "<:scrubred:797476323169533963> The reason for warning musn't be more than 32 characters."
+        "<:scrubred:797476323169533963> The reason for warning musn't be more than 128 characters."
       );
 
     const warning = {

@@ -12,6 +12,10 @@ module.exports = class JumpMusicCommand extends Commando.Command {
       argsType: "single",
       format: "<musicNo>",
       examples: ["jump 3"],
+      throttling: {
+        usages: 1,
+        duration: 5,
+      },
       guildOnly: true,
     });
   }

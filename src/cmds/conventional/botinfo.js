@@ -11,12 +11,15 @@ module.exports = class BotInfoCommand extends Commando.Command {
       group: "conventional",
       memberName: "botinfo",
       description: "Get and display my informations.",
+      throttling: {
+        usages: 1,
+        duration: 5,
+      },
     });
   }
 
   async run(message) {
     let totalMembers = 0;
-    let author;
 
     let totalSeconds = this.client.uptime / 1000;
     const days = Math.floor(totalSeconds / 86400);
@@ -26,64 +29,49 @@ module.exports = class BotInfoCommand extends Commando.Command {
     const minutes = Math.floor(totalSeconds / 60);
     const seconds = Math.floor(totalSeconds % 60);
 
-    this.client.users.fetch(process.env.OWNERID).then(async (user) => {
-      author = user.tag;
-    });
+    const clientInvite = `https://discord.com/oauth2/authorize?client_id=${this.client.user.id}&scope=bot&permissions=473295991`;
+
+    const memUsed = process.memoryUsage().heapUsed;
+    const memTotal = process.memoryUsage().heapTotal;
+    const memUsedInMB = (memUsed / 1024 / 1024).toFixed(2);
+    const memTotalInMB = (memTotal / 1024 / 1024).toFixed(2);
+
+    const memUsedPercentage = ((memUsed / memTotal) * 100).toFixed(2) + "%";
+    const author = await this.client.users.fetch(process.env.OWNERID);
 
     for (const guild of this.client.guilds.cache) {
       totalMembers += (await guild[1].members.fetch()).size;
     }
 
+    const totalGuild = this.client.guilds.cache.size;
+
     const botinfoEmbed = new Discord.MessageEmbed()
       .setColor(embedcolor)
       .setAuthor(
-        `${this.client.user.username}`,
+        `Client info for ${this.client.user.username}`,
         this.client.user.displayAvatarURL()
       )
+      .setThumbnail(this.client.user.displayAvatarURL())
       .addFields(
         {
-          name: "Client Version",
-          value: version,
-          inline: true,
+          name: "Stats",
+          value: `
+• Version: \`${version}\`
+• Memory Used: \`${memUsedInMB}/${memTotalInMB}MB (${memUsedPercentage})\`        
+• Library: [\`discord.js\`](https://discord.js.org/)[\`-commando\`](https://github.com/discordjs/Commando)
+• \`In ${totalGuild} Server(s) | Serving ${totalMembers} Member(s)\` 
+• \`Online for ${days} days, ${hours} hrs, ${minutes} min, ${seconds} sec\` 
+          `,
         },
         {
-          name: "Library",
-          value: "discord.js",
-          inline: true,
-        },
-        {
-          name: "Framework",
-          value: "discord.js-commando",
-          inline: true,
-        },
-        {
-          name: "Bot Creator",
-          value: author,
-          inline: true,
-        },
-        {
-          name: "Servers Currently In",
-          value: this.client.guilds.cache.size,
-          inline: true,
-        },
-        {
-          name: "Members Served",
-          value: totalMembers,
-          inline: true,
-        },
-        {
-          name: "Invite the Bot",
-          value: `[Official Client Invite](https://discord.com/oauth2/authorize?client_id=${this.client.user.id}&scope=bot&permissions=2083911167)`,
-          inline: true,
-        },
-        {
-          name: "Support/Community",
-          value: "[Server Invite](https://discord.gg/fqE2yrA)",
-          inline: true,
+          name: "Links",
+          value: `
+• [\`Client Invite\`](${clientInvite})\`|\`[\`Source Code\`](https://github.com/scrubthispie/meowscrub)\`|\`[\`Server Invite\`](${process.env.DISCORDINVITE})    
+          `,
         }
       )
       .setFooter(
-        `Current Uptime: ${days} days, ${hours} hrs, ${minutes} min, ${seconds} sec`
+        `2020 - 2021 ${author.tag}`
       );
     message.channel.send(botinfoEmbed);
   }

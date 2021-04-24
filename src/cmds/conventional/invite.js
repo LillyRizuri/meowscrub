@@ -8,6 +8,10 @@ module.exports = class InviteBotCommand extends Commando.Command {
       group: "conventional",
       memberName: "invite",
       description: "Invite link for me to join your server.",
+      throttling: {
+        usages: 1,
+        duration: 5,
+      },
     });
   }
 
@@ -15,7 +19,7 @@ module.exports = class InviteBotCommand extends Commando.Command {
     const inviteEmbed = new Discord.MessageEmbed()
       .setColor("RANDOM")
       .setDescription(
-        `**Generated an invite link! It** [lies here.](https://discord.com/oauth2/authorize?client_id=${this.client.user.id}&scope=bot&permissions=2083911167)`
+        `**Generated an invite link! It** [lies here.](https://discord.com/oauth2/authorize?client_id=${this.client.user.id}&scope=bot&permissions=473295991)`
       );
     message.channel.send(inviteEmbed);
   }

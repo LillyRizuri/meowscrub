@@ -26,7 +26,7 @@ module.exports = class WorkCommand extends Commando.Command {
         round: true,
       });
       return message.reply(
-        `You've to wait ${remaining} before you can work again.`
+        `You may not use the \`work\` command again for another ${remaining}.`
       );
     }
     const guildId = message.guild.id;

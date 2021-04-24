@@ -16,6 +16,10 @@ module.exports = class BanCommand extends Commando.Command {
       argsType: "single",
       clientPermissions: ["MANAGE_MESSAGES", "READ_MESSAGE_HISTORY"],
       userPermissions: ["MANAGE_MESSAGES", "READ_MESSAGE_HISTORY"],
+      throttling: {
+        usages: 1,
+        duration: 5,
+      },
       guildOnly: true,
     });
   }
@@ -50,7 +54,7 @@ module.exports = class BanCommand extends Commando.Command {
     });
 
     try {
-      await message.channel.bulkDelete(fetched).then((messages) => {
+      await message.channel.bulkDelete(fetched).then(async (messages) => {
         const purgeOKEmbed = new Discord.MessageEmbed()
           .setColor(green)
           .setDescription(
@@ -58,9 +62,10 @@ module.exports = class BanCommand extends Commando.Command {
           )
           .setFooter("hmmmmmmm")
           .setTimestamp();
-        message.reply(purgeOKEmbed).then((msg) => {
-          msg.delete({ timeout: 5000 });
-        });
+        const msg = await message.channel.send(message.author, purgeOKEmbed);
+        setTimeout(() => {
+          msg.delete();
+        }, 5000);
       });
     } catch (err) {
       message.reply(

@@ -13,6 +13,10 @@ module.exports = class TopCovidCasesCommand extends Commando.Command {
       memberName: "ctop",
       description:
         "Shows the top 10 countries with the most cases of COVID-19.",
+      throttling: {
+        usages: 1,
+        duration: 5,
+      },
     });
   }
 

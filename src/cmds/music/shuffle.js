@@ -10,6 +10,10 @@ module.exports = class ShuffleMusicCommand extends Commando.Command {
       group: "music",
       memberName: "shuffle",
       description: "Shuffle all music from the existing queue.",
+      throttling: {
+        usages: 1,
+        duration: 5,
+      },
       guildOnly: true,
     });
   }

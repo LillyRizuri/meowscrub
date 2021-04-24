@@ -21,6 +21,10 @@ module.exports = class SlowModeCommand extends Commando.Command {
       argsType: "multiple",
       clientPermissions: ["MANAGE_CHANNELS"],
       userPermissions: ["MANAGE_CHANNELS"],
+      throttling: {
+        usages: 1,
+        duration: 5,
+      },
       guildOnly: true,
     });
   }

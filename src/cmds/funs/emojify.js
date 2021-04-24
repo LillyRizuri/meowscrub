@@ -29,6 +29,10 @@ module.exports = class EmojifyCommand extends Commando.Command {
       memberName: "emojify",
       description: "Return provided text in emoji form.",
       argsType: "single",
+      throttling: {
+        usages: 1,
+        duration: 5,
+      },
     });
   }
 

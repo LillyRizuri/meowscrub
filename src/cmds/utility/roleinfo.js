@@ -16,6 +16,10 @@ module.exports = class RoleInfoCommand extends Commando.Command {
         "roleinfo @Member",
         "roleinfo 694239225226199070",
       ],
+      throttling: {
+        usages: 1,
+        duration: 5,
+      },
       guildOnly: true,
     });
   }

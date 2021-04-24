@@ -15,6 +15,10 @@ module.exports = class WikipediaCommand extends Commando.Command {
       description: "Search for a Wikipedia entry.",
       format: "<query>",
       examples: ["wikipedia vietnam"],
+      throttling: {
+        usages: 1,
+        duration: 5,
+      },
     });
   }
 

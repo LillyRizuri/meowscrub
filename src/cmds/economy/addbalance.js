@@ -65,8 +65,8 @@ module.exports = class AddbalCommand extends Commando.Command {
       .setColor(green)
       .setDescription(
         `
-<:scrubgreen:797476323316465676> Successfully added <@${userId}> **¢${coins}**
-<@${userId}>'s Current Balance: **¢${newCoins}**`
+<:scrubgreen:797476323316465676> Successfully added ${target.tag} **¢${coins}**.
+${target.tag}'s Current Wallet: **¢${newCoins}**`
       )
       .setFooter("hmmmmmm")
       .setTimestamp();

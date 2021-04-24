@@ -18,6 +18,10 @@ module.exports = class WarningsCommand extends Commando.Command {
       examples: ["warnings @frockles"],
       clientPermissions: ["BAN_MEMBERS"],
       userPermissions: ["BAN_MEMBERS"],
+      throttling: {
+        usages: 1,
+        duration: 5,
+      },
       guildOnly: true,
     });
   }
@@ -60,12 +64,18 @@ module.exports = class WarningsCommand extends Commando.Command {
 
     let reply = "";
 
-    for (const warning of results.warnings) {
-      const { author, timestamp, warnId, reason } = warning;
+    try {
+      for (const warning of results.warnings) {
+        const { author, timestamp, warnId, reason } = warning;
 
-      reply += `+ **ID: ${warnId} | ${author}**\n"${reason}" - ${new Date(
-        timestamp
-      ).toLocaleDateString("en-US", dateTimeOptions)}\n\n`;
+        reply += `+ **ID: ${warnId} | ${author}**\n"${reason}" - ${new Date(
+          timestamp
+        ).toLocaleDateString("en-US", dateTimeOptions)}\n\n`;
+      }
+    } catch (err) {
+      return message.reply(
+        "<:scrubred:797476323169533963> There's no warnings for that user."
+      );
     }
 
     if (!reply)

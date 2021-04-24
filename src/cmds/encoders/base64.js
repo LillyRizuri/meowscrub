@@ -20,6 +20,10 @@ module.exports = class Base64Command extends Commando.Command {
         "base64 encode never gonna give you up",
         "base64 decode bmV2ZXIgZ29ubmEgZ2l2ZSB5b3UgdXA=",
       ],
+      throttling: {
+        usages: 1,
+        duration: 5,
+      },
     });
   }
 

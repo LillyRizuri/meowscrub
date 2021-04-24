@@ -9,7 +9,7 @@ module.exports = class LeaderboardCommand extends Commando.Command {
   constructor(client) {
     super(client, {
       name: "leaderboard",
-      aliases: ["lb"],
+      aliases: ["lb", "top"],
       group: "economy",
       memberName: "leaderboard",
       description: "Check the server's economy leaderboard.",
@@ -23,7 +23,9 @@ module.exports = class LeaderboardCommand extends Commando.Command {
     await Promise.all(
       message.guild.members.cache.map(async (member) => {
         const id = member.id;
-        const bal = await economy.getCoins(message.guild.id, member.id);
+        const coins = await economy.getCoins(message.guild.id, member.id);
+        const coinBank = await economy.getCoinBank(message.guild.id, member.id);
+        const bal = coins + coinBank;
         return bal !== 0
           ? collection.set(id, {
               id,
@@ -44,7 +46,7 @@ module.exports = class LeaderboardCommand extends Commando.Command {
       .setColor(embedcolor)
       .setAuthor(`Top 10's in ${message.guild.name}`)
       .setDescription(leaderboardMap)
-      .setFooter("this is money ON HAND, not net worth");
+      .setFooter("on hand + on bank account");
     message.channel.send(leaderboardEmbed);
   }
 };

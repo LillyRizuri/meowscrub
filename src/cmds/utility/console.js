@@ -16,11 +16,16 @@ module.exports = class AvatarCommand extends Commando.Command {
   }
 
   run(message, args) {
-    if (message.author.id !== process.env.OWNERID) {
+    if (this.client.isOwner(message.author) === false) {
       return message.reply(
-        "<:scrubnull:797476323533783050> You are not a bot owner. Stop.\nThis can allow people to tamper with me."
+        "<:scrubred:797476323169533963> You are not a bot owner. Stop.\nThis can allow people to tamper with me."
       );
     }
+
+    if (!args)
+      return message.reply(
+        "<:scrubnull:797476323533783050> You didn't initialize the console properly. Try again by typing a command."
+      );
 
     message.channel.send("```Initializing the Terminal...```");
     process.exec(args, (error, stdout) => {

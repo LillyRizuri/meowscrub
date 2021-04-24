@@ -12,6 +12,10 @@ module.exports = class TicTacToeCommand extends Commando.Command {
       description: "Play some really simple tic-tac-toe.",
       format: "<@user>",
       examples: ["tictactoe @frockles"],
+      throttling: {
+        usages: 1,
+        duration: 5,
+      },
       guildOnly: true,
     });
   }

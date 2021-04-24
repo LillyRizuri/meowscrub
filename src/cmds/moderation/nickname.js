@@ -16,14 +16,27 @@ module.exports = class SetNickCommand extends Commando.Command {
       argsType: "multiple",
       clientPermissions: ["MANAGE_NICKNAMES"],
       userPermissions: ["MANAGE_NICKNAMES", "CHANGE_NICKNAME"],
+      throttling: {
+        usages: 1,
+        duration: 5,
+      },
       guildOnly: true,
     });
   }
 
   async run(message, args) {
-    const target = message.mentions.users.first();
+    let target;
+    try {
+      target =
+        message.mentions.users.first() ||
+        message.guild.members.cache.get(args[0]).user;
+    } catch (err) {
+      return message.reply(
+        "<:scrubred:797476323169533963> What is this ID. Please explain now."
+      );
+    }
 
-    if (!target)
+    if (!args[0])
       return message.reply(
         "<:scrubnull:797476323533783050> No user has to be found for nickname change."
       );

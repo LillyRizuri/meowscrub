@@ -11,6 +11,10 @@ module.exports = class CatCommand extends Commando.Command {
       group: "images",
       memberName: "dog",
       description: "Random dog pic haha",
+      throttling: {
+        usages: 1,
+        duration: 5,
+      },
     });
   }
 

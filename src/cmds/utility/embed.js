@@ -19,6 +19,10 @@ module.exports = class EmbedCreatorCommand extends Commando.Command {
       ],
       userPermissions: ["MANAGE_MESSAGES"],
       guildOnly: true,
+      throttling: {
+        usages: 1,
+        duration: 5,
+      },
     });
   }
 

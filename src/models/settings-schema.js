@@ -10,7 +10,7 @@ const settingsSchema = mongoose.Schema({
   chatbotChannel: reqString,
   suggestionsChannel: reqString,
   ticketCategory: reqString,
-  globalChat: reqString
+  globalChat: reqString,
 });
 
 module.exports = mongoose.model("guildSettings", settingsSchema);

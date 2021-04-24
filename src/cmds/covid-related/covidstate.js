@@ -17,6 +17,10 @@ module.exports = class CovidStates extends Commando.Command {
       description: "Display stats about COVID-19 in an US state.",
       format: "<state>",
       examples: ["cstate texas"],
+      throttling: {
+        usages: 1,
+        duration: 5,
+      },
     });
   }
 

@@ -21,6 +21,10 @@ module.exports = class SuggestCommand extends Commando.Command {
       examples: [
         "suggest frockles should probably do something for the whole server. it's dying.",
       ],
+      throttling: {
+        usages: 1,
+        duration: 5,
+      },
       guildOnly: true,
     });
   }

@@ -22,8 +22,6 @@ module.exports = class GiveCommand extends Commando.Command {
   }
 
   async run(message, args) {
-    const { guild, member } = message;
-
     if (!args[0])
       return message.reply(
         "<:scrubnull:797476323533783050> Please specify someone to give coins to."
@@ -40,6 +38,18 @@ module.exports = class GiveCommand extends Commando.Command {
         "<:scrubred:797476323169533963> What is that User ID."
       );
     }
+
+    switch (target) {
+      case message.author:
+        return message.reply(
+          "<:scrubred:797476323169533963> How can you give money to yourself?"
+        );
+      case this.client.user:
+        return message.reply(
+          "<:scrubred:797476323169533963> You wanted to gave me your money so hard, but I can't use them."
+        );
+    }
+
     if (target.bot === true)
       return message.reply(
         "<:scrubred:797476323169533963> Neither can you check a bot's balance, or give money to them."
@@ -56,27 +66,27 @@ module.exports = class GiveCommand extends Commando.Command {
         "<:scrubred:797476323169533963> Don't even try breaking me using a simple negative value."
       );
 
-    const coinsOwned = await economy.getCoins(guild.id, member.id);
+    const coinsOwned = await economy.getCoins(message.guild.id, message.member.id);
     if (coinsOwned < coinsToGive)
       return message.reply(
         `<:scrubred:797476323169533963> There's no **¢${coinsToGive}** on your pocket.`
       );
 
     const remainingCoins = await economy.addCoins(
-      guild.id,
-      member.id,
+      message.guild.id,
+      message.member.id,
       coinsToGive * -1
     );
 
-    const newBalance = await economy.addCoins(guild.id, target.id, coinsToGive);
+    const newBalance = await economy.addCoins(message.guild.id, target.id, coinsToGive);
 
     const givebalEmbed = new Discord.MessageEmbed()
       .setColor(green)
       .setDescription(
         `
-<:scrubgreen:797476323316465676> <@${target.id}> has received **¢${coinsToGive}** from you!
-<@${target.id}>'s Current Balance: **¢${newBalance}**
-Your Current Balance: **¢${remainingCoins}**`
+<:scrubgreen:797476323316465676> **${target.tag}** has received **¢${coinsToGive}** from you.
+**${target.tag}'s Current Wallet: ¢${newBalance}**
+**Your Current Wallet: ¢${remainingCoins}**`
       )
       .setFooter("hmmmmmm")
       .setTimestamp();

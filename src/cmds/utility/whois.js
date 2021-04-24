@@ -12,15 +12,33 @@ module.exports = class WhoIsCommand extends Commando.Command {
       memberName: "whois",
       description: "Shows an user's information.",
       argsType: "single",
-      format: "[@user]",
+      format: "[@user/userID]",
       examples: ["whois @frockles"],
+      throttling: {
+        usages: 1,
+        duration: 5,
+      },
       guildOnly: true,
     });
   }
 
   async run(message, args) {
-    // worst code ever
     const guild = this.client.guilds.cache.get(message.guild.id);
+    let target;
+
+    try {
+      if (!args) {
+        target = message.author;
+      } else {
+        target =
+          message.mentions.users.first() ||
+          (await this.client.users.fetch(args));
+      }
+    } catch (err) {
+      return message.reply(
+        "<:scrubred:797476323169533963> What are you trying to do with that invalid user ID?"
+      );
+    }
 
     const dateTimeOptions = {
       weekday: "long",
@@ -32,86 +50,35 @@ module.exports = class WhoIsCommand extends Commando.Command {
       timeZoneName: "short",
     };
 
-    let target;
-    let member;
-    let rolemap;
-    let joinedTimestamp;
-    let userPresence;
-    let createdAt;
-    let userStatus;
-    let isBot;
+    const createdAt = new Date(target.createdTimestamp).toLocaleDateString(
+      "en-US",
+      dateTimeOptions
+    );
 
-    if (message.mentions.users.first()) {
-      // if the input was an user mention
-      target = message.mentions.users.first();
-      member = message.guild.members.cache.get(target.id);
+    const avatar = target.displayAvatarURL({
+      dynamic: true,
+    });
 
-      joinedTimestamp = new Date(member.joinedTimestamp).toLocaleDateString(
-        "en-US",
-        dateTimeOptions
-      );
+    const isBot = target.bot
+      .toString()
+      .replace("true", "Yes")
+      .replace("false", "No");
 
-      createdAt = new Date(target.createdTimestamp).toLocaleDateString(
-        "en-US",
-        dateTimeOptions
-      );
-
-      userPresence = target.presence.activities[0]
-        ? target.presence.activities[0].name
-        : "None";
-
-      userStatus = target.presence.status
-        .replace("dnd", "Do Not Disturb")
-        .toProperCase();
-
-      isBot = target.bot
-        .toString()
-        .replace("true", "Yes")
-        .replace("false", "No");
-
-      rolemap = member.roles.cache
-        .sort((a, b) => b.position - a.position)
-        .map((r) => r)
-        .join(" ")
-        .replace("@everyone", " ");
-      if (rolemap.length > 800) rolemap = "`Too many roles to display.`";
-      if (member.roles.cache.size - 1 === 0) rolemap = "`No roles to display.`";
-
+    if (!guild.members.resolve(target)) {
       const infoEmbed = new Discord.MessageEmbed()
         .setColor(embedcolor)
-        .setAuthor(
-          `Information for ${target.username}`,
-          target.displayAvatarURL({
-            dynamic: true,
-          })
-        )
-        .setThumbnail(
-          target.displayAvatarURL({
-            dynamic: true,
-          })
-        )
+        .setAuthor(`Information for ${target.username}`, avatar)
+        .setThumbnail(avatar)
         .setDescription(`[<@${target.id}>]`)
-        .addFields(
-          {
-            name: "Member Details",
-            value: `
-• Nickname: \`${member.nickname || "None"}\`
-• Roles [${member.roles.cache.size - 1}]: ${rolemap}            
-• Joined: \`${joinedTimestamp}\`
-• Activity: \`${userPresence}\`
-                    `,
-          },
-          {
-            name: "User Details",
-            value: `
+        .addFields({
+          name: "User Details",
+          value: `
 • ID: \`${target.id}\`
 • Username: \`${target.tag}\`
 • Created: \`${createdAt}\`
-• Status: \`${userStatus}\`   
 • Is Bot: \`${isBot}\`
 `,
-          }
-        )
+        })
         .setFooter(
           `Requested by ${message.author.tag}`,
           message.author.displayAvatarURL({
@@ -119,211 +86,64 @@ module.exports = class WhoIsCommand extends Commando.Command {
           })
         )
         .setTimestamp();
-      message.channel.send(infoEmbed);
-    } else if (args[0]) {
-      // if the input was a string
-      this.client.users
-        .fetch(args)
-        // eslint-disable-next-line no-shadow
-        .then((target) => {
-          createdAt = new Date(target.createdTimestamp).toLocaleDateString(
-            "en-US",
-            dateTimeOptions
-          );
+      return message.channel.send(infoEmbed);
+    }
 
-          isBot = target.bot
-            .toString()
-            .replace("true", "Yes")
-            .replace("false", "No");
+    const member = message.guild.members.cache.get(target.id);
 
-          if (!guild.member(args)) {
-            // check if a person isn't in the guild it was ran on
+    const joinedTimestamp = new Date(member.joinedTimestamp).toLocaleDateString(
+      "en-US",
+      dateTimeOptions
+    );
+    const userPresence = target.presence.activities[0]
+      ? target.presence.activities[0].name
+      : "None";
 
-            const infoEmbed = new Discord.MessageEmbed()
-              .setColor(embedcolor)
-              .setAuthor(
-                `Information for ${target.username}`,
-                target.displayAvatarURL({
-                  dynamic: true,
-                })
-              )
-              .setThumbnail(
-                target.displayAvatarURL({
-                  dynamic: true,
-                })
-              )
-              .setDescription(`[<@${target.id}>]`)
-              .addFields({
-                name: "User Details",
-                value: `
-• ID: \`${target.id}\`
-• Username: \`${target.tag}\`
-• Created: \`${createdAt}\`
-• Is Bot: \`${isBot}\`
-`,
-              })
-              .setFooter(
-                `Requested by ${message.author.tag}`,
-                message.author.displayAvatarURL({
-                  dynamic: true,
-                })
-              )
-              .setTimestamp();
-            message.channel.send(infoEmbed);
-          } else {
-            // it's the reverse
-            member = message.guild.members.cache.get(target.id);
+    const userStatus = target.presence.status
+      .replace("dnd", "Do Not Disturb")
+      .toProperCase();
 
-            joinedTimestamp = new Date(
-              member.joinedTimestamp
-            ).toLocaleDateString("en-US", dateTimeOptions);
+    let rolemap = member.roles.cache
+      .sort((a, b) => b.position - a.position)
+      .map((r) => r)
+      .join(" ")
+      .replace("@everyone", " ");
+    if (rolemap.length > 800) rolemap = "`Too many roles to display.`";
+    if (member.roles.cache.size - 1 === 0) rolemap = "`No roles to display.`";
 
-            userPresence = target.presence.activities[0]
-              ? target.presence.activities[0].name
-              : "None";
-
-            userStatus = target.presence.status
-              .replace("dnd", "Do Not Disturb")
-              .toProperCase();
-
-            rolemap = member.roles.cache
-              .sort((a, b) => b.position - a.position)
-              .map((r) => r)
-              .join(" ")
-              .replace("@everyone", " ");
-            if (rolemap.length > 800) rolemap = "`Too many roles to display.`";
-            if (member.roles.cache.size - 1 === 0)
-              rolemap = "`No roles to display.`";
-
-            const infoEmbed = new Discord.MessageEmbed()
-              .setColor(embedcolor)
-              .setAuthor(
-                `Information for ${target.username}`,
-                target.displayAvatarURL({
-                  dynamic: true,
-                })
-              )
-              .setThumbnail(
-                target.displayAvatarURL({
-                  dynamic: true,
-                })
-              )
-              .setDescription(`[<@${target.id}>]`)
-              .addFields(
-                {
-                  name: "Member Details",
-                  value: `
+    const infoEmbed = new Discord.MessageEmbed()
+      .setColor(embedcolor)
+      .setAuthor(`Information for ${target.username}`, avatar)
+      .setThumbnail(avatar)
+      .setDescription(`[<@${target.id}>]`)
+      .addFields(
+        {
+          name: "Member Details",
+          value: `
 • Nickname: \`${member.nickname || "None"}\`
 • Roles [${member.roles.cache.size - 1}]: ${rolemap}        
 • Joined: \`${joinedTimestamp}\`
 • Activity: \`${userPresence}\`
                     `,
-                },
-                {
-                  name: "User Details",
-                  value: `
+        },
+        {
+          name: "User Details",
+          value: `
 • ID: \`${target.id}\`
 • Username: \`${target.tag}\`
 • Created: \`${createdAt}\`
 • Status: \`${userStatus}\`   
 • Is Bot: \`${isBot}\`
 `,
-                }
-              )
-              .setFooter(
-                `Requested by ${message.author.tag}`,
-                message.author.displayAvatarURL({
-                  dynamic: true,
-                })
-              )
-              .setTimestamp();
-            message.channel.send(infoEmbed);
-          }
+        }
+      )
+      .setFooter(
+        `Requested by ${message.author.tag}`,
+        message.author.displayAvatarURL({
+          dynamic: true,
         })
-        .catch(() => {
-          return message.reply(
-            "<:scrubred:797476323169533963> What are you trying to do with that invalid user ID?"
-          );
-        });
-    } else {
-      // if there's no argument, check for the user who ran the command
-      target = message.author;
-      member = guild.members.cache.get(target.id);
-
-      joinedTimestamp = new Date(member.joinedTimestamp).toLocaleDateString(
-        "en-US",
-        dateTimeOptions
-      );
-
-      createdAt = new Date(target.createdTimestamp).toLocaleDateString(
-        "en-US",
-        dateTimeOptions
-      );
-
-      userPresence = target.presence.activities[0]
-        ? target.presence.activities[0].name
-        : "None";
-
-      userStatus = target.presence.status
-        .replace("dnd", "Do Not Disturb")
-        .toProperCase();
-
-      isBot = target.bot
-        .toString()
-        .replace("true", "Yes")
-        .replace("false", "No");
-
-      rolemap = member.roles.cache
-        .sort((a, b) => b.position - a.position)
-        .map((r) => r)
-        .join(" ")
-        .replace("@everyone", " ");
-      if (rolemap.length > 800) rolemap = "`Too many roles to display.`";
-      if (member.roles.cache.size - 1 === 0) rolemap = "`No roles to display.`";
-
-      const infoEmbed = new Discord.MessageEmbed()
-        .setColor(embedcolor)
-        .setAuthor(
-          `Information for ${target.username}`,
-          target.displayAvatarURL({
-            dynamic: true,
-          })
-        )
-        .setThumbnail(
-          target.displayAvatarURL({
-            dynamic: true,
-          })
-        )
-        .setDescription(`[<@${target.id}>]`)
-        .addFields(
-          {
-            name: "Member Details",
-            value: `
-• Nickname: \`${member.nickname || "None"}\`
-• Roles [${member.roles.cache.size - 1}]: ${rolemap}            
-• Joined: \`${joinedTimestamp}\`
-• Activity: \`${userPresence}\`
-                    `,
-          },
-          {
-            name: "User Details",
-            value: `
-• ID: \`${target.id}\`
-• Username: \`${target.tag}\`
-• Created: \`${createdAt}\`
-• Status: \`${userStatus}\`   
-• Is Bot: \`${isBot}\`
-`,
-          }
-        )
-        .setFooter(
-          `Requested by ${message.author.tag}`,
-          message.author.displayAvatarURL({
-            dynamic: true,
-          })
-        )
-        .setTimestamp();
-      message.channel.send(infoEmbed);
-    }
+      )
+      .setTimestamp();
+    message.channel.send(infoEmbed);
   }
 };

@@ -8,6 +8,10 @@ module.exports = class TryItAndSeeCommand extends Commando.Command {
       group: "misc",
       memberName: "tryitandsee",
       description: "Try it and see.",
+      throttling: {
+        usages: 1,
+        duration: 5,
+      },
     });
   }
 

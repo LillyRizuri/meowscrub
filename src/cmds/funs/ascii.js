@@ -11,6 +11,10 @@ module.exports = class AsciiCommand extends Commando.Command {
         "Create an ASCII art using text. Won't look pretty on mobile though.",
       argsType: "single",
       format: "<string>",
+      throttling: {
+        usages: 1,
+        duration: 5,
+      },
     });
   }
 

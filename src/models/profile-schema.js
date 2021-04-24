@@ -14,8 +14,8 @@ const profileSchema = mongoose.Schema({
   },
   coinBank: {
     type: Number,
-    required: true
-  }
+    required: true,
+  },
 });
 
 module.exports = mongoose.model("profiles", profileSchema);

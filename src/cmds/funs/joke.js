@@ -8,6 +8,10 @@ module.exports = class JokeCommand extends Commando.Command {
       group: "funs",
       memberName: "joke",
       description: "\"Funny\" joke transfer here.",
+      throttling: {
+        usages: 1,
+        duration: 5,
+      },
     });
   }
 

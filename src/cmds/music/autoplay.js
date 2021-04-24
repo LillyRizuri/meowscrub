@@ -13,6 +13,10 @@ module.exports = class AutoPlayMusicCommand extends Commando.Command {
       description:
         "Enable/Disable the autoplay function by running the command.",
       details: "It's identical to the YouTube's autoplay function.",
+      throttling: {
+        usages: 1,
+        duration: 5,
+      },
       guildOnly: true,
     });
   }

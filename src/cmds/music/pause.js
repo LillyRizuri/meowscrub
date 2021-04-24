@@ -14,6 +14,10 @@ module.exports = class StopTrackEmbed extends Commando.Command {
       group: "music",
       memberName: "pause",
       description: "Pause the music playback.",
+      throttling: {
+        usages: 1,
+        duration: 5,
+      },
       guildOnly: true,
     });
   }

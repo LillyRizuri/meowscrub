@@ -26,6 +26,10 @@ module.exports = class CovidCommand extends Commando.Command {
         "Display stats about COVID-19 globally, or for a specified country.",
       format: "[country]",
       examples: ["covid", "covid usa"],
+      throttling: {
+        usages: 1,
+        duration: 5,
+      },
     });
   }
 
@@ -115,7 +119,6 @@ module.exports = class CovidCommand extends Commando.Command {
         message.channel.send("Retrieving Informations, I guess...");
 
         let countryInput = args.toProperCase();
-        if (countryInput.toLowerCase() == "netherlands") countryInput = "nl";
         if (countryInput.toLowerCase() == "laos")
           countryInput = "Lao People's Democratic Republic";
         const country = await covid.getCountry({ country: countryInput });
@@ -123,8 +126,8 @@ module.exports = class CovidCommand extends Commando.Command {
         let wikiName;
         const wikiAliases = {
           "S. Korea": "South Korea",
-          UK: "United Kingdom",
-          USA: "United States",
+          "UK": "United Kingdom",
+          "USA": "United States",
         };
 
         const thePrefixedContries = ["United States", "Netherlands"];

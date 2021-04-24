@@ -7,6 +7,10 @@ module.exports = class PlayAudioCommand extends Commando.Command {
       group: "music-library",
       memberName: "ticktock",
       description: "Just what you expect. Tick Tock. [60 Seconds]",
+      throttling: {
+        usages: 1,
+        duration: 5,
+      },
       guildOnly: true,
     });
   }
