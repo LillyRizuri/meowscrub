@@ -17,7 +17,7 @@
     "covidtracker": "^2.0.1",
     "discord-giveaways": "^4.4.3",
     "discord.js": "github:discordjs/discord.js",
-    "discord.js-commando": "git+https://github.com/discordjs/Commando.git",
+    "discord.js-commando": "^0.12.3",
     "distube": "^2.8.9",
     "dotenv": "^8.2.0",
     "eslint": "^7.23.0",
