@@ -1,7 +1,7 @@
 const fetch = require("node-fetch");
 const utf8 = require("utf8");
 const settingsSchema = require("../models/settings-schema");
-const userBlacklist = require("../../user-blacklist.json");
+const blacklistSchema = require("../models/blacklist-schema");
 
 module.exports = {
   name: "message",
@@ -12,19 +12,22 @@ module.exports = {
       const guildId = message.guild.id;
       const input = encodeURIComponent(message.content);
 
-      const results = await settingsSchema.find({
+      const guildResults = await settingsSchema.find({
         guildId,
       });
 
-      for (let i = 0; i < results.length; i++) {
-        const { chatbotChannel } = results[i];
+      for (let i = 0; i < guildResults.length; i++) {
+        const { chatbotChannel } = guildResults[i];
         channel = chatbotChannel;
       }
 
       if (message.author.bot) return;
       if (channel.includes(message.channel.id)) {
+        const blacklistResults = await blacklistSchema.findOne({
+          userId: message.author.id,
+        });
         // If the user is blacklisted, return
-        if (userBlacklist.indexOf(message.author.id) !== -1) {
+        if (blacklistResults) {
           await message.delete();
           const msg = await message.channel.send(
             `${message.author}, You are blacklisted from using this functionality. For that, your message won't be delivered.`
@@ -35,6 +38,7 @@ module.exports = {
           }, 5000);
           return;
         }
+
         message.channel.startTyping();
         const response = await fetch(
           utf8.encode(

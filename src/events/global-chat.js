@@ -1,6 +1,6 @@
 const Discord = require("discord.js");
 const settingsSchema = require("../models/settings-schema");
-const userBlacklist = require("../../user-blacklist.json");
+const blacklistSchema = require("../models/blacklist-schema");
 
 const { embedcolor } = require("../assets/json/colors.json");
 
@@ -24,7 +24,11 @@ module.exports = {
       // If the user is blacklisted, return
       try {
         if (guildChannelId.includes(message.channel.id)) {
-          if (userBlacklist.indexOf(message.author.id) !== -1) {
+          const results = await blacklistSchema.findOne({
+            userId: message.author.id,
+          });
+
+          if (results) {
             await message.delete();
             const msg = await thisChannel.send(
               `${message.author}, You are blacklisted from using this functionality. For that, your message won't be delivered.`
