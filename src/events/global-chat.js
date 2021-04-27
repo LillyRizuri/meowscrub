@@ -2,8 +2,6 @@ const Discord = require("discord.js");
 const settingsSchema = require("../models/settings-schema");
 const blacklistSchema = require("../models/blacklist-schema");
 
-const { embedcolor } = require("../assets/json/colors.json");
-
 module.exports = {
   name: "message",
   async execute(message, client) {
@@ -39,6 +37,18 @@ module.exports = {
             }, 5000);
             return;
           }
+
+          if (message.content.length > 1024) {
+            await message.delete();
+            const msg = await thisChannel.send(
+              `${message.author}, Your message musn't be more than 1024 characters.`
+            );
+
+            setTimeout(() => {
+              msg.delete();
+            }, 5000);
+            return;
+          }
         }
         // eslint-disable-next-line no-empty
       } catch (err) {}
@@ -64,16 +74,28 @@ module.exports = {
             ? message.attachments.first().proxyURL
             : null;
 
-          const textEmbed = new Discord.MessageEmbed()
-            .setColor(embedcolor)
-            .setDescription(`**${message.author.tag}:** ${message.content}`);
-          if (attachment) {
-            textEmbed.setImage(attachment).addFields({
-              name: "Attachments Sent",
-              value: attachment,
+          if (!attachment)
+            return await channel
+              .send(`**${message.author.tag}:**\n\`${message.content}\``)
+              .catch(() => {
+                message.channel.send(
+                  `I can't deliver the message to **${guild}**`
+                );
+              });
+
+          const attachmentToSend = new Discord.MessageAttachment(attachment);
+          await channel
+            .send(
+              message.content
+                ? `**${message.author.tag}:**\n\`${message.content}\``
+                : `**${message.author.tag}:**`,
+              attachmentToSend
+            )
+            .catch(() => {
+              message.channel.send(
+                `I can't deliver the message to **${guild}**`
+              );
             });
-          }
-          channel.send(textEmbed);
         });
       }
       // eslint-disable-next-line no-empty
