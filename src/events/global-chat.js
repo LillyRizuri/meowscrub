@@ -70,13 +70,16 @@ module.exports = {
 
           if (!channel) return;
 
+          // to prevent exploits using backticks
+          const msgContentToSend = message.content.split("`").join("\"");
+
           const attachment = message.attachments.first()
             ? message.attachments.first().proxyURL
             : null;
 
           if (!attachment)
             return await channel
-              .send(`**${message.author.tag}:**\n\`${message.content}\``)
+              .send(`**${message.author.tag}:**\n\`${msgContentToSend}\``)
               .catch(() => {
                 message.channel.send(
                   `I can't deliver the message to **${guild}**`
@@ -87,7 +90,7 @@ module.exports = {
           await channel
             .send(
               message.content
-                ? `**${message.author.tag}:**\n\`${message.content}\``
+                ? `**${message.author.tag}:**\n\`${msgContentToSend}\``
                 : `**${message.author.tag}:**`,
               attachmentToSend
             )
