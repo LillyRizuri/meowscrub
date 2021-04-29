@@ -1,7 +1,7 @@
 const MongoClient = require("mongodb").MongoClient;
 const MongoDBProvider = require("commando-provider-mongo").MongoDBProvider;
-
-const mongo = require("../mongo");
+const mongoose = require("mongoose");
+const mongoPath = process.env.MONGO;
 
 module.exports = {
   name: "ready",
@@ -20,9 +20,15 @@ module.exports = {
 
     // Connecting to MongoDB
     const connectToMongoDB = async () => {
-      await mongo().then(() => {
-        console.log("Successfully Connected to MongoDB Atlas.");
-      });
+      await mongoose
+        .connect(mongoPath, {
+          useNewUrlParser: true,
+          useUnifiedTopology: true,
+          useFindAndModify: false,
+        })
+        .then(() => {
+          console.log("Successfully Connected to MongoDB Atlas.");
+        });
     };
     connectToMongoDB();
   },
