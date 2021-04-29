@@ -1,7 +1,7 @@
 const fetch = require("node-fetch");
 const utf8 = require("utf8");
 const settingsSchema = require("../models/settings-schema");
-const blacklistSchema = require("../models/blacklist-schema");
+const userBlacklistSchema = require("../models/user-blacklist-schema");
 
 module.exports = {
   name: "message",
@@ -23,7 +23,7 @@ module.exports = {
 
       if (message.author.bot) return;
       if (channel.includes(message.channel.id)) {
-        const blacklistResults = await blacklistSchema.findOne({
+        const blacklistResults = await userBlacklistSchema.findOne({
           userId: message.author.id,
         });
         // If the user is blacklisted, return

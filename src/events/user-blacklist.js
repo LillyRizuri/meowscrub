@@ -1,9 +1,9 @@
-const blacklistSchema = require("../models/blacklist-schema");
+const userBlacklistSchema = require("../models/user-blacklist-schema");
 
 module.exports = {
   name: "message",
   async execute(message, client) {
-    const results = await blacklistSchema.findOne({
+    const results = await userBlacklistSchema.findOne({
       userId: message.author.id
     });
 

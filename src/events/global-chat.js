@@ -1,6 +1,6 @@
 const Discord = require("discord.js");
 const settingsSchema = require("../models/settings-schema");
-const blacklistSchema = require("../models/blacklist-schema");
+const userBlacklistSchema = require("../models/user-blacklist-schema");
 
 module.exports = {
   name: "message",
@@ -22,7 +22,7 @@ module.exports = {
       // If the user is blacklisted, return
       try {
         if (guildChannelId.includes(message.channel.id)) {
-          const results = await blacklistSchema.findOne({
+          const results = await userBlacklistSchema.findOne({
             userId: message.author.id,
           });
 
@@ -71,7 +71,8 @@ module.exports = {
           if (!channel) return;
 
           // to prevent exploits using backticks
-          const msgContentToSend = message.content.split("`").join("\"");
+          // eslint-disable-next-line quotes
+          const msgContentToSend = message.content.split("`").join('"');
 
           const attachment = message.attachments.first()
             ? message.attachments.first().proxyURL
