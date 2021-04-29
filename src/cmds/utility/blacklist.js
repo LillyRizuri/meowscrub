@@ -1,6 +1,6 @@
 const Commando = require("discord.js-commando");
 const Discord = require("discord.js");
-const blacklistSchema = require("../../models/blacklist-schema");
+const blacklistSchema = require("../../models/user-blacklist-schema");
 
 const { embedcolor } = require("../../assets/json/colors.json");
 const checkMark = "<:scrubgreenlarge:797816509967368213>";
