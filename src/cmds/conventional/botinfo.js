@@ -29,7 +29,7 @@ module.exports = class BotInfoCommand extends Commando.Command {
     const minutes = Math.floor(totalSeconds / 60);
     const seconds = Math.floor(totalSeconds % 60);
 
-    const clientInvite = `https://discord.com/oauth2/authorize?client_id=${this.client.user.id}&scope=bot&permissions=473295991`;
+    const clientInvite = `https://discord.com/oauth2/authorize?client_id=${this.client.user.id}&permissions=473295991&scope=bot%20applications.commands`;
 
     const memUsed = process.memoryUsage().heapUsed;
     const memTotal = process.memoryUsage().heapTotal;

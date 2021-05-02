@@ -1,9 +1,7 @@
-const Discord = require("discord.js");
-// const client = new Discord.Client()
 require("dotenv").config();
 
 const Commando = require("discord.js-commando");
-
+const Discord = require("discord.js");
 const path = require("path");
 const fs = require("fs");
 

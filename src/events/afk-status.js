@@ -6,13 +6,11 @@ const { red, yellow, green, what } = require("../assets/json/colors.json");
 
 module.exports = {
   name: "message",
-  // eslint-disable-next-line no-unused-vars
-  async execute(message, client) {
+  async execute(message) {
     try {
       const guildId = message.guild.id;
       if (message.author.bot) return;
-      if (message.mentions.members.first()) {
-        if (message.mentions.members.first().id === message.author.id) return;
+      if (message.mentions.users.first()) {
         const results = await afkSchema.find({
           guildId,
         });
@@ -20,32 +18,35 @@ module.exports = {
         for (let i = 0; i < results.length; i++) {
           const { userId, afk, timestamp, pingCount } = results[i];
 
-          if (message.mentions.members.first().id === userId) {
-            await afkSchema.findOneAndUpdate(
-              {
-                guildId,
-                userId,
-              },
-              {
-                pingCount: pingCount + 1,
-              },
-              {
-                upsert: true,
-              }
-            );
+          message.mentions.users.each(async (user) => {
+            if (user.id === userId) {
+              if (userId === message.author.id) return;
+              await afkSchema.findOneAndUpdate(
+                {
+                  guildId,
+                  userId,
+                },
+                {
+                  pingCount: pingCount + 1,
+                },
+                {
+                  upsert: true,
+                }
+              );
 
-            const user = message.guild.members.cache.get(userId).user;
-            const afkTimestamp = moment(timestamp).fromNow();
-            const IsAfkEmbed = new Discord.MessageEmbed()
-              .setColor(what)
-              .setDescription(
-                `**${user.tag} is currently AFK for the following reason:**\n\`"${afk}" - ${afkTimestamp}\``
-              )
-              .setFooter("don't disturb them again.")
-              .setTimestamp();
-            message.channel.send(IsAfkEmbed);
-            return;
-          }
+              const AFKuser = message.guild.members.cache.get(userId).user;
+              const afkTimestamp = moment(timestamp).fromNow();
+              const IsAfkEmbed = new Discord.MessageEmbed()
+                .setColor(what)
+                .setDescription(
+                  `**${AFKuser.tag} is currently AFK for the following reason:**\n\`"${afk}" - ${afkTimestamp}\``
+                )
+                .setFooter("don't disturb them again.")
+                .setTimestamp();
+              message.channel.send(IsAfkEmbed);
+              return;
+            }
+          });
         }
       } else {
         const afkResults = await afkSchema.find({
@@ -77,8 +78,7 @@ module.exports = {
                     `${defaultMsg}\n\`You haven't been directly pinged.\``
                   )
                   .setFooter("nice");
-                message.channel.send(afkRemovalEmbed);
-                return;
+                break;
               case 1:
                 afkRemovalEmbed
                   .setColor(yellow)
@@ -86,8 +86,7 @@ module.exports = {
                     `${defaultMsg}\n\`You've been directly pinged one time.\``
                   )
                   .setFooter("hmmmmm");
-                message.channel.send(afkRemovalEmbed);
-                return;
+                break;
               default:
                 afkRemovalEmbed
                   .setColor(red)
@@ -95,9 +94,10 @@ module.exports = {
                     `${defaultMsg}\n\`You've been directly pinged ${pingCount} times.\``
                   )
                   .setFooter("two times or higher isn't good");
-                message.channel.send(afkRemovalEmbed);
-                return;
+                break;
             }
+
+            return message.channel.send(afkRemovalEmbed);
           }
         }
       }

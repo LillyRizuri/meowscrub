@@ -19,7 +19,7 @@ module.exports = class InviteBotCommand extends Commando.Command {
     const inviteEmbed = new Discord.MessageEmbed()
       .setColor("RANDOM")
       .setDescription(
-        `**Generated an invite link! It** [lies here.](https://discord.com/oauth2/authorize?client_id=${this.client.user.id}&scope=bot&permissions=473295991)`
+        `**Generated an invite link! It** [lies here.](https://discord.com/oauth2/authorize?client_id=${this.client.user.id}&permissions=473295991&scope=bot%20applications.commands)`
       );
     message.channel.send(inviteEmbed);
   }
