@@ -75,7 +75,10 @@ You will attempt to nuke this channel: [${channelToNuke}]
             );
           } finally {
             setTimeout(async () => {
-              const newChannel = await channelToNuke.clone();
+              const newChannel = await channelToNuke.clone({
+                reason: `Operation done by ${message.author.tag}`,
+              });
+
               await channelToNuke.delete();
               const nukeCompleteEmbed = new Discord.MessageEmbed()
                 .setColor(green)
