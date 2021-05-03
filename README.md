@@ -33,9 +33,3 @@ BRAINSHOP_API_KEY=
    - Scroll down to "Request Headers"
    - Find the "cookie" header and copy its entire contents
  - `BRAINSHOP_BRAIN_ID` and `BRAINSHOP_API_KEY` can be obtained by creating a brain in http://brainshop.ai/
-### Create your `user-blacklist.json` and surround the file's content with an array:
-```
-[]
-```
- - If you want to blacklist someone, get their User ID and surround them with double quotes. The bot will scan for the file's content when an user attempts to use the bot's functionality.
-   - e.g: `["1234567890123456789", "1651876649849149498"]`

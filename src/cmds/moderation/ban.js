@@ -29,13 +29,14 @@ module.exports = class BanCommand extends Commando.Command {
         "<:scrubnull:797476323533783050> Who do you want to ban? Get it right."
       );
 
+    const guild = this.client.guilds.cache.get(message.guild.id);
     let reason;
     let target;
 
     try {
       target =
         message.mentions.users.first() ||
-        message.guild.members.cache.get(args[0]).user;
+        (await this.client.users.fetch(args[0]));
     } catch (err) {
       return message.reply(
         "<:scrubred:797476323169533963> What is this ID. Explain or begone."
@@ -66,34 +67,34 @@ module.exports = class BanCommand extends Commando.Command {
       reason = "No reason provided.";
     }
 
-    const { guild } = message;
+    const user = message.guild.members.cache.get(target.id);
+    if (guild.members.resolve(target.id)) {
+      if (!user.bannable)
+        return message.reply(
+          "<:scrubred:797476323169533963> How the heck can I ban the user you specified, ya bafoon?"
+        );
 
-    const user = guild.members.cache.get(target.id);
-    if (!user.bannable)
-      return message.reply(
-        "<:scrubred:797476323169533963> How the heck can I ban the user you specified, ya bafoon?"
-      );
-
-    const dmReasonEmbed = new Discord.MessageEmbed()
-      .setColor(embedcolor)
-      .setTitle(`You were banned in ${guild.name}.`)
-      .addFields(
-        {
-          name: "Performed By",
-          value: `${message.author.tag} (${message.author.id})`,
-        },
-        {
-          name: "Reason for Banning",
-          value: reason,
-        }
-      )
-      .setFooter("Sorry. Can't help out.")
-      .setTimestamp();
-    await user.send(dmReasonEmbed).catch(() => {
-      message.channel.send(
-        "Can't send the reason to the offender. Maybe they have their DM disabled."
-      );
-    });
+      const dmReasonEmbed = new Discord.MessageEmbed()
+        .setColor(embedcolor)
+        .setTitle(`You were banned in ${message.guild.name}.`)
+        .addFields(
+          {
+            name: "Performed By",
+            value: `${message.author.tag} (${message.author.id})`,
+          },
+          {
+            name: "Reason for Banning",
+            value: reason,
+          }
+        )
+        .setFooter("Sorry. Can't help out.")
+        .setTimestamp();
+      await user.send(dmReasonEmbed).catch(() => {
+        message.channel.send(
+          "Can't send the reason to the offender. Maybe they have their DM disabled."
+        );
+      });
+    }
 
     user.ban({ days: 1, reason: `From ${message.author.tag}: ${reason}` });
 
