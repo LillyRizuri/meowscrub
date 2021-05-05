@@ -18,7 +18,7 @@ module.exports = class RestartCommand extends Commando.Command {
   }
 
   async run(message) {
-    if (this.client.isOwner(message.author) === false)
+    if (!this.client.isOwner(message.author))
       return message.reply(
         "<:scrubred:797476323169533963> THIS COMMAND IS VERY DANGEROUS AND IT WILL MAKE THE CLIENT REBOOT.\nTHIS IS NO JOKE."
       );

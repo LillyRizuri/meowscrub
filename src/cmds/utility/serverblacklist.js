@@ -26,7 +26,7 @@ module.exports = class ServerBlacklistCommand extends Commando.Command {
   }
 
   async run(message, args) {
-    if (this.client.isOwner(message.author) === false)
+    if (!this.client.isOwner(message.author))
       return message.reply(
         "<:scrubred:797476323169533963> Messing with this command is unauthorized by regulars.\nOnly intended for bot owner(s)."
       );

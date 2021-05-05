@@ -1,32 +1,28 @@
 const Commando = require("discord.js-commando");
 const Discord = require("discord.js");
-const guildBlacklistSchema = require("../../models/guild-blacklist-schema");
+const blacklistSchema = require("../../models/user-blacklist-schema");
 
 const { embedcolor } = require("../../assets/json/colors.json");
 const checkMark = "<:scrubgreenlarge:797816509967368213>";
 const cross = "<:scrubredlarge:797816510579998730>";
 
-module.exports = class ServerBlacklistRemoveCommand extends Commando.Command {
+module.exports = class UserWhitelistCommand extends Commando.Command {
   constructor(client) {
     super(client, {
-      name: "server-unblacklist",
-      aliases: ["guild-unblacklist", "server-unban"],
+      name: "whitelist",
+      aliases: ["unblacklist", "rm-blacklist", "bot-unban"],
       group: "utility",
-      memberName: "server-unblacklist",
-      description: "Unblacklist a server from inviting me",
-      details:
-        "Use [--force] to skip guild checking. Good for blacklisting a guild that I'm not in.\nOnly the bot owner(s) may use this command.",
-      argsType: "multiple",
-      format: "<guildId> [--force]",
-      examples: [
-        "serverunblacklist 692346925428506777",
-        "serverunblacklist 692346925428506777 --force",
-      ],
+      memberName: "whitelist",
+      description: "Whitelist an user from using my stuff.",
+      details: "Only the bot owner(s) may use this command.",
+      argsType: "single",
+      format: "<userId>",
+      examples: ["unblacklist 693832549943869493"],
     });
   }
 
   async run(message, args) {
-    if (this.client.isOwner(message.author) === false)
+    if (!this.client.isOwner(message.author))
       return message.reply(
         "<:scrubred:797476323169533963> Messing with this command is unauthorized by regulars.\nOnly intended for bot owner(s)."
       );
@@ -37,23 +33,35 @@ module.exports = class ServerBlacklistRemoveCommand extends Commando.Command {
       );
 
     let target;
-    let guildId;
 
-    if (!args[1]) {
-      try {
-        target = await this.client.guilds.fetch(args[0]);
-      } catch (err) {
-        return message.reply(
-          "<:scrubred:797476323169533963> What is this ID. Please explain.\nBut if the guild you provided DOES exist, use `--force` alongside with the Guild ID."
-        );
-      }
-      guildId = target.id;
-    } else if (args[1] === "--force") {
-      guildId = args[0];
+    try {
+      target = await this.client.users.fetch(args);
+    } catch (err) {
+      return message.reply(
+        "<:scrubred:797476323169533963> What is this ID. Please explain."
+      );
     }
 
-    const results = await guildBlacklistSchema.findOne({
-      guildId,
+    switch (target) {
+      case message.author:
+        return message.reply(
+          "<:scrubred:797476323169533963> Whitelisting yourself? Do you see that you can run commands here?"
+        );
+      case this.client.user:
+        return message.reply(
+          "<:scrubred:797476323169533963> Whitelisting me? ..."
+        );
+    }
+
+    if (target.bot)
+      return message.reply(
+        "<:scrubred:797476323169533963> Bot can't even interact with my stuff, and same for me too.\nSo why would you want to try?"
+      );
+
+    const userId = target.id;
+
+    const results = await blacklistSchema.findOne({
+      userId,
     });
 
     if (results) {
@@ -62,18 +70,10 @@ module.exports = class ServerBlacklistRemoveCommand extends Commando.Command {
         .setAuthor(
           `Initiated by ${message.author.tag}`,
           message.author.displayAvatarURL({ dynamic: true })
-        );
-      if (!args[1]) {
-        confirmationEmbed.setDescription(`
-You will attempt to unblacklist this guild: **${target.name}**.
+        ).setDescription(`
+You will attempt to whitelist **${target.tag}**.
 Please confirm your choice by reacting to a check mark or a cross to abort.     
         `);
-      } else if (args[1] === "--force") {
-        confirmationEmbed.setDescription(`
-You will attempt to unblacklist this guild: **${guildId}**.
-Please confirm your choice by reacting to a check mark or a cross to abort.     
-        `);
-      }
       const msg = await message.reply(confirmationEmbed);
       await msg.react(checkMark);
       await msg.react(cross);
@@ -90,11 +90,11 @@ Please confirm your choice by reacting to a check mark or a cross to abort.
           if (collected.first().emoji.name == "scrubgreenlarge") {
             try {
               await message.channel.send(
-                "You've made your choice to unblacklist **that following guild.**.\nOperation complete."
+                `You've made your choice to whitelist **${target.tag}**.\nOperation complete. Restart me for this change to be applied.`
               );
             } finally {
-              await guildBlacklistSchema.findOneAndDelete({
-                guildId,
+              await blacklistSchema.findOneAndDelete({
+                userId,
               });
             }
           } else message.channel.send("Operation aborted.");
@@ -106,7 +106,7 @@ Please confirm your choice by reacting to a check mark or a cross to abort.
         });
     } else {
       return message.reply(
-        `**${target.name}** hasn't been blacklisted. What are you trying to do?`
+        `**${target.tag}** hasn't been blacklisted. What are you trying to do?`
       );
     }
   }

@@ -59,19 +59,18 @@ You will attempt to nuke this channel: [${channelToNuke}]
     await msg.react(checkMark);
     await msg.react(cross);
 
+    const filter = (reaction, user) =>
+      user.id == message.author.id &&
+      (reaction.emoji.name == "scrubgreenlarge" ||
+        reaction.emoji.name == "scrubredlarge");
+
     msg
-      .awaitReactions(
-        (reaction, user) =>
-          user.id == message.author.id &&
-          (reaction.emoji.name == "scrubgreenlarge" ||
-            reaction.emoji.name == "scrubredlarge"),
-        { max: 1, time: 30000 }
-      )
-      .then(async (collected) => {
-        if (collected.first().emoji.name == "scrubgreenlarge") {
+      .awaitReactions(filter, { max: 1, time: 30000 })
+      .then(async (reactionCollected) => {
+        if (reactionCollected.first().emoji.name == "scrubgreenlarge") {
           try {
             await message.channel.send(
-              "Right. The timer for 5 seconds has been set for the nuke."
+              "Right. The timer for 10 seconds has been set for the nuke.\n**Type `abort` in this channel to stop the timer.**"
             );
           } finally {
             setTimeout(async () => {
@@ -90,7 +89,7 @@ You will attempt to nuke this channel: [${channelToNuke}]
               if (channelToNuke !== message.channel)
                 await message.channel.send(nukeCompleteEmbed);
               await newChannel.send(nukeCompleteEmbed);
-            }, 5000);
+            }, 10000);
           }
         } else message.channel.send("Operation canceled. Phew.");
       })

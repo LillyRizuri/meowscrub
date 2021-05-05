@@ -9,7 +9,7 @@ module.exports = class BotUptimeCommand extends Commando.Command {
       name: "uptime",
       group: "utility",
       memberName: "uptime",
-      description: "Shows how long I am online.",
+      description: "Shows how long I am awake.",
     });
   }
 

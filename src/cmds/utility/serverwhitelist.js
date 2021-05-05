@@ -1,28 +1,27 @@
 const Commando = require("discord.js-commando");
 const Discord = require("discord.js");
-const blacklistSchema = require("../../models/user-blacklist-schema");
+const guildBlacklistSchema = require("../../models/guild-blacklist-schema");
 
 const { embedcolor } = require("../../assets/json/colors.json");
 const checkMark = "<:scrubgreenlarge:797816509967368213>";
 const cross = "<:scrubredlarge:797816510579998730>";
 
-module.exports = class UserBlacklistRemoveCommand extends Commando.Command {
+module.exports = class ServerBlacklistRemoveCommand extends Commando.Command {
   constructor(client) {
     super(client, {
-      name: "unblacklist",
-      aliases: ["removeblacklist", "botunban"],
+      name: "guild-whitelist",
+      aliases: ["server-whitelist", "server-unban"],
       group: "utility",
-      memberName: "unblacklist",
-      description: "Unblacklist an user from using my stuff.",
-      details: "Only the bot owner(s) may use this command.",
+      memberName: "server-whitelist",
+      description: "Whitelist a server from inviting me",
       argsType: "single",
-      format: "<userId>",
-      examples: ["unblacklist 693832549943869493"],
+      format: "<guildId>",
+      examples: ["serverunblacklist 692346925428506777"],
     });
   }
 
   async run(message, args) {
-    if (this.client.isOwner(message.author) === false)
+    if (!this.client.isOwner(message.author))
       return message.reply(
         "<:scrubred:797476323169533963> Messing with this command is unauthorized by regulars.\nOnly intended for bot owner(s)."
       );
@@ -33,35 +32,10 @@ module.exports = class UserBlacklistRemoveCommand extends Commando.Command {
       );
 
     let target;
+    const guildId = args;
 
-    try {
-      target = await this.client.users.fetch(args);
-    } catch (err) {
-      return message.reply(
-        "<:scrubred:797476323169533963> What is this ID. Please explain."
-      );
-    }
-
-    switch (target) {
-      case message.author:
-        return message.reply(
-          "<:scrubred:797476323169533963> Unblacklisting yourself? Do you see that you can run commands here?"
-        );
-      case this.client.user:
-        return message.reply(
-          "<:scrubred:797476323169533963> Unblacklisting me? ..."
-        );
-    }
-
-    if (target.bot)
-      return message.reply(
-        "<:scrubred:797476323169533963> Bot can't even interact with my stuff, and same for me too.\nSo why would you want to try?"
-      );
-
-    const userId = target.id;
-
-    const results = await blacklistSchema.findOne({
-      userId,
+    const results = await guildBlacklistSchema.findOne({
+      guildId,
     });
 
     if (results) {
@@ -71,9 +45,10 @@ module.exports = class UserBlacklistRemoveCommand extends Commando.Command {
           `Initiated by ${message.author.tag}`,
           message.author.displayAvatarURL({ dynamic: true })
         ).setDescription(`
-You will attempt to unblacklist **${target.tag}**.
+You will attempt to whitelist this guild with this ID: **${guildId}**.
 Please confirm your choice by reacting to a check mark or a cross to abort.     
         `);
+
       const msg = await message.reply(confirmationEmbed);
       await msg.react(checkMark);
       await msg.react(cross);
@@ -90,11 +65,11 @@ Please confirm your choice by reacting to a check mark or a cross to abort.
           if (collected.first().emoji.name == "scrubgreenlarge") {
             try {
               await message.channel.send(
-                `You've made your choice to unblacklist **${target.tag}**.\nOperation complete. Restart me for this change to be applied.`
+                "You've made your choice to whitelist **that following guild.**.\nOperation complete."
               );
             } finally {
-              await blacklistSchema.findOneAndDelete({
-                userId,
+              await guildBlacklistSchema.findOneAndDelete({
+                guildId,
               });
             }
           } else message.channel.send("Operation aborted.");
@@ -106,7 +81,7 @@ Please confirm your choice by reacting to a check mark or a cross to abort.
         });
     } else {
       return message.reply(
-        `**${target.tag}** hasn't been blacklisted. What are you trying to do?`
+        `**${target.name}** hasn't been blacklisted. What are you trying to do?`
       );
     }
   }

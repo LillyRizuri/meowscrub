@@ -16,7 +16,7 @@ module.exports = class AvatarCommand extends Commando.Command {
   }
 
   run(message, args) {
-    if (this.client.isOwner(message.author) === false) {
+    if (!this.client.isOwner(message.author)) {
       return message.reply(
         "<:scrubred:797476323169533963> You are not a bot owner. Stop.\nThis can allow people to tamper with me."
       );

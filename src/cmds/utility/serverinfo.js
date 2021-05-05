@@ -7,7 +7,7 @@ module.exports = class ServerInfoCommand extends Commando.Command {
   constructor(client) {
     super(client, {
       name: "serverinfo",
-      aliases: ["svinfo"],
+      aliases: ["guildinfo", "svinfo"],
       group: "utility",
       memberName: "serverinfo",
       description: "Shows some informations about this very guild.",
