@@ -78,12 +78,19 @@ module.exports = {
             ? message.attachments.first().proxyURL
             : null;
 
+          let usernamePart;
+          if (client.isOwner(message.author)) {
+            usernamePart = `**👮‍♂️ ${message.author.tag}**`;
+          } else {
+            usernamePart = `**👤 ${message.author.tag}**`;
+          }
+
           if (!attachment)
             return await channel
-              .send(`**${message.author.tag}:**\n\`${msgContentToSend}\``)
-              .catch(() => {
+              .send(`**${usernamePart}**\n\`${msgContentToSend}\``)
+              .catch((err) => {
                 message.channel.send(
-                  `I can't deliver the message to **${guild}**`
+                  `I can't deliver the message to **${guild}** for: ${err}`
                 );
               });
 
@@ -91,14 +98,23 @@ module.exports = {
           await channel
             .send(
               message.content
-                ? `**${message.author.tag}:**\n\`${msgContentToSend}\``
-                : `**${message.author.tag}:**`,
+                ? `${usernamePart}\n\`${msgContentToSend}\``
+                : `${usernamePart}`,
               attachmentToSend
             )
-            .catch(() => {
-              message.channel.send(
-                `I can't deliver the message to **${guild}**`
-              );
+            .catch((err) => {
+              try {
+                const errorMessage = `*Error sending attachment: ${err}*`;
+                channel.send(
+                  message.content
+                    ? `${usernamePart}\n\`${msgContentToSend}\`\n${errorMessage}`
+                    : `${usernamePart}\n${errorMessage}`
+                );
+              } catch (err) {
+                message.channel.send(
+                  `I can't deliver the message to **${guild}** for: ${err}`
+                );
+              }
             });
         });
       }
