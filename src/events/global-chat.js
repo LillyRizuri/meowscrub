@@ -79,10 +79,18 @@ module.exports = {
             : null;
 
           let usernamePart;
-          if (client.isOwner(message.author)) {
-            usernamePart = `**👮‍♂️ ${message.author.tag}**`;
-          } else {
-            usernamePart = `**👤 ${message.author.tag}**`;
+          if (!process.env.GUILD_TEST || guild.id !== process.env.GUILD_TEST) {
+            if (client.isOwner(message.author)) {
+              usernamePart = `**👮‍♂️ ${message.author.tag}**`;
+            } else {
+              usernamePart = `**👤 ${message.author.tag}**`;
+            }
+          } else if (guild.id === process.env.GUILD_TEST) {
+            if (client.isOwner(message.author)) {
+              usernamePart = `**👮‍♂️ ${message.author.tag} | ID: ${message.author.id}**`;
+            } else {
+              usernamePart = `**👤 ${message.author.tag} | ID: ${message.author.id}**`;
+            }
           }
 
           if (!attachment)
