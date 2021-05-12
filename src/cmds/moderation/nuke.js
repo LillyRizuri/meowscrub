@@ -70,7 +70,7 @@ You will attempt to nuke this channel: [${channelToNuke}]
         if (reactionCollected.first().emoji.name == "scrubgreenlarge") {
           try {
             await message.channel.send(
-              "Right. The timer for 10 seconds has been set for the nuke.\n**Type `abort` in this channel to stop the timer.**"
+              "Right. The timer for 10 seconds has been set for the nuke."
             );
           } finally {
             setTimeout(async () => {
