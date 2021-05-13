@@ -25,11 +25,6 @@ module.exports = class KillCommand extends Commando.Command {
         "<:scrubnull:797476323533783050> Do it again, but this time actually mention someone to kill."
       );
 
-    if (target.bot === true)
-      return message.reply(
-        "<:scrubred:797476323169533963> Why do you want to kill bots? That's stupid"
-      );
-
     switch (target) {
       case message.author:
         return message.reply(
