@@ -1,6 +1,8 @@
 const Commando = require("discord.js-commando");
 const Discord = require("discord.js");
 
+const { green } = require("../../assets/json/colors.json");
+
 module.exports = class SetPresenceCommand extends Commando.Command {
   constructor(client) {
     super(client, {
@@ -33,11 +35,19 @@ module.exports = class SetPresenceCommand extends Commando.Command {
       this.client.user.setPresence({
         activity: {
           name: args,
+          type: "WATCHING"
         },
       });
-      message.reply(`<:scrubgreen:797476323316465676> Successfully changed my presence to: \`${args}\``);
+      const confirmationEmbed = new Discord.MessageEmbed()
+        .setColor(green)
+        .setDescription(
+          `<:scrubgreen:797476323316465676> Successfullly changed my presence to:\n\`WATCHING ${args}\``
+        )
+        .setFooter("hmmm why that")
+        .setTimestamp();
+      message.reply(confirmationEmbed);
     } catch (err) {
-        message.reply(`An unexpected error occured.\n${err}`);
+      message.reply(`An unexpected error occured.\n${err}`);
     }
   }
 };
