@@ -9,7 +9,7 @@ module.exports = class KillCommand extends Commando.Command {
       description:
         "Sick of someone? **Kill that person.** (we don't endorse murder)",
       format: "<@user>",
-      examples: ["fight @frockles#4339"],
+      examples: ["kill @frockles#4339"],
       throttling: {
         usages: 1,
         duration: 5,

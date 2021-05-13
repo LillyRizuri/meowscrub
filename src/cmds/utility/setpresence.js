@@ -1,0 +1,43 @@
+const Commando = require("discord.js-commando");
+const Discord = require("discord.js");
+
+module.exports = class SetPresenceCommand extends Commando.Command {
+  constructor(client) {
+    super(client, {
+      name: "set-presence",
+      group: "utility",
+      memberName: "set-presence",
+      argsType: "single",
+      format: "<activityName>",
+      description: "Set my presence based on your provided argument.",
+      details: "Only the bot owner(s) may use this command.",
+      throttling: {
+        usages: 1,
+        duration: 5,
+      },
+    });
+  }
+
+  async run(message, args) {
+    if (!this.client.isOwner(message.author))
+      return message.reply(
+        "<:scrubred:797476323169533963> Messing with this command is unauthorized by regulars.\nOnly intended for bot owner(s)."
+      );
+
+    if (!args)
+      return message.reply(
+        "<:scrubnull:797476323533783050> I can't set my presence without your provided argument. Try again."
+      );
+
+    try {
+      this.client.user.setPresence({
+        activity: {
+          name: args,
+        },
+      });
+      message.reply(`<:scrubgreen:797476323316465676> Successfully changed my presence to: \`${args}\``);
+    } catch (err) {
+        message.reply(`An unexpected error occured.\n${err}`);
+    }
+  }
+};
