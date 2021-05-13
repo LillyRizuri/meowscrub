@@ -37,10 +37,10 @@ module.exports = class KillCommand extends Commando.Command {
     }
 
     const killResponse = require("../../assets/json/kill-response.json");
-    const randomKillResponse = Math.floor(Math.random() * killResponse.length);
+    const randomKillResponse = killResponse[Math.floor(Math.random() * killResponse.length)];
 
     message.channel.send(
-      killResponse[randomKillResponse]
+      randomKillResponse
         .split("{target}")
         .join(target.username)
         .split("{author}")
