@@ -70,10 +70,6 @@ module.exports = {
 
           if (!channel) return;
 
-          // to prevent exploits using backticks
-          // eslint-disable-next-line quotes
-          const msgContentToSend = message.content.split("`").join('"');
-
           const attachment = message.attachments.first()
             ? message.attachments.first().proxyURL
             : null;
@@ -81,21 +77,21 @@ module.exports = {
           let usernamePart;
           if (!process.env.GUILD_TEST || guild.id !== process.env.GUILD_TEST) {
             if (client.isOwner(message.author)) {
-              usernamePart = `**👮‍♂️ ${message.author.tag}**`;
+              usernamePart = `👮‍♂️ **\`${message.author.tag}\`**`;
             } else {
-              usernamePart = `**👤 ${message.author.tag}**`;
+              usernamePart = `👤 **\`${message.author.tag}\`**`;
             }
           } else if (guild.id === process.env.GUILD_TEST) {
             if (client.isOwner(message.author)) {
-              usernamePart = `**👮‍♂️ ${message.author.tag} | ID: ${message.author.id}**`;
+              usernamePart = `👮‍♂️ **\`${message.author.tag}\`** | ID: \`${message.author.id}\``;
             } else {
-              usernamePart = `**👤 ${message.author.tag} | ID: ${message.author.id}**`;
+              usernamePart = `👤 **\`${message.author.tag}\`** | \`ID: ${message.author.id}\``;
             }
           }
 
           if (!attachment)
             return await channel
-              .send(`**${usernamePart}**\n\`${msgContentToSend}\``)
+              .send(`${usernamePart}\n${message.content}`)
               .catch((err) => {
                 message.channel.send(
                   `I can't deliver the message to **${guild}** for: ${err}`
@@ -106,7 +102,7 @@ module.exports = {
           await channel
             .send(
               message.content
-                ? `${usernamePart}\n\`${msgContentToSend}\``
+                ? `${usernamePart}\n${message.content}`
                 : `${usernamePart}`,
               attachmentToSend
             )
@@ -115,7 +111,7 @@ module.exports = {
                 const errorMessage = `*Error sending attachment: ${err}*`;
                 channel.send(
                   message.content
-                    ? `${usernamePart}\n\`${msgContentToSend}\`\n${errorMessage}`
+                    ? `${usernamePart}\n${message.content}\n${errorMessage}`
                     : `${usernamePart}\n${errorMessage}`
                 );
               } catch (err) {
