@@ -7,13 +7,14 @@ module.exports = class KillCommand extends Commando.Command {
       group: "funs",
       memberName: "kill",
       description:
-        "Sick of someone? **Kill that person.** (we don't endorse murder)",
+        "Sick of someone? **Kill that person.** (We don't endorse murder in any shape or form, remember that.)",
       format: "<@user>",
       examples: ["kill @frockles#4339"],
       throttling: {
         usages: 1,
         duration: 5,
       },
+      guildOnly: true,
     });
   }
 
@@ -37,7 +38,8 @@ module.exports = class KillCommand extends Commando.Command {
     }
 
     const killResponse = require("../../assets/json/kill-response.json");
-    const randomKillResponse = killResponse[Math.floor(Math.random() * killResponse.length)];
+    const randomKillResponse =
+      killResponse[Math.floor(Math.random() * killResponse.length)];
 
     message.channel.send(
       randomKillResponse

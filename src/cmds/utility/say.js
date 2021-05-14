@@ -26,13 +26,6 @@ module.exports = class SayCommand extends Commando.Command {
       message.guild.channels.cache.get(args[0]);
     const content = args.slice(1).join(" ");
 
-    if (
-      message.content.includes("@everyone") ||
-      message.content.includes("@here")
-    ) return message.reply(
-      "<:scrubred:797476323169533963> Really? Including @everyone/@here isn't cool."
-    );
-
     if (!args[0])
     return message.reply(
       "<:scrubnull:797476323533783050> Provide a channel before advancing."

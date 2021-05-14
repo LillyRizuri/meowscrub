@@ -20,66 +20,66 @@ module.exports = class PokeDexCommand extends Commando.Command {
     });
   }
 
-  run(message, args) {
+  async run(message, args) {
     if (!args)
       return message.reply(
         "<:scrubred:797476323169533963> Provide a specific Pokémon in order to continue."
       );
 
-    fetch(`https://some-random-api.ml/pokedex?pokemon=${args}`)
-      .then((res) => res.json())
-      .then((json) => {
-        try {
-          const embed = new Discord.MessageEmbed()
-            .setColor(embedcolor)
-            .setThumbnail(json.sprites.animated)
-            .setAuthor(
-              `Pokédex for ID: ${json.id} | ${json.name.toProperCase()}`
-            )
-            .addFields(
-              {
-                name: "Species",
-                value: json.species,
-                inline: true,
-              },
-              {
-                name: "Type",
-                value: json.type,
-                inline: true,
-              },
-              {
-                name: "Height",
-                value: json.height,
-                inline: true,
-              },
-              {
-                name: "Weight",
-                value: json.weight,
-                inline: true,
-              },
-              {
-                name: "Gender Rate",
-                value: json.gender,
-                inline: true,
-              },
-              {
-                name: "Abilities",
-                value: json.abilities,
-                inline: true,
-              },
-              {
-                name: "Pokémon Description",
-                value: json.description,
-              }
-            )
-            .setFooter("Results Provide by Some Random Api")
-            .setTimestamp();
-          message.channel.send(embed);
-        } catch (err) {
-          message.reply(
-            `<:scrubred:797476323169533963> No results for: **${args}**. Does it exist?`
-          );
-        }
-      });
+    const pkmnData = await fetch(
+      `https://some-random-api.ml/pokedex?pokemon=${args.toLowerCase()}`
+    ).then((res) => res.json());
+
+    try {
+      const embed = new Discord.MessageEmbed()
+        .setColor(embedcolor)
+        .setThumbnail(pkmnData.sprites.animated)
+        .setAuthor(
+          `Pokédex for ID: ${pkmnData.id} | ${pkmnData.name.toProperCase()}`
+        )
+        .addFields(
+          {
+            name: "Species",
+            value: pkmnData.species,
+            inline: true,
+          },
+          {
+            name: "Type",
+            value: pkmnData.type,
+            inline: true,
+          },
+          {
+            name: "Height",
+            value: pkmnData.height,
+            inline: true,
+          },
+          {
+            name: "Weight",
+            value: pkmnData.weight,
+            inline: true,
+          },
+          {
+            name: "Gender Rate",
+            value: pkmnData.gender,
+            inline: true,
+          },
+          {
+            name: "Abilities",
+            value: pkmnData.abilities,
+            inline: true,
+          },
+          {
+            name: "Pokémon Description",
+            value: pkmnData.description,
+          }
+        )
+        .setFooter("Results Provided by Some Random Api")
+        .setTimestamp();
+      message.channel.send(embed);
+    } catch (err) {
+      message.reply(
+        `<:scrubred:797476323169533963> No results for: **${args}**. Does it exist?`
+      );
+    }
   }
 };

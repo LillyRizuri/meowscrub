@@ -62,7 +62,7 @@ module.exports = class BanCommand extends Commando.Command {
           )
           .setFooter("hmmmmmmm")
           .setTimestamp();
-        const msg = await message.channel.send(message.author, purgeOKEmbed);
+        const msg = await message.channel.send(purgeOKEmbed);
         setTimeout(() => {
           msg.delete();
         }, 5000);
