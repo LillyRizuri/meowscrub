@@ -10,8 +10,10 @@ module.exports = {
     client.setProvider(
       MongoClient.connect(process.env.MONGO)
         .then((clientSettings) => {
-          return new MongoDBProvider(clientSettings, "FrocklesDatabases");
-          // Please rename "FrocklesDatabases" to your collection's name
+          return new MongoDBProvider(
+            clientSettings,
+            process.env.MONGOCOLLECTIONNAME
+          );
         })
         .catch((err) => {
           console.error(err);
@@ -27,7 +29,7 @@ module.exports = {
           useFindAndModify: false,
         })
         .then(() => {
-          console.log("Successfully Connected to MongoDB Atlas.");
+          console.log("Successfully Connected to your MongoDB Database.");
         });
     };
     connectToMongoDB();

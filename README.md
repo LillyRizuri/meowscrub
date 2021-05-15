@@ -26,6 +26,7 @@ BRAINSHOP_API_KEY=
  - `TOKEN` is your Discord Bot Token
  - `GENIUS` is for the lyrics command. Obtain it here: http://genius.com/api-clients
  - `MONGO` is your connection string to your MongoDB database, cloud or local.
+ - `MONGOCOLLECTIONNAME` is your MongoDB Database's collection name (recommended to use the collection name the same as your connection string to your mongodb database)
  - `YTCOOKIE` can be obtainable by doing these:
    - Log in using your dummy channel (HIGHLY recommended because autoplay)
    - Navigate to YouTube in a web browser

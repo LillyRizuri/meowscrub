@@ -84,38 +84,7 @@ module.exports = class UserPermissionsCommand extends Commando.Command {
       permissions.forEach((perm) => {
         description += `${member.permissions.has(perm) ? yes : no} | ${
           message.channel.permissionsFor(user.id).has(perm) ? yes : no
-        } - ${perm
-          .replace("CREATE_INSTANT_INVITE", "Create Invite")
-          .replace("KICK_MEMBERS", "Kick Members")
-          .replace("BAN_MEMBERS", "Ban Members")
-          .replace("ADMINISTRATOR", "Administrator")
-          .replace("MANAGE_CHANNELS", "Manage Channels")
-          .replace("MANAGE_GUILD", "Manage Guild")
-          .replace("ADD_REACTIONS", "Add Reactions")
-          .replace("VIEW_AUDIT_LOG", "View Audit Log")
-          .replace("PRIORITY_SPEAKER", "Priority Speaker")
-          .replace("STREAM", "Stream")
-          .replace("VIEW_CHANNEL", "View Channel")
-          .replace("SEND_MESSAGES", "Send Messages")
-          .replace("SEND_TTS_MESSAGES", "Send TTS Messages")
-          .replace("MANAGE_MESSAGES", "Manage Messages")
-          .replace("EMBED_LINKS", "Embed Links")
-          .replace("ATTACH_FILES", "Attach Files")
-          .replace("READ_MESSAGE_HISTORY", "Read Message History")
-          .replace("MENTION_EVERYONE", "Mention Everyone")
-          .replace("USE_EXTERNAL_EMOJIS", "Use External Emojis")
-          .replace("VIEW_GUILD_INSIGHTS", "View Guild Insights")
-          .replace("CONNECT", "Connect")
-          .replace("SPEAK", "Speak")
-          .replace("MUTE_MEMBERS", "Mute Members")
-          .replace("DEAFEN_MEMBERS", "Deafen Members")
-          .replace("MOVE_MEMBERS", "Move Members")
-          .replace("USE_VAD", "Use VAD")
-          .replace("CHANGE_NICKNAME", "Change Nickname")
-          .replace("MANAGE_NICKNAMES", "Manage Nicknames")
-          .replace("MANAGE_ROLES", "Manage Roles")
-          .replace("MANAGE_WEBHOOKS", "Manage Webhooks")
-          .replace("MANAGE_EMOJIS", "Manage Emojis")}\n`;
+        } - ${perm.split("_").join(" ").toProperCase()}\n`;
       });
       permListEmbed.setDescription(x + description + x);
       message.channel.send(permListEmbed);

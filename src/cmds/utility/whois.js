@@ -69,7 +69,7 @@ module.exports = class WhoIsCommand extends Commando.Command {
         .setColor(embedcolor)
         .setAuthor(`Information for ${target.username}`, avatar)
         .setThumbnail(avatar)
-        .setDescription(`[<@${target.id}>]`)
+        .setDescription(`[${target}]`)
         .addFields({
           name: "User Details",
           value: `
@@ -115,7 +115,7 @@ module.exports = class WhoIsCommand extends Commando.Command {
       .setColor(embedcolor)
       .setAuthor(`Information for ${target.username}`, avatar)
       .setThumbnail(avatar)
-      .setDescription(`[<@${target.id}>]`)
+      .setDescription(`[${target}]`)
       .addFields(
         {
           name: "Member Details",

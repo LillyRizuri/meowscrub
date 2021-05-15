@@ -27,7 +27,7 @@ module.exports = class AvatarCommand extends Commando.Command {
         "<:scrubnull:797476323533783050> You didn't initialize the console properly. Try again by typing a command."
       );
 
-    message.channel.send("```Initializing the Terminal...```");
+    message.channel.send("```Waiting for the Terminal's output...```");
     process.exec(args, (error, stdout) => {
       const result = stdout || error;
       message.channel

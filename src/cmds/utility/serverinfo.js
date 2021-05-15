@@ -88,25 +88,9 @@ module.exports = class ServerInfoCommand extends Commando.Command {
       message.guild.features
         .join(", ")
         .toString()
-        .replace("ANIMATED_ICON", "Animated Icon")
-        .replace("BANNER", "Banner")
-        .replace("COMMERCE", "Commerce")
-        .replace("COMMUNITY", "Community")
-        .replace("DISCOVERABLE", "Discoverable")
-        .replace("FEATURABLE", "Featurable")
-        .replace("INVITE_SPLASH", "Invite Splash")
-        .replace("NEWS", "News")
-        .replace("PARTNERED", "Partnered")
-        .replace("RELAY_ENABLED", "Relay Enabled")
-        .replace("VANITY_URL", "Vanity URL")
-        .replace("VERIFIED", "Verified")
-        .replace("VIP_REGIONS", "VIP Regions")
-        .replace("WELCOME_SCREEN_ENABLED", "Welcome Screen Enabled")
-        .replace("PREVIEW_ENABLED", "Preview Enabled")
-        .replace(
-          "MEMBER_VERIFICATION_GATE_ENABLED",
-          "Member Verification Gate Enabled"
-        ) || "No Community Features";
+        .split("_")
+        .join(" ")
+        .toProperCase() || "No Community Features";
 
     const serverInfoEmbed = new Discord.MessageEmbed()
       .setColor(embedcolor)

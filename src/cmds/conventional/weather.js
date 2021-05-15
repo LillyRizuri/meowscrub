@@ -24,7 +24,6 @@ module.exports = class WeatherCommand extends Commando.Command {
 
   run(message, args) {
     weather.find({ search: args, degreeType: "C" }, function (error, result) {
-      // 'C' can be changed to 'F' for farneheit results
       if (!args)
         return message.reply(
           "<:scrubnull:797476323533783050> Specify a location in order to continue."
@@ -37,27 +36,45 @@ module.exports = class WeatherCommand extends Commando.Command {
 
       const current = result[0].current;
       const location = result[0].location;
+      const forecast = result[0].forecast[2];
 
-      const tempF = Math.round(result[0].current.temperature * 1.8 + 32);
-      const feelsLikeF = Math.round(result[0].current.feelslike * 1.8 + 32);
-      const windDisplaySplit = result[0].current.winddisplay.split("km/h");
-      const windDisplayMph =
-        Math.round(windDisplaySplit[0] * 0.62137119223733) +
-        " mph" +
-        windDisplaySplit[1];
+      const tempF = Math.round(current.temperature * 1.8 + 32);
+      const feelsLikeF = Math.round(current.feelslike * 1.8 + 32);
+
+      const forecastLow = Math.round(forecast.low * 1.8 + 32);
+      const forecastHigh = Math.round(forecast.high * 1.8 + 32);
+
+      const windDisplaySplit = current.winddisplay.split("km/h");
+      const windDisplayMph = `${Math.round(
+        windDisplaySplit[0] * 0.62137119223733
+      )} mph${windDisplaySplit[1]}`;
 
       const weatherinfo = new Discord.MessageEmbed()
-        .setTitle(`**UTC${location.timezone} | ${current.skytext}**`)
-        .setAuthor(`Weather report for ${current.observationpoint}`)
-        .setThumbnail(current.imageUrl)
+        .setTitle(
+          `Weather report for ${current.observationpoint} - UTC${location.timezone}`
+        )
         .setColor(embedcolor)
-        .setDescription(
-          `
-• **Temperature:** ${current.temperature}°C (${tempF}°F)               
-• **Feels Like:** ${current.feelslike}°C (${feelsLikeF}°F)         
-• **Wind:** ${current.winddisplay} (${windDisplayMph})
-• **Humidity:** ${current.humidity}%
-`
+        .addFields(
+          {
+            name: "Current Weather",
+            value: `
+• **Weather:** \`${current.skytext}\`
+• **Temperature:** \`${current.temperature}°C (${tempF}°F)\`
+• **Feels Like:** \`${current.feelslike}°C (${feelsLikeF}°F)\`         
+• **Wind:** \`${current.winddisplay} (${windDisplayMph})\`
+• **Humidity:** \`${current.humidity}%\`
+            `,
+            inline: true,
+          },
+          {
+            name: "Weather Forecast For Tomorrow",
+            value: `
+• **Weather:** \`${forecast.skytextday}\`            
+• **Temperature:** \`${forecast.low} - ${forecast.high}°C (${forecastLow} - ${forecastHigh}°F)\`          
+• **Precipitation:** \`${forecast.precip}%\`
+          `,
+            inline: true,
+          }
         )
         .setFooter("weather.service.msn.com")
         .setTimestamp();
