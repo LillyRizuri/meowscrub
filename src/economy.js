@@ -70,12 +70,16 @@ module.exports.getCoins = async (guildId, userId) => {
   const coinBank = 0;
   if (result) {
     coins = result.coins;
-  } else {
+  } else if (
+    !result ||
+    typeof result.coins === "undefined" ||
+    typeof result.coinBank === "undefined"
+  ) {
     await new profileSchema({
       guildId,
       userId,
       coins,
-      coinBank
+      coinBank,
     }).save();
   }
 
@@ -99,7 +103,11 @@ module.exports.getCoinBank = async (guildId, userId) => {
   const coins = 0;
   if (result) {
     coinBank = result.coinBank;
-  } else {
+  } else if (
+    !result ||
+    typeof result.coins === "undefined" ||
+    typeof result.coinBank === "undefined"
+  ) {
     await new profileSchema({
       guildId,
       userId,

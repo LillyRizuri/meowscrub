@@ -29,6 +29,7 @@ module.exports = class WorkCommand extends Commando.Command {
         `You may not use the \`work\` command again for another ${remaining}.`
       );
     }
+
     const guildId = message.guild.id;
     const rngCoins = Math.floor(Math.random() * 1500 + 200);
     const randomWorkResponse = Math.floor(Math.random() * workResponse.length);
