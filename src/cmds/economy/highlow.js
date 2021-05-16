@@ -10,7 +10,7 @@ module.exports = class LeaderboardCommand extends Commando.Command {
     super(client, {
       name: "high-low",
       group: "economy",
-      memberName: "highlow",
+      memberName: "high-low",
       description:
         "Guess if the actual number is higher or lower than the first provided number.",
       details: "If you guess it right, you will earn some coins.",
