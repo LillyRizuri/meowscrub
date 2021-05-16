@@ -27,7 +27,7 @@ module.exports = class LeaderboardCommand extends Commando.Command {
         round: true,
       });
       return message.reply(
-        `You may not use the \`work\` command again for another ${remaining}.`
+        `You may not use the \`high-low\` command again for another ${remaining}.`
       );
     }
 
