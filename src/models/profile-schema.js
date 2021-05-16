@@ -11,10 +11,12 @@ const profileSchema = mongoose.Schema({
   coins: {
     type: Number,
     required: true,
+    default: 0
   },
   coinBank: {
     type: Number,
     required: true,
+    default: 0
   },
 });
 
