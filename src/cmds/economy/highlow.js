@@ -1,7 +1,9 @@
 const Commando = require("discord.js-commando");
 const Discord = require("discord.js");
+const humanizeDuration = require("humanize-duration");
 
 const { green, red, what } = require("../../assets/json/colors.json");
+const cooldowns = new Map();
 
 const economy = require("../../economy");
 
@@ -19,6 +21,16 @@ module.exports = class LeaderboardCommand extends Commando.Command {
   }
 
   async run(message) {
+    const cooldown = cooldowns.get(message.author.id);
+    if (cooldown) {
+      const remaining = humanizeDuration(cooldown - Date.now(), {
+        round: true,
+      });
+      return message.reply(
+        `You may not use the \`work\` command again for another ${remaining}.`
+      );
+    }
+
     function between(min, max) {
       return Math.floor(Math.random() * (max - min + 1) + min);
     }
@@ -141,5 +153,10 @@ Try the command again with these response: \`high\`, \`low\`, and \`jackpot\`.
       .catch(() => {
         message.reply("Stalling for time is not a good idea.");
       });
+
+    cooldowns.set(message.author.id, Date.now() + 30000);
+    setTimeout(() => {
+      cooldowns.delete(message.author.id);
+    }, 30000);
   }
 };
