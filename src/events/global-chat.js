@@ -85,41 +85,42 @@ module.exports = {
             if (client.isOwner(message.author)) {
               usernamePart = `👮‍♂️ **\`${message.author.tag}\`** | ID: \`${message.author.id}\``;
             } else {
-              usernamePart = `👤 **\`${message.author.tag}\`** | \`ID: ${message.author.id}\``;
+              usernamePart = `👤 **\`${message.author.tag}\`** | ID: ${message.author.id}\``;
             }
           }
 
-          if (!attachment)
-            return await channel
+          if (!attachment) {
+            await channel
               .send(`${usernamePart}\n${message.content}`)
               .catch((err) => {
                 message.channel.send(
-                  `I can't deliver the message to **${guild}** for: ${err}`
+                  `Can't deliver the message to **${guild}** for: ${err}`
                 );
               });
-
-          const attachmentToSend = new Discord.MessageAttachment(attachment);
-          await channel
-            .send(
-              message.content
-                ? `${usernamePart}\n${message.content}`
-                : `${usernamePart}`,
-              attachmentToSend
-            )
-            .catch((err) => {
-              try {
-                const errorMessage = `*Error sending attachment: ${err}*`;
-                channel.send(
-                  message.content
-                    ? `${usernamePart}\n${message.content}\n${errorMessage}`
-                    : `${usernamePart}\n${errorMessage}`
-                );
-              } catch (err) {
-                message.channel.send(
-                  `I can't deliver the message to **${guild}** for: ${err}`
-                );
-              }
-            });
+          } else if (attachment) {
+            const attachmentToSend = new Discord.MessageAttachment(attachment);
+            await channel
+              .send(
+                message.content
+                  ? `${usernamePart}\n${message.content}`
+                  : `${usernamePart}`,
+                attachmentToSend
+              )
+              .catch((err) => {
+                try {
+                  const errorMessage = `*Error sending attachment: ${err}*`;
+                  channel.send(
+                    message.content
+                      ? `${usernamePart}\n${message.content}\n${errorMessage}`
+                      : `${usernamePart}\n${errorMessage}`
+                  );
+                } catch (err) {
+                  message.channel.send(
+                    `Can't deliver the message to **${guild}** for: ${err}`
+                  );
+                }
+              });
+          }
         });
       }
       // eslint-disable-next-line no-empty

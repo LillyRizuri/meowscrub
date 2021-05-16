@@ -29,7 +29,7 @@ module.exports = {
           useFindAndModify: false,
         })
         .then(() => {
-          console.log("Successfully Connected to your MongoDB Database.");
+          console.log("Successfully connected to your MongoDB Database.");
         });
     };
     connectToMongoDB();
