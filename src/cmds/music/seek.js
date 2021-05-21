@@ -17,6 +17,7 @@ module.exports = class SeekMusicCommand extends Commando.Command {
       description: "Seek the playhead by providing the timestamp.",
       format: "<hh:mm:ss> | <mm:ss> | <ss>",
       examples: ["seek 26", "seek 10:40", "seek 01:25:40"],
+      clientPermissions: ["EMBED_LINKS"],
       guildOnly: true,
     });
   }

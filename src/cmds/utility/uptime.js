@@ -1,7 +1,4 @@
 const Commando = require("discord.js-commando");
-const Discord = require("discord.js");
-
-const { embedcolor } = require("../../assets/json/colors.json");
 
 module.exports = class BotUptimeCommand extends Commando.Command {
   constructor(client) {
@@ -22,14 +19,9 @@ module.exports = class BotUptimeCommand extends Commando.Command {
     const minutes = Math.floor(totalSeconds / 60);
     const seconds = Math.floor(totalSeconds % 60);
 
-    const uptimeEmbed = new Discord.MessageEmbed()
-      .setColor(embedcolor)
-      .setTitle(`${this.client.user.username}'s Current Uptime`)
-      .setDescription(
-        `\`\`\`css\n${days} days, ${hours} hrs, ${minutes} min, ${seconds} sec\`\`\``
-      )
-      .setFooter("imagine uptime exceeds to 1 day")
-      .setTimestamp();
-    message.channel.send(uptimeEmbed);
+    message.channel.send(`
+My current uptime:
+\`\`\`css\n${days} days, ${hours} hrs, ${minutes} min, ${seconds} sec\`\`\`
+    `);
   }
 };

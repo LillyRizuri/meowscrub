@@ -54,6 +54,7 @@ module.exports = class UserPermissionsCommand extends Commando.Command {
       argsType: "single",
       format: "[@user/userID]",
       examples: ["permissions @frockles"],
+      clientPermissions: ["EMBED_LINKS"],
       throttling: {
         usages: 1,
         duration: 5,

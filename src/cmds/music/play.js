@@ -12,6 +12,7 @@ module.exports = class PlayMusicCommand extends Commando.Command {
       description: "Very simple music command with no bullshit whatsoever.",
       format: "<string>",
       examples: ["play very noise"],
+      clientPermissions: ["EMBED_LINKS"],
       throttling: {
         usages: 1,
         duration: 5,

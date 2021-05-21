@@ -19,7 +19,7 @@ module.exports = class SlowModeCommand extends Commando.Command {
         "slowmode 6h #test-lol",
       ],
       argsType: "multiple",
-      clientPermissions: ["MANAGE_CHANNELS"],
+      clientPermissions: ["MANAGE_CHANNELS", "EMBED_LINKS"],
       userPermissions: ["MANAGE_CHANNELS"],
       throttling: {
         usages: 1,

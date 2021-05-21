@@ -13,6 +13,7 @@ module.exports = class LeaderboardCommand extends Commando.Command {
       group: "economy",
       memberName: "leaderboard",
       description: "Check the server's economy leaderboard.",
+      clientPermissions: ["EMBED_LINKS"],
       guildOnly: true,
     });
   }

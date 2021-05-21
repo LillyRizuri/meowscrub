@@ -13,7 +13,7 @@ module.exports = class KickCommand extends Commando.Command {
       argsType: "multiple",
       format: "<@user/userID> [reason]",
       examples: ["kick @frockles broken a rule"],
-      clientPermissions: ["KICK_MEMBERS"],
+      clientPermissions: ["KICK_MEMBERS", "EMBED_LINKS"],
       userPermissions: ["KICK_MEMBERS"],
       throttling: {
         usages: 1,

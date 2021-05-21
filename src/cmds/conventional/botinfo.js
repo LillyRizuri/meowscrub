@@ -11,6 +11,7 @@ module.exports = class BotInfoCommand extends Commando.Command {
       group: "conventional",
       memberName: "botinfo",
       description: "Get and display my informations.",
+      clientPermissions: ["EMBED_LINKS"],
       throttling: {
         usages: 1,
         duration: 5,

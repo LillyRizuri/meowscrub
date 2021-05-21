@@ -19,6 +19,7 @@ module.exports = class BinaryCommand extends Commando.Command {
         "binary never",
         "binary decode 01101110 01100101 01110110 01100101 01110010",
       ],
+      clientPermissions: ["EMBED_LINKS"],
       throttling: {
         usages: 1,
         duration: 5,

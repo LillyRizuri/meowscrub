@@ -16,6 +16,7 @@ module.exports = class WithdrawCommand extends Commando.Command {
       argsType: "single",
       format: "<number/all>",
       examples: ["withdraw 10000", "withdraw all"],
+      clientPermissions: ["EMBED_LINKS"],
       guildOnly: true,
     });
   }

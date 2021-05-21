@@ -17,6 +17,7 @@ module.exports = class LyricsCommand extends Commando.Command {
       argsType: "single",
       format: "<string>",
       examples: ["lyrics here comes the sun"],
+      clientPermissions: ["EMBED_LINKS"],
       throttling: {
         usages: 1,
         duration: 5,

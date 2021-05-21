@@ -18,6 +18,7 @@ module.exports = class UserBlacklistCommand extends Commando.Command {
       argsType: "single",
       format: "<userId>",
       examples: ["blacklist 693832549943869493"],
+      clientPermissions: ["EMBED_LINKS"],
     });
   }
 

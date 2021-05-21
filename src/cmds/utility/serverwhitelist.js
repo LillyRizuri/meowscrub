@@ -17,6 +17,7 @@ module.exports = class ServerBlacklistRemoveCommand extends Commando.Command {
       argsType: "single",
       format: "<guildId>",
       examples: ["serverunblacklist 692346925428506777"],
+      clientPermissions: ["EMBED_LINKS"],
     });
   }
 

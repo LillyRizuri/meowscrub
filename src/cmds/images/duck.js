@@ -11,6 +11,7 @@ module.exports = class DuckCommand extends Commando.Command {
       group: "images",
       memberName: "duck",
       description: "q u a c k",
+      clientPermissions: ["EMBED_LINKS"],
       throttling: {
         usages: 1,
         duration: 5,

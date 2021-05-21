@@ -14,6 +14,7 @@ module.exports = class WhoIsCommand extends Commando.Command {
       argsType: "single",
       format: "[@user/userID]",
       examples: ["whois @frockles"],
+      clientPermissions: ["EMBED_LINKS"],
       throttling: {
         usages: 1,
         duration: 5,

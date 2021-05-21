@@ -16,6 +16,7 @@ module.exports = class RoleInfoCommand extends Commando.Command {
         "roleinfo @Member",
         "roleinfo 694239225226199070",
       ],
+      clientPermissions: ["EMBED_LINKS"],
       throttling: {
         usages: 1,
         duration: 5,

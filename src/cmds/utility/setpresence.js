@@ -13,6 +13,7 @@ module.exports = class SetPresenceCommand extends Commando.Command {
       format: "<activityName>",
       description: "Set my presence based on your provided argument.",
       details: "Only the bot owner(s) may use this command.",
+      clientPermissions: ["EMBED_LINKS"],
       throttling: {
         usages: 1,
         duration: 5,

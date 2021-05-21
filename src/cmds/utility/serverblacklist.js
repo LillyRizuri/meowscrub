@@ -22,6 +22,7 @@ module.exports = class ServerBlacklistCommand extends Commando.Command {
         "blacklist 692346925428506777",
         "blacklist 692346925428506777 --force",
       ],
+      clientPermissions: ["EMBED_LINKS"],
     });
   }
 

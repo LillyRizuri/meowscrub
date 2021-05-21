@@ -14,6 +14,7 @@ module.exports = class AddCommand extends Commando.Command {
       description:
         "You can do calculation with Math.js. Check <https://mathjs.org> for more information.",
       argsType: "single",
+      clientPermissions: ["EMBED_LINKS"],
       throttling: {
         usages: 1,
         duration: 5,

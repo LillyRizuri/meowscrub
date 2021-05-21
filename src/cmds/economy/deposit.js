@@ -16,6 +16,7 @@ module.exports = class DepositCommand extends Commando.Command {
       argsType: "single",
       format: "<number/all>",
       examples: ["deposit 10000", "deposit all"],
+      clientPermissions: ["EMBED_LINKS"],
       guildOnly: true,
     });
   }

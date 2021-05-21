@@ -26,6 +26,7 @@ module.exports = class CovidCommand extends Commando.Command {
         "Display stats about COVID-19 globally, or for a specified country.",
       format: "[country]",
       examples: ["covid", "covid usa"],
+      clientPermissions: ["EMBED_LINKS"],
       throttling: {
         usages: 1,
         duration: 5,

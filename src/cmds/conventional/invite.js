@@ -8,6 +8,7 @@ module.exports = class InviteBotCommand extends Commando.Command {
       group: "conventional",
       memberName: "invite",
       description: "Invite link for me to join your server.",
+      clientPermissions: ["EMBED_LINKS"],
       throttling: {
         usages: 1,
         duration: 5,

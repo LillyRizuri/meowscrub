@@ -11,6 +11,7 @@ module.exports = class DocsCommand extends Commando.Command {
       memberName: "docs",
       argsType: "single",
       description: "Documentation of discord.js.",
+      clientPermissions: ["EMBED_LINKS"],
       throttling: {
         usages: 1,
         duration: 5,

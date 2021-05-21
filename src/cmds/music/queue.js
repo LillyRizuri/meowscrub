@@ -10,6 +10,7 @@ module.exports = class ListQueueCommand extends Commando.Command {
       group: "music",
       memberName: "queue",
       description: "Display the guild's music queue.",
+      clientPermissions: ["EMBED_LINKS"],
       throttling: {
         usages: 1,
         duration: 5,

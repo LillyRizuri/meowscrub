@@ -19,6 +19,7 @@ module.exports = class RobCommand extends Commando.Command {
       argsType: "single",
       format: "<@user>",
       examples: ["rob @frockles"],
+      clientPermissions: ["EMBED_LINKS"],
       guildOnly: true,
     });
   }

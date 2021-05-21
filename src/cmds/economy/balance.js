@@ -15,7 +15,8 @@ module.exports = class BalCommand extends Commando.Command {
       description: "Check your/someone else's pocket.",
       argsType: "single",
       format: "[@user/userID]",
-      examples: ["balance", "balance @frockles"],
+      examples: ["balance", "balance @frockles", "balance 693832549943869493"],
+      clientPermissions: ["EMBED_LINKS"],
       guildOnly: true,
     });
   }

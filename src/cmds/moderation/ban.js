@@ -13,7 +13,7 @@ module.exports = class BanCommand extends Commando.Command {
       argsType: "multiple",
       format: "<@user/userID> [reason]",
       examples: ["ban @frockles not complying to the rules"],
-      clientPermissions: ["BAN_MEMBERS"],
+      clientPermissions: ["BAN_MEMBERS", "EMBED_LINKS"],
       userPermissions: ["BAN_MEMBERS"],
       throttling: {
         usages: 1,

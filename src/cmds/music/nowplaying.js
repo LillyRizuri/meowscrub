@@ -12,6 +12,7 @@ module.exports = class NowPlayingCommand extends Commando.Command {
       memberName: "nowplaying",
       description:
         "Shows what music am I playing, and the current playhead location.",
+      clientPermissions: ["EMBED_LINKS"],
       guildOnly: true,
     });
   }

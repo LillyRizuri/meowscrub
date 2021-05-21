@@ -13,6 +13,7 @@ module.exports = class ResumeTrackEmbed extends Commando.Command {
       group: "music",
       memberName: "resume",
       description: "Resume the music playback.",
+      clientPermissions: ["EMBED_LINKS"],
       throttling: {
         usages: 1,
         duration: 5,

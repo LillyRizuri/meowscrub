@@ -16,7 +16,7 @@ module.exports = class WarnCommand extends Commando.Command {
       argsType: "multiple",
       format: "<@user> [reason]",
       examples: ["warn @frockles spamming"],
-      clientPermissions: ["BAN_MEMBERS"],
+      clientPermissions: ["EMBED_LINKS"],
       userPermissions: ["BAN_MEMBERS"],
       throttling: {
         usages: 1,

@@ -20,6 +20,7 @@ module.exports = class SetTicketCategoryCommand extends Commando.Command {
       format: "<categoryID>",
       examples: ["setchatbot 800959164493856858", "setchatbot disable"],
       userPermissions: ["ADMINISTRATOR"],
+      clientPermissions: ["EMBED_LINKS"],
       throttling: {
         usages: 1,
         duration: 5,

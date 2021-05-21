@@ -12,6 +12,7 @@ module.exports = class OnlineStatsCommand extends Commmando.Command {
       memberName: "online",
       description:
         "Shows a statistic of people who are online, offline, etc...",
+      clientPermissions: ["EMBED_LINKS"],
       throttling: {
         usages: 1,
         duration: 5,

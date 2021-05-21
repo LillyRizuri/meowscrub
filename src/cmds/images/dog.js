@@ -11,6 +11,7 @@ module.exports = class CatCommand extends Commando.Command {
       group: "images",
       memberName: "dog",
       description: "Random dog pic haha",
+      clientPermissions: ["EMBED_LINKS"],
       throttling: {
         usages: 1,
         duration: 5,

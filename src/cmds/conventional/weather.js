@@ -15,6 +15,7 @@ module.exports = class WeatherCommand extends Commando.Command {
       description: "Shows weather report for a specific location.",
       format: "<location>",
       examples: ["weather hanoi"],
+      clientPermissions: ["EMBED_LINKS"],
       throttling: {
         usages: 1,
         duration: 5,

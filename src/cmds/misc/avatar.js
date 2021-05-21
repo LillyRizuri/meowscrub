@@ -14,6 +14,7 @@ module.exports = class AvatarCommand extends Commando.Command {
       argsType: "single",
       format: "[@user/userID]",
       examples: ["avatar", "avatar @frockles", "avatar 693832549943869493"],
+      clientPermissions: ["EMBED_LINKS"],
       throttling: {
         usages: 1,
         duration: 5,

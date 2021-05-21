@@ -16,6 +16,7 @@ module.exports = class WorkCommand extends Commando.Command {
       group: "economy",
       memberName: "work",
       description: "Work to get yourself money.",
+      clientPermissions: ["EMBED_LINKS"],
       guildOnly: true,
     });
   }

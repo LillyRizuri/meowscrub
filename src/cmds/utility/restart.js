@@ -14,6 +14,7 @@ module.exports = class RestartCommand extends Commando.Command {
       memberName: "reboot",
       description: "Restart me in case of emergencies.",
       details: "Only the bot owner(s) may use this command.",
+      clientPermissions: ["EMBED_LINKS"],
     });
   }
 

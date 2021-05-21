@@ -16,6 +16,7 @@ module.exports = class LoopMusicCommand extends Commando.Command {
         "There are 3 values to choose: `song`, `queue`, or turn it `off`.",
       format: "<value>",
       examples: ["loop 1"],
+      clientPermissions: ["EMBED_LINKS"],
       throttling: {
         usages: 1,
         duration: 5,

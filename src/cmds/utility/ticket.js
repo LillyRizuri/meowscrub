@@ -18,7 +18,7 @@ module.exports = class TicketCommand extends Commando.Command {
       examples: [
         "ticket ok someone is constantly pinging everyone and i can't handle it",
       ],
-      clientPermissions: ["MANAGE_CHANNELS", "ADD_REACTIONS"],
+      clientPermissions: ["MANAGE_CHANNELS", "ADD_REACTIONS", "EMBED_LINKS"],
       throttling: {
         usages: 1,
         duration: 5,

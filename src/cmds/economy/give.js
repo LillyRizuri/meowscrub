@@ -17,6 +17,7 @@ module.exports = class GiveCommand extends Commando.Command {
       argsCount: "2",
       format: "<@user> <number>",
       examples: ["give @frockles 1000"],
+      clientPermissions: ["EMBED_LINKS"],
       guildOnly: true,
     });
   }

@@ -13,6 +13,7 @@ module.exports = class PokeDexCommand extends Commando.Command {
       memberName: "pokedex",
       description: "Search for a Pokémon's data.",
       argsType: "single",
+      clientPermissions: ["EMBED_LINKS"],
       throttling: {
         usages: 1,
         duration: 5,

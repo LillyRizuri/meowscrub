@@ -11,6 +11,7 @@ module.exports = class AnimeQuoteCommand extends Commando.Command {
       group: "misc",
       memberName: "animequote",
       description: "Random anime quote. What do you expect.",
+      clientPermissions: ["EMBED_LINKS"],
       throttling: {
         usages: 1,
         duration: 5,

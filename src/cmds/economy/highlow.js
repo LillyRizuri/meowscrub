@@ -16,6 +16,7 @@ module.exports = class LeaderboardCommand extends Commando.Command {
       description:
         "Guess if the actual number is higher or lower than the first provided number.",
       details: "If you guess it right, you will earn some coins.",
+      clientPermissions: ["EMBED_LINKS"],
       guildOnly: true,
     });
   }
@@ -35,8 +36,9 @@ module.exports = class LeaderboardCommand extends Commando.Command {
       return Math.floor(Math.random() * (max - min + 1) + min);
     }
 
+    const plusOrMinus = Math.random() < 0.5 ? -1 : 1;
     const actualNumber = between(15, 85);
-    const hintedNumber = between(0, 100);
+    const hintedNumber = actualNumber + (plusOrMinus * between(0, 30));
 
     const readyEmbed = new Discord.MessageEmbed()
       .setColor(what)

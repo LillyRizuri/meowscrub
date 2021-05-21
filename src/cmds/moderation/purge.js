@@ -14,7 +14,11 @@ module.exports = class BanCommand extends Commando.Command {
       format: "<number>",
       examples: ["purge 25"],
       argsType: "single",
-      clientPermissions: ["MANAGE_MESSAGES", "READ_MESSAGE_HISTORY"],
+      clientPermissions: [
+        "MANAGE_MESSAGES",
+        "READ_MESSAGE_HISTORY",
+        "EMBED_LINKS",
+      ],
       userPermissions: ["MANAGE_MESSAGES", "READ_MESSAGE_HISTORY"],
       throttling: {
         usages: 1,

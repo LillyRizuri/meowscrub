@@ -8,6 +8,7 @@ module.exports = class SkipMusicCommand extends Commando.Command {
       memberName: "skip",
       description:
         "Attempt to skip a song if there's more than 1 song in the queue.",
+      clientPermissions: ["EMBED_LINKS"],
       throttling: {
         usages: 1,
         duration: 5,

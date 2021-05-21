@@ -14,6 +14,7 @@ module.exports = class AdjustVolume extends Commando.Command {
       description: "Adjust the volume of the music player (in %)",
       format: "<number>",
       examples: ["volume 80"],
+      clientPermissions: ["EMBED_LINKS"],
       guildOnly: true,
     });
   }

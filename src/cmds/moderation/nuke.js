@@ -21,8 +21,13 @@ module.exports = class NukeCommand extends Commando.Command {
         "MANAGE_MESSAGES",
         "MANAGE_CHANNELS",
         "READ_MESSAGE_HISTORY",
+        "EMBED_LINKS",
       ],
-      userPermissions: ["MANAGE_MESSAGES", "READ_MESSAGE_HISTORY"],
+      userPermissions: [
+        "MANAGE_MESSAGES",
+        "MANAGE_CHANNELS",
+        "READ_MESSAGE_HISTORY",
+      ],
       throttling: {
         usages: 1,
         duration: 5,

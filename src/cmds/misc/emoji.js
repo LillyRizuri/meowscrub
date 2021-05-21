@@ -15,6 +15,7 @@ module.exports = class StealEmojiCommand extends Commando.Command {
       argsType: "single",
       format: "<emojiname>",
       examples: ["emoji :what:"],
+      clientPermissions: ["EMBED_LINKS"],
       throttling: {
         usages: 1,
         duration: 5,

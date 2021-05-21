@@ -9,6 +9,7 @@ module.exports = class SuicideHotlineCommand extends Commando.Command {
       group: "conventional",
       memberName: "suicide",
       description: "Use this command to not kill yourself, fortunately.",
+      clientPermissions: ["EMBED_LINKS"],
       throttling: {
         usages: 1,
         duration: 5,

@@ -20,6 +20,7 @@ module.exports = class SetChatbotChannelCommand extends Commando.Command {
       format: "<channel/channelID>",
       examples: ["setchatbot #chatbot", "setchatbot disable"],
       userPermissions: ["ADMINISTRATOR"],
+      clientPermissions: ["EMBED_LINKS"],
       throttling: {
         usages: 1,
         duration: 5,

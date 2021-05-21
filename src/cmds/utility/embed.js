@@ -18,6 +18,7 @@ module.exports = class EmbedCreatorCommand extends Commando.Command {
         "embed Hello GREEN This is a test.",
       ],
       userPermissions: ["MANAGE_MESSAGES"],
+      clientPermissions: ["EMBED_LINKS"],
       guildOnly: true,
       throttling: {
         usages: 1,

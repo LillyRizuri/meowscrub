@@ -20,6 +20,7 @@ module.exports = class EditSnipeCommand extends Commando.Command {
         "editsnipe",
       ],
       userPermissions: ["MANAGE_MESSAGES"],
+      clientPermissions: ["EMBED_LINKS"],
       throttling: {
         usages: 1,
         duration: 5,

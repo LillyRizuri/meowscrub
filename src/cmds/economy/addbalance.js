@@ -17,7 +17,7 @@ module.exports = class AddbalCommand extends Commando.Command {
       argsCount: "2",
       format: "<@user> <number>",
       examples: ["addbalance @frockles 10000"],
-      clientPermissions: ["MANAGE_GUILD"],
+      clientPermissions: ["EMBED_LINKS"],
       userPermissions: ["MANAGE_GUILD"],
       guildOnly: true,
     });

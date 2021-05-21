@@ -14,6 +14,7 @@ module.exports = class ShutdownCommand extends Commando.Command {
       memberName: "shutdown",
       description: "Shut the actual bot down. No joke.",
       details: "Only the bot owner(s) may use this command.",
+      clientPermissions: ["EMBED_LINKS"],
     });
   }
 
