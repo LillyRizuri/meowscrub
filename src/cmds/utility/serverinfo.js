@@ -42,6 +42,8 @@ module.exports = class ServerInfoCommand extends Commando.Command {
 
     const allEmojis = message.guild.emojis.cache.size;
 
+    const allBoosts = message.guild.premiumSubscriptionCount;
+
     const serverTier = message.guild.premiumTier;
 
     const memberCount =
@@ -74,16 +76,16 @@ module.exports = class ServerInfoCommand extends Commando.Command {
     }
 
     const explicitContentFilter = message.guild.explicitContentFilter
-      .replace("DISABLED", "Disabled")
-      .replace("MEMBERS_WITHOUT_ROLES", "Members Without Roles")
-      .replace("ALL_MEMBERS", "All Members");
+      .split("_")
+      .join(" ")
+      .toProperCase();
 
     const verificationLevel = message.guild.verificationLevel
-      .replace("NONE", "None")
-      .replace("LOW", "Low")
-      .replace("MEDIUM", "Medium")
-      .replace("VERY_HIGH", "┻━┻ ﾐヽ(ಠ益ಠ)ノ彡┻━┻")
-      .replace("HIGH", "(╯°□°）╯︵ ┻━┻");
+      .split("_")
+      .join(" ")
+      .toProperCase()
+      .replace("Very High", "┻━┻ ﾐヽ(ಠ益ಠ)ノ彡┻━┻ | Very High")
+      .replace("High", "(╯°□°）╯︵ ┻━┻ | High");
 
     const communityFeatures =
       message.guild.features
@@ -104,7 +106,7 @@ module.exports = class ServerInfoCommand extends Commando.Command {
 • Owner: \`${serverOwner.tag} | ID: ${serverOwner.id}\`
 • Created At: \`${createdAt}\`       
 • \`${memberCount} Member(s) | ${botCount} Bot(s)\`
-• \`${allRoles} Role(s) | ${allEmojis} Emoji(s) | Tier ${serverTier}\`   
+• \`${allRoles} Role(s) | ${allEmojis} Emoji(s) | ${allBoosts} Boost(s) | Tier ${serverTier}\`   
           `,
         },
         {
