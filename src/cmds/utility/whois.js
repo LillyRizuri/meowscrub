@@ -92,13 +92,20 @@ module.exports = class WhoIsCommand extends Commando.Command {
 
     const member = message.guild.members.cache.get(target.id);
 
+    const nickname = member.nickname ? `"${member.nickname}"` : "None";
+
     const joinedTimestamp = new Date(member.joinedTimestamp).toLocaleDateString(
       "en-US",
       dateTimeOptions
     );
+
     const userPresence = target.presence.activities[0]
       ? target.presence.activities[0].name
       : "None";
+
+    const userPresenceState = target.presence.activities[0]
+      ? `: ${target.presence.activities[0].state}`
+      : "";
 
     const userStatus = target.presence.status
       .replace("dnd", "Do Not Disturb")
@@ -108,34 +115,34 @@ module.exports = class WhoIsCommand extends Commando.Command {
       .sort((a, b) => b.position - a.position)
       .map((r) => r)
       .join(" ")
-      .replace("@everyone", " ");
+      .replace("@everyone", "");
     if (rolemap.length > 800) rolemap = "`Too many roles to display.`";
     if (member.roles.cache.size - 1 === 0) rolemap = "`No roles to display.`";
 
     const infoEmbed = new Discord.MessageEmbed()
-      .setColor(embedcolor)
+      .setColor(member.displayHexColor)
       .setAuthor(`Information for ${target.username}`, avatar)
       .setThumbnail(avatar)
       .setDescription(`[${target}]`)
       .addFields(
         {
-          name: "Member Details",
-          value: `
-• Nickname: \`${member.nickname || "None"}\`
-• Roles [${member.roles.cache.size - 1}]: ${rolemap}        
-• Joined: \`${joinedTimestamp}\`
-• Activity: \`${userPresence}\`
-                    `,
-        },
-        {
           name: "User Details",
           value: `
 • ID: \`${target.id}\`
 • Username: \`${target.tag}\`
-• Created: \`${createdAt}\`
-• Status: \`${userStatus}\`   
+• Created: \`${createdAt}\` 
 • Is Bot: \`${isBot}\`
 `,
+        },
+        {
+          name: "Member Details",
+          value: `
+• Nickname: \`${nickname}\`
+• Roles [${member.roles.cache.size - 1}]: ${rolemap}        
+• Joined: \`${joinedTimestamp}\`
+• Status: \`${userStatus}\`  
+• Top Activity: \`${userPresence}${userPresenceState}\`
+                    `,
         }
       )
       .setFooter(
