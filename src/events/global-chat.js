@@ -85,7 +85,7 @@ module.exports = {
             if (client.isOwner(message.author)) {
               usernamePart = `👮‍♂️ **\`${message.author.tag}\`** | ID: \`${message.author.id}\``;
             } else {
-              usernamePart = `👤 **\`${message.author.tag}\`** | ID: ${message.author.id}\``;
+              usernamePart = `👤 **\`${message.author.tag}\`** | ID: \`${message.author.id}\``;
             }
           }
 
