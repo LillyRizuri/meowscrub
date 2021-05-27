@@ -37,6 +37,7 @@ module.exports = class AvatarCommand extends Commando.Command {
         "<:scrubred:797476323169533963> What are you trying to do with that invalid user ID?"
       );
     }
+
     const avatar = target.displayAvatarURL({
       format: "png",
       size: 4096,

@@ -24,9 +24,7 @@ module.exports = class WhoIsCommand extends Commando.Command {
   }
 
   async run(message, args) {
-    const guild = this.client.guilds.cache.get(message.guild.id);
     let target;
-
     try {
       if (!args) {
         target = message.author;
@@ -65,7 +63,7 @@ module.exports = class WhoIsCommand extends Commando.Command {
       .replace("true", "Yes")
       .replace("false", "No");
 
-    if (!guild.members.resolve(target)) {
+    if (!message.guild.members.resolve(target)) {
       const infoEmbed = new Discord.MessageEmbed()
         .setColor(embedcolor)
         .setAuthor(`Information for ${target.username}`, avatar)

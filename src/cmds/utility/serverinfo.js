@@ -84,8 +84,8 @@ module.exports = class ServerInfoCommand extends Commando.Command {
       .split("_")
       .join(" ")
       .toProperCase()
-      .replace("Very High", "┻━┻ ﾐヽ(ಠ益ಠ)ノ彡┻━┻ | Very High")
-      .replace("High", "(╯°□°）╯︵ ┻━┻ | High");
+      .replace("Very High", "┻━┻ ﾐヽ(ಠ益ಠ)ノ彡┻━┻")
+      .replace("High", "(╯°□°）╯︵ ┻━┻");
 
     const communityFeatures =
       message.guild.features

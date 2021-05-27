@@ -37,8 +37,10 @@ module.exports = class LeaderboardCommand extends Commando.Command {
     }
 
     const plusOrMinus = Math.random() < 0.5 ? -1 : 1;
-    const actualNumber = between(15, 85);
-    const hintedNumber = actualNumber + (plusOrMinus * between(0, 30));
+
+    const actualNumber = between(20, 85);
+
+    const hintedNumber = actualNumber + plusOrMinus * between(0, 15);
 
     const readyEmbed = new Discord.MessageEmbed()
       .setColor(what)
@@ -57,15 +59,22 @@ Respond with \`high\`, \`low\`, or \`jackpot\`.
       );
     await message.channel.send(readyEmbed);
 
-    let winning;
     const preppedMoney = between(200, 2500);
+
     const passedResponse = new Discord.MessageEmbed()
       .setColor(green)
       .setAuthor(
         `${message.author.username}'s winning of a high-low game`,
         message.author.displayAvatarURL()
       )
+      .setDescription(
+        `
+**You won ¢${preppedMoney}!**
+The hint was **${hintedNumber}**, and the actual number was **${actualNumber}**.
+              `
+      )
       .setFooter("kudos to you");
+
     const failedResponse = new Discord.MessageEmbed()
       .setColor(red)
       .setAuthor(
@@ -79,6 +88,7 @@ The hint was **${hintedNumber}**, and the actual number was **${actualNumber}**.
       `
       )
       .setFooter("well, idk what to say");
+
     const filter = (m) => m.author.id === message.author.id;
     message.channel
       .awaitMessages(filter, {
@@ -89,53 +99,38 @@ The hint was **${hintedNumber}**, and the actual number was **${actualNumber}**.
         switch (collectedMessage.first().content.toLowerCase()) {
           case "high":
             if (actualNumber > hintedNumber) {
-              winning = await economy.addCoins(
+              await economy.addCoins(
                 message.guild.id,
                 message.author.id,
                 preppedMoney
               );
-
-              passedResponse.setDescription(`
-**You won ¢${preppedMoney}!**
-The hint was **${hintedNumber}**, and the actual number was **${actualNumber}**.
-              `);
-              message.reply(passedResponse);
+              collectedMessage.first().reply(passedResponse);
             } else {
-              message.reply(failedResponse);
+              collectedMessage.first().reply(failedResponse);
             }
             return;
           case "low":
             if (actualNumber < hintedNumber) {
-              winning = await economy.addCoins(
+              await economy.addCoins(
                 message.guild.id,
                 message.author.id,
                 preppedMoney
               );
-
-              passedResponse.setDescription(`
-**You won ¢${preppedMoney}!**
-The hint was **${hintedNumber}**, and the actual number was **${actualNumber}**.
-              `);
-              message.reply(passedResponse);
+              collectedMessage.first().reply(passedResponse);
             } else {
-              message.reply(failedResponse);
+              collectedMessage.first().reply(failedResponse);
             }
             return;
           case "jackpot":
             if (actualNumber === hintedNumber) {
-              winning = await economy.addCoins(
+              await economy.addCoins(
                 message.guild.id,
                 message.author.id,
                 preppedMoney
               );
-
-              passedResponse.setDescription(`
-**You won ¢${winning}!**
-The hint was **${hintedNumber}**, and the actual number was **${actualNumber}**.
-              `);
-              message.reply(passedResponse);
+              collectedMessage.first().reply(passedResponse);
             } else {
-              message.reply(failedResponse);
+              collectedMessage.first().reply(failedResponse);
             }
             return;
           default: {
@@ -148,7 +143,7 @@ Try the command again with these response: \`high\`, \`low\`, and \`jackpot\`.
                 `
               )
               .setFooter(`the secret number was ${actualNumber} by the way`);
-            message.reply(invalidResponse);
+            collectedMessage.first().reply(invalidResponse);
           }
         }
       })
