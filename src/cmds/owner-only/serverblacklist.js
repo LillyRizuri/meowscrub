@@ -11,7 +11,7 @@ module.exports = class ServerBlacklistCommand extends Commando.Command {
     super(client, {
       name: "server-blacklist",
       aliases: ["guild-blacklist", "server-ban"],
-      group: "utility",
+      group: "owner-only",
       memberName: "server-blacklist",
       description: "Blacklist a server from inviting me.",
       details:
@@ -23,6 +23,7 @@ module.exports = class ServerBlacklistCommand extends Commando.Command {
         "blacklist 692346925428506777 --force",
       ],
       clientPermissions: ["EMBED_LINKS"],
+      hidden: true
     });
   }
 

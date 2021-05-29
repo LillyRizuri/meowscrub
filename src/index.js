@@ -33,6 +33,8 @@ client.on("ready", async () => {
       ["misc", "Miscellaneous Stuff"],
       ["utility", "Extra Utilities"],
       ["settings", "Guild Settings"],
+      ["owner-only", "Bot Owner Only"],
+      ["notice", "Bot Notice"],
     ])
     .registerDefaults()
     .registerCommandsIn(path.join(__dirname, "cmds"));

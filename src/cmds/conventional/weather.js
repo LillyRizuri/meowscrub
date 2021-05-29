@@ -30,7 +30,9 @@ module.exports = class WeatherCommand extends Commando.Command {
           "<:scrubnull:797476323533783050> Specify a location in order to continue."
         );
 
-      if (result === undefined || result.length === 0)
+      message.channel.send("Attempting to retrieve weather data...");
+
+      if (typeof result === undefined || result.length === 0)
         return message.reply(
           "<:scrubred:797476323169533963> THIS is not a location. What's that."
         );

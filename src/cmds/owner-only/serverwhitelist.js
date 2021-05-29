@@ -1,24 +1,24 @@
 const Commando = require("discord.js-commando");
 const Discord = require("discord.js");
-const blacklistSchema = require("../../models/user-blacklist-schema");
+const guildBlacklistSchema = require("../../models/guild-blacklist-schema");
 
 const { embedcolor } = require("../../assets/json/colors.json");
 const checkMark = "<:scrubgreenlarge:797816509967368213>";
 const cross = "<:scrubredlarge:797816510579998730>";
 
-module.exports = class UserWhitelistCommand extends Commando.Command {
+module.exports = class ServerBlacklistRemoveCommand extends Commando.Command {
   constructor(client) {
     super(client, {
-      name: "whitelist",
-      aliases: ["unblacklist", "rm-blacklist", "bot-unban"],
-      group: "utility",
-      memberName: "whitelist",
-      description: "Whitelist an user from using my stuff.",
-      details: "Only the bot owner(s) may use this command.",
+      name: "guild-whitelist",
+      aliases: ["server-whitelist", "server-unban"],
+      group: "owner-only",
+      memberName: "server-whitelist",
+      description: "Whitelist a server from inviting me",
       argsType: "single",
-      format: "<userId>",
-      examples: ["unblacklist 693832549943869493"],
+      format: "<guildId>",
+      examples: ["serverunblacklist 692346925428506777"],
       clientPermissions: ["EMBED_LINKS"],
+      hidden: true
     });
   }
 
@@ -34,35 +34,10 @@ module.exports = class UserWhitelistCommand extends Commando.Command {
       );
 
     let target;
+    const guildId = args;
 
-    try {
-      target = await this.client.users.fetch(args);
-    } catch (err) {
-      return message.reply(
-        "<:scrubred:797476323169533963> What is this ID. Please explain."
-      );
-    }
-
-    switch (target) {
-      case message.author:
-        return message.reply(
-          "<:scrubred:797476323169533963> Whitelisting yourself? Do you see that you can run commands here?"
-        );
-      case this.client.user:
-        return message.reply(
-          "<:scrubred:797476323169533963> Whitelisting me? ..."
-        );
-    }
-
-    if (target.bot)
-      return message.reply(
-        "<:scrubred:797476323169533963> Bot can't even interact with my stuff, and same for me too.\nSo why would you want to try?"
-      );
-
-    const userId = target.id;
-
-    const results = await blacklistSchema.findOne({
-      userId,
+    const results = await guildBlacklistSchema.findOne({
+      guildId,
     });
 
     if (results) {
@@ -72,9 +47,10 @@ module.exports = class UserWhitelistCommand extends Commando.Command {
           `Initiated by ${message.author.tag}`,
           message.author.displayAvatarURL({ dynamic: true })
         ).setDescription(`
-You will attempt to whitelist **${target.tag}**.
+You will attempt to whitelist this guild with this ID: **${guildId}**.
 Please confirm your choice by reacting to a check mark or a cross to abort.     
         `);
+
       const msg = await message.reply(confirmationEmbed);
       await msg.react(checkMark);
       await msg.react(cross);
@@ -91,11 +67,11 @@ Please confirm your choice by reacting to a check mark or a cross to abort.
           if (collected.first().emoji.name == "scrubgreenlarge") {
             try {
               await message.channel.send(
-                `You've made your choice to whitelist **${target.tag}**.\nOperation complete. Restart me for this change to be applied.`
+                "You've made your choice to whitelist **that following guild.**.\nOperation complete."
               );
             } finally {
-              await blacklistSchema.findOneAndDelete({
-                userId,
+              await guildBlacklistSchema.findOneAndDelete({
+                guildId,
               });
             }
           } else message.channel.send("Operation aborted.");
@@ -107,7 +83,7 @@ Please confirm your choice by reacting to a check mark or a cross to abort.
         });
     } else {
       return message.reply(
-        `**${target.tag}** hasn't been blacklisted. What are you trying to do?`
+        `**${target.name}** hasn't been blacklisted. What are you trying to do?`
       );
     }
   }

@@ -6,12 +6,13 @@ module.exports = class AvatarCommand extends Commando.Command {
     super(client, {
       name: "console",
       aliases: ["shell", "terminal"],
-      group: "utility",
+      group: "owner-only",
       memberName: "console",
       description: "Run the bot's own terminal.",
       details: "Only the bot owner(s) may use this command.",
       argsType: "single",
       format: "<input>",
+      hidden: true
     });
   }
 

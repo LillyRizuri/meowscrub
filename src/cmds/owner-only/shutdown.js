@@ -10,11 +10,12 @@ module.exports = class ShutdownCommand extends Commando.Command {
     super(client, {
       name: "shutdown",
       aliases: ["destroy", "terminate", "poweroff"],
-      group: "utility",
+      group: "owner-only",
       memberName: "shutdown",
       description: "Shut the actual bot down. No joke.",
       details: "Only the bot owner(s) may use this command.",
       clientPermissions: ["EMBED_LINKS"],
+      hidden: true
     });
   }
 
