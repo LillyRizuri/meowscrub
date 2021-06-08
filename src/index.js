@@ -14,6 +14,7 @@ const client = new Commando.CommandoClient({
   invite: `<${process.env.DISCORDINVITE}>`,
   // Do not modify this for safety purposes
   disableMentions: "all",
+  partials: ["USER", "CHANNEL", "GUILD_MEMBER", "MESSAGE", "REACTION"],
   intents: new Discord.Intents(Discord.Intents.ALL),
 });
 

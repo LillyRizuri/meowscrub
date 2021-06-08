@@ -30,7 +30,7 @@ module.exports = {
         if (blacklistResults) {
           await message.delete();
           const msg = await message.channel.send(
-            `${message.author}, You are blacklisted from using this functionality. For that, your message won't be delivered.`
+            `**${message.author.username}**: You are blacklisted from using this functionality. For that, your message won't be delivered.`
           );
 
           setTimeout(() => {
@@ -39,6 +39,9 @@ module.exports = {
           return;
         }
 
+        if (message.mentions.users.first() || message.mentions.channels.first())
+          return message.reply("i can't chat properly when your message contains any user/channel mentions.");
+
         message.channel.startTyping();
         const response = await fetch(
           utf8.encode(
@@ -46,7 +49,7 @@ module.exports = {
           )
         );
         const json = await response.json();
-        message.channel.send(json.cnt.toLowerCase());
+        message.reply(json.cnt.toLowerCase());
         return message.channel.stopTyping(true);
       }
       // eslint-disable-next-line no-empty

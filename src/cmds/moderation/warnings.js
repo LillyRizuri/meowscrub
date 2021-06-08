@@ -17,7 +17,7 @@ module.exports = class WarningsCommand extends Commando.Command {
       format: "<@user>",
       examples: ["warnings @frockles"],
       clientPermissions: ["EMBED_LINKS"],
-      userPermissions: ["BAN_MEMBERS"],
+      userPermissions: ["MANAGE_GUILD"],
       throttling: {
         usages: 1,
         duration: 5,

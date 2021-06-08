@@ -1,5 +1,7 @@
 [
   "no, you",
+  "{author}, are you sure you want to kill {target}? they seem nice to me.\nrun the command again to confirm.",
+  "{author} hired an assassin to kill {target}, but the assassin doesn't want to.",
   "{target} died due to cringe.",
   "{author} slipped poison to {target}'s drink.",
   "{target} died from fall damage.",
@@ -34,5 +36,13 @@
   "{author} replaced water with lava in {target}'s bathroom, which causes {target} to burn while taking a shower.",
   "{target} laughed at {author} so hard that {target} choked.",
   "{author} spammed pk fire at {target}.",
-  "{target} died of going too fast by car."
+  "{target} died of going too fast by car.",
+  "{target} got squashed by {author}'s lifeless body.",
+  "{target} got a seizure after {target} watched {author}'s epileptic video.",
+  "{author} somehow replaced {target}'s house floor with a broken one, causing {target} to fall down the floor.",
+  "{author} killed {target} because {author} mistook {target} as the main villain.",
+  "{target} tripped and fell down the stairs because of its crappy stairs design.",
+  "{target} died of splnning a fidget spinner... **with edgy blades.**",
+  "{target} fell down into a bottomless hole somehow.",
+  "{target} drowned in a pond... what the hell."
 ]

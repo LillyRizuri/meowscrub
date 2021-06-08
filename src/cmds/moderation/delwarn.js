@@ -9,15 +9,15 @@ module.exports = class DeleteWarnCommand extends Commando.Command {
   constructor(client) {
     super(client, {
       name: "delwarn",
-      aliases: ["removestrike", "pardon"],
+      aliases: ["rmstrike", "pardon"],
       group: "moderation",
       memberName: "delwarn",
       description: "Delete a warn using their Warn ID.",
       argsType: "multiple",
       format: "<@user> <WarnID>",
       examples: ["delwarn @frockles _g7tfhtshw"],
-      clientPermissions: ["BAN_MEMBERS", "EMBED_LINKS"],
-      userPermissions: ["BAN_MEMBERS"],
+      clientPermissions: ["EMBED_LINKS"],
+      userPermissions: ["MANAGE_GUILD"],
       throttling: {
         usages: 1,
         duration: 5,
