@@ -1,8 +1,6 @@
 const Commando = require("discord.js-commando");
-const Discord = require("discord.js");
 const ms = require("ms");
-
-const { green } = require("../../assets/json/colors.json");
+const modules = require("../../modules");
 
 module.exports = class SlowModeCommand extends Commando.Command {
   constructor(client) {
@@ -12,11 +10,14 @@ module.exports = class SlowModeCommand extends Commando.Command {
       group: "moderation",
       memberName: "slowmode",
       description: "Set cooldown for a channel.",
-      format: "<s/m/h> [#channel/channelID]",
+      details:
+        "Leave the channel parameter blank to set a cooldown to the channel where the command was ran on.",
+      format: "<number><s/m/h> [#channel/channelID]",
       examples: [
         "slowmode 10s #general",
         "slowmode 1m #vote",
         "slowmode 6h #test-lol",
+        "slowmode 30s",
       ],
       argsType: "multiple",
       clientPermissions: ["MANAGE_CHANNELS", "EMBED_LINKS"],
@@ -30,14 +31,28 @@ module.exports = class SlowModeCommand extends Commando.Command {
   }
 
   async run(message, args) {
-    const channel =
-      message.mentions.channels.first() ||
-      message.guild.channels.cache.get(args[1]) ||
-      message.channel;
+    let channel;
+
+    if (!args[1]) {
+      channel = message.channel;
+    } else if (args[1]) {
+      channel =
+        message.mentions.channels.first() ||
+        message.guild.channels.cache.get(args[1]);
+      if (!channel)
+        return message.reply(
+          "<:scrubnull:797476323533783050> That's NOT a valid Channel ID."
+        );
+    }
 
     if (!args[0])
       return message.reply(
-        "<:scrubnull:797476323533783050> What do you want the slowmode to be set to?\nPlease use the format: `s/m/h`."
+        "<:scrubnull:797476323533783050> What do you want the slowmode to be set to?\nPlease set the cooldown value with this format: `<number><s/m/h>`."
+      );
+
+    if (!modules.endsWithAny(["s", "m", "h"], args[0].toLowerCase()))
+      return message.reply(
+        "<:scrubred:797476323169533963> Your cooldown value doesn't end with `s/m/h`. Try again."
       );
 
     const cooldownValue = ms(args[0]) / 1000;
@@ -58,14 +73,9 @@ module.exports = class SlowModeCommand extends Commando.Command {
         `Operation done by ${message.author.tag}`
       );
 
-      const slowModeOKEmbed = new Discord.MessageEmbed()
-        .setColor(green)
-        .setDescription(
-          `<:scrubgreen:797476323316465676> Slowmode for ${channel} has been set to **${args[0]}**.`
-        )
-        .setFooter("is this slowmode good enough")
-        .setTimestamp();
-      message.reply(slowModeOKEmbed);
+      message.reply(
+        `<:scrubgreen:797476323316465676> Slowmode for ${channel} has been set to **${args[0].toLowerCase()}**.`
+      );
     } catch (err) {
       console.log(err);
     }
