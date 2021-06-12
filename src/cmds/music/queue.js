@@ -1,5 +1,6 @@
 const Commando = require("discord.js-commando");
 const Discord = require("discord.js");
+const { PaginatedEmbed } = require("embed-paginator");
 
 const { embedcolor } = require("../../assets/json/colors.json");
 
@@ -28,6 +29,9 @@ module.exports = class ListQueueCommand extends Commando.Command {
         "<:scrubnull:797476323533783050> Go to the same VC that I'm blasting music out to list the queue."
       );
 
+    if (!queue)
+      return message.reply("<:scrubnull:797476323533783050> There's no queue.");
+
     const loopSetting = queue.repeatMode
       .toString()
       .replace("0", "Disabled")
@@ -42,20 +46,29 @@ module.exports = class ListQueueCommand extends Commando.Command {
     const queueList = queue.songs
       .map(
         (song, id) =>
-          `**${id}**. [${song.name}](${song.url}) - \`${song.formattedDuration}\``
+          `\`${id}.\` [${song.name}](${song.url}) | \`${song.formattedDuration} Requested by: ${song.user.tag}\`\n`
       )
       .join("\n");
 
-    if (!queue)
-      return message.reply("<:scrubnull:797476323533783050> There's no queue.");
+    const splitQueue = Discord.splitMessage(queueList, {
+      maxLength: 1024,
+      char: "\n",
+      prepend: "",
+      append: "",
+    });
 
-    const currentQueueEmbed = new Discord.MessageEmbed()
-      .setColor(embedcolor)
-      .setAuthor("Current queue for this Guild")
-      .setDescription(queueList)
-      .setFooter(
+    const currentQueueEmbed = new PaginatedEmbed({
+      descriptions: splitQueue,
+      colours: [embedcolor],
+      duration: 60 * 1000,
+      paginationType: "description",
+      itemsPerPage: 2
+    })
+      .setTitle(`Queue for ${message.guild.name}`)
+      .setAuthor(
         `Loop: ${loopSetting} | Volume: ${queue.volume}% | Autoplay: ${autoplaySetting}`
       );
-    message.channel.send(currentQueueEmbed);
+
+    currentQueueEmbed.send(message.channel);
   }
 };

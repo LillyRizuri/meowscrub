@@ -42,18 +42,33 @@ module.exports = {
         message.channel.send(playingEmbed);
       })
       .on("addSong", (message, queue, song) => {
-        const playingEmbed = new Discord.MessageEmbed()
+        message.channel.send(`
+<:scrubgreen:797476323316465676> Added the following song to the queue:
+\`${song.name} - ${song.formattedDuration}\`
+        `);
+      })
+      .on("playList", (message, queue, playlist, song) => {
+        const playlistEmbed = new Discord.MessageEmbed()
           .setColor(green)
           .setThumbnail(song.thumbnail)
           .setDescription(
             `
-<:scrubgreen:797476323316465676> **Added to the queue.**
+<:scrubgreen:797476323316465676> **Now Playing Playlist:**
+[${playlist.name}](${playlist.url}) - **${playlist.songs.length} songs**
+
+<:scrubgreen:797476323316465676> **Playing First:**
 [${song.name}](${song.url}) - **${song.formattedDuration}**
-  `
+          `
           )
-          .setFooter(`Added by: ${song.user.tag}`)
+          .setFooter(`Requested by: ${song.user.tag}`)
           .setTimestamp();
-        message.channel.send(playingEmbed);
+        message.channel.send(playlistEmbed);
+      })
+      .on("addList", (message, queue, playlist) => {
+        message.channel.send(`
+<:scrubgreen:797476323316465676> Added the following playlist to the queue:
+\`${playlist.name} - ${playlist.songs.length} songs\`
+        `);
       })
       .on("empty", (message) => {
         const emptyChannelEmbed = new Discord.MessageEmbed()

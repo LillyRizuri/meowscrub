@@ -40,7 +40,9 @@ module.exports = {
         }
 
         if (message.mentions.users.first() || message.mentions.channels.first())
-          return message.reply("i can't chat properly when your message contains any user/channel mentions.");
+          return message.reply(
+            "i can't chat properly when your message contains any user/channel mentions."
+          );
 
         message.channel.startTyping();
         const response = await fetch(
