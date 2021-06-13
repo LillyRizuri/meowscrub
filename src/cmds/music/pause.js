@@ -1,10 +1,5 @@
 /* eslint-disable no-case-declarations */
 const Commando = require("discord.js-commando");
-const Discord = require("discord.js");
-
-const {
-  green,
-} = require("../../assets/json/colors.json");
 
 module.exports = class StopTrackEmbed extends Commando.Command {
   constructor(client) {
@@ -14,7 +9,6 @@ module.exports = class StopTrackEmbed extends Commando.Command {
       group: "music",
       memberName: "pause",
       description: "Pause the music playback.",
-      clientPermissions: ["EMBED_LINKS"],
       throttling: {
         usages: 1,
         duration: 5,
@@ -27,27 +21,24 @@ module.exports = class StopTrackEmbed extends Commando.Command {
     const voiceChannel = message.member.voice.channel;
 
     if (!voiceChannel)
-    return message.reply(
-      "<:scrubnull:797476323533783050> Join an appropriate voice channel to do that action."
-    );
+      return message.reply(
+        "<:scrubnull:797476323533783050> Join an appropriate voice channel to do that action."
+      );
 
     const paused = this.client.distube.isPaused(message);
     const playing = this.client.distube.isPlaying(message);
 
     if (paused === true)
-    return message.reply(
-      "<:scrubred:797476323169533963> It's already paused. Jeez."
-    );
+      return message.reply(
+        "<:scrubred:797476323169533963> It's already paused. Jeez."
+      );
 
     switch (playing) {
       case true:
         this.client.distube.pause(message);
-        const stoppedEmbed = new Discord.MessageEmbed()
-          .setColor(green)
-          .setDescription(
-            "<:scrubgreen:797476323316465676> **Paused the track.**"
-          );
-        message.channel.send(stoppedEmbed);
+        message.channel.send(
+          "<:scrubgreen:797476323316465676> **Paused the track.**"
+        );
         break;
       case false:
         return message.reply(

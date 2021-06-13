@@ -1,7 +1,4 @@
 const Commando = require("discord.js-commando");
-const Discord = require("discord.js");
-
-const { green } = require("../../assets/json/colors.json");
 
 module.exports = class AutoPlayMusicCommand extends Commando.Command {
   constructor(client) {
@@ -13,7 +10,6 @@ module.exports = class AutoPlayMusicCommand extends Commando.Command {
       description:
         "Enable/Disable the autoplay function by running the command.",
       details: "It's identical to the YouTube's autoplay function.",
-      clientPermissions: ["EMBED_LINKS"],
       throttling: {
         usages: 1,
         duration: 5,
@@ -39,11 +35,8 @@ module.exports = class AutoPlayMusicCommand extends Commando.Command {
 
     mode = this.client.distube.toggleAutoplay(message);
     mode = mode ? "On" : "Off";
-    const toggleAutoplayEmbed = new Discord.MessageEmbed()
-      .setColor(green)
-      .setDescription(
-        `<:scrubgreen:797476323316465676> Set autoplay mode to **${mode}**.`
-      );
-    message.channel.send(toggleAutoplayEmbed);
+    message.channel.send(
+      `<:scrubgreen:797476323316465676> Set autoplay mode to **${mode}**.`
+    );
   }
 };

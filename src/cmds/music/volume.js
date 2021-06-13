@@ -1,9 +1,6 @@
 const Commando = require("discord.js-commando");
-const Discord = require("discord.js");
 
-const { green } = require("../../assets/json/colors.json");
-
-module.exports = class AdjustVolume extends Commando.Command {
+module.exports = class AdjustVolumeCommand extends Commando.Command {
   constructor(client) {
     super(client, {
       name: "volume",
@@ -12,9 +9,9 @@ module.exports = class AdjustVolume extends Commando.Command {
       memberName: "volume",
       argsType: "single",
       description: "Adjust the volume of the music player (in %)",
+      details: "Leave the argument blank to show the current volume of the music player.",
       format: "<number>",
       examples: ["volume 80"],
-      clientPermissions: ["EMBED_LINKS"],
       guildOnly: true,
     });
   }
@@ -26,23 +23,25 @@ module.exports = class AdjustVolume extends Commando.Command {
         "<:scrubnull:797476323533783050> There's no queue. Have at least one song before advancing."
       );
 
+    if (!args)
+      return message.reply(
+        `<:scrubnull:797476323533783050> Current audio playback volume: **${queue.volume}%**`
+      );
+
     const volume = Number(args);
     if (isNaN(volume) || !Number.isInteger(volume))
-    return message.reply(
-      "<:scrubred:797476323169533963> Percentage not valid. Try again."
-    );
+      return message.reply(
+        "<:scrubred:797476323169533963> Percentage not valid. Try again."
+      );
 
     if (volume < 1 || volume > 200)
-    return message.reply(
-      "<:scrubred:797476323169533963> The percentage you provided must be in-between 1 - 200%.\nMaking everyone's eardrum explode isn't a good idea."
-    );
+      return message.reply(
+        "<:scrubred:797476323169533963> The percentage you provided must be in-between 1 - 200%.\nMaking everyone's eardrum explode isn't a good idea."
+      );
 
     this.client.distube.setVolume(message, volume);
-    const volEmbed = new Discord.MessageEmbed()
-      .setColor(green)
-      .setDescription(
-        `<:scrubgreen:797476323316465676> Adjusted the volume to **${volume}%**.`
-      );
-    message.channel.send(volEmbed);
+    message.channel.send(
+      `<:scrubgreen:797476323316465676> Adjusted the volume to **${volume}%**.`
+    );
   }
 };

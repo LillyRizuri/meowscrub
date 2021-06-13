@@ -1,10 +1,5 @@
 /* eslint-disable no-case-declarations */
 const Commando = require("discord.js-commando");
-const Discord = require("discord.js");
-
-const {
-  green,
-} = require("../../assets/json/colors.json");
 
 module.exports = class ResumeTrackEmbed extends Commando.Command {
   constructor(client) {
@@ -13,7 +8,6 @@ module.exports = class ResumeTrackEmbed extends Commando.Command {
       group: "music",
       memberName: "resume",
       description: "Resume the music playback.",
-      clientPermissions: ["EMBED_LINKS"],
       throttling: {
         usages: 1,
         duration: 5,
@@ -41,12 +35,9 @@ module.exports = class ResumeTrackEmbed extends Commando.Command {
     switch (paused) {
       case true:
         this.client.distube.resume(message);
-        const stoppedEmbed = new Discord.MessageEmbed()
-          .setColor(green)
-          .setDescription(
-            "<:scrubgreen:797476323316465676> **Resumed the track.**"
-          );
-        message.channel.send(stoppedEmbed);
+        message.channel.send(
+          "<:scrubgreen:797476323316465676> **Resumed the track.**"
+        );
         break;
       case false:
         return message.reply(

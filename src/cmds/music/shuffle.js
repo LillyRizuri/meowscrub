@@ -1,7 +1,4 @@
 const Commando = require("discord.js-commando");
-const Discord = require("discord.js");
-
-const { green } = require("../../assets/json/colors.json");
 
 module.exports = class ShuffleMusicCommand extends Commando.Command {
   constructor(client) {
@@ -10,7 +7,6 @@ module.exports = class ShuffleMusicCommand extends Commando.Command {
       group: "music",
       memberName: "shuffle",
       description: "Shuffle all music from the existing queue.",
-      clientPermissions: ["EMBED_LINKS"],
       throttling: {
         usages: 1,
         duration: 5,
@@ -34,11 +30,8 @@ module.exports = class ShuffleMusicCommand extends Commando.Command {
       );
 
     this.client.distube.shuffle(message);
-    const shuffleEmbed = new Discord.MessageEmbed()
-      .setColor(green)
-      .setDescription(
-        "<:scrubgreen:797476323316465676> **Shuffled the entire music queue.**"
-      );
-    message.channel.send(shuffleEmbed);
+    message.channel.send(
+      "<:scrubgreen:797476323316465676> **Shuffled the entire music queue.**"
+    );
   }
 };

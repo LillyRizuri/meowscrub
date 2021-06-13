@@ -20,8 +20,6 @@ module.exports = class BotInfoCommand extends Commando.Command {
   }
 
   async run(message) {
-    let totalMembers = 0;
-
     let totalSeconds = this.client.uptime / 1000;
     const days = Math.floor(totalSeconds / 86400);
     totalSeconds %= 86400;
@@ -40,10 +38,6 @@ module.exports = class BotInfoCommand extends Commando.Command {
     const memUsedPercentage = ((memUsed / memTotal) * 100).toFixed(2) + "%";
     const author = await this.client.users.fetch(process.env.OWNERID);
 
-    for (const guild of this.client.guilds.cache) {
-      totalMembers += (await guild[1].members.fetch()).size;
-    }
-
     const totalGuild = this.client.guilds.cache.size;
 
     const botinfoEmbed = new Discord.MessageEmbed()
@@ -60,8 +54,8 @@ module.exports = class BotInfoCommand extends Commando.Command {
 • Version: \`${version}\`
 • Memory Used: \`${memUsedInMB}/${memTotalInMB}MB (${memUsedPercentage})\`        
 • Library: [\`discord.js\`](https://discord.js.org/)[\`-commando\`](https://github.com/discordjs/Commando)
-• \`In ${totalGuild} Server(s) | Serving ${totalMembers} Member(s)\` 
-• \`Online for ${days} days, ${hours} hrs, ${minutes} min, ${seconds} sec\` 
+• Servers in: \`${totalGuild}\` 
+• Online for: \`${days} days, ${hours} hrs, ${minutes} min, ${seconds} sec\` 
           `,
         },
         {
@@ -71,9 +65,7 @@ module.exports = class BotInfoCommand extends Commando.Command {
           `,
         }
       )
-      .setFooter(
-        `2020 - 2021 ${author.tag}`
-      );
+      .setFooter(`2020 - 2021 ${author.tag}`);
     message.channel.send(botinfoEmbed);
   }
 };

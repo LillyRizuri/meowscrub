@@ -54,7 +54,12 @@ module.exports = class ListQueueCommand extends Commando.Command {
       )
       .join("\n");
 
-    const queueList = `__Now Playing:__\n${nowPlaying}\n\n__Up Next:__\n${queueMap}`;
+    let queueList = `__Now Playing:__\n${nowPlaying}\n\n__Up Next:__`;
+    if (queueMap) {
+      queueList = queueList + `\n${queueMap}`;
+    } else if (!queueMap) {
+      queueList = queueList + "\nThere's nothing in here. Add some music!";
+    }
 
     const splitQueue = Discord.splitMessage(queueList, {
       maxLength: 1024,

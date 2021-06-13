@@ -1,7 +1,4 @@
 const Commando = require("discord.js-commando");
-const Discord = require("discord.js");
-
-const { green } = require("../../assets/json/colors.json");
 
 module.exports = class LoopMusicCommand extends Commando.Command {
   constructor(client) {
@@ -16,7 +13,6 @@ module.exports = class LoopMusicCommand extends Commando.Command {
         "There are 3 values to choose: `song`, `queue`, or turn it `off`.",
       format: "<value>",
       examples: ["loop 1"],
-      clientPermissions: ["EMBED_LINKS"],
       throttling: {
         usages: 1,
         duration: 5,
@@ -63,11 +59,8 @@ module.exports = class LoopMusicCommand extends Commando.Command {
 
     mode = this.client.distube.setRepeatMode(message, mode);
     mode = mode ? (mode == 2 ? "Repeat Queue" : "Repeat Song") : "Off";
-    const selLoopEmbed = new Discord.MessageEmbed()
-      .setColor(green)
-      .setDescription(
-        `<:scrubgreen:797476323316465676> Set repeat option to: **${mode}**`
-      );
-    message.channel.send(selLoopEmbed);
+    message.channel.send(
+      `<:scrubgreen:797476323316465676> Set repeat configuration to: **${mode}**`
+    );
   }
 };

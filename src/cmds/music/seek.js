@@ -1,7 +1,4 @@
 const Commando = require("discord.js-commando");
-const Discord = require("discord.js");
-
-const { green } = require("../../assets/json/colors.json");
 
 const notTimestampMsg =
   "<:scrubred:797476323169533963> THAT is not a valid timestamp.";
@@ -17,7 +14,7 @@ module.exports = class SeekMusicCommand extends Commando.Command {
       description: "Seek the playhead by providing the timestamp.",
       format: "<hh:mm:ss> | <mm:ss> | <ss>",
       examples: ["seek 26", "seek 10:40", "seek 01:25:40"],
-      clientPermissions: ["EMBED_LINKS"],
+
       guildOnly: true,
     });
   }
@@ -76,15 +73,12 @@ module.exports = class SeekMusicCommand extends Commando.Command {
     }
 
     this.client.distube.seek(message, Number(milliseconds));
-    const seekEmbed = new Discord.MessageEmbed()
-      .setColor(green)
-      .setDescription(
-        `<:scrubgreen:797476323316465676> Moved the playhead to **${new Date(
-          milliseconds
-        )
-          .toISOString()
-          .substr(11, 8)}**.`
-      );
-    message.channel.send(seekEmbed);
+    message.channel.send(
+      `<:scrubgreen:797476323316465676> Moved the playhead to **${new Date(
+        milliseconds
+      )
+        .toISOString()
+        .substr(11, 8)}**.`
+    );
   }
 };

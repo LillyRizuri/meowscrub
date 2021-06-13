@@ -1,6 +1,5 @@
 const Commando = require("discord.js-commando");
 
-
 module.exports = class JumpMusicCommand extends Commando.Command {
   constructor(client) {
     super(client, {
@@ -8,11 +7,11 @@ module.exports = class JumpMusicCommand extends Commando.Command {
       group: "music",
       memberName: "jump",
       description:
-        "Jump from one music to another. List the queue to know which one to jump first.",
+        "Jump from one music to another.",
+      details: "List the queue to know which one to jump first.",
       argsType: "single",
       format: "<musicNo>",
       examples: ["jump 3"],
-      clientPermissions: ["EMBED_LINKS"],
       throttling: {
         usages: 1,
         duration: 5,
@@ -38,7 +37,7 @@ module.exports = class JumpMusicCommand extends Commando.Command {
 
     if (!args)
       return message.reply(
-        "<:scrubnull:797476323533783050> There's no music no. in your argument."
+        "<:scrubnull:797476323533783050> There's no music queue number in your argument."
       );
 
     if (

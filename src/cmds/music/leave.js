@@ -1,7 +1,4 @@
 const Commando = require("discord.js-commando");
-const Discord = require("discord.js");
-
-const { green } = require("../../assets/json/colors.json");
 
 module.exports = class StopMusicCommand extends Commando.Command {
   constructor(client) {
@@ -11,7 +8,6 @@ module.exports = class StopMusicCommand extends Commando.Command {
       group: "music",
       memberName: "leave",
       description: "Stop playing music for you.",
-      clientPermissions: ["EMBED_LINKS"],
       throttling: {
         usages: 1,
         duration: 5,
@@ -36,11 +32,8 @@ module.exports = class StopMusicCommand extends Commando.Command {
       );
 
     this.client.distube.stop(message);
-    const stoppedEmbed = new Discord.MessageEmbed()
-      .setColor(green)
-      .setDescription(
-        "<:scrubgreen:797476323316465676> **Stopped the track, and cleaned the queue.**"
-      );
-    message.channel.send(stoppedEmbed);
+    message.channel.send(
+      "<:scrubgreen:797476323316465676> **Stopped the track, and cleaned the queue.**"
+    );
   }
 };
