@@ -1,17 +1,18 @@
 const Commando = require("discord.js-commando");
 
-module.exports = class JumpMusicCommand extends Commando.Command {
+module.exports = class DeleteSongCommand extends Commando.Command {
   constructor(client) {
     super(client, {
-      name: "jump",
+      name: "delete-song",
+      aliases: ["remove-song", "del-song", "rm-song"],
       group: "music",
-      memberName: "jump",
+      memberName: "del-song",
       description:
-        "Jump from one music to another using a music queue ID.",
-      details: "List the queue to know which one to jump first. THIS ACTION WILL ALSO OVERWRITE ALL SONGS BEFORE YOUR CHOSEN MUSIC!",
+        "Remove a song from the current music queue using a music queue ID.",
+      details: "List the queue to know which one to remove first.",
       argsType: "single",
       format: "<musicNo>",
-      examples: ["jump 3"],
+      examples: ["rm-song 2"],
       throttling: {
         usages: 1,
         duration: 5,
@@ -27,7 +28,7 @@ module.exports = class JumpMusicCommand extends Commando.Command {
 
     if (!voiceChannel)
       return message.reply(
-        "<:scrubnull:797476323533783050> Go to the same VC that I'm blasting music out to jump through."
+        "<:scrubnull:797476323533783050> Go to the same VC that I'm blasting music out to do that action."
       );
 
     if (!queue)
@@ -50,13 +51,20 @@ module.exports = class JumpMusicCommand extends Commando.Command {
       );
 
     try {
-      this.client.distube.jump(message, parseInt(musicNumber));
-      message.channel.send(
-        `⏩ Jumped to a music with the song number: **${musicNumber}**.`
-      );
+      try {
+        await message.channel.send(
+          `
+<:scrubgreen:797476323316465676> Removed this song which matches this music queue ID:
+\`${musicNumber}. ${queue.songs[musicNumber].name} - ${queue.songs[musicNumber].formattedDuration}\`
+\`Music requested by ${queue.songs[musicNumber].user.tag}\`
+            `
+        );
+      } finally {
+        await queue.songs.splice(musicNumber, 1);
+      }
     } catch (err) {
       message.reply(
-        "<:scrubred:797476323169533963> Completely invalid song number."
+        "<:scrubred:797476323169533963> That music queue ID doesn't match with any songs found in the queue."
       );
     }
   }

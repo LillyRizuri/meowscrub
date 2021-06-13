@@ -20,7 +20,6 @@ module.exports = class SkipMusicCommand extends Commando.Command {
     const queue = await this.client.distube.getQueue(message);
 
     const voiceChannel = message.member.voice.channel;
-
     if (!voiceChannel)
       return message.reply(
         "<:scrubnull:797476323533783050> Go to the same VC that I'm blasting music out to do that action."
@@ -29,6 +28,11 @@ module.exports = class SkipMusicCommand extends Commando.Command {
     if (!queue)
       return message.reply(
         "<:scrubnull:797476323533783050> There's no music to play next."
+      );
+
+    if (queue.songs.length === 1)
+      return message.reply(
+        "<:scrubnull:797476323533783050> There's nowhere to skip."
       );
 
     this.client.distube.skip(message);

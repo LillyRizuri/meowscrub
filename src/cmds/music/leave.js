@@ -20,7 +20,6 @@ module.exports = class StopMusicCommand extends Commando.Command {
     const queue = await this.client.distube.getQueue(message);
 
     const voiceChannel = message.member.voice.channel;
-
     if (!voiceChannel)
       return message.reply(
         "<:scrubnull:797476323533783050> Go to the same VC that I'm blasting music out to stop me"
