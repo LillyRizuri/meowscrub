@@ -11,7 +11,7 @@ module.exports = class ListQueueCommand extends Commando.Command {
       group: "music",
       memberName: "queue",
       description: "Display the guild's music queue.",
-      clientPermissions: ["EMBED_LINKS"],
+      clientPermissions: ["EMBED_LINKS", "ADD_REACTIONS", "MANAGE_MESSAGES"],
       throttling: {
         usages: 1,
         duration: 5,
@@ -43,12 +43,18 @@ module.exports = class ListQueueCommand extends Commando.Command {
       .replace("true", "On")
       .replace("false", "Off");
 
-    const queueList = queue.songs
+    const nowPlaying = `[${queue.songs[0].name}](${queue.songs[0].url}) | \`${queue.songs[0].formattedDuration} Requested by: ${queue.songs[0].user.tag}\``;
+
+    const mainQueue = [...queue.songs];
+    mainQueue.shift();
+    const queueMap = mainQueue
       .map(
         (song, id) =>
-          `\`${id}.\` [${song.name}](${song.url}) | \`${song.formattedDuration} Requested by: ${song.user.tag}\`\n`
+          `\`${id + 1}.\` [${song.name}](${song.url}) | \`${song.formattedDuration} Requested by: ${song.user.tag}\`\n`
       )
       .join("\n");
+
+    const queueList = `__Now Playing:__\n${nowPlaying}\n\n__Up Next:__\n${queueMap}`;
 
     const splitQueue = Discord.splitMessage(queueList, {
       maxLength: 1024,
@@ -58,11 +64,11 @@ module.exports = class ListQueueCommand extends Commando.Command {
     });
 
     const currentQueueEmbed = new PaginatedEmbed({
-      descriptions: splitQueue,
       colours: [embedcolor],
+      descriptions: splitQueue,
       duration: 60 * 1000,
       paginationType: "description",
-      itemsPerPage: 2
+      itemsPerPage: 2,
     })
       .setTitle(`Queue for ${message.guild.name}`)
       .setAuthor(
