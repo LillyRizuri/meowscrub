@@ -56,7 +56,7 @@ module.exports = class SearchMusicCommand extends Commando.Command {
       .map(
         (song, id) =>
           `\`${id + 1}.\` [${song.name}](${song.url}) | \`${
-            song.formattedDuration
+            song.formattedDuration ? song.formattedDuration : "Playlist"
           }\`\n`
       )
       .join("\n");
@@ -99,10 +99,10 @@ module.exports = class SearchMusicCommand extends Commando.Command {
             "<:scrubred:797476323169533963> Huh? That's NOT a valid music results' ID."
           );
 
-          this.client.distube.play(
-            message,
-            results[collected.first().content - 1]
-          );
+        this.client.distube.play(
+          message,
+          results[collected.first().content - 1].url
+        );
       })
       .catch(() => {
         message.channel.send(

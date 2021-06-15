@@ -8,10 +8,10 @@ module.exports = class DeleteSongCommand extends Commando.Command {
       group: "music",
       memberName: "del-song",
       description:
-        "Remove a song from the current music queue using a music queue ID.",
+        "Remove a song from the current music queue using a music queue's ID.",
       details: "List the queue to know which one to remove first.",
       argsType: "single",
-      format: "<musicNo>",
+      format: "<musicID>",
       examples: ["rm-song 2"],
       throttling: {
         usages: 1,
@@ -38,7 +38,7 @@ module.exports = class DeleteSongCommand extends Commando.Command {
 
     if (!args)
       return message.reply(
-        "<:scrubnull:797476323533783050> There's no music queue ID in your argument."
+        "<:scrubnull:797476323533783050> There's no music queue's ID in your argument."
       );
 
     if (
@@ -54,7 +54,7 @@ module.exports = class DeleteSongCommand extends Commando.Command {
       try {
         await message.channel.send(
           `
-<:scrubgreen:797476323316465676> Removed this song which matches this music queue ID:
+<:scrubgreen:797476323316465676> Removed this song which matches this music queue's ID:
 \`${musicNumber}. ${queue.songs[musicNumber].name} - ${queue.songs[musicNumber].formattedDuration}\`
 \`Music requested by ${queue.songs[musicNumber].user.tag}\`
             `
@@ -64,7 +64,7 @@ module.exports = class DeleteSongCommand extends Commando.Command {
       }
     } catch (err) {
       message.reply(
-        "<:scrubred:797476323169533963> That music queue ID doesn't match with any songs found in the queue."
+        "<:scrubred:797476323169533963> That ID doesn't match with any songs found in the queue."
       );
     }
   }

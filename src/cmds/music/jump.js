@@ -7,10 +7,10 @@ module.exports = class JumpMusicCommand extends Commando.Command {
       group: "music",
       memberName: "jump",
       description:
-        "Jump from one music to another using a music queue ID.",
+        "Jump from one music to another using a music queue's ID.",
       details: "List the queue to know which one to jump first. THIS ACTION WILL ALSO OVERWRITE ALL SONGS BEFORE YOUR CHOSEN MUSIC!",
       argsType: "single",
-      format: "<musicNo>",
+      format: "<musicID>",
       examples: ["jump 3"],
       throttling: {
         usages: 1,
@@ -37,7 +37,7 @@ module.exports = class JumpMusicCommand extends Commando.Command {
 
     if (!args)
       return message.reply(
-        "<:scrubnull:797476323533783050> There's no music queue ID in your argument."
+        "<:scrubnull:797476323533783050> There's no music queue's ID in your argument."
       );
 
     if (
