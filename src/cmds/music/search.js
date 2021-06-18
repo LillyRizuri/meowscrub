@@ -14,7 +14,7 @@ module.exports = class SearchMusicCommand extends Commando.Command {
       description:
         "Search a music and I list the results here. Then, you can play it by typing a search results' ID.",
       details: "Only the first 15 results will be shown.",
-      format: "<string>",
+      format: "<searchString>",
       examples: ["search daft punk"],
       clientPermissions: ["EMBED_LINKS"],
       throttling: {

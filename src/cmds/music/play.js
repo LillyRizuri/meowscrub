@@ -9,8 +9,8 @@ module.exports = class PlayMusicCommand extends Commando.Command {
       group: "music",
       memberName: "play",
       argsType: "single",
-      description: "Very simple music command with no bullshit whatsoever.",
-      format: "<string>",
+      description: "Very simple music command with no additional stuff whatsoever.",
+      format: "<searchString>",
       examples: ["play very noise"],
       clientPermissions: ["EMBED_LINKS"],
       throttling: {
@@ -39,7 +39,7 @@ module.exports = class PlayMusicCommand extends Commando.Command {
 
     if (!permissions.has("SPEAK"))
       return message.reply(
-        "<:scrubred:797476323169533963> I don't think that I can transmit music into the VC..."
+        "<:scrubred:797476323169533963> I don't think that I can transmit music into the VC.\nPlease contact your nearest server administrator."
       );
 
     if (!music)

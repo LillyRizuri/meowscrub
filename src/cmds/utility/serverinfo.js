@@ -98,7 +98,7 @@ module.exports = class ServerInfoCommand extends Commando.Command {
     const serverInfoEmbed = new Discord.MessageEmbed()
       .setColor(embedcolor)
       .setAuthor(`Reports for: ${message.guild.name}`, message.guild.iconURL())
-      .setThumbnail(message.guild.iconURL())
+      .setThumbnail(message.guild.iconURL({ format: "png", dynamic: true }))
       .addFields(
         {
           name: "Overview",

@@ -46,7 +46,7 @@ module.exports = class LyricsCommand extends Commando.Command {
 
     getSong(options).then((song) => {
       try {
-        const splitLyrics = Discord.splitMessage(trim(song.lyrics, 5700), {
+        const splitLyrics = Discord.Util.splitMessage(trim(song.lyrics, 5700), {
           maxLength: 1024,
           char: "\n",
           prepend: "",

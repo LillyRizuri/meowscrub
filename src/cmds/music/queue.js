@@ -70,7 +70,7 @@ module.exports = class ListQueueCommand extends Commando.Command {
         howManySongs = `${queue.songs.length} songs`;
         break;
     }
-    const splitQueue = Discord.splitMessage(queueList, {
+    const splitQueue = Discord.Util.splitMessage(queueList, {
       maxLength: 1024,
       char: "\n",
       prepend: "",
