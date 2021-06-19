@@ -77,9 +77,9 @@ module.exports = class DeleteWarnCommand extends Commando.Command {
           )
           .setFooter("is this fine?")
           .setTimestamp();
-        message.channel.send(confirmationEmbed);
+        return message.channel.send(confirmationEmbed);
       } else {
-        message.reply(
+        return message.reply(
           `<:scrubred:797476323169533963> This Warn ID isn't a valid ID assigned for ${target.tag}.`
         );
       }
