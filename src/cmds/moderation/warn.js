@@ -60,11 +60,7 @@ module.exports = class WarnCommand extends Commando.Command {
         "<:scrubred:797476323169533963> Warning a bot user is useless y'know."
       );
 
-    const ID = function () {
-      return "_" + Math.random().toString(36).substr(2, 9);
-    };
-
-    const warnId = ID();
+    const warnId = "_" + Math.random().toString(36).substr(2, 9);
 
     args.shift();
 
@@ -83,7 +79,8 @@ module.exports = class WarnCommand extends Commando.Command {
       );
 
     const warning = {
-      author: message.member.user.tag,
+      author: message.author.tag,
+      authorId: message.author.id,
       timestamp: new Date().getTime(),
       warnId,
       reason,
@@ -109,7 +106,10 @@ module.exports = class WarnCommand extends Commando.Command {
     const warnedEmbed = new Discord.MessageEmbed()
       .setColor(green)
       .setDescription(
-        `<:scrubgreen:797476323316465676> **${target.tag}** has been warned.`
+        `
+<:scrubgreen:797476323316465676> **${target.tag}** has been warned for this following reason:
+\`${reason}\`
+        `
       )
       .setFooter(`WarnID: ${warnId}`)
       .setTimestamp();

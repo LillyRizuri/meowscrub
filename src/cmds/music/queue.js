@@ -71,7 +71,7 @@ module.exports = class ListQueueCommand extends Commando.Command {
         break;
     }
     const splitQueue = Discord.Util.splitMessage(queueList, {
-      maxLength: 1024,
+      maxLength: 2048,
       char: "\n",
       prepend: "",
       append: "",
@@ -82,12 +82,13 @@ module.exports = class ListQueueCommand extends Commando.Command {
       descriptions: splitQueue,
       duration: 60 * 1000,
       paginationType: "description",
-      itemsPerPage: 2,
+      itemsPerPage: 1,
     })
       .setTitle(`Queue for ${message.guild.name} - ${howManySongs}`)
       .setAuthor(
         `Loop: ${loopSetting} | Volume: ${queue.volume}% | Autoplay: ${autoplaySetting}`
-      );
+      )
+      .setTimestamp();
 
     currentQueueEmbed.send(message.channel);
   }
