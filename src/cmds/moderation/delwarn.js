@@ -60,7 +60,10 @@ module.exports = class DeleteWarnCommand extends Commando.Command {
     for (const warning of results.warnings) {
       const { warnId } = warning;
       if (args[1] === warnId) {
-        await warnSchema.updateOne({
+        await warnSchema.findOneAndUpdate({
+          guildId,
+          userId,
+        }, {
           guildId,
           userId,
           $pull: {
