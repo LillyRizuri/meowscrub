@@ -1,6 +1,5 @@
 const Commando = require("discord.js-commando");
 
-
 module.exports = class PlayMusicCommand extends Commando.Command {
   constructor(client) {
     super(client, {
@@ -9,7 +8,8 @@ module.exports = class PlayMusicCommand extends Commando.Command {
       group: "music",
       memberName: "play",
       argsType: "single",
-      description: "Very simple music command with no additional stuff whatsoever.",
+      description:
+        "Very simple music command with no additional stuff whatsoever.",
       format: "<searchString>",
       examples: ["play very noise"],
       clientPermissions: ["EMBED_LINKS"],
@@ -47,6 +47,15 @@ module.exports = class PlayMusicCommand extends Commando.Command {
         "<:scrubnull:797476323533783050> I didn't see you searching for a specific music."
       );
 
-    this.client.distube.play(message, music);
+    if (music.length >= 1024)
+      return message.reply(
+        "<:scrubred:797476323169533963> Your search query musn't be longer than/equal 1024 characters."
+      );
+
+    message.channel.send(`🔍 **Searching for:** \`${music}\`**...**`);
+    const results = await this.client.distube.search(music);
+
+    message.channel.send("🎵 **Now attempting to add the song...**");
+    this.client.distube.play(message, results[0].url);
   }
 };

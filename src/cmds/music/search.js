@@ -51,6 +51,12 @@ module.exports = class SearchMusicCommand extends Commando.Command {
         "<:scrubnull:797476323533783050> I didn't see you searching for a specific music."
       );
 
+    if (music.length >= 1024)
+      return message.reply(
+        "<:scrubred:797476323169533963> Your search query musn't be longer than/equal 1024 characters."
+      );
+
+    message.channel.send(`🔍 **Searching for:** \`${music}\`**...**`);
     const results = await this.client.distube.search(music);
     const resultsMap = results
       .map(
@@ -70,7 +76,11 @@ module.exports = class SearchMusicCommand extends Commando.Command {
 
     const searchResultsEmbed = new Discord.MessageEmbed()
       .setColor(embedcolor)
-      .setTitle(`Search Results for: ${music}`)
+      .setAuthor(
+        `Search requested by ${message.author.tag}`,
+        message.author.displayAvatarURL()
+      )
+      .setTitle(`Results for: ${music}`)
       .setDescription(splitResults)
       .setFooter(
         "Type in a music results' ID (number that matches a music result) to play or add the specified the music to the queue. You have 1 minute."
@@ -98,6 +108,10 @@ module.exports = class SearchMusicCommand extends Commando.Command {
           return message.reply(
             "<:scrubred:797476323169533963> Huh? That's NOT a valid music results' ID."
           );
+
+        message.channel.send(
+          "🎵 **Now attempting to add the selected song...**"
+        );
 
         this.client.distube.play(
           message,
