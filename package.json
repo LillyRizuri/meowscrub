@@ -2,6 +2,9 @@
   "name": "meowscrub",
   "version": "2.2.1",
   "description": "General bot. But it's very lacking.",
+  "engines": {
+    "node": "14.15.3"
+  },
   "main": "./src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
