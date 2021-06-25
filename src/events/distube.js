@@ -1,7 +1,7 @@
 const DisTube = require("distube");
 const Discord = require("discord.js");
 
-const { green, what } = require("../assets/json/colors.json");
+const { green } = require("../assets/json/colors.json");
 
 module.exports = {
   name: "ready",
@@ -11,6 +11,8 @@ module.exports = {
       searchSongs: false,
       emitNewSongOnly: true,
       leaveOnFinish: true,
+      youtubeDL: true,
+      updateYouTubeDL: true,
       youtubeCookie: process.env.YTCOOKIE,
     });
     /* To get your YouTube Cookie:
@@ -71,34 +73,28 @@ module.exports = {
         `);
       })
       .on("empty", (message) => {
-        const emptyChannelEmbed = new Discord.MessageEmbed()
-          .setColor(what)
-          .setDescription(
-            "<:scrubnull:797476323533783050> **VC Empty. Leaving the channel...**"
-          );
-        message.channel.send(emptyChannelEmbed);
+        message.channel.send(
+          "<:scrubnull:797476323533783050> **The VC I'm in is empty. Leaving the channel...**"
+        );
       })
       .on("noRelated", (message) => {
-        const noRelatedMusicEmbed = new Discord.MessageEmbed()
-          .setColor(what)
-          .setDescription(
-            "<:scrubnull:797476323533783050> **No related music can be found. Leaving the VC...**"
-          );
-        message.channel.send(noRelatedMusicEmbed);
+        message.channel.send(
+          "<:scrubnull:797476323533783050> **No related music can be found. Attempting to leave the VC...**"
+        );
       })
       .on("finish", (message) => {
-        const endQueueEmbed = new Discord.MessageEmbed()
-          .setColor(what)
-          .setDescription(
-            "<:scrubnull:797476323533783050> **No more songs in queue. Leaving...**"
-          );
-        message.channel.send(endQueueEmbed);
+        message.channel.send(
+          "<:scrubnull:797476323533783050> **The queue is now empty. Leaving the VC...**"
+        );
       })
       .on("error", (message, err) => {
         const errorEmbed = new Discord.MessageEmbed()
           .setColor("#ff0000")
-          .setTitle("(Un)expected Error Occurred.")
-          .setDescription(`\`\`\`${err}\`\`\``);
+          .setAuthor("An error occurred while running the command:")
+          .setDescription(`\`\`\`${err}\`\`\``)
+          .setFooter(
+            "You shouldn't receive an error like this. Please contact a bot owner near you."
+          );
         message.channel.send(errorEmbed);
       });
   },

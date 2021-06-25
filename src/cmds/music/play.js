@@ -52,10 +52,10 @@ module.exports = class PlayMusicCommand extends Commando.Command {
         "<:scrubred:797476323169533963> Your search query musn't be longer than/equal 1024 characters."
       );
 
-    message.channel.send(`🔍 **Searching for:** \`${music}\`**...**`);
+    message.channel.send(`🔍 **Searching for:** \`${music}\``);
     const results = await this.client.distube.search(music);
 
-    message.channel.send("🎵 **Now attempting to add the song...**");
+    message.channel.send("🎶 **Now attempting to add the first result...**");
     this.client.distube.play(message, results[0].url);
   }
 };

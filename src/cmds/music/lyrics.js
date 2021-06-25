@@ -58,7 +58,7 @@ module.exports = class LyricsCommand extends Commando.Command {
           .setTimestamp()
           .addFields({
             name: `Probable Results for: ${songInput}`,
-            value: `[Genius ID Match: ${song.id}](${song.url})`,
+            value: `Genius ID Match: ${song.id} | ${song.url}`,
           });
         splitLyrics.map(async (m) => {
           lyricsEmbed.addFields({

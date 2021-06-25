@@ -17,7 +17,7 @@ module.exports = class DeleteWarnCommand extends Commando.Command {
       format: "<@user> <WarnID>",
       examples: ["delwarn @frockles _g7tfhtshw"],
       clientPermissions: ["EMBED_LINKS"],
-      userPermissions: ["MANAGE_GUILD"],
+      userPermissions: ["BAN_MEMBERS"],
       throttling: {
         usages: 1,
         duration: 5,
