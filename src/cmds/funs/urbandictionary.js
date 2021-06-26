@@ -1,5 +1,6 @@
 const Commando = require("discord.js-commando");
 const Discord = require("discord.js");
+const modules = require("../../modules");
 const fetch = require("node-fetch");
 const utf8 = require("utf8");
 
@@ -42,18 +43,16 @@ module.exports = class DictionaryCommand extends Commando.Command {
 
     try {
       const [answer] = list;
-      const trim = (str, max) =>
-        str.length > max ? `${str.slice(0, max - 3)}...` : str;
 
       const embed = new Discord.MessageEmbed()
         .setColor(urbandictionary)
         .setAuthor("Definition for:", "https://i.imgur.com/RFm5zMt.png")
         .setTitle(answer.word)
         // .setURL(answer.permalink)
-        .setDescription(trim(answer.definition, 2048))
+        .setDescription(modules.trim(answer.definition, 2048))
         .addFields({
           name: "Example",
-          value: trim(answer.example, 1024),
+          value: modules.trim(answer.example, 1024),
         })
         .setFooter(
           `👍${answer.thumbs_up} | 👎${answer.thumbs_down} | Definition by ${answer.author}`

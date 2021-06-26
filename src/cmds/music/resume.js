@@ -34,8 +34,10 @@ module.exports = class ResumeTrackEmbed extends Commando.Command {
 
     switch (paused) {
       case true:
-        // circumvention to a bug in discord.js using node.js v14.7
-        this.client.distube.resume(message).pause(message).resume(message);
+        // circumvention to a bug in discord.js running node.js v14.7
+        this.client.distube.resume(message);
+        this.client.distube.pause(message);
+        this.client.distube.resume(message);
         message.channel.send(
           "<:scrubgreen:797476323316465676> **Resumed the track.**"
         );

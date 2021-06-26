@@ -4,3 +4,7 @@ module.exports.endsWithAny = (suffixes, string) => {
     return string.endsWith(suffix);
   });
 };
+
+module.exports.trim = (string, max) => {
+  return string.length > max ? `${string.slice(0, max - 3)}...` : string;
+};
