@@ -77,6 +77,22 @@ module.exports = {
 
       // check if the message was sent in a global chat channel, and if the target wasn't a bot
       if (message.channel.id === guildChannelId && !message.author.bot) {
+        // check if the target is a bot staff
+        const isBotStaff = await botStaffSchema.findOne({
+          userId: message.author.id,
+        });
+
+        // check if the target is a bot owner/staff
+        // if the target isn't, set up a cooldown for 3 seconds.
+        // eslint-disable-next-line no-empty
+        if (client.isOwner(message.author) || isBotStaff) {
+        } else {
+          gcCooldowns.set(message.author.id, Date.now() + 3000);
+          setTimeout(() => {
+            gcCooldowns.delete(message.author.id);
+          }, 3000);
+        }
+
         // for each guilds that the client was in
         client.guilds.cache.forEach(async (guild) => {
           // if the guild that the client chose happens to be the same guild the message was sent in, return
@@ -103,25 +119,25 @@ module.exports = {
             : null;
 
           let usernamePart;
-          // check if the target is a bot staff
-          const isBotStaff = await botStaffSchema.findOne({
-            userId: message.author.id,
-          });
 
           // check the guild is/isn't a guild test
           if (!process.env.GUILD_TEST || guild.id !== process.env.GUILD_TEST) {
             // if the target is a bot owner/bot staff, have a police emoji append with their username
             if (client.isOwner(message.author) || isBotStaff) {
-              usernamePart = `👮‍♂️ **\`${message.author.tag}\`**`;
+              usernamePart = `👮‍♂️ **\`${message.author.tag}\` - \`${message.guild.name}\`**`;
             } else {
-              usernamePart = `👤 **\`${message.author.tag}\`**`;
+              usernamePart = `👤 **\`${message.author.tag}\` - \`${message.guild.name}\`**`;
             }
           } else if (guild.id === process.env.GUILD_TEST) {
-            // same with above, but add the user id if the guild chosen was a guild test
+            // same with above, but add the user id and the guild id if the guild chosen was a guild test
             if (client.isOwner(message.author) || isBotStaff) {
-              usernamePart = `👮‍♂️ **\`${message.author.tag}\`** | ID: \`${message.author.id}\``;
+              usernamePart = `
+👮‍♂️ **\`${message.author.tag}\` - \`${message.guild.name}\`**
+**userID: \`${message.author.id}\` - guildID: \`${message.guild.id}\`**`;
             } else {
-              usernamePart = `👤 **\`${message.author.tag}\`** | ID: \`${message.author.id}\``;
+              usernamePart = `
+👤 **\`${message.author.tag}\` - \`${message.guild.name}\`**
+**userID: \`${message.author.id}\` - guildID: \`${message.guild.id}\`**`;
             }
           }
 
@@ -158,17 +174,6 @@ module.exports = {
                   );
                 }
               });
-          }
-
-          // check if the target is a bot owner/staff
-          // if the target isn't, set up a cooldown for 3 seconds.
-          if (client.isOwner(message.author) || isBotStaff) {
-            return;
-          } else {
-            gcCooldowns.set(message.author.id, Date.now() + 3000);
-            setTimeout(() => {
-              gcCooldowns.delete(message.author.id);
-            }, 3000);
           }
         });
       }
