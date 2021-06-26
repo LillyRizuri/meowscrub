@@ -1,5 +1,6 @@
 [
   "no, you",
+  "sorry {author}, but i don't want to kill people right now.",
   "{author}, are you sure you want to kill {target}? they seem nice to me.\nrun the command again to confirm.",
   "{author} hired an assassin to kill {target}, but the assassin doesn't want to.",
   "{target} died due to cringe.",
@@ -48,8 +49,17 @@
   "{target} got smacked by a box heading towards them and somehow died (of in-game logics)",
   "{target} played an \"electric\" guitar on stage and died of electric shock.",
   "{author} fired a machine gun at {target}.",
-  "milwaukee pasta bandit found dead, and that was {target}.",
+  "milwaukee pasta bandit was found dead, and that was {target}.",
   "{author} has an execution prepared for {target}...\nimagine what will happen next.",
   "{author} slapped very hard at {target}, resulting in their unconsciousness.\nwill {target} die? i don't know.",
-  "{target} accidentally drank poison and dies on the spot."
+  "{target} accidentally drank poison and dies on the spot.",
+  "somehow, after all that shenanigans, {author} killed {target} from the grave by falling on {target}.",
+  "{author} crushed {target}'s hopes and dreams on super smash bros ultimate by doing a high-knockback atatck on {target} as they were about to grab a ledge.",
+  "{author} strapped {target} to an intercontinental ballistic missile and sent them to north korea.",
+  "{target} made an amogus joke in front of {author} and results in {target} being assassinated by {author}",
+  "being a grammar nazi that {target} is, {author} poisoned {target} out of spite.",
+  "{target} broke into the study girl's house and it results in {target} somehow taking her place.\n{target} can't take it anymore and died after that.",
+  "{author} installed a prank virus into {target}'s phone.\n{target} raged so hard that they threw their phone across the room, and it landed into their face as the phone's final destination.",
+  "{author} planted both red and blue pills into {target}'s cup of water.\n{target} drank that cup of water and it results in {target} being ripped apart mentally, due to both pills containing substances that makes them wake up and sleep at the same time.\n{target} can't take it anymore and died.",
+  "{target} went into an alleyway at nighttime. feeling scared, {target} turns around, and saw a shadow-y figure behind them.\nturns out, it was {author} lunging towards {target}! {target} doesn't have enough response time and it results in them being killed by {author} in cold blood."
 ]
