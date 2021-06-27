@@ -9,15 +9,27 @@ module.exports = class AdjustVolumeCommand extends Commando.Command {
       memberName: "volume",
       argsType: "single",
       description: "Adjust the volume of the music player (in %)",
-      details: "Leave the argument blank to show the current volume of the music player.",
-      format: "<number>",
+      details:
+        "Leave the argument blank to show the current volume of the music player.",
+      format: "[number]",
       examples: ["volume 80"],
+      throttling: {
+        usages: 1,
+        duration: 5,
+      },
       guildOnly: true,
     });
   }
 
   async run(message, args) {
     const queue = this.client.distube.getQueue(message);
+    const voiceChannel = message.member.voice.channel;
+
+    if (!voiceChannel)
+      return message.reply(
+        "<:scrubnull:797476323533783050> Join an appropriate voice channel to loop the music."
+      );
+
     if (!queue)
       return message.reply(
         "<:scrubnull:797476323533783050> There's no queue. Have at least one song before advancing."

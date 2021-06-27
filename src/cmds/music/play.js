@@ -1,4 +1,5 @@
 const Commando = require("discord.js-commando");
+const ytdl = require("ytdl-core");
 
 module.exports = class PlayMusicCommand extends Commando.Command {
   constructor(client) {
@@ -52,10 +53,15 @@ module.exports = class PlayMusicCommand extends Commando.Command {
         "<:scrubred:797476323169533963> Your search query musn't be longer than/equal 1024 characters."
       );
 
-    message.channel.send(`🔍 **Searching for:** \`${music}\``);
-    const results = await this.client.distube.search(music);
+    if (ytdl.validateURL(music)) {
+      message.channel.send("🎶 **Attempting to add the provided music...**");
+      return this.client.distube.play(message, music);
+    } else if (!ytdl.validateURL(music)) {
+      message.channel.send(`🔍 **Searching for:** \`${music}\``);
+      const results = await this.client.distube.search(music);
 
-    message.channel.send("🎶 **Now attempting to add the first result...**");
-    this.client.distube.play(message, results[0].url);
+      message.channel.send("🎶 **Attempting to add the first result...**");
+      return this.client.distube.play(message, results[0].url);
+    }
   }
 };

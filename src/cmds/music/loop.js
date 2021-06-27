@@ -11,7 +11,7 @@ module.exports = class LoopMusicCommand extends Commando.Command {
       description: "Loop your music or queue.",
       details:
         "There are 3 values to choose: `song`, `queue`, or turn it `off`.",
-      format: "<value>",
+      format: "[value]",
       examples: ["loop 1"],
       throttling: {
         usages: 1,
@@ -36,9 +36,15 @@ module.exports = class LoopMusicCommand extends Commando.Command {
         "<:scrubnull:797476323533783050> Must confirm that there's a queue first."
       );
 
+    const loopSetting = queue.repeatMode
+      .toString()
+      .replace("0", "Disabled")
+      .replace("1", "Song")
+      .replace("2", "Queue");
+
     if (!args)
       return message.reply(
-        "<:scrubnull:797476323533783050> There's no value to set.\nEither it's `queue`, `song`, or turn `off`."
+        `<:scrubnull:797476323533783050> Current repeat configuration: **${loopSetting}**`
       );
 
     switch (args) {
