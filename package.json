@@ -42,6 +42,6 @@
     "utf8": "^3.0.0",
     "weather-js": "^2.0.0",
     "weky": "^1.9.9",
-    "ytdl-core": "github:distubejs/node-ytdl-core"
+    "ytdl-core": "^4.8.3"
   }
 }
