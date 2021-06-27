@@ -43,6 +43,8 @@ module.exports = class ListQueueCommand extends Commando.Command {
       .replace("true", "On")
       .replace("false", "Off");
 
+    const audioFilter = queue.filter || "Off";
+
     const nowPlaying = `[${queue.songs[0].name}](${queue.songs[0].url}) | \`${queue.songs[0].formattedDuration} Requested by: ${queue.songs[0].user.tag}\``;
 
     const mainQueue = [...queue.songs];
@@ -50,7 +52,9 @@ module.exports = class ListQueueCommand extends Commando.Command {
     const queueMap = mainQueue
       .map(
         (song, id) =>
-          `\`${id + 1}.\` [${song.name}](${song.url}) | \`${song.formattedDuration} Requested by: ${song.user.tag}\`\n`
+          `\`${id + 1}.\` [${song.name}](${song.url}) | \`${
+            song.formattedDuration
+          } Requested by: ${song.user.tag}\`\n`
       )
       .join("\n");
 
@@ -86,7 +90,7 @@ module.exports = class ListQueueCommand extends Commando.Command {
     })
       .setTitle(`Queue for ${message.guild.name} - ${howManySongs}`)
       .setAuthor(
-        `Loop: ${loopSetting} | Volume: ${queue.volume}% | Autoplay: ${autoplaySetting}`
+        `Volume: ${queue.volume}% | Filter: ${audioFilter} | Loop: ${loopSetting} | Autoplay: ${autoplaySetting}`
       )
       .setTimestamp();
 
