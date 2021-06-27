@@ -1,5 +1,6 @@
 const Commando = require("discord.js-commando");
 const Discord = require("discord.js");
+const moment = require("moment");
 
 const { embedcolor } = require("../../assets/json/colors.json");
 
@@ -22,21 +23,23 @@ module.exports = class ServerInfoCommand extends Commando.Command {
 
   async run(message) {
     const dateTimeOptions = {
-      weekday: "long",
+      weekday: "short",
       year: "numeric",
-      month: "long",
+      month: "short",
       day: "numeric",
       hour: "numeric",
       minute: "numeric",
       timeZoneName: "short",
     };
 
+    const serverOwner = await this.client.users.fetch(message.guild.ownerID);
+
     const createdAt = new Date(message.guild.createdAt).toLocaleDateString(
       "en-US",
       dateTimeOptions
     );
 
-    const serverOwner = await this.client.users.fetch(message.guild.ownerID);
+    const createdAtFromNow = moment(message.guild.createdAt).fromNow();
 
     const allRoles = message.guild.roles.cache.size - 1;
 
@@ -51,6 +54,12 @@ module.exports = class ServerInfoCommand extends Commando.Command {
       message.guild.members.cache.filter((m) => m.user.bot).size;
 
     const botCount = message.guild.members.cache.filter((m) => m.user.bot).size;
+
+    const maximumMembers = message.guild.maximumMembers;
+
+    const guildDescription = message.guild.description
+      ? `"${message.guild.description}"`
+      : "None";
 
     const textChannels = message.guild.channels.cache.filter(
       (channel) => channel.type == "text"
@@ -104,8 +113,9 @@ module.exports = class ServerInfoCommand extends Commando.Command {
           name: "Overview",
           value: `
 • Owner: \`${serverOwner.tag} | ID: ${serverOwner.id}\`
-• Created At: \`${createdAt}\`       
-• \`${memberCount} Member(s) | ${botCount} Bot(s)\`
+• Created: \`${createdAt} (${createdAtFromNow})\`
+• Description: \`${guildDescription}\`
+• \`${memberCount} Member(s) | ${botCount} Bot(s) | Maximum of ${maximumMembers} members\`
 • \`${allRoles} Role(s) | ${allEmojis} Emoji(s) | ${allBoosts} Boost(s) | Tier ${serverTier}\`   
           `,
         },

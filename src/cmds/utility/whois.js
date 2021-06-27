@@ -1,5 +1,6 @@
 const Commando = require("discord.js-commando");
 const Discord = require("discord.js");
+const moment = require("moment");
 
 const { embedcolor } = require("../../assets/json/colors.json");
 
@@ -40,9 +41,9 @@ module.exports = class WhoIsCommand extends Commando.Command {
     }
 
     const dateTimeOptions = {
-      weekday: "long",
+      weekday: "short",
       year: "numeric",
-      month: "long",
+      month: "short",
       day: "numeric",
       hour: "numeric",
       minute: "numeric",
@@ -74,7 +75,7 @@ module.exports = class WhoIsCommand extends Commando.Command {
           value: `
 • ID: \`${target.id}\`
 • Username: \`${target.tag}\`
-• Created: \`${createdAt}\`
+• Created: \`${createdAt} (${moment(target.createdTimestamp).fromNow()})\`
 • Is Bot: \`${isBot}\`
 `,
         })
@@ -101,9 +102,12 @@ module.exports = class WhoIsCommand extends Commando.Command {
       ? target.presence.activities[0].name
       : "None";
 
-    const userPresenceState = target.presence.activities[0]
+    let userPresenceState = target.presence.activities[0]
       ? `: ${target.presence.activities[0].state}`
       : "";
+
+    if (target.presence.activities[0])
+      if (!target.presence.activities[0].state) userPresenceState = "";
 
     const userStatus = target.presence.status
       .replace("dnd", "Do Not Disturb")
@@ -128,7 +132,7 @@ module.exports = class WhoIsCommand extends Commando.Command {
           value: `
 • ID: \`${target.id}\`
 • Username: \`${target.tag}\`
-• Created: \`${createdAt}\` 
+• Created: \`${createdAt} (${moment(target.createdTimestamp).fromNow()})\` 
 • Is Bot: \`${isBot}\`
 `,
         },
@@ -137,7 +141,7 @@ module.exports = class WhoIsCommand extends Commando.Command {
           value: `
 • Nickname: \`${nickname}\`
 • Roles [${member.roles.cache.size - 1}]: ${rolemap}        
-• Joined: \`${joinedTimestamp}\`
+• Joined: \`${joinedTimestamp} (${moment(member.joinedTimestamp).fromNow()})\`
 • Status: \`${userStatus}\`  
 • Top Activity: \`${userPresence}${userPresenceState}\`
                     `,
