@@ -84,6 +84,10 @@ module.exports = class ServerInfoCommand extends Commando.Command {
       afkChannel = "None";
     }
 
+    const defaultMsgNotif = message.guild.defaultMessageNotifications
+      .replace("All", "All messages")
+      .replace("MENTIONS", "Only @mentions");
+
     const explicitContentFilter = message.guild.explicitContentFilter
       .split("_")
       .join(" ")
@@ -116,7 +120,8 @@ module.exports = class ServerInfoCommand extends Commando.Command {
 • Created: \`${createdAt} (${createdAtFromNow})\`
 • Description: \`${guildDescription}\`
 • \`${memberCount} Member(s) | ${botCount} Bot(s) | Maximum of ${maximumMembers} members\`
-• \`${allRoles} Role(s) | ${allEmojis} Emoji(s) | ${allBoosts} Boost(s) | Tier ${serverTier}\`   
+• \`${allRoles} Role(s) | ${allEmojis} Emoji(s) | ${allBoosts} Boost(s) | Tier ${serverTier}\`
+• \`${defaultMsgNotif} notified by default\`   
           `,
         },
         {
@@ -130,12 +135,12 @@ module.exports = class ServerInfoCommand extends Commando.Command {
           name: "All Channels",
           value: `
 • AFK Voice Channel: \`${afkChannel}\`
-• \`${textChannels} Text | ${voiceChannels} Voice | ${parentChannels} Category | ${newsChannels} News\`
+• \`${textChannels} Text Ch. | ${voiceChannels} Voice Ch. | ${parentChannels} Category Ch. | ${newsChannels} News\`
           `,
         },
         {
           name: "Community Features",
-          value: `\`• ${communityFeatures}\``,
+          value: `• \`${communityFeatures}\``,
         }
       )
       .setFooter(`GuildID: ${message.guild.id}`)

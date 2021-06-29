@@ -102,12 +102,14 @@ module.exports = class WhoIsCommand extends Commando.Command {
       ? target.presence.activities[0].name
       : "None";
 
-    let userPresenceState = target.presence.activities[0]
-      ? `: ${target.presence.activities[0].state}`
-      : "";
-
-    if (target.presence.activities[0])
-      if (!target.presence.activities[0].state) userPresenceState = "";
+    let userPresenceState;
+    if (target.presence.activities[0]) {
+      if (target.presence.activities[0].state) {
+        userPresenceState = `: ${target.presence.activities[0].state}`;
+      } else if (!target.presence.activities[0].state) {
+        userPresenceState = "";
+      }
+    }
 
     const userStatus = target.presence.status
       .replace("dnd", "Do Not Disturb")
