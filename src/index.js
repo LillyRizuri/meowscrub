@@ -13,7 +13,7 @@ const client = new Commando.CommandoClient({
   // Discord Support Server Invite surrounded with "<>" goes here
   invite: `<${process.env.DISCORDINVITE}>`,
   // Do not modify this for safety purposes
-  disableMentions: "all",
+  disableMentions: "everyone",
   partials: ["USER", "CHANNEL", "GUILD_MEMBER", "MESSAGE", "REACTION"],
   intents: new Discord.Intents(Discord.Intents.ALL),
 });

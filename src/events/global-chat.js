@@ -141,6 +141,16 @@ module.exports = {
             }
           }
 
+          // transform all user mentions in message content to usernames and tags
+          let modifiedMessageContent;
+          message.mentions.users.each(async (user) => {
+            modifiedMessageContent = message.content
+              .split(`<@!${user.id}>`)
+              .join(`@${user.tag}`);
+
+            message.content = modifiedMessageContent;
+          });
+
           // check if the message contains any attachments
           if (!attachment) {
             await channel
