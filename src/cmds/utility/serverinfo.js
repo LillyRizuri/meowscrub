@@ -135,7 +135,7 @@ module.exports = class ServerInfoCommand extends Commando.Command {
           name: "All Channels",
           value: `
 • AFK Voice Channel: \`${afkChannel}\`
-• \`${textChannels} Text Ch. | ${voiceChannels} Voice Ch. | ${parentChannels} Category Ch. | ${newsChannels} News\`
+• \`${textChannels} Text Ch. | ${voiceChannels} Voice Ch. | ${parentChannels} Category Ch. | ${newsChannels} News Ch.\`
           `,
         },
         {
