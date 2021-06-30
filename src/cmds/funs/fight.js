@@ -38,9 +38,15 @@ module.exports = class FightCommand extends Commando.Command {
     const prepareFight = new fight({
         client: this.client,
         message: message,
-        acceptMessage: `Do you want to fight **${message.author.tag}**?`,
+        acceptMessage: `${target}, Do you want to fight **${message.author.tag}**?`,
         challenger: message.author,
         opponent: target,
+        hitButtonText: "Attack",
+        hitButtonColor: "red",
+        healButtonText: "Heal",
+        healButtonColor:  "green",
+        cancelButtonText: "Run",
+        cancelButtonColor: "blurple",
     });
 
     prepareFight.start();

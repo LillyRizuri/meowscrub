@@ -18,6 +18,9 @@ const client = new Commando.CommandoClient({
   intents: new Discord.Intents(Discord.Intents.ALL),
 });
 
+const disbut = require("discord-buttons");
+disbut(client);
+
 client.on("ready", async () => {
   client.registry
     .registerGroups([
