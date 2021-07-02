@@ -148,6 +148,12 @@ module.exports = {
               .split(`<@!${user.id}>`)
               .join(`@${user.tag}`);
 
+            // check if nothing has changed
+            if (modifiedMessageContent === message.content)
+              modifiedMessageContent = message.content
+                .split(`<@${user.id}>`)
+                .join(`@${user.tag}`);
+
             message.content = modifiedMessageContent;
           });
 
