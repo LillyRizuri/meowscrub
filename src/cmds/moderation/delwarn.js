@@ -57,21 +57,24 @@ module.exports = class DeleteWarnCommand extends Commando.Command {
       userId,
     });
 
-    for (const warning of results.warnings) {
-      const { warnId } = warning;
+    for (let i = 0; i < results.warnings.length; i++) {
+      const { warnId } = results.warnings[i];
       if (args[1] === warnId) {
-        await warnSchema.findOneAndUpdate({
-          guildId,
-          userId,
-        }, {
-          guildId,
-          userId,
-          $pull: {
-            warnings: {
-              warnId,
-            },
+        await warnSchema.findOneAndUpdate(
+          {
+            guildId,
+            userId,
           },
-        });
+          {
+            guildId,
+            userId,
+            $pull: {
+              warnings: {
+                warnId,
+              },
+            },
+          }
+        );
 
         const confirmationEmbed = new Discord.MessageEmbed()
           .setColor(green)
@@ -81,10 +84,6 @@ module.exports = class DeleteWarnCommand extends Commando.Command {
           .setFooter("is this fine?")
           .setTimestamp();
         return message.channel.send(confirmationEmbed);
-      } else {
-        return message.reply(
-          `<:scrubred:797476323169533963> This Warn ID isn't a valid ID assigned for ${target.tag}.`
-        );
       }
     }
   }
