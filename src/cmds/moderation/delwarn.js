@@ -86,5 +86,15 @@ module.exports = class DeleteWarnCommand extends Commando.Command {
         return message.channel.send(confirmationEmbed);
       }
     }
+
+    const afterProcess = await warnSchema.findOne({
+      guildId,
+      userId,
+    });
+
+    if ((results.warnings = afterProcess.warnings))
+      return message.reply(
+        `<:scrubred:797476323169533963> The Warn ID you provided isn't a valid ID assigned for ${target.tag}.`
+      );
   }
 };
