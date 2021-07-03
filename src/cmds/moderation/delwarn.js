@@ -94,7 +94,7 @@ module.exports = class DeleteWarnCommand extends Commando.Command {
 
     if ((results.warnings = afterProcess.warnings))
       return message.reply(
-        `<:scrubred:797476323169533963> The Warn ID you provided isn't a valid ID assigned for ${target.tag}.`
+        `<:scrubred:797476323169533963> The Warn ID you provided isn't a valid ID assigned for **${target.tag}**.`
       );
   }
 };
