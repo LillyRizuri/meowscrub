@@ -5,8 +5,8 @@ const userBlacklistSchema = require("../models/user-blacklist-schema");
 
 module.exports = {
   name: "message",
-  // eslint-disable-next-line no-unused-vars
-  async execute(message, client) {
+  async execute(message) {
+    if (!message.gulid) return;
     try {
       let channel;
       const guildId = message.guild.id;
