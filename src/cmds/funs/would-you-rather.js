@@ -8,7 +8,7 @@ module.exports = class WouldYouRatherCommand extends Commando.Command {
       aliases: ["wyr"],
       group: "funs",
       memberName: "would-you-rather",
-      description: "This command is a game of preference, made up of many would-you-rather questions with statistics and debate.",
+      description: "This command initiates a game of preference, made up of many \"would-you-rather\" questions with statistics and debate.",
       throttling: {
         usages: 1,
         duration: 5,
