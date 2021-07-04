@@ -6,7 +6,7 @@ const userBlacklistSchema = require("../models/user-blacklist-schema");
 module.exports = {
   name: "message",
   async execute(message) {
-    if (!message.gulid) return;
+    if (message.channel.type === "dm") return;
     try {
       let channel;
       const guildId = message.guild.id;

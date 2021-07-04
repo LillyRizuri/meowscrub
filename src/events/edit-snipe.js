@@ -1,6 +1,7 @@
 module.exports = {
   name: "messageUpdate",
   async execute(message, newMessage, client) {
+    if (message.channel.type === "dm") return;
     client.editsnipe = new Map();
     switch (message.channel.nsfw) {
       case false:

@@ -6,7 +6,7 @@ const { red, yellow, green } = require("../assets/json/colors.json");
 module.exports = {
   name: "message",
   async execute(message) {
-    if (!message.gulid) return;
+    if (message.channel.type === "dm") return;
     const guildId = message.guild.id;
     if (message.author.bot) return;
     const afkResults = await afkSchema.findOne({

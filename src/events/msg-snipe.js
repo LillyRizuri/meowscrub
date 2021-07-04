@@ -1,6 +1,7 @@
 module.exports = {
   name: "messageDelete",
   async execute(message, client) {
+    if (message.channel.type === "dm") return;
     client.snipe = new Map();
     switch (message.channel.nsfw) {
       case false:

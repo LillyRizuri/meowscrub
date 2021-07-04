@@ -9,7 +9,7 @@ const gcCooldowns = new Map();
 module.exports = {
   name: "message",
   async execute(message, client) {
-    if (!message.gulid) return;
+    if (message.channel.type === "dm") return;
     try {
       let guildChannelId;
       let otherGuildChannelId;

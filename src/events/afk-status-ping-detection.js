@@ -7,7 +7,7 @@ const { what } = require("../assets/json/colors.json");
 module.exports = {
   name: "message",
   async execute(message) {
-    if (!message.gulid) return;
+    if (message.channel.type === "dm") return;
     try {
       const guildId = message.guild.id;
       if (message.author.bot) return;
