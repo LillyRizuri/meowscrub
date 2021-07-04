@@ -1,6 +1,5 @@
 const Commando = require("discord.js-commando");
-const { tictactoe } = require("reconlx");
-
+const { TicTacToe } = require("weky");
 
 module.exports = class TicTacToeCommand extends Commando.Command {
   constructor(client) {
@@ -38,9 +37,14 @@ module.exports = class TicTacToeCommand extends Commando.Command {
         "<:scrubred:797476323169533963> You can't be alone like that."
       );
 
-    new tictactoe({
-      player_two: target,
+    const tttGame = new TicTacToe({
       message: message,
+      opponent: target,
+      xColor: "red",
+      oColor: "blurple",
+      xEmoji: "❌",
+      oEmoji: "0️⃣",
     });
+    tttGame.start();
   }
 };
