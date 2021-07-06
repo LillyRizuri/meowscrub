@@ -74,6 +74,7 @@ module.exports = class ListQueueCommand extends Commando.Command {
         howManySongs = `${queue.songs.length} songs`;
         break;
     }
+
     const splitQueue = Discord.Util.splitMessage(queueList, {
       maxLength: 2048,
       char: "\n",
@@ -88,7 +89,7 @@ module.exports = class ListQueueCommand extends Commando.Command {
       paginationType: "description",
       itemsPerPage: 1,
     })
-      .setTitle(`Queue for ${message.guild.name} - ${howManySongs}`)
+      .setTitle(`${howManySongs} | Queue Duration: ${queue.formattedDuration}`)
       .setAuthor(
         `Volume: ${queue.volume}% | Filter: ${audioFilter} | Loop: ${loopSetting} | Autoplay: ${autoplaySetting}`
       )
