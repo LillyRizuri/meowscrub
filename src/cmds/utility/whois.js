@@ -106,7 +106,10 @@ module.exports = class WhoIsCommand extends Commando.Command {
     if (target.presence.activities[0]) {
       if (target.presence.activities[0].state) {
         userPresenceState = `: ${target.presence.activities[0].state}`;
-      } else if (!target.presence.activities[0].state) {
+      } else if (
+        !target.presence.activities[0].state ||
+        typeof target.presence.activities[0].state === "undefined"
+      ) {
         userPresenceState = "";
       }
     }
