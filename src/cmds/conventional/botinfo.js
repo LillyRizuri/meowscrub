@@ -1,8 +1,6 @@
 const Commando = require("discord.js-commando");
-const Discord = require("discord.js");
+const { PaginatedEmbed } = require("embed-paginator");
 const { version } = require("../../../package.json");
-
-const { embedcolor } = require("../../assets/json/colors.json");
 
 module.exports = class BotInfoCommand extends Commando.Command {
   constructor(client) {
@@ -40,14 +38,10 @@ module.exports = class BotInfoCommand extends Commando.Command {
 
     const totalGuild = this.client.guilds.cache.size;
 
-    const botinfoEmbed = new Discord.MessageEmbed()
-      .setColor(embedcolor)
-      .setAuthor(
-        `Client info for ${this.client.user.username}`,
-        this.client.user.displayAvatarURL()
-      )
-      .setThumbnail(this.client.user.displayAvatarURL())
-      .addFields(
+    const infoEmbed = new PaginatedEmbed({
+      colours: ["RANDOM"],
+      descriptions: [`2020 - 2021 ${author.tag}`],
+      fields: [
         {
           name: "Stats",
           value: `
@@ -63,9 +57,55 @@ module.exports = class BotInfoCommand extends Commando.Command {
           value: `
 • [\`Client Invite\`](${clientInvite})\`|\`[\`Source Code\`](https://github.com/scrubthispie/meowscrub)\`|\`[\`Server Invite\`](${process.env.DISCORDINVITE})    
           `,
+        },
+        {
+          name: "Special Thanks",
+          value: `
+• discord.js
+\`A powerful node.js module that allows you to interact with the Discord API\`
+• discord.js-commando
+\`The official command framework for discord.js\`
+• commando-provider-mongo
+\`Effectively replacing SQLite Provider with MongoDB Provider for discord.js-commando\`
+
+• mongodb
+\`The database for modern applications, utilizes JSON-like documents for storing datas\`
+• mongoose
+\`A MongoDB object modeling tool designed to work in an asynchronous environment\`
+• quick.db
+\`Access & store data in a low to medium volume environment via better-sqlite3\`
+          `,
+        },
+        {
+          name: "\u200b",
+          value: `
+• distube
+\`A discord.js module to simplify your music commands and play songs with audio filters on Discord without any API key\`
+• ffmpeg-static
+\`A complete, cross-platform solution to record, convert and stream audio and video\`
+
+• weky
+\`For the tic-tac-toe, fight, would-you-rather command\`
+
+• weather-js
+\`A module for obtaining weather information from weather.service.msn.com somehow\`
+• genius-lyrics-api
+\`Leverages Genius API to search and fetch/scrape song lyrics and album art\`
+• covidtracker
+\`View information on the Coronavirus outbreak around the world\`
+          `
         }
+      ],
+      duration: 60 * 1000,
+      itemsPerPage: 2,
+      paginationType: "field",
+    })
+      .setAuthor(
+        `Client info for ${this.client.user.username}`,
+        this.client.user.displayAvatarURL()
       )
-      .setFooter(`2020 - 2021 ${author.tag}`);
-    message.channel.send(botinfoEmbed);
+      .setThumbnail(this.client.user.displayAvatarURL());
+
+    infoEmbed.send(message.channel);
   }
 };
