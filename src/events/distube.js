@@ -1,4 +1,3 @@
-const DisTube = require("distube");
 const Discord = require("discord.js");
 
 const { green } = require("../assets/json/colors.json");
@@ -6,24 +5,6 @@ const { green } = require("../assets/json/colors.json");
 module.exports = {
   name: "ready",
   async execute(client) {
-    // support for music playback
-    client.distube = new DisTube(client, {
-      searchSongs: false,
-      emitNewSongOnly: true,
-      leaveOnFinish: true,
-      youtubeDL: true,
-      updateYouTubeDL: true,
-      youtubeCookie: process.env.YTCOOKIE,
-    });
-    /* To get your YouTube Cookie:
-    / - Log in using your dummy channel (HIGHLY recommended because autoplay)
-    / - Navigate to YouTube in a web browser
-    / - Open up Developer Tools (opt+cmd+j on mac, ctrl+shift+j on windows)
-    / - Go to the Network Tab
-    / - Click on `sw.js_data` when it appears
-    / - Scroll down to "Request Headers"
-    / - Find the "cookie" header and copy its entire contents
-    */
     client.distube
       .on("initQueue", (queue) => {
         queue.autoplay = false;
@@ -88,14 +69,13 @@ module.exports = {
         );
       })
       .on("error", (message, err) => {
-        const errorEmbed = new Discord.MessageEmbed()
-          .setColor("#ff0000")
-          .setAuthor("An error occurred while running the command:")
-          .setDescription(`\`\`\`${err}\`\`\``)
-          .setFooter(
-            "You shouldn't receive an error like this. Please contact a bot owner near you."
-          );
-        message.channel.send(errorEmbed);
+        message.channel.send(
+          `
+An unexpected error occurred whie executing the command.
+You shouldn't receive an error like this. Please contact your nearest bot owner near you.
+\`\`\`${err}\`\`\`
+          `
+        );
       });
   },
 };

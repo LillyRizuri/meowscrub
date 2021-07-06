@@ -2,7 +2,7 @@ require("dotenv").config();
 
 const Commando = require("discord.js-commando");
 const Discord = require("discord.js");
-const { getSong } = require("genius-lyrics-api");
+const { getSong, searchSong } = require("genius-lyrics-api");
 
 const { music } = require("../../assets/json/colors.json");
 
@@ -42,37 +42,41 @@ module.exports = class LyricsCommand extends Commando.Command {
         "<:scrubnull:797476323533783050> The name query is blank."
       );
 
-    message.channel.send("Searching, I guess...");
+    message.channel.send(
+      `🔍 **Searching for:** \`${songInput}\`\nPlease be patient, this will take a while...`
+    );
 
-    getSong(options).then((song) => {
-      try {
-        const splitLyrics = Discord.Util.splitMessage(trim(song.lyrics, 5700), {
-          maxLength: 1024,
-          char: "\n",
-          prepend: "",
-          append: "",
+    const song = await getSong(options);
+    const searchSongInfo = await searchSong(options);
+    const firstSongInfo = searchSongInfo[0];
+
+    try {
+      const splitLyrics = Discord.Util.splitMessage(trim(song.lyrics, 5700), {
+        maxLength: 1024,
+        char: "\n",
+        prepend: "",
+        append: "",
+      });
+      const lyricsEmbed = new Discord.MessageEmbed()
+        .setColor(music)
+        .setFooter("Lyrics Provided by Genius")
+        .setTimestamp()
+        .addFields({
+          name: `Results for: ${firstSongInfo.title}`,
+          value: `Genius ID Match: [${song.id}](${song.url})`,
         });
-        const lyricsEmbed = new Discord.MessageEmbed()
-          .setColor(music)
-          .setFooter("Lyrics Provided by Genius")
-          .setTimestamp()
-          .addFields({
-            name: `Probable Results for: ${songInput}`,
-            value: `Genius ID Match: ${song.id} | ${song.url}`,
-          });
-        splitLyrics.map(async (m) => {
-          lyricsEmbed.addFields({
-            name: "\u200b",
-            value: m,
-          });
+      splitLyrics.map(async (m) => {
+        lyricsEmbed.addFields({
+          name: "\u200b",
+          value: m,
         });
-        message.channel.send(lyricsEmbed);
-      } catch (err) {
-        return message.reply(
-          `<:scrubred:797476323169533963> No results for: **${songInput}**.`
-        );
-      }
-    });
+      });
+      message.channel.send(lyricsEmbed);
+    } catch (err) {
+      return message.reply(
+        `<:scrubred:797476323169533963> No results for: **${songInput}**.`
+      );
+    }
   }
 };
 

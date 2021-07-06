@@ -2,6 +2,7 @@ require("dotenv").config();
 
 const Commando = require("discord.js-commando");
 const Discord = require("discord.js");
+const DisTube = require("distube");
 const path = require("path");
 const fs = require("fs");
 
@@ -20,6 +21,15 @@ const client = new Commando.CommandoClient({
 
 const disbut = require("discord-buttons");
 disbut(client);
+
+client.distube = new DisTube(client, {
+  searchSongs: false,
+  emitNewSongOnly: true,
+  leaveOnFinish: true,
+  youtubeDL: true,
+  updateYouTubeDL: true,
+  youtubeCookie: process.env.YTCOOKIE,
+});
 
 client.on("ready", async () => {
   client.registry
