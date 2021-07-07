@@ -32,7 +32,7 @@ module.exports = {
         let estimatedTime = modules.formatDuration(
           queue.duration * 1000 - song.duration * 1000 - queue.currentTime
         );
-        if (queue.songs[0].formattedDuration === "Live")
+        if (queue.songs[0].formattedDuration === "Live" || queue.repeatMode === 1)
           estimatedTime = "Until you skip, that is";
         else if (
           queue.filter &&
@@ -62,7 +62,7 @@ Estimated Time Until Playing: **${estimatedTime}**
           .setDescription(
             `
 <:scrubgreen:797476323316465676> **Now Playing Playlist:**
-[${playlist.name}](${playlist.url}) - **${playlist.songs.length} songs**
+[${playlist.name}](${playlist.url}) - **${playlist.formattedDuration}** - **${playlist.songs.length} songs**
 
 <:scrubgreen:797476323316465676> **Playing First:**
 [${song.name}](${song.url}) - **${song.formattedDuration}**
@@ -77,7 +77,7 @@ Estimated Time Until Playing: **${estimatedTime}**
         let estimatedTime = modules.formatDuration(
           queue.duration * 1000 - playlist.duration * 1000 - queue.currentTime
         );
-        if (queue.songs[0].formattedDuration === "Live")
+        if (queue.songs[0].formattedDuration === "Live" || queue.repeatMode === 1)
           estimatedTime = "Until you skip, that is";
         else if (
           queue.filter &&
@@ -90,7 +90,7 @@ Estimated Time Until Playing: **${estimatedTime}**
           .setDescription(
             `
 <:scrubnull:797476323533783050> **Added the following playlist to the queue:**
-[${playlist.name}](${playlist.url}) - **${playlist.songs.length} songs**
+[${playlist.name}](${playlist.url}) - **${playlist.formattedDuration}** - **${playlist.songs.length} songs**
 
 Estimated Time Until Playing: **${estimatedTime}**
   `
@@ -123,7 +123,7 @@ Estimated Time Until Playing: **${estimatedTime}**
           `
 An unexpected error occurred whie executing the command.
 You shouldn't receive an error like this. Please contact your nearest bot owner near you.
-\`\`\`${err}\`\`\`
+\`\`\`\n${err}\n\`\`\`
           `
         );
       });
