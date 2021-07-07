@@ -1,10 +1,11 @@
 const Commando = require("discord.js-commando");
 const Discord = require("discord.js");
+const { PaginatedEmbed } = require("embed-paginator");
 const covid = require("covidtracker");
 const fetch = require("node-fetch");
 const statesJson = require("../../assets/json/states.json");
 
-const { red, embedcolor } = require("../../assets/json/colors.json");
+const { red } = require("../../assets/json/colors.json");
 
 module.exports = class CovidStates extends Commando.Command {
   constructor(client) {
@@ -76,51 +77,70 @@ module.exports = class CovidStates extends Commando.Command {
           flagURL = statesJson[i].state_flag_url;
       }
 
-      const covidStatesEmbed = new Discord.MessageEmbed()
-        .setColor(embedcolor)
+      const active = `${state.active.toLocaleString()} (${(
+        (state.active / state.cases) *
+        100
+      ).toFixed(2)}%)`;
+
+      const recovered = `${state.recovered.toLocaleString()} (${(
+        (state.recovered / state.cases) *
+        100
+      ).toFixed(2)})%`;
+
+      const deaths = `${state.deaths.toLocaleString()} (${(
+        (state.deaths / state.cases) *
+        100
+      ).toFixed(2)}%)`;
+
+      let lastUpdated = `Last Updated: ${updatedTime}`;
+      if (imageLink) lastUpdated = `${lastUpdated}\n[Image](${imageLink})`;
+
+      const definedStateEmbed = new PaginatedEmbed({
+        colours: ["RANDOM"],
+        descriptions: [lastUpdated],
+        fields: [
+          {
+            name: "Cases",
+            value: `
+• All Cases: \`${state.cases.toLocaleString()}\`
+• Active Cases: \`${active}\`   
+            `,
+            inline: true,
+          },
+          {
+            name: "Recovered/Deaths/Tests",
+            value: `
+• Recovered: \`${recovered}\`
+• Deaths: \`${deaths}\`
+• Tests: \`${state.tests.toLocaleString()}\`            
+            `,
+            inline: true,
+          },
+          {
+            name: "Today",
+            value: `
+• Today Cases: \`+ ${state.todayCases.toLocaleString()}\`
+• Today Deaths: \`+ ${state.todayDeaths.toLocaleString()}\`
+            `,
+            inline: true,
+          },
+          {
+            name: "Per One Million",
+            value: `
+• Cases Per Mil: \`${state.casesPerOneMillion.toLocaleString()}\`  
+• Deaths Per Mil: \`${state.deathsPerOneMillion.toLocaleString()}\`
+• Tests Per Mil: \`${state.testsPerOneMillion.toLocaleString()}\`
+            `,
+            inline: true,
+          },
+        ],
+        duration: 60 * 1000,
+        itemsPerPage: 2,
+        paginationType: "field",
+      })
         .setAuthor(state.state)
-        .setThumbnail(flagURL)
-        .addFields(
-          {
-            name: "Confirmed Cases",
-            value: `**${state.cases.toLocaleString()}**`,
-            inline: true,
-          },
-          {
-            name: "Today Cases",
-            value: `+${state.todayCases.toLocaleString()}`,
-            inline: true,
-          },
-          {
-            name: "Today Deaths",
-            value: `+${state.todayDeaths.toLocaleString()}`,
-            inline: true,
-          },
-          {
-            name: "Active",
-            value: `${state.active.toLocaleString()} (${(
-              (state.active / state.cases) *
-              100
-            ).toFixed(2)}%)`,
-            inline: true,
-          },
-          {
-            name: "Deaths",
-            value: `${state.deaths.toLocaleString()} (${(
-              (state.deaths / state.cases) *
-              100
-            ).toFixed(2)}%)`,
-            inline: true,
-          },
-          {
-            name: "Tests",
-            value: state.tests.toLocaleString(),
-            inline: true,
-          }
-        )
-        .setFooter(`Last Updated: ${updatedTime}`);
-      if (imageLink) covidStatesEmbed.setImage(imageLink);
-      message.channel.send(covidStatesEmbed);
+        .setThumbnail(flagURL);
+      definedStateEmbed.send(message.channel);
     } catch (err) {
       const noResultsEmbed = new Discord.MessageEmbed()
         .setColor(red)

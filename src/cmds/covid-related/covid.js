@@ -1,9 +1,10 @@
 const Commando = require("discord.js-commando");
 const Discord = require("discord.js");
+const { PaginatedEmbed } = require("embed-paginator");
 const covid = require("covidtracker");
 const fetch = require("node-fetch");
 
-const { red, embedcolor } = require("../../assets/json/colors.json");
+const { red } = require("../../assets/json/colors.json");
 
 Object.defineProperty(String.prototype, "toProperCase", {
   value: function () {
@@ -54,67 +55,72 @@ module.exports = class CovidCommand extends Commando.Command {
         dateTimeOptions
       );
 
-      const globalCasesEmbed = new Discord.MessageEmbed()
-        .setColor(embedcolor)
-        .setAuthor("Coronavirus Stats")
-        .addFields(
+      const active = `${totalStats.active.toLocaleString()} (${(
+        (totalStats.active / totalStats.cases) *
+        100
+      ).toFixed(2)}%)`;
+
+      const recovered = `${totalStats.recovered.toLocaleString()} (${(
+        (totalStats.recovered / totalStats.cases) *
+        100
+      ).toFixed(2)}%)`;
+
+      const deaths = `${totalStats.deaths.toLocaleString()} (${(
+        (totalStats.deaths / totalStats.cases) *
+        100
+      ).toFixed(2)}%)`;
+
+      const allCasesEmbed = new PaginatedEmbed({
+        colours: ["RANDOM"],
+        descriptions: [
+          `Last Updated: ${updatedTime}\n[Image](https://xtrading.io/static/layouts/qK98Z47ptC-embed.png?newest=${Date.now()})`,
+        ],
+        fields: [
           {
-            name: "Confirmed Cases",
-            value: `**${totalStats.cases.toLocaleString()}**`,
+            name: "Cases",
+            value: `
+• All Cases: \`${totalStats.cases.toLocaleString()}\`            
+• Active Cases: \`${active}\`
+• Critical Cases: \`${totalStats.critical.toLocaleString()}\`
+            `,
             inline: true,
           },
           {
-            name: "Today Cases",
-            value: `+${totalStats.todayCases.toLocaleString()}`,
+            name: "Recovered/Deaths/Tests",
+            value: `
+• Recovered: \`${recovered}\`
+• Deaths: \`${deaths}\`
+• Tests: \`${totalStats.tests.toLocaleString()}\`
+            `,
             inline: true,
           },
           {
-            name: "Today Deaths",
-            value: `+${totalStats.todayDeaths.toLocaleString()}`,
+            name: "Today",
+            value: `
+• Today Cases: \`+ ${totalStats.todayCases.toLocaleString()}\`
+• Today Recovered: \`+ ${totalStats.todayRecovered.toLocaleString()}\`  
+• Today Deaths: \`+ ${totalStats.todayDeaths.toLocaleString()}\`          
+            `,
             inline: true,
           },
           {
-            name: "Active",
-            value: totalStats.active.toLocaleString(),
+            name: "Per One Million",
+            value: `
+• Cases Per Mil: \`${totalStats.casesPerOneMillion.toLocaleString()}\`  
+• Deaths Per Mil: \`${totalStats.deathsPerOneMillion.toLocaleString()}\`
+• Tests Per Mil: \`${totalStats.testsPerOneMillion.toLocaleString()}\`
+• Active Per Mil: \`${totalStats.activePerOneMillion.toLocaleString()}\`
+• Recovered Per Mil: \`${totalStats.recoveredPerOneMillion.toLocaleString()}\`
+• Critical Per MIl: \`${totalStats.criticalPerOneMillion.toLocaleString()}\`
+            `,
             inline: true,
           },
-          {
-            name: "Recovered",
-            value: `${totalStats.recovered.toLocaleString()} (${(
-              (totalStats.recovered / totalStats.cases) *
-              100
-            ).toFixed(2)}%`,
-            inline: true,
-          },
-          {
-            name: "Deaths",
-            value: `${totalStats.deaths.toLocaleString()} (${(
-              (totalStats.deaths / totalStats.cases) *
-              100
-            ).toFixed(2)}%)`,
-            inline: true,
-          },
-          {
-            name: "Tests",
-            value: totalStats.tests.toLocaleString(),
-            inline: true,
-          },
-          {
-            name: "Cases Per Mil.",
-            value: totalStats.casesPerOneMillion.toLocaleString(),
-            inline: true,
-          },
-          {
-            name: "Deaths Per Mil.",
-            value: totalStats.deathsPerOneMillion.toLocaleString(),
-            inline: true,
-          }
-        )
-        .setImage(
-          `https://xtrading.io/static/layouts/qK98Z47ptC-embed.png?newest=${Date.now()}`
-        )
-        .setFooter(`Last Updated: ${updatedTime}`);
-      message.channel.send(globalCasesEmbed);
+        ],
+        duration: 60 * 1000,
+        itemsPerPage: 2,
+        paginationType: "field",
+      }).setAuthor("Coronavirus Worldwide Stats");
+      allCasesEmbed.send(message.channel);
     } else {
       try {
         message.channel.send("Retrieving Informations, I guess...");
@@ -127,8 +133,8 @@ module.exports = class CovidCommand extends Commando.Command {
         let wikiName;
         const wikiAliases = {
           "S. Korea": "South Korea",
-          "UK": "United Kingdom",
-          "USA": "United States",
+          UK: "United Kingdom",
+          USA: "United States",
         };
 
         const thePrefixedContries = ["United States", "Netherlands"];
@@ -169,75 +175,81 @@ module.exports = class CovidCommand extends Commando.Command {
           dateTimeOptions
         );
 
-        const setCountryEmbed = new Discord.MessageEmbed()
-          .setColor(embedcolor)
-          .setAuthor(country.country)
-          .addFields(
+        const active = `${country.active.toLocaleString()} (${(
+          (country.active / country.cases) *
+          100
+        ).toFixed(2)}%)`;
+
+        const recovered = `${country.recovered.toLocaleString()} (${(
+          (country.recovered / country.cases) *
+          100
+        ).toFixed(2)}%)`;
+
+        const deaths = `${country.deaths.toLocaleString()} (${(
+          (country.deaths / country.cases) *
+          100
+        ).toFixed(2)}%)`;
+
+        let lastUpdated = `Last Updated: ${updatedTime}`;
+        if (wikiImage) lastUpdated = `${lastUpdated}\n[Image](${wikiImage})`;
+
+        const definedCountryEmbed = new PaginatedEmbed({
+          colours: ["RANDOM"],
+          descriptions: [lastUpdated],
+          fields: [
             {
-              name: "Confirmed Cases",
-              value: `**${country.cases.toLocaleString()}**`,
+              name: "Cases",
+              value: `
+• All Cases: \`${country.cases.toLocaleString()}\`
+• Active Cases: \`${active}\`
+• Critical Cases: \`${country.critical.toLocaleString()}\`
+              `,
               inline: true,
             },
             {
-              name: "Today Cases",
-              value: `+${country.todayCases.toLocaleString()}`,
+              name: "Recovered/Deaths/Tests",
+              value: `
+• Recovered: \`${recovered}\`
+• Deaths: \`${deaths}\`
+• Tests: \`${country.tests.toLocaleString()}\`              
+              `,
               inline: true,
             },
             {
-              name: "Today Deaths",
-              value: `+${country.todayDeaths.toLocaleString()}`,
+              name: "Today",
+              value: `
+• Today Cases: \`+ ${country.todayCases.toLocaleString()}\`
+• Today Recovered: \`+ ${country.todayRecovered.toLocaleString()}\`  
+• Today Deaths: \`+ ${country.todayDeaths.toLocaleString()}\`         
+              `,
               inline: true,
             },
             {
-              name: "Active",
-              value: `${country.active.toLocaleString()} (${(
-                (country.active / country.cases) *
-                100
-              ).toFixed(2)}%)`,
+              name: "Per One Million",
+              value: `
+• Cases Per Mil: \`${country.casesPerOneMillion.toLocaleString()}\`  
+• Deaths Per Mil: \`${country.deathsPerOneMillion.toLocaleString()}\`
+• Tests Per Mil: \`${country.testsPerOneMillion.toLocaleString()}\`
+• Active Per Mil: \`${country.activePerOneMillion.toLocaleString()}\`
+• Recovered Per Mil: \`${country.recoveredPerOneMillion.toLocaleString()}\`
+• Critical Per MIl: \`${country.criticalPerOneMillion.toLocaleString()}\`
+              `,
               inline: true,
             },
-            {
-              name: "Recovered",
-              value: `${country.recovered.toLocaleString()} (${(
-                (country.recovered / country.cases) *
-                100
-              ).toFixed(2)}%)`,
-              inline: true,
-            },
-            {
-              name: "Deaths",
-              value: `${country.deaths.toLocaleString()} (${(
-                (country.deaths / country.cases) *
-                100
-              ).toFixed(2)}%)`,
-              inline: true,
-            },
-            {
-              name: "Tests",
-              value: country.tests.toLocaleString(),
-              inline: true,
-            },
-            {
-              name: "Cases Per Mil.",
-              value: country.casesPerOneMillion.toLocaleString(),
-              inline: true,
-            },
-            {
-              name: "Deaths Per Mil.",
-              value: country.deathsPerOneMillion.toLocaleString(),
-              inline: true,
-            }
-          )
+          ],
+          duration: 60 * 1000,
+          itemsPerPage: 2,
+          paginationType: "field",
+        })
+          .setAuthor(`${country.country} - ${country.continent}`)
           .setThumbnail(
             `https://www.countryflags.io/${
               require("../../assets/json/countries-abbreviation.json")[
                 country.country
               ]
             }/flat/64.png`
-          )
-          .setFooter(`Last Updated: ${updatedTime}`);
-        if (wikiImage) setCountryEmbed.setImage(wikiImage);
-        message.channel.send(setCountryEmbed);
+          );
+        definedCountryEmbed.send(message.channel);
       } catch (err) {
         const noResultsEmbed = new Discord.MessageEmbed()
           .setColor(red)

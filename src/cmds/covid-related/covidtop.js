@@ -2,8 +2,6 @@ const Commando = require("discord.js-commando");
 const Discord = require("discord.js");
 const covid = require("covidtracker");
 
-const { embedcolor } = require("../../assets/json/colors.json");
-
 module.exports = class TopCovidCasesCommand extends Commando.Command {
   constructor(client) {
     super(client, {
@@ -35,7 +33,7 @@ module.exports = class TopCovidCasesCommand extends Commando.Command {
     }
 
     const top10Embed = new Discord.MessageEmbed()
-      .setColor(embedcolor)
+      .setColor("RANDOM")
       .setAuthor("Top 10 Countries with most cases of COVID-19")
       .setDescription(topCountries)
       .setFooter("certified bruh moment")

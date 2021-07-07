@@ -2,7 +2,7 @@ const Commando = require("discord.js-commando");
 const Discord = require("discord.js");
 const covid = require("covidtracker");
 
-const { red, embedcolor } = require("../../assets/json/colors.json");
+const { red } = require("../../assets/json/colors.json");
 
 module.exports = class CovidProvinceCommand extends Commando.Command {
   constructor(client) {
@@ -47,36 +47,32 @@ module.exports = class CovidProvinceCommand extends Commando.Command {
     try {
       const prov = await covid.getJHU({ country, province });
       const obj = prov[0];
+      const stats = obj.stats;
+
       const updatedTime = new Date(obj.updatedAt).toLocaleDateString(
         "en-US",
         dateTimeOptions
       );
 
+      const recovered = `${stats.recovered.toLocaleString()} (${(
+        (stats.recovered / stats.confirmed) *
+        100
+      ).toFixed(2)}%)`;
+
+      const deaths = `${stats.deaths.toLocaleString()} (${(
+        (stats.deaths / stats.confirmed) *
+        100
+      ).toFixed(2)}%)`;
+
       const covidProvinceEmbed = new Discord.MessageEmbed()
-        .setColor(embedcolor)
+        .setColor("RANDOM")
         .setAuthor(`${obj.province}, ${obj.country}`)
-        .addFields(
-          {
-            name: "Confirmed Cases",
-            value: `**${obj.stats.confirmed.toLocaleString()}**`,
-            inline: true,
-          },
-          {
-            name: "Deaths",
-            value: `${obj.stats.deaths.toLocaleString()} (${(
-              (obj.stats.deaths / obj.stats.confirmed) *
-              100
-            ).toFixed(2)}%)`,
-            inline: true,
-          },
-          {
-            name: "Recovered",
-            value: `${obj.stats.recovered.toLocaleString()} (${(
-              (obj.stats.recovered / obj.stats.confirmed) *
-              100
-            ).toFixed(2)}%)`,
-            inline: true,
-          }
+        .setDescription(
+          `
+• Confirmed Cases: \`${stats.confirmed.toLocaleString()}\`
+• Recovered: \`${recovered}\`
+• Deaths: \`${deaths}\`
+        `
         )
         .setFooter(`Last Updated: ${updatedTime}`);
       message.channel.send(covidProvinceEmbed);
