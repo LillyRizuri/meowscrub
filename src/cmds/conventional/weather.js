@@ -2,8 +2,6 @@ const Commando = require("discord.js-commando");
 const Discord = require("discord.js");
 const weather = require("weather-js");
 
-const { embedcolor } = require("../../assets/json/colors.json");
-
 module.exports = class WeatherCommand extends Commando.Command {
   constructor(client) {
     super(client, {
@@ -56,7 +54,7 @@ module.exports = class WeatherCommand extends Commando.Command {
         .setTitle(
           `Weather report for ${current.observationpoint} - UTC${location.timezone}`
         )
-        .setColor(embedcolor)
+        .setColor("RANDOM")
         .addFields(
           {
             name: "Current Weather",
