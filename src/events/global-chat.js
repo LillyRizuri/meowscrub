@@ -1,83 +1,67 @@
 const Discord = require("discord.js");
 const humanizeDuration = require("humanize-duration");
+const modules = require("../modules");
 const settingsSchema = require("../models/settings-schema");
+const globalChatSchema = require("../models/global-chat-schema");
 const userBlacklistSchema = require("../models/user-blacklist-schema");
 const botStaffSchema = require("../models/bot-staff-schema");
 
 const gcCooldowns = new Map();
+
+const badge = require("../assets/json/badge-emoji.json");
 
 module.exports = {
   name: "message",
   async execute(message, client) {
     if (message.channel.type === "dm") return;
     try {
-      let guildChannelId;
-      let otherGuildChannelId;
+      const requiredMsgForVerification = 30;
 
-      const currentGuildResults = await settingsSchema.find({
+      const currentGuildResults = await settingsSchema.findOne({
         guildId: message.guild.id,
       });
 
-      for (let i = 0; i < currentGuildResults.length; i++) {
-        const { globalChat } = currentGuildResults[i];
-        guildChannelId = globalChat;
-      }
+      const thisChannel = message.guild.channels.cache.get(
+        currentGuildResults.globalChat
+      );
 
-      const thisChannel = message.guild.channels.cache.get(guildChannelId);
-      try {
-        // If the target is blacklisted, return
-        if (guildChannelId.includes(message.channel.id)) {
-          const results = await userBlacklistSchema.findOne({
-            userId: message.author.id,
-          });
-
-          if (results) {
-            await message.delete();
-            const msg = await thisChannel.send(
-              `**${message.author.tag}**, You are blacklisted from using this functionality. For that, your message won't be delivered.`
-            );
-
-            setTimeout(() => {
-              msg.delete();
-            }, 5000);
-            return;
-          }
-
-          // if the target is in cooldown, return
-          const cooldown = gcCooldowns.get(message.author.id);
-          if (cooldown) {
-            const remaining = humanizeDuration(cooldown - Date.now(), {
-              round: true,
-            });
-            await message.delete();
-            const msg = await thisChannel.send(
-              `**${message.author.tag}**, You are in cooldown for ${remaining}.`
-            );
-
-            setTimeout(() => {
-              msg.delete();
-            }, 5000);
-            return;
-          }
-
-          // if the target's message is over 1024 characters, return
-          if (message.content.length > 1024) {
-            await message.delete();
-            const msg = await thisChannel.send(
-              `**${message.author.tag}**, Your message musn't be more than 1024 characters.`
-            );
-
-            setTimeout(() => {
-              msg.delete();
-            }, 5000);
-            return;
-          }
-        }
-        // eslint-disable-next-line no-empty
-      } catch (err) {}
+      if (!thisChannel) return;
 
       // check if the message was sent in a global chat channel, and if the target wasn't a bot
-      if (message.channel.id === guildChannelId && !message.author.bot) {
+      if (
+        message.channel.id === currentGuildResults.globalChat &&
+        !message.author.bot
+      ) {
+        // If the target is blacklisted, return
+        const results = await userBlacklistSchema.findOne({
+          userId: message.author.id,
+        });
+
+        if (results) {
+          await message.delete();
+          const msg = await thisChannel.send(
+            `**${message.author.tag}**, You are blacklisted from using this functionality. For that, your message won't be delivered.`
+          );
+
+          setTimeout(() => {
+            msg.delete();
+          }, 5000);
+          return;
+        }
+
+        // if the target's message is over 1024 characters, return
+        if (message.content.length > 1024) {
+          await message.delete();
+          const msg = await thisChannel.send(
+            `**${message.author.tag}**, Your message musn't be more than 1024 characters.`
+          );
+
+          setTimeout(() => {
+            msg.delete();
+          }, 5000);
+          return;
+        }
+
         // check if the target is a bot staff
         const isBotStaff = await botStaffSchema.findOne({
           userId: message.author.id,
@@ -94,69 +78,155 @@ module.exports = {
           }, 3000);
         }
 
+        // find global chat data for an user
+        let gcInfo = await globalChatSchema.findOne({
+          userId: message.author.id,
+        });
+
+        if (!gcInfo) {
+          await new globalChatSchema({
+            userId: message.author.id,
+            messageCount: 0,
+          }).save();
+
+          gcInfo = await globalChatSchema.findOne({
+            userId: message.author.id,
+          });
+        }
+
+        // urlify the message content so that the bot can see the difference
+        // if the bot sees 1 or more differences, it will think that a newbie sent 1 or more links
+        // eslint-disable-next-line no-empty
+        if (client.isOwner(message.author) || isBotStaff) {
+        } else if (gcInfo.messageCount < requiredMsgForVerification) {
+          const urlify = modules.urlify(message.content);
+          console.log(urlify);
+          if (urlify !== message.content) {
+            await message.delete();
+            const msg = await thisChannel.send(
+              `**${message.author.tag}**, Links are not allowed for new members using this chat.`
+            );
+
+            setTimeout(() => {
+              msg.delete();
+            }, 5000);
+            return;
+          }
+        }
+
+        // if the target is in cooldown, return
+        const cooldown = gcCooldowns.get(message.author.id);
+        if (cooldown) {
+          const remaining = humanizeDuration(cooldown - Date.now());
+          await message.delete();
+          const msg = await thisChannel.send(
+            `**${message.author.tag}**, You are in cooldown for ${remaining}.`
+          );
+
+          setTimeout(() => {
+            msg.delete();
+          }, 5000);
+          return;
+        }
+
+        await globalChatSchema.findOneAndUpdate(
+          {
+            userId: message.author.id,
+          },
+          {
+            userId: message.author.id,
+            messageCount: gcInfo.messageCount + 1,
+          },
+          {
+            upsert: true,
+          }
+        );
+
+        gcInfo = await globalChatSchema.findOne({
+          userId: message.author.id,
+        });
+
+        // transform all user mentions in message content to usernames and tags
+        let modifiedMessageContent;
+        message.mentions.users.each(async (user) => {
+          modifiedMessageContent = message.content
+            .split(`<@!${user.id}>`)
+            .join(`@${user.tag}`);
+
+          // check if nothing has changed
+          if (modifiedMessageContent === message.content)
+            modifiedMessageContent = message.content
+              .split(`<@${user.id}>`)
+              .join(`@${user.tag}`);
+
+          message.content = modifiedMessageContent;
+        });
+
+        // get the first message attachment
+        const attachment = message.attachments.first()
+          ? message.attachments.first().proxyURL
+          : null;
+
+        // check if the target didn't send a sufficient number of messages to post attachments
+        if (attachment) {
+          // eslint-disable-next-line no-empty
+          if (client.isOwner(message.author) || isBotStaff) {
+          } else if (gcInfo.messageCount < requiredMsgForVerification) {
+            message.reply(
+              "Can't send attachments due to the status of being a newbie."
+            );
+          }
+        }
+
         // for each guilds that the client was in
         client.guilds.cache.forEach(async (guild) => {
           // if the guild that the client chose happens to be the same guild the message was sent in, return
           if (guild === message.guild) return;
 
           // fetch to see if the guild that the client chose have a global chat channel
-          const otherGuildResults = await settingsSchema.find({
+          const otherGuildResults = await settingsSchema.findOne({
             guildId: guild.id,
           });
 
-          for (let i = 0; i < otherGuildResults.length; i++) {
-            const { globalChat } = otherGuildResults[i];
-            otherGuildChannelId = globalChat;
-          }
-
-          const channel = guild.channels.cache.get(otherGuildChannelId);
+          const channel = guild.channels.cache.get(
+            otherGuildResults.globalChat
+          );
 
           // if there's none, return
           if (!channel) return;
-
-          // get message attachments
-          const attachment = message.attachments.first()
-            ? message.attachments.first().proxyURL
-            : null;
 
           let usernamePart;
 
           // check the guild is/isn't a guild test
           if (!process.env.GUILD_TEST || guild.id !== process.env.GUILD_TEST) {
             // if the target is a bot owner/bot staff, have a police emoji append with their username
-            if (client.isOwner(message.author) || isBotStaff) {
-              usernamePart = `👮‍♂️ **\`${message.author.tag}\` - \`${message.guild.name}\`**`;
-            } else {
-              usernamePart = `👤 **\`${message.author.tag}\` - \`${message.guild.name}\`**`;
-            }
+            if (client.isOwner(message.author))
+              usernamePart = `_ _\n[ ${badge.developer} **\`${message.author.tag}\` - \`${message.guild.name}\`** ]`;
+            else if (isBotStaff)
+              usernamePart = `_ _\n[ ${badge.staff} **\`${message.author.tag}\` - \`${message.guild.name}\`** ]`;
+            else if (gcInfo.messageCount < requiredMsgForVerification)
+              usernamePart = `_ _\n[ ${badge.newbie} **\`${message.author.tag}\` - \`${message.guild.name}\`** ]`;
+            else
+              usernamePart = `_ _\n[ ${badge.verified} **\`${message.author.tag}\` - \`${message.guild.name}\`** ]`;
           } else if (guild.id === process.env.GUILD_TEST) {
             // same with above, but add the user id and the guild id if the guild chosen was a guild test
-            if (client.isOwner(message.author) || isBotStaff) {
+            if (client.isOwner(message.author))
               usernamePart = `
-👮‍♂️ **\`${message.author.tag}\` - \`${message.guild.name}\`**
-**userID: \`${message.author.id}\` - guildID: \`${message.guild.id}\`**`;
-            } else {
+_ _\n[ ${badge.developer} **\`${message.author.tag}\` - \`${message.guild.name}\`** ]     
+**userID: \`${message.author.id}\` - guildID: \`${message.guild.id}\`**       `;
+            else if (isBotStaff)
               usernamePart = `
-👤 **\`${message.author.tag}\` - \`${message.guild.name}\`**
+_ _\n[ ${badge.staff} **\`${message.author.tag}\` - \`${message.guild.name}\`** ]
+**userID: \`${message.author.id}\` - guildID: \`${message.guild.id}\`**            `;
+            else if (gcInfo.messageCount < requiredMsgForVerification)
+              usernamePart = `
+_ _\n[ ${badge.newbie} **\`${message.author.tag}\` - \`${message.guild.name}\`** ] 
 **userID: \`${message.author.id}\` - guildID: \`${message.guild.id}\`**`;
-            }
+            else
+              usernamePart = `
+_ _\n[ ${badge.verified} **\`${message.author.tag}\` - \`${message.guild.name}\`** ]
+**userID: \`${message.author.id}\` - guildID: \`${message.guild.id}\`**            `;
           }
-
-          // transform all user mentions in message content to usernames and tags
-          let modifiedMessageContent;
-          message.mentions.users.each(async (user) => {
-            modifiedMessageContent = message.content
-              .split(`<@!${user.id}>`)
-              .join(`@${user.tag}`);
-
-            // check if nothing has changed
-            if (modifiedMessageContent === message.content)
-              modifiedMessageContent = message.content
-                .split(`<@${user.id}>`)
-                .join(`@${user.tag}`);
-
-            message.content = modifiedMessageContent;
-          });
 
           // check if the message contains any attachments
           if (!attachment) {
@@ -168,6 +238,19 @@ module.exports = {
                 );
               });
           } else if (attachment) {
+            // eslint-disable-next-line no-empty
+            if (client.isOwner(message.author) || isBotStaff) {
+            } else if (gcInfo.messageCount < requiredMsgForVerification) {
+              const prohibitedMsg =
+                "*Can't send attachments due to the status of being a newbie.*";
+              await channel.send(
+                message.content
+                  ? `${usernamePart}\n${message.content}\n${prohibitedMsg}`
+                  : `${usernamePart}\n${prohibitedMsg}`
+              );
+              return;
+            }
+
             const attachmentToSend = new Discord.MessageAttachment(attachment);
             await channel
               .send(
@@ -194,6 +277,7 @@ module.exports = {
           }
         });
       }
+
       // eslint-disable-next-line no-empty
     } catch (err) {}
   },

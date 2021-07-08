@@ -1,3 +1,4 @@
+/* eslint-disable no-inline-comments */
 module.exports.endsWithAny = (suffixes, string) => {
   // suffixes is an array
   return suffixes.some(function (suffix) {
@@ -26,4 +27,24 @@ module.exports.formatDuration = (milliseconds) => {
     return `${formatInt(minutes)}:${formatInt(seconds)}`;
   }
   return `00:${formatInt(seconds)}`;
+};
+
+module.exports.urlify = (string) => {
+  // not suitable
+  // const pattern = new RegExp(
+  //   "^(https?:\\/\\/)?" + // protocol
+  //     "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|" + // domain name
+  //     "((\\d{1,3}\\.){3}\\d{1,3}))" + // OR ip (v4) address
+  //     "(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*" + // port and path
+  //     "(\\?[;&a-z\\d%_.~+=-]*)?" + // query string
+  //     "(\\#[-a-z\\d_]*)?$",
+  //   "i"
+  // ); // fragment locator
+
+  const pattern = /^((ftp|http|https):\/\/)?www\.([A-z]+)\.([A-z]{2,})/;
+
+  return string.replace(pattern, function (url) {
+    // eslint-disable-next-line quotes
+    return '<a href="' + url + '">' + url + "</a>";
+  });
 };
