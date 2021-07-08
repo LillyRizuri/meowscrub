@@ -51,6 +51,9 @@ module.exports.urlify = (string) => {
 
 module.exports.compareMaps = (map1, map2) => {
   let testVal;
+  if (map1.size !== map2.size) {
+    return false;
+  }
   for (const [key, val] of map1) {
     testVal = map2.get(key);
     // in cases of an undefined value, make sure the key

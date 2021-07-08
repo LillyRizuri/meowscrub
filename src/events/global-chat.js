@@ -212,45 +212,46 @@ module.exports = {
           let usernamePart = "";
 
           // check the guild is/isn't a guild test
-          if (!modules.compareMaps(sameUser, sameUserOld)) {
-            if (
-              !process.env.GUILD_TEST ||
-              guild.id !== process.env.GUILD_TEST
-            ) {
-              // if the target is a bot owner/bot staff, have a police emoji append with their username
-              if (client.isOwner(message.author))
-                usernamePart = `_ _\n[ ${badge.developer} **\`${message.author.tag}\` - \`${message.guild.name}\`** ]`;
-              else if (isBotStaff)
-                usernamePart = `_ _\n[ ${badge.staff} **\`${message.author.tag}\` - \`${message.guild.name}\`** ]`;
-              else if (gcInfo.messageCount < requiredMsgForVerification)
-                usernamePart = `_ _\n[ ${badge.newbie} **\`${message.author.tag}\` - \`${message.guild.name}\`** ]`;
-              else
-                usernamePart = `_ _\n[ ${badge.verified} **\`${message.author.tag}\` - \`${message.guild.name}\`** ]`;
-            } else if (guild.id === process.env.GUILD_TEST) {
-              // same with above, but add the user id and the guild id if the guild chosen was a guild test
-              if (client.isOwner(message.author))
-                usernamePart = `
+          if (!process.env.GUILD_TEST || guild.id !== process.env.GUILD_TEST) {
+            // if the target is a bot owner/bot staff, have a police emoji append with their username
+            if (client.isOwner(message.author))
+              usernamePart = `_ _\n[ ${badge.developer} **\`${message.author.tag}\` - \`${message.guild.name}\`** ]`;
+            else if (isBotStaff)
+              usernamePart = `_ _\n[ ${badge.staff} **\`${message.author.tag}\` - \`${message.guild.name}\`** ]`;
+            else if (gcInfo.messageCount < requiredMsgForVerification)
+              usernamePart = `_ _\n[ ${badge.newbie} **\`${message.author.tag}\` - \`${message.guild.name}\`** ]`;
+            else
+              usernamePart = `_ _\n[ ${badge.verified} **\`${message.author.tag}\` - \`${message.guild.name}\`** ]`;
+          } else if (guild.id === process.env.GUILD_TEST) {
+            // same with above, but add the user id and the guild id if the guild chosen was a guild test
+            if (client.isOwner(message.author))
+              usernamePart = `
 _ _\n[ ${badge.developer} **\`${message.author.tag}\` - \`${message.guild.name}\`** ]     
 **userID: \`${message.author.id}\` - guildID: \`${message.guild.id}\`**       `;
-              else if (isBotStaff)
-                usernamePart = `
+            else if (isBotStaff)
+              usernamePart = `
 _ _\n[ ${badge.staff} **\`${message.author.tag}\` - \`${message.guild.name}\`** ]
 **userID: \`${message.author.id}\` - guildID: \`${message.guild.id}\`**            `;
-              else if (gcInfo.messageCount < requiredMsgForVerification)
-                usernamePart = `
+            else if (gcInfo.messageCount < requiredMsgForVerification)
+              usernamePart = `
 _ _\n[ ${badge.newbie} **\`${message.author.tag}\` - \`${message.guild.name}\`** ] 
 **userID: \`${message.author.id}\` - guildID: \`${message.guild.id}\`**`;
-              else
-                usernamePart = `
+            else
+              usernamePart = `
 _ _\n[ ${badge.verified} **\`${message.author.tag}\` - \`${message.guild.name}\`** ]
 **userID: \`${message.author.id}\` - guildID: \`${message.guild.id}\`**            `;
-            }
-          } else if (modules.compareMaps(sameUser, sameUserOld)) {
-            usernamePart - "";
           }
 
           // check if the message contains any attachments
           if (!attachment) {
+            if (!modules.compareMaps(sameUser, sameUserOld)) {
+              await channel.send(message.content).catch((err) => {
+                message.channel.send(
+                  `Can't deliver the message to **${guild}** for: ${err}`
+                );
+              });
+            }
+
             await channel
               .send(`${usernamePart}\n${message.content}`)
               .catch((err) => {
@@ -259,6 +260,42 @@ _ _\n[ ${badge.verified} **\`${message.author.tag}\` - \`${message.guild.name}\`
                 );
               });
           } else if (attachment) {
+            if (!modules.compareMaps(sameUser, sameUserOld)) {
+              // eslint-disable-next-line no-empty
+              if (client.isOwner(message.author) || isBotStaff) {
+              } else if (gcInfo.messageCount < requiredMsgForVerification) {
+                const prohibitedMsg =
+                  "*Can't send attachments due to the status of being a newbie.*";
+                await channel.send(
+                  message.content
+                    ? `${message.content}\n${prohibitedMsg}`
+                    : `${prohibitedMsg}`
+                );
+                return;
+              }
+
+              const attachmentToSend = new Discord.MessageAttachment(
+                attachment
+              );
+              await channel
+                .send(message.content, attachmentToSend)
+                .catch((err) => {
+                  try {
+                    // try to send a notice if the bot can't send attachment to the guild chosen
+                    const errorMessage = `*Error sending attachment: ${err}*`;
+                    channel.send(
+                      message.content
+                        ? `${message.content}\n${errorMessage}`
+                        : `${errorMessage}`
+                    );
+                  } catch (err) {
+                    message.channel.send(
+                      `Can't deliver the message to **${guild}** for: ${err}`
+                    );
+                  }
+                });
+            }
+
             // eslint-disable-next-line no-empty
             if (client.isOwner(message.author) || isBotStaff) {
             } else if (gcInfo.messageCount < requiredMsgForVerification) {
