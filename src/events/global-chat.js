@@ -185,9 +185,13 @@ module.exports = {
 
         sameUser.clear();
         sameUser.set(message.author.id, message.guild.id);
-        setTimeout(() => {
+        let timeUntilUngroup = setTimeout(() => {
           sameUser.delete(message.author.id);
-        }, 100000);
+        }, 300000);
+        clearTimeout(timeUntilUngroup);
+        timeUntilUngroup = setTimeout(() => {
+          sameUser.delete(message.author.id);
+        }, 300000);
 
         // for each guilds that the client was in
         client.guilds.cache.forEach(async (guild) => {
