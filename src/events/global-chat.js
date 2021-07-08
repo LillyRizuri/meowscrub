@@ -250,6 +250,8 @@ _ _\n[ ${badge.verified} **\`${message.author.tag}\` - \`${message.guild.name}\`
                   `Can't deliver the message to **${guild}** for: ${err}`
                 );
               });
+
+              return;
             }
 
             await channel
@@ -294,6 +296,8 @@ _ _\n[ ${badge.verified} **\`${message.author.tag}\` - \`${message.guild.name}\`
                     );
                   }
                 });
+
+              return;
             }
 
             // eslint-disable-next-line no-empty
