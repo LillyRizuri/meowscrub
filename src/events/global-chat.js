@@ -132,14 +132,6 @@ module.exports = {
           }, 3000);
         }
 
-        const sameUserOld = new Map(sameUser);
-
-        sameUser.clear();
-        sameUser.set(message.author.id, message.guild.id);
-        setTimeout(() => {
-          sameUser.delete(message.author.id);
-        }, 300000);
-
         await globalChatSchema.findOneAndUpdate(
           {
             userId: message.author.id,
@@ -188,6 +180,14 @@ module.exports = {
             );
           }
         }
+
+        const sameUserOld = new Map(sameUser);
+
+        sameUser.clear();
+        sameUser.set(message.author.id, message.guild.id);
+        setTimeout(() => {
+          sameUser.delete(message.author.id);
+        }, 100000);
 
         // for each guilds that the client was in
         client.guilds.cache.forEach(async (guild) => {
