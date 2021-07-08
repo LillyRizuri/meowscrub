@@ -244,7 +244,7 @@ _ _\n[ ${badge.verified} **\`${message.author.tag}\` - \`${message.guild.name}\`
 
           // check if the message contains any attachments
           if (!attachment) {
-            if (!modules.compareMaps(sameUser, sameUserOld)) {
+            if (modules.compareMaps(sameUser, sameUserOld)) {
               await channel.send(message.content).catch((err) => {
                 message.channel.send(
                   `Can't deliver the message to **${guild}** for: ${err}`
@@ -260,7 +260,7 @@ _ _\n[ ${badge.verified} **\`${message.author.tag}\` - \`${message.guild.name}\`
                 );
               });
           } else if (attachment) {
-            if (!modules.compareMaps(sameUser, sameUserOld)) {
+            if (modules.compareMaps(sameUser, sameUserOld)) {
               // eslint-disable-next-line no-empty
               if (client.isOwner(message.author) || isBotStaff) {
               } else if (gcInfo.messageCount < requiredMsgForVerification) {
