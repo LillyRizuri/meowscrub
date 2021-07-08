@@ -70,17 +70,6 @@ module.exports = {
           userId: message.author.id,
         });
 
-        // check if the target is a bot owner/staff
-        // if the target isn't, set up a cooldown for 3 seconds.
-        // eslint-disable-next-line no-empty
-        if (client.isOwner(message.author) || isBotStaff) {
-        } else {
-          gcCooldowns.set(message.author.id, Date.now() + 3000);
-          setTimeout(() => {
-            gcCooldowns.delete(message.author.id);
-          }, 3000);
-        }
-
         // find global chat data for an user
         let gcInfo = await globalChatSchema.findOne({
           userId: message.author.id,
@@ -130,6 +119,17 @@ module.exports = {
             msg.delete();
           }, 5000);
           return;
+        }
+
+        // check if the target is a bot owner/staff
+        // if the target isn't, set up a cooldown for 3 seconds.
+        // eslint-disable-next-line no-empty
+        if (client.isOwner(message.author) || isBotStaff) {
+        } else {
+          gcCooldowns.set(message.author.id, Date.now() + 3000);
+          setTimeout(() => {
+            gcCooldowns.delete(message.author.id);
+          }, 3000);
         }
 
         await globalChatSchema.findOneAndUpdate(
