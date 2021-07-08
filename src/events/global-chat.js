@@ -21,6 +21,7 @@ module.exports = {
         guildId: message.guild.id,
       });
 
+      if (!currentGuildResults) return;
       if (!currentGuildResults.globalChat) return;
 
       const thisChannel = message.guild.channels.cache.get(
@@ -190,6 +191,7 @@ module.exports = {
             guildId: guild.id,
           });
 
+          if (!otherGuildResults) return;
           if (!otherGuildResults.globalChat) return;
 
           const channel = guild.channels.cache.get(
