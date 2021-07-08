@@ -15,11 +15,13 @@ module.exports = {
   async execute(message, client) {
     if (message.channel.type === "dm") return;
     try {
-      const requiredMsgForVerification = 30;
+      const requiredMsgForVerification = 100;
 
       const currentGuildResults = await settingsSchema.findOne({
         guildId: message.guild.id,
       });
+
+      if (!currentGuildResults.globalChat) return;
 
       const thisChannel = message.guild.channels.cache.get(
         currentGuildResults.globalChat
@@ -187,6 +189,8 @@ module.exports = {
           const otherGuildResults = await settingsSchema.findOne({
             guildId: guild.id,
           });
+
+          if (!otherGuildResults.globalChat) return;
 
           const channel = guild.channels.cache.get(
             otherGuildResults.globalChat
