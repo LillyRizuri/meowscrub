@@ -7,6 +7,7 @@ const userBlacklistSchema = require("../models/user-blacklist-schema");
 const botStaffSchema = require("../models/bot-staff-schema");
 
 const gcCooldowns = new Map();
+const sameUser = new Map();
 
 const badge = require("../assets/json/badge-emoji.json");
 
@@ -92,7 +93,6 @@ module.exports = {
         if (client.isOwner(message.author) || isBotStaff) {
         } else if (gcInfo.messageCount < requiredMsgForVerification) {
           const urlify = modules.urlify(message.content);
-          console.log(urlify);
           if (urlify !== message.content) {
             await message.delete();
             const msg = await thisChannel.send(
@@ -131,6 +131,14 @@ module.exports = {
             gcCooldowns.delete(message.author.id);
           }, 3000);
         }
+
+        const sameUserOld = new Map(sameUser);
+
+        sameUser.clear();
+        sameUser.set(message.author.id, message.guild.id);
+        setTimeout(() => {
+          sameUser.delete(message.author.id);
+        }, 300000);
 
         await globalChatSchema.findOneAndUpdate(
           {
@@ -201,37 +209,44 @@ module.exports = {
           // if there's none, return
           if (!channel) return;
 
-          let usernamePart;
+          let usernamePart = "";
 
           // check the guild is/isn't a guild test
-          if (!process.env.GUILD_TEST || guild.id !== process.env.GUILD_TEST) {
-            // if the target is a bot owner/bot staff, have a police emoji append with their username
-            if (client.isOwner(message.author))
-              usernamePart = `_ _\n[ ${badge.developer} **\`${message.author.tag}\` - \`${message.guild.name}\`** ]`;
-            else if (isBotStaff)
-              usernamePart = `_ _\n[ ${badge.staff} **\`${message.author.tag}\` - \`${message.guild.name}\`** ]`;
-            else if (gcInfo.messageCount < requiredMsgForVerification)
-              usernamePart = `_ _\n[ ${badge.newbie} **\`${message.author.tag}\` - \`${message.guild.name}\`** ]`;
-            else
-              usernamePart = `_ _\n[ ${badge.verified} **\`${message.author.tag}\` - \`${message.guild.name}\`** ]`;
-          } else if (guild.id === process.env.GUILD_TEST) {
-            // same with above, but add the user id and the guild id if the guild chosen was a guild test
-            if (client.isOwner(message.author))
-              usernamePart = `
+          if (!modules.compareMaps(sameUser, sameUserOld)) {
+            if (
+              !process.env.GUILD_TEST ||
+              guild.id !== process.env.GUILD_TEST
+            ) {
+              // if the target is a bot owner/bot staff, have a police emoji append with their username
+              if (client.isOwner(message.author))
+                usernamePart = `_ _\n[ ${badge.developer} **\`${message.author.tag}\` - \`${message.guild.name}\`** ]`;
+              else if (isBotStaff)
+                usernamePart = `_ _\n[ ${badge.staff} **\`${message.author.tag}\` - \`${message.guild.name}\`** ]`;
+              else if (gcInfo.messageCount < requiredMsgForVerification)
+                usernamePart = `_ _\n[ ${badge.newbie} **\`${message.author.tag}\` - \`${message.guild.name}\`** ]`;
+              else
+                usernamePart = `_ _\n[ ${badge.verified} **\`${message.author.tag}\` - \`${message.guild.name}\`** ]`;
+            } else if (guild.id === process.env.GUILD_TEST) {
+              // same with above, but add the user id and the guild id if the guild chosen was a guild test
+              if (client.isOwner(message.author))
+                usernamePart = `
 _ _\n[ ${badge.developer} **\`${message.author.tag}\` - \`${message.guild.name}\`** ]     
 **userID: \`${message.author.id}\` - guildID: \`${message.guild.id}\`**       `;
-            else if (isBotStaff)
-              usernamePart = `
+              else if (isBotStaff)
+                usernamePart = `
 _ _\n[ ${badge.staff} **\`${message.author.tag}\` - \`${message.guild.name}\`** ]
 **userID: \`${message.author.id}\` - guildID: \`${message.guild.id}\`**            `;
-            else if (gcInfo.messageCount < requiredMsgForVerification)
-              usernamePart = `
+              else if (gcInfo.messageCount < requiredMsgForVerification)
+                usernamePart = `
 _ _\n[ ${badge.newbie} **\`${message.author.tag}\` - \`${message.guild.name}\`** ] 
 **userID: \`${message.author.id}\` - guildID: \`${message.guild.id}\`**`;
-            else
-              usernamePart = `
+              else
+                usernamePart = `
 _ _\n[ ${badge.verified} **\`${message.author.tag}\` - \`${message.guild.name}\`** ]
 **userID: \`${message.author.id}\` - guildID: \`${message.guild.id}\`**            `;
+            }
+          } else if (modules.compareMaps(sameUser, sameUserOld)) {
+            usernamePart - "";
           }
 
           // check if the message contains any attachments
