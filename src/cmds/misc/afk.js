@@ -39,20 +39,20 @@ module.exports = class AFKCommand extends Commando.Command {
         "<:scrubred:797476323169533963> The reason is way beyond limit of 256 characters."
       );
 
-    const results = await afkSchema.find({
+    const results = await afkSchema.findOne({
       guildId,
+      userId: message.author.id,
     });
 
-    for (let i = 0; i < results.length; i++) {
-      // eslint-disable-next-line no-shadow
-      const { userId } = results[i];
-
-      if (message.author.id === userId) {
+    if (results) {
+      if (message.author.id === results.userId) {
         await afkSchema.findOneAndDelete({
           guildId,
           userId,
         });
       }
+    // eslint-disable-next-line no-empty
+    } else if (!results) {
     }
 
     await afkSchema.findOneAndUpdate(

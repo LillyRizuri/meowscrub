@@ -8,18 +8,14 @@ module.exports = {
   async execute(message) {
     if (message.channel.type === "dm") return;
     try {
-      let channel;
       const guildId = message.guild.id;
       const input = encodeURIComponent(message.content);
 
-      const guildResults = await settingsSchema.find({
+      const results = await settingsSchema.findOne({
         guildId,
       });
 
-      for (let i = 0; i < guildResults.length; i++) {
-        const { chatbotChannel } = guildResults[i];
-        channel = chatbotChannel;
-      }
+      const channel = results.chatbotChannel;
 
       if (message.author.bot) return;
       if (channel.includes(message.channel.id)) {

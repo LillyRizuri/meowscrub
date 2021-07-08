@@ -7,7 +7,6 @@ const checkMark = "<:scrubgreenlarge:797816509967368213>";
 const cross = "<:scrubredlarge:797816510579998730>";
 const qstnMark = "<:scrubnulllarge:797816510298324992>";
 
-
 module.exports = class SuggestCommand extends Commando.Command {
   constructor(client) {
     super(client, {
@@ -33,16 +32,14 @@ module.exports = class SuggestCommand extends Commando.Command {
   async run(message, args) {
     const guildId = message.guild.id;
     const input = args;
-    let channel;
 
-    const results = await settingsSchema.find({
+    const results = await settingsSchema.findOne({
       guildId,
     });
 
-    for (let i = 0; i < results.length; i++) {
-      const { suggestionsChannel } = results[i];
-      channel = message.guild.channels.cache.get(suggestionsChannel);
-    }
+    const channel = message.guild.channels.cache.get(
+      results.suggestionsChannel
+    );
 
     if (!channel)
       return message.reply(
