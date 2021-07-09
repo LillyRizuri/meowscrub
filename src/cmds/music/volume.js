@@ -35,6 +35,15 @@ module.exports = class AdjustVolumeCommand extends Commando.Command {
         "<:scrubnull:797476323533783050> There's no queue. Have at least one song before advancing."
       );
 
+    const inSameChannel = this.client.voice.connections.some(
+      (connection) => connection.channel.id === message.member.voice.channelID
+    );
+
+    if (!inSameChannel)
+      return message.reply(
+        "<:scrubred:797476323169533963> You need to be in the same VC as the bot in order to continue."
+      );
+
     if (!args)
       return message.reply(
         `<:scrubnull:797476323533783050> Current audio playback volume: **${queue.volume}%**`

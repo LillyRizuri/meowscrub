@@ -19,12 +19,25 @@ module.exports = class NowPlayingCommand extends Commando.Command {
 
   async run(message) {
     const queue = await this.client.distube.getQueue(message);
-
     const voiceChannel = message.member.voice.channel;
 
     if (!voiceChannel)
       return message.reply(
         "<:scrubnull:797476323533783050> Go to the same VC that I'm blasting music out to see what I am playing."
+      );
+
+    if (!queue)
+      return message.reply(
+        "<:scrubred:797476323169533963> No queue found for this server."
+      );
+
+    const inSameChannel = this.client.voice.connections.some(
+      (connection) => connection.channel.id === message.member.voice.channelID
+    );
+
+    if (!inSameChannel)
+      return message.reply(
+        "<:scrubred:797476323169533963> You need to be in the same VC as the bot in order to continue."
       );
 
     let currentPlayhead = `${queue.formattedCurrentTime}/${queue.songs[0].formattedDuration}`;

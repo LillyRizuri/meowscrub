@@ -21,6 +21,7 @@ module.exports = class SeekMusicCommand extends Commando.Command {
 
   async run(message, args) {
     const seekValue = args;
+    const queue = await this.client.distube.getQueue(message);
     const actualSeekValue = seekValue.split(":");
     const voiceChannel = message.member.voice.channel;
 
@@ -29,11 +30,16 @@ module.exports = class SeekMusicCommand extends Commando.Command {
         "<:scrubnull:797476323533783050> Join an appropriate voice channel to seek."
       );
 
-    const isPlaying = await this.client.distube.isPlaying(message);
+    if (!queue)
+      return message.reply("<:scrubred:797476323169533963> There's no queue.");
 
-    if (!isPlaying)
+    const inSameChannel = this.client.voice.connections.some(
+      (connection) => connection.channel.id === message.member.voice.channelID
+    );
+
+    if (!inSameChannel)
       return message.reply(
-        "<:scrubnull:797476323533783050> There's no music playing. How am I supposed to seek?"
+        "<:scrubred:797476323169533963> You need to be in the same VC as the bot in order to continue."
       );
 
     if (!seekValue)

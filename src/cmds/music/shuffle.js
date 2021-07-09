@@ -29,6 +29,15 @@ module.exports = class ShuffleMusicCommand extends Commando.Command {
         "<:scrubnull:797476323533783050> There's no queue to even shuffle."
       );
 
+    const inSameChannel = this.client.voice.connections.some(
+      (connection) => connection.channel.id === message.member.voice.channelID
+    );
+
+    if (!inSameChannel)
+      return message.reply(
+        "<:scrubred:797476323169533963> You need to be in the same VC as the bot in order to continue."
+      );
+
     this.client.distube.shuffle(message);
     message.channel.send(
       "<:scrubgreen:797476323316465676> **Shuffled the entire music queue.**"

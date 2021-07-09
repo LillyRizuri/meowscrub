@@ -6,9 +6,9 @@ module.exports = class JumpMusicCommand extends Commando.Command {
       name: "jump",
       group: "music",
       memberName: "jump",
-      description:
-        "Jump from one music to another using a music queue's ID.",
-      details: "List the queue to know which one to jump first. THIS ACTION WILL ALSO OVERWRITE ALL SONGS BEFORE YOUR CHOSEN MUSIC!",
+      description: "Jump from one music to another using a music queue's ID.",
+      details:
+        "List the queue to know which one to jump first. THIS ACTION WILL ALSO OVERWRITE ALL SONGS BEFORE YOUR CHOSEN MUSIC!",
       argsType: "single",
       format: "<musicID>",
       examples: ["jump 3"],
@@ -33,6 +33,15 @@ module.exports = class JumpMusicCommand extends Commando.Command {
     if (!queue)
       return message.reply(
         "<:scrubnull:797476323533783050> There's no queue to do that action."
+      );
+
+    const inSameChannel = this.client.voice.connections.some(
+      (connection) => connection.channel.id === message.member.voice.channelID
+    );
+
+    if (!inSameChannel)
+      return message.reply(
+        "<:scrubred:797476323169533963> You need to be in the same VC as the bot in order to continue."
       );
 
     if (!args)

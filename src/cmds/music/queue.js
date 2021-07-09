@@ -32,6 +32,15 @@ module.exports = class ListQueueCommand extends Commando.Command {
     if (!queue)
       return message.reply("<:scrubnull:797476323533783050> There's no queue.");
 
+    const inSameChannel = this.client.voice.connections.some(
+      (connection) => connection.channel.id === message.member.voice.channelID
+    );
+
+    if (!inSameChannel)
+      return message.reply(
+        "<:scrubred:797476323169533963> You need to be in the same VC as the bot in order to continue."
+      );
+
     const loopSetting = queue.repeatMode
       .toString()
       .replace("0", "Disabled")

@@ -33,6 +33,15 @@ module.exports = class AutoPlayMusicCommand extends Commando.Command {
         "<:scrubnull:797476323533783050> Must confirm that there's a queue first."
       );
 
+    const inSameChannel = this.client.voice.connections.some(
+      (connection) => connection.channel.id === message.member.voice.channelID
+    );
+
+    if (!inSameChannel)
+      return message.reply(
+        "<:scrubred:797476323169533963> You need to be in the same VC as the bot in order to continue."
+      );
+
     mode = this.client.distube.toggleAutoplay(message);
     mode = mode ? "On" : "Off";
     message.channel.send(
