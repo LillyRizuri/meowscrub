@@ -7,7 +7,7 @@ const userBlacklistSchema = require("../models/user-blacklist-schema");
 const botStaffSchema = require("../models/bot-staff-schema");
 
 const gcCooldowns = new Map();
-const sameUser = new Map();
+const sameUserLog = new Map();
 
 const badge = require("../assets/json/badge-emoji.json");
 
@@ -15,9 +15,8 @@ module.exports = {
   name: "message",
   async execute(message, client) {
     if (message.channel.type === "dm") return;
+    const requiredMsgForVerification = 100;
     try {
-      const requiredMsgForVerification = 100;
-
       const currentGuildResults = await settingsSchema.findOne({
         guildId: message.guild.id,
       });
@@ -76,6 +75,7 @@ module.exports = {
           userId: message.author.id,
         });
 
+        // if there isn't one, create a new one
         if (!gcInfo) {
           await new globalChatSchema({
             userId: message.author.id,
@@ -132,6 +132,7 @@ module.exports = {
           }, 3000);
         }
 
+        // update the message count
         await globalChatSchema.findOneAndUpdate(
           {
             userId: message.author.id,
@@ -181,10 +182,22 @@ module.exports = {
           }
         }
 
-        const sameUserOld = new Map(sameUser);
+        // depends on account status, have a designated badge append with their username
+        let badgeDisplayed = "";
+        if (client.isOwner(message.author)) {
+          badgeDisplayed = badge.developer;
+        } else if (isBotStaff) {
+          badgeDisplayed = badge.staff;
+        } else if (gcInfo.messageCount < requiredMsgForVerification) {
+          badgeDisplayed = badge.newbie;
+        } else {
+          badgeDisplayed = badge.verified;
+        }
 
-        sameUser.clear();
-        sameUser.set(message.author.id, message.guild.id);
+        const sameUserOld = new Map(sameUserLog);
+
+        sameUserLog.clear();
+        sameUserLog.set(message.author.id, message.guild.id);
 
         // for each guilds that the client was in
         client.guilds.cache.forEach(async (guild) => {
@@ -209,48 +222,23 @@ module.exports = {
           let usernamePart = "";
 
           // check the guild is/isn't a guild test
-          if (!process.env.GUILD_TEST || guild.id !== process.env.GUILD_TEST) {
-            // if the target is a bot owner/bot staff, have a police emoji append with their username
-            if (client.isOwner(message.author))
-              usernamePart = `_ _\n[ ${badge.developer} **\`${message.author.tag}\` - \`${message.guild.name}\`** ]`;
-            else if (isBotStaff)
-              usernamePart = `_ _\n[ ${badge.staff} **\`${message.author.tag}\` - \`${message.guild.name}\`** ]`;
-            else if (gcInfo.messageCount < requiredMsgForVerification)
-              usernamePart = `_ _\n[ ${badge.newbie} **\`${message.author.tag}\` - \`${message.guild.name}\`** ]`;
-            else
-              usernamePart = `_ _\n[ ${badge.verified} **\`${message.author.tag}\` - \`${message.guild.name}\`** ]`;
-          } else if (guild.id === process.env.GUILD_TEST) {
-            // same with above, but add the user id and the guild id if the guild chosen was a guild test
-            if (client.isOwner(message.author))
+          if (!modules.compareMaps(sameUserLog, sameUserOld)) {
+            if (
+              !process.env.GUILD_TEST ||
+              guild.id !== process.env.GUILD_TEST
+            ) {
+              usernamePart = `_ _\n[ ${badgeDisplayed} **\`${message.author.tag}\` - \`${message.guild.name}\`** ]`;
+            } else if (guild.id === process.env.GUILD_TEST) {
               usernamePart = `
-_ _\n[ ${badge.developer} **\`${message.author.tag}\` - \`${message.guild.name}\`** ]     
-**userID: \`${message.author.id}\` - guildID: \`${message.guild.id}\`**       `;
-            else if (isBotStaff)
-              usernamePart = `
-_ _\n[ ${badge.staff} **\`${message.author.tag}\` - \`${message.guild.name}\`** ]
-**userID: \`${message.author.id}\` - guildID: \`${message.guild.id}\`**            `;
-            else if (gcInfo.messageCount < requiredMsgForVerification)
-              usernamePart = `
-_ _\n[ ${badge.newbie} **\`${message.author.tag}\` - \`${message.guild.name}\`** ] 
+_ _\n[ ${badgeDisplayed} **\`${message.author.tag}\` - \`${message.guild.name}\`** ]     
 **userID: \`${message.author.id}\` - guildID: \`${message.guild.id}\`**`;
-            else
-              usernamePart = `
-_ _\n[ ${badge.verified} **\`${message.author.tag}\` - \`${message.guild.name}\`** ]
-**userID: \`${message.author.id}\` - guildID: \`${message.guild.id}\`**            `;
+            }
+          } else if (modules.compareMaps(sameUserLog, sameUserOld)) {
+            usernamePart = "";
           }
 
           // check if the message contains any attachments
           if (!attachment) {
-            if (modules.compareMaps(sameUser, sameUserOld)) {
-              await channel.send(message.content).catch((err) => {
-                message.channel.send(
-                  `Can't deliver the message to **${guild}** for: ${err}`
-                );
-              });
-
-              return;
-            }
-
             await channel
               .send(`${usernamePart}\n${message.content}`)
               .catch((err) => {
@@ -259,44 +247,6 @@ _ _\n[ ${badge.verified} **\`${message.author.tag}\` - \`${message.guild.name}\`
                 );
               });
           } else if (attachment) {
-            if (modules.compareMaps(sameUser, sameUserOld)) {
-              // eslint-disable-next-line no-empty
-              if (client.isOwner(message.author) || isBotStaff) {
-              } else if (gcInfo.messageCount < requiredMsgForVerification) {
-                const prohibitedMsg =
-                  "*Can't send attachments due to the status of being a newbie.*";
-                await channel.send(
-                  message.content
-                    ? `${message.content}\n${prohibitedMsg}`
-                    : `${prohibitedMsg}`
-                );
-                return;
-              }
-
-              const attachmentToSend = new Discord.MessageAttachment(
-                attachment
-              );
-              await channel
-                .send(message.content, attachmentToSend)
-                .catch((err) => {
-                  try {
-                    // try to send a notice if the bot can't send attachment to the guild chosen
-                    const errorMessage = `*Error sending attachment: ${err}*`;
-                    channel.send(
-                      message.content
-                        ? `${message.content}\n${errorMessage}`
-                        : `${errorMessage}`
-                    );
-                  } catch (err) {
-                    message.channel.send(
-                      `Can't deliver the message to **${guild}** for: ${err}`
-                    );
-                  }
-                });
-
-              return;
-            }
-
             // eslint-disable-next-line no-empty
             if (client.isOwner(message.author) || isBotStaff) {
             } else if (gcInfo.messageCount < requiredMsgForVerification) {
