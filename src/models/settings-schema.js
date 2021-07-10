@@ -11,6 +11,7 @@ const settingsSchema = mongoose.Schema({
   suggestionsChannel: reqString,
   ticketCategory: reqString,
   globalChat: reqString,
+  muteRole: reqString,
 });
 
 module.exports = mongoose.model("guildSettings", settingsSchema);
