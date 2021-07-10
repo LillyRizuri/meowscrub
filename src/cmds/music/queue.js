@@ -8,6 +8,7 @@ module.exports = class ListQueueCommand extends Commando.Command {
   constructor(client) {
     super(client, {
       name: "queue",
+      aliases: ["q"],
       group: "music",
       memberName: "queue",
       description: "Display the guild's music queue.",
