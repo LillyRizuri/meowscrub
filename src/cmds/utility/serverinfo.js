@@ -41,24 +41,39 @@ module.exports = class ServerInfoCommand extends Commando.Command {
 
     const createdAtFromNow = moment(message.guild.createdAt).fromNow();
 
-    const allRoles = message.guild.roles.cache.size - 1;
+    const allRoles = (message.guild.roles.cache.size - 1).toLocaleString();
 
-    const allEmojis = message.guild.emojis.cache.size;
+    const allEmojis = message.guild.emojis.cache.size.toLocaleString();
 
-    const allBoosts = message.guild.premiumSubscriptionCount;
+    const allBoosts = message.guild.premiumSubscriptionCount.toLocaleString();
 
-    const serverTier = message.guild.premiumTier;
+    const serverTier = message.guild.premiumTier.toLocaleString();
 
-    const memberCount =
+    const memberCount = (
       message.guild.memberCount -
-      message.guild.members.cache.filter((m) => m.user.bot).size;
+      message.guild.members.cache.filter((m) => m.user.bot).size
+    ).toLocaleString();
 
-    const botCount = message.guild.members.cache.filter((m) => m.user.bot).size;
+    const botCount = message.guild.members.cache
+      .filter((m) => m.user.bot)
+      .size.toLocaleString();
 
-    const maximumMembers = message.guild.maximumMembers;
+    const maximumMembers = message.guild.maximumMembers.toLocaleString();
 
     const guildDescription = message.guild.description
-      ? `"${message.guild.description}"`
+      ? `${message.guild.description}`
+      : "None";
+
+    const rulesChannel = message.guild.rulesChannelID
+      ? `#${
+          message.guild.channels.cache.get(message.guild.rulesChannelID).name
+        }`
+      : "None";
+
+    const systemChannel = message.guild.systemChannelID
+      ? `#${
+          message.guild.channels.cache.get(message.guild.systemChannelID).name
+        }`
       : "None";
 
     const textChannels = message.guild.channels.cache.filter(
@@ -77,15 +92,19 @@ module.exports = class ServerInfoCommand extends Commando.Command {
       (channel) => channel.type == "news"
     ).size;
 
-    let afkChannel;
-    try {
-      afkChannel = `"${message.guild.afkChannel.name}"`;
-    } catch (err) {
+    let afkChannel = "";
+    let afkTimeout = "";
+    if (message.guild.afkChannelID) {
+      afkChannel = `"${
+        message.guild.channels.cache.get(message.guild.afkChannelID).name
+      }"`;
+      afkTimeout = ` - ${message.guild.afkTimeout}s Timeout`;
+    } else if (!message.guild.afkChannelID) {
       afkChannel = "None";
     }
 
     const defaultMsgNotif = message.guild.defaultMessageNotifications
-      .replace("All", "All messages")
+      .replace("ALL", "All messages")
       .replace("MENTIONS", "Only @mentions");
 
     const explicitContentFilter = message.guild.explicitContentFilter
@@ -121,7 +140,7 @@ module.exports = class ServerInfoCommand extends Commando.Command {
 • Description: \`${guildDescription}\`
 • \`${memberCount} Member(s) | ${botCount} Bot(s) | Maximum of ${maximumMembers} members\`
 • \`${allRoles} Role(s) | ${allEmojis} Emoji(s) | ${allBoosts} Boost(s) | Tier ${serverTier}\`
-• \`${defaultMsgNotif} notified by default\`   
+• \`${defaultMsgNotif} will be notified by default\`   
           `,
         },
         {
@@ -134,7 +153,9 @@ module.exports = class ServerInfoCommand extends Commando.Command {
         {
           name: "All Channels",
           value: `
-• AFK Voice Channel: \`${afkChannel}\`
+• Rules Channel: \`${rulesChannel}\`
+• System Channel: \`${systemChannel}\`          
+• AFK Voice Channel: \`${afkChannel}${afkTimeout}\`
 • \`${textChannels} Text Ch. | ${voiceChannels} Voice Ch. | ${parentChannels} Category Ch. | ${newsChannels} News Ch.\`
           `,
         },
