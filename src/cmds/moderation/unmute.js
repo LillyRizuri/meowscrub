@@ -57,9 +57,9 @@ module.exports = class MuteCommand extends Commando.Command {
 
     const reasonMessage = args.slice(1).join(" ");
 
-    if (reasonMessage.length > 1000)
+    if (reasonMessage.length > 200)
       return message.reply(
-        "<:scrubred:797476323169533963> Consider lowering your reason's length to be just under 1000 characters."
+        "<:scrubred:797476323169533963> Consider lowering your reason's length to be just under 200 characters."
       );
 
     if (reasonMessage) {
@@ -112,7 +112,7 @@ module.exports = class MuteCommand extends Commando.Command {
 
     await member.roles.remove(
       mutedRole,
-      `Operation done by ${message.author.tag}`
+      `From ${message.author.tag}: ${reason}`
     );
 
     const muteSuccessEmbed = new Discord.MessageEmbed()

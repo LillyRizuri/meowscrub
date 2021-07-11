@@ -23,7 +23,7 @@ module.exports = class ServerBlacklistCommand extends Commando.Command {
         "blacklist 692346925428506777 --force",
       ],
       clientPermissions: ["EMBED_LINKS"],
-      hidden: true
+      hidden: true,
     });
   }
 
@@ -50,8 +50,12 @@ module.exports = class ServerBlacklistCommand extends Commando.Command {
         );
       }
       guildId = target.id;
-    } else if (args[1] === "--force") {
+    } else if (args[1].toLowerCase() === "--force") {
       guildId = args[0];
+    } else {
+      return message.reply(
+        "<:scrubred:797476323169533963> Did you type in the wrong flag? Please try again."
+      );
     }
 
     const results = await guildBlacklistSchema.findOne({
@@ -81,7 +85,7 @@ module.exports = class ServerBlacklistCommand extends Commando.Command {
 You will attempt to blacklist this guild: **${target.name}**.
 Please confirm your choice by reacting to a check mark or a cross to abort.     
         `);
-      } else if (args[1] === "--force") {
+      } else if (args[1].toLowerCase() === "--force") {
         confirmationEmbed.setDescription(`
 You will attempt to blacklist this guild: **${guildId}**.
 Please confirm your choice by reacting to a check mark or a cross to abort.     
