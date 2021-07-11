@@ -12,6 +12,7 @@ module.exports = class UserPermissionsCommand extends Commando.Command {
       group: "utility",
       memberName: "permissions",
       description: "Shows your, or a specified user's permission.",
+      details: "Use --text to check permissions in the channel where the command was sent.",
       argsType: "multiple",
       format: "<@user/userID> [--text]",
       examples: ["permissions @frockles"],

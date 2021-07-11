@@ -15,7 +15,7 @@ module.exports = class ServerBlacklistCommand extends Commando.Command {
       memberName: "server-blacklist",
       description: "Blacklist a server from inviting me.",
       details:
-        "Use [--force] to skip guild checking. Good for blacklisting a guild that I'm not in.\nOnly the bot owner(s) may use this command.",
+        "Use --force to skip guild checking. Good for blacklisting a guild that I'm not in.\nOnly the bot owner(s) may use this command.",
       argsType: "multiple",
       format: "<guildId> [--force]",
       examples: [
