@@ -69,17 +69,17 @@ module.exports = class MuteCommand extends Commando.Command {
       reason = "No reason provided.";
     }
 
-    const settingsOutput = await settingsSchema.findOne({
+    const guildSettings = await settingsSchema.findOne({
       guildId: message.guild.id,
     });
 
-    if (!settingsOutput || !settingsOutput.muteRole)
+    if (!guildSettings || !guildSettings.muteRole)
       return message.reply(
         "<:scrubred:797476323169533963> There's no muted role set in this server.\nPlease set one using the `muterole` command."
       );
 
     const mutedRole = message.guild.roles.cache.find(
-      (e) => e.id === settingsOutput.muteRole
+      (e) => e.id === guildSettings.muteRole
     );
 
     if (!mutedRole)
@@ -87,15 +87,23 @@ module.exports = class MuteCommand extends Commando.Command {
         "<:scrubred:797476323169533963> The muted role was set, but couldn't be found anywhere.\nMaybe the role got deleted?"
       );
 
-    if (member.roles.cache.has(mutedRole.id))
-      return message.reply(
-        `<:scrubred:797476323169533963> **${member.user.tag}** is already muted.`
-      );
+    if (message.guild.members.resolve(member.user.id)) {
+      if (
+        message.member.roles.highest.position <=
+          member.roles.highest.position &&
+        message.guild.ownerID !== message.author.id
+      )
+        return message.reply(
+          `<:scrubred:797476323169533963> You are not allowed to interact with **${member.user.tag}**.`
+        );
 
-    await member.roles.add(
-      mutedRole,
-      `From ${message.author.tag}: ${reason}`
-    );
+      if (member.roles.cache.has(mutedRole.id))
+        return message.reply(
+          `<:scrubred:797476323169533963> **${member.user.tag}** is already muted.`
+        );
+    }
+
+    await member.roles.add(mutedRole, `From ${message.author.tag}: ${reason}`);
 
     const results = await mutedSchema.findOne({
       guildId: message.guild.id,
@@ -109,6 +117,31 @@ module.exports = class MuteCommand extends Commando.Command {
         guildId: message.guild.id,
         users: member.id,
       }).save();
+    }
+
+    if (message.guild.members.resolve(member.user.id)) {
+      if (guildSettings && guildSettings.dmPunishment) {
+        const dmReasonEmbed = new Discord.MessageEmbed()
+          .setColor("RANDOM")
+          .setTitle(`You were muted in ${message.guild.name}.`)
+          .addFields(
+            {
+              name: "Performed By",
+              value: `${message.author.tag} (${message.author.id})`,
+            },
+            {
+              name: "Reason for Muting",
+              value: reason,
+            }
+          )
+          .setFooter("... What were you doing?")
+          .setTimestamp();
+        await member.send(dmReasonEmbed).catch(() => {
+          message.channel.send(
+            "Can't send the reason to the offender. Maybe they have their DM disabled."
+          );
+        });
+      }
     }
 
     const muteSuccessEmbed = new Discord.MessageEmbed()

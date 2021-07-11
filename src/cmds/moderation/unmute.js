@@ -68,17 +68,17 @@ module.exports = class MuteCommand extends Commando.Command {
       reason = "No reason provided.";
     }
 
-    const settingsOutput = await settingsSchema.findOne({
+    const guildSettings = await settingsSchema.findOne({
       guildId: message.guild.id,
     });
 
-    if (!settingsOutput || !settingsOutput.muteRole)
+    if (!guildSettings || !guildSettings.muteRole)
       return message.reply(
         "<:scrubred:797476323169533963> There's no muted role set in this server.\nPlease set one using the `muterole` command."
       );
 
     const mutedRole = message.guild.roles.cache.find(
-      (e) => e.id === settingsOutput.muteRole
+      (e) => e.id === guildSettings.muteRole
     );
 
     if (!mutedRole)
@@ -89,6 +89,17 @@ module.exports = class MuteCommand extends Commando.Command {
     const results = await mutedSchema.findOne({
       guildId: message.guild.id,
     });
+
+    if (message.guild.members.resolve(member.user.id)) {
+      if (
+        message.member.roles.highest.position <=
+          member.roles.highest.position &&
+        message.guild.ownerID !== message.author.id
+      )
+        return message.reply(
+          `<:scrubred:797476323169533963> You are not allowed to interact with **${member.user.tag}**.`
+        );
+    }
 
     if (!results)
       return message.reply(
@@ -101,19 +112,47 @@ module.exports = class MuteCommand extends Commando.Command {
         `<:scrubred:797476323169533963> **${member.user.tag}** hasn't been muted yet.`
       );
 
-    await mutedSchema.findOneAndUpdate({
-      guildId: message.guild.id,
-    }, {
-      guildId: message.guild.id,
-      $pull: {
-        users: member.id
+    await mutedSchema.findOneAndUpdate(
+      {
+        guildId: message.guild.id,
+      },
+      {
+        guildId: message.guild.id,
+        $pull: {
+          users: member.id,
+        },
       }
-    });
-
-    await member.roles.remove(
-      mutedRole,
-      `From ${message.author.tag}: ${reason}`
     );
+
+    if (message.guild.members.resolve(member.user.id)) {
+      await member.roles.remove(
+        mutedRole,
+        `From ${message.author.tag}: ${reason}`
+      );
+
+      if (guildSettings && guildSettings.dmPunishment) {
+        const dmReasonEmbed = new Discord.MessageEmbed()
+          .setColor("RANDOM")
+          .setTitle(`You were unmuted in ${message.guild.name}.`)
+          .addFields(
+            {
+              name: "Performed By",
+              value: `${message.author.tag} (${message.author.id})`,
+            },
+            {
+              name: "Reason for Unmuting",
+              value: reason,
+            }
+          )
+          .setFooter("... What were you doing again?")
+          .setTimestamp();
+        await member.send(dmReasonEmbed).catch(() => {
+          message.channel.send(
+            "Can't send the reason to the target. Maybe they have their DM disabled."
+          );
+        });
+      }
+    }
 
     const muteSuccessEmbed = new Discord.MessageEmbed()
       .setColor(green)

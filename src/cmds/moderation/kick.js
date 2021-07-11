@@ -1,7 +1,9 @@
 const Commando = require("discord.js-commando");
 const Discord = require("discord.js");
 
-const { green, embedcolor } = require("../../assets/json/colors.json");
+const settingsSchema = require("../../models/settings-schema");
+
+const { green } = require("../../assets/json/colors.json");
 
 module.exports = class KickCommand extends Commando.Command {
   constructor(client) {
@@ -68,34 +70,48 @@ module.exports = class KickCommand extends Commando.Command {
 
     const { guild } = message;
 
-    const user = guild.members.cache.get(target.id);
-    if (!user.kickable)
+    const member = guild.members.cache.get(target.id);
+    if (
+      message.member.roles.highest.position <= member.roles.highest.position &&
+      message.guild.ownerID !== message.author.id
+    )
+      return message.reply(
+        `<:scrubred:797476323169533963> You are not allowed to interact with **${target.tag}**.`
+      );
+
+    if (!member.kickable)
       return message.reply(
         "<:scrubred:797476323169533963> How the heck can I kick the user you specified? Jesus."
       );
 
-    const dmReasonEmbed = new Discord.MessageEmbed()
-      .setColor(embedcolor)
-      .setTitle(`You were kicked in ${guild.name}.`)
-      .addFields(
-        {
-          name: "Performed By",
-          value: `${message.author.tag} (${message.author.id})`,
-        },
-        {
-          name: "Reason for Kicking",
-          value: reason,
-        }
-      )
-      .setFooter("Well.")
-      .setTimestamp();
-    await user.send(dmReasonEmbed).catch(() => {
-      message.channel.send(
-        "Can't send the reason to the offender. Maybe they have their DM disabled."
-      );
+    const guildSettings = await settingsSchema.findOne({
+      guildId: message.guild.id,
     });
 
-    user.kick(`From ${message.author.tag}: ${reason}`);
+    if (guildSettings && guildSettings.dmPunishment) {
+      const dmReasonEmbed = new Discord.MessageEmbed()
+        .setColor("RANDOM")
+        .setTitle(`You were kicked in ${guild.name}.`)
+        .addFields(
+          {
+            name: "Performed By",
+            value: `${message.author.tag} (${message.author.id})`,
+          },
+          {
+            name: "Reason for Kicking",
+            value: reason,
+          }
+        )
+        .setFooter("Well.")
+        .setTimestamp();
+      await member.send(dmReasonEmbed).catch(() => {
+        message.channel.send(
+          "Can't send the reason to the offender. Maybe they have their DM disabled."
+        );
+      });
+    }
+
+    await member.kick(`From ${message.author.tag}: ${reason}`);
 
     const kickConfirmEmbed = new Discord.MessageEmbed()
       .setColor(green)
@@ -114,6 +130,6 @@ module.exports = class KickCommand extends Commando.Command {
       )
       .setFooter("hmmm...")
       .setTimestamp();
-    message.channel.send(kickConfirmEmbed);
+    await message.channel.send(kickConfirmEmbed);
   }
 };

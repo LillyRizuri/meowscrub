@@ -53,6 +53,14 @@ module.exports = class SetNickCommand extends Commando.Command {
     }
 
     const member = message.guild.members.cache.get(target.id);
+    if (
+      message.member.roles.highest.position <=
+        member.roles.highest.position &&
+      message.guild.ownerID !== message.author.id
+    )
+      return message.reply(
+        `<:scrubred:797476323169533963> You are not allowed to interact with **${target.tag}**.`
+      );
 
     args.shift();
     const nickname = args.join(" ");

@@ -7,6 +7,11 @@ const reqString = {
 
 const settingsSchema = mongoose.Schema({
   guildId: reqString,
+  dmPunishment: {
+    type: Boolean,
+    required: true,
+    default: false,
+  },
   chatbotChannel: reqString,
   suggestionsChannel: reqString,
   ticketCategory: reqString,

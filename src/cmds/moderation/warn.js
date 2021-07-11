@@ -2,6 +2,7 @@ const Commando = require("discord.js-commando");
 const Discord = require("discord.js");
 
 const warnSchema = require("../../models/warn-schema");
+const settingsSchema = require("../../models/settings-schema");
 
 const { green } = require("../../assets/json/colors.json");
 
@@ -42,6 +43,19 @@ module.exports = class WarnCommand extends Commando.Command {
       return message.reply(
         "<:scrubred:797476323169533963> THAT'S not a valid user."
       );
+    }
+
+    const member = message.guild.members.cache.get(target.id);
+
+    if (message.guild.members.resolve(target.id)) {
+      if (
+        message.member.roles.highest.position <=
+          member.roles.highest.position &&
+        message.guild.ownerID !== message.author.id
+      )
+        return message.reply(
+          `<:scrubred:797476323169533963> You are not allowed to interact with **${target.tag}**.`
+        );
     }
 
     switch (target) {
@@ -102,6 +116,35 @@ module.exports = class WarnCommand extends Commando.Command {
         upsert: true,
       }
     );
+
+    if (message.guild.members.resolve(target.id)) {
+      const guildSettings = await settingsSchema.findOne({
+        guildId,
+      });
+
+      if (guildSettings && guildSettings.dmPunishment) {
+        const dmReasonEmbed = new Discord.MessageEmbed()
+          .setColor("RANDOM")
+          .setTitle(`You got warned in ${message.guild.name}.`)
+          .addFields(
+            {
+              name: "Performed By",
+              value: `${message.author.tag} (${message.author.id})`,
+            },
+            {
+              name: "Reason for Warning",
+              value: `ID: ${warnId} - ${reason}`,
+            }
+          )
+          .setFooter("Hmmm...")
+          .setTimestamp();
+        await member.send(dmReasonEmbed).catch(() => {
+          message.channel.send(
+            "Can't send the reason to the target. Maybe they have their DM disabled."
+          );
+        });
+      }
+    }
 
     const warnedEmbed = new Discord.MessageEmbed()
       .setColor(green)

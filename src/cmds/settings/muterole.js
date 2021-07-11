@@ -10,7 +10,7 @@ module.exports = class SetMuteRoleCommand extends Commando.Command {
   constructor(client) {
     super(client, {
       name: "muterole",
-      aliases: ["setmuterole"],
+      aliases: ["mutedrole", "setmutedrole", "setmuterole"],
       group: "settings",
       memberName: "muterole",
       description: "Set a muted role.",
