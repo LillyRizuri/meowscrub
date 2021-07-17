@@ -10,7 +10,7 @@ module.exports = class TicketCommand extends Commando.Command {
     super(client, {
       name: "ticket",
       aliases: ["support"],
-      group: "utility",
+      group: "ticket",
       memberName: "ticket",
       description: "Create a basic ticket for you and staffs to talk.",
       argsType: "single",
@@ -29,7 +29,6 @@ module.exports = class TicketCommand extends Commando.Command {
 
   async run(message, args) {
     const guildId = message.guild.id;
-    let parentChannel;
     let channel;
 
     const channelNameCache = message.guild.channels.cache.find(
@@ -46,27 +45,20 @@ module.exports = class TicketCommand extends Commando.Command {
         "<:scrubnull:797476323533783050> There's no reason for opening your ticket."
       );
 
-    message.delete().then(() => {
-      message.channel
-        .send("placeholder text, nothing to be seen here lmao")
-        .then((msg) => {
-          msg.delete();
-        });
-    });
+    message.delete();
 
     if (args.length > 512)
       return message.reply(
         "<:scrubred:797476323169533963> Limit your reason to just 512 characters only."
       );
 
-    const results = await settingsSchema.find({
+    const results = await settingsSchema.findOne({
       guildId,
     });
 
-    for (let i = 0; i < results.length; i++) {
-      const { ticketCategory } = results[i];
-      parentChannel = message.guild.channels.cache.get(ticketCategory);
-    }
+    const parentChannel = message.guild.channels.cache.get(
+      results.ticketCategory
+    );
 
     if (!parentChannel)
       return message.reply(

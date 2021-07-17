@@ -36,6 +36,7 @@ client.on("ready", async () => {
     .registerGroups([
       ["conventional", "Conventional Commands"],
       ["moderation", "Moderation Commands"],
+      ["ticket", "Ticket-Related Commands"],
       ["economy", "Economy System"],
       ["images", "Pictures Retrieval"],
       ["encoders", "Message Encoders"],
