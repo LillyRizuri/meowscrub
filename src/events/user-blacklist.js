@@ -8,7 +8,9 @@ module.exports = {
     });
 
     client.dispatcher.addInhibitor((msg) => {
-      if (results) {
+      if (!results) {
+        return;
+      } else if (results.userId === msg.author.id) {
         return {
           reason: "Blacklisted.",
           response: msg.reply(
