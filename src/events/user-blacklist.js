@@ -7,15 +7,15 @@ module.exports = {
       userId: message.author.id,
     });
 
-    if (results) {
-      client.dispatcher.addInhibitor((msg) => {
+    client.dispatcher.addInhibitor((msg) => {
+      if (results) {
         return {
           reason: "Blacklisted.",
           response: msg.reply(
             "You are blacklisted from using my features. For that, you can't do anything other than appeal."
           ),
         };
-      });
-    }
+      }
+    });
   },
 };
