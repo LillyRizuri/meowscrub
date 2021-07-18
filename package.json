@@ -19,6 +19,7 @@
     "commando-provider-mongo": "^2.1.0",
     "covidtracker": "^2.0.1",
     "discord-buttons": "^3.2.1",
+    "discord-together": "^1.1.14",
     "discord.js": "^12.5.3",
     "discord.js-commando": "^0.12.3",
     "distube": "^2.8.15",

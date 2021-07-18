@@ -3,6 +3,7 @@ require("dotenv").config();
 const Commando = require("discord.js-commando");
 const Discord = require("discord.js");
 const DisTube = require("distube");
+const { DiscordTogether } = require("discord-together");
 const path = require("path");
 const fs = require("fs");
 
@@ -31,24 +32,27 @@ client.distube = new DisTube(client, {
   youtubeCookie: process.env.YTCOOKIE,
 });
 
+client.discordTogether = new DiscordTogether(client);
+
 client.on("ready", async () => {
   client.registry
     .registerGroups([
       ["conventional", "Conventional Commands"],
       ["moderation", "Moderation Commands"],
+      ["settings", "Guild Settings"],
       ["ticket", "Ticket-Related Commands"],
-      ["economy", "Economy System"],
-      ["images", "Pictures Retrieval"],
-      ["encoders", "Message Encoders"],
-      ["covid-related", "COVID-19 Related Commands"],
       ["funs", "Some Really Simple Fun Stuff"],
       ["soundboard", "Soundboard!"],
       ["music-library", "Frockle's Music Library"],
       ["music", "Music Controller"],
+      ["discord-together", "Discord Together"],
+      ["economy", "Economy System"],
+      ["images", "Pictures Retrieval"],
+      ["encoders", "Message Encoders"],
+      ["covid-related", "COVID-19 Related Commands"],
       ["misc", "Miscellaneous Stuff"],
-      ["utility", "Extra Utilities"],
-      ["settings", "Guild Settings"],
       ["owner-only", "Bot Owner Only"],
+      ["utility", "Extra Utilities"],
       ["notice", "Bot Notice"],
     ])
     .registerDefaults()
