@@ -41,7 +41,7 @@ module.exports.urlify = (string) => {
   //   "i"
   // ); // fragment locator
 
-  const pattern = /^((ftp|http|https):\/\/)?(www\.)?([A-z]+)\.([A-z]{2,})/;
+  const pattern = /^((ftp|http|https):\/\/)?(www\.)?([^\s$.?#]+)\.([^\s]{2,})/gm;
 
   return string.replace(pattern, function (url) {
     // eslint-disable-next-line quotes
