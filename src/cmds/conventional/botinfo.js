@@ -86,6 +86,8 @@ module.exports = class BotInfoCommand extends Commando.Command {
 
 • weky
 \`For the tic-tac-toe, fight, would-you-rather command\`
+• discord-together
+\`Play games or watch YouTube videos together on Discord!\`
 
 • weather-js
 \`A module for obtaining weather information from weather.service.msn.com somehow\`
