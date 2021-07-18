@@ -21,17 +21,14 @@ module.exports = {
     );
 
     // Connecting to MongoDB
-    const connectToMongoDB = async () => {
-      await mongoose
-        .connect(mongoPath, {
-          useNewUrlParser: true,
-          useUnifiedTopology: true,
-          useFindAndModify: false,
-        })
-        .then(() => {
-          console.log("Successfully connected to your MongoDB Database.");
-        });
-    };
-    connectToMongoDB();
+    await mongoose
+      .connect(mongoPath, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        useFindAndModify: false,
+      })
+      .then(() => {
+        console.log("Successfully connected to your MongoDB Database.");
+      });
   },
 };
