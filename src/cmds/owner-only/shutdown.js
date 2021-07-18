@@ -1,9 +1,8 @@
 const Commando = require("discord.js-commando");
-const Discord = require("discord.js");
+const disbut = require("discord-buttons");
 
-const { embedcolor } = require("../../assets/json/colors.json");
-const checkMark = "<:scrubgreenlarge:797816509967368213>";
-const cross = "<:scrubredlarge:797816510579998730>";
+const confirmId = "confirmShutdown";
+const abortId = "cancelShutdown";
 
 module.exports = class ShutdownCommand extends Commando.Command {
   constructor(client) {
@@ -15,7 +14,7 @@ module.exports = class ShutdownCommand extends Commando.Command {
       description: "Shut the actual bot down. No joke.",
       details: "Only the bot owner(s) may use this command.",
       clientPermissions: ["EMBED_LINKS"],
-      hidden: true
+      hidden: true,
     });
   }
 
@@ -25,43 +24,70 @@ module.exports = class ShutdownCommand extends Commando.Command {
         "<:scrubred:797476323169533963> THIS COMMAND IS VERY DANGEROUS AND IT WILL MAKE THE CLIENT SHUT DOWN.\nTHIS IS NO JOKE."
       );
 
-    const confirmationEmbed = new Discord.MessageEmbed()
-      .setColor(embedcolor)
-      .setAuthor(
-        `Initiated by ${message.author.tag}`,
-        message.author.displayAvatarURL({ dynamic: true })
-      ).setDescription(`
-The entire client seesion will be destroyed.
-Please confirm with a check mark or with a red cross.        
-        `);
-    message.reply(confirmationEmbed).then((msg) => {
-      msg.react(checkMark);
-      setTimeout(() => {
-        msg.react(cross);
-      }, 750);
+    const confirmBtn = new disbut.MessageButton()
+      .setStyle("green")
+      .setLabel("Confirm")
+      .setID(confirmId);
 
-      msg
-        .awaitReactions(
-          (reaction, user) =>
-            user.id == message.author.id &&
-            (reaction.emoji.name == "scrubgreenlarge" ||
-              reaction.emoji.name == "scrubredlarge"),
-          { max: 1, time: 30000 }
-        )
-        .then(async (collected) => {
-          if (collected.first().emoji.name == "scrubgreenlarge") {
-            try {
-              await message.channel.send("*The client has been put to rest.*");
-            } finally {
-              process.exit();
-            }
-          } else message.channel.send("Operation canceled. Phew.");
-        })
-        .catch(() => {
-          message.channel.send(
-            "No reaction after 30 seconds, operation canceled."
-          );
-        });
-    });
+    const abortBtn = new disbut.MessageButton()
+      .setStyle("red")
+      .setLabel("Abort")
+      .setID(abortId);
+
+    const row = new disbut.MessageActionRow().addComponents([
+      confirmBtn,
+      abortBtn,
+    ]);
+
+    const msg = await message.reply(
+      `
+The entire client seesion will be destroyed.  
+Please confirm your choice by clicking one of the buttons below.    
+      `,
+      row
+    );
+    const filter = (button) => button.clicker.user.id === message.author.id;
+
+    msg
+      .awaitButtons(filter, { max: 1, time: 30000 })
+      .then(async (collected) => {
+        const confirmBtnEdit = new disbut.MessageButton()
+          .setStyle("green")
+          .setLabel("Confirm")
+          .setID(confirmId)
+          .setDisabled();
+
+        const abortBtnEdit = new disbut.MessageButton()
+          .setStyle("red")
+          .setLabel("Abort")
+          .setID(abortId)
+          .setDisabled();
+
+        const rowEdit = new disbut.MessageActionRow().addComponents([
+          confirmBtnEdit,
+          abortBtnEdit,
+        ]);
+
+        if (collected.first().id === confirmId) {
+          try {
+            await collected
+              .first()
+              .message.edit("*The client has been put to rest.*", rowEdit);
+            await collected.first().defer();
+          } finally {
+            process.exit();
+          }
+        } else if (collected.first().id === abortId) {
+          await collected
+            .first()
+            .message.edit("Operation aborted. Phew.", rowEdit);
+          collected.first().defer();
+        }
+      })
+      .catch(() => {
+        message.channel.send(
+          `${message.author}, No reaction after 30 seconds, operation aborted.`
+        );
+      });
   }
 };

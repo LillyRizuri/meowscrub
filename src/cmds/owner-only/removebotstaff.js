@@ -1,10 +1,9 @@
 const Commando = require("discord.js-commando");
-const Discord = require("discord.js");
+const disbut = require("discord-buttons");
 const botStaffSchema = require("../../models/bot-staff-schema");
 
-const { embedcolor } = require("../../assets/json/colors.json");
-const checkMark = "<:scrubgreenlarge:797816509967368213>";
-const cross = "<:scrubredlarge:797816510579998730>";
+const confirmId = "removeBotStaff";
+const abortId = "cancelRemovingBotStaff";
 
 module.exports = class RemoveBotStaffCommand extends Commando.Command {
   constructor(client) {
@@ -17,8 +16,6 @@ module.exports = class RemoveBotStaffCommand extends Commando.Command {
       details: "Only the bot owner(s) may use this command.",
       argsType: "single",
       format: "<userId>",
-      examples: ["blacklist 693832549943869493"],
-      clientPermissions: ["EMBED_LINKS"],
       hidden: true,
     });
   }
@@ -70,46 +67,79 @@ module.exports = class RemoveBotStaffCommand extends Commando.Command {
       return message.reply(
         `**${target.tag}** is not a bot staff. What are you trying to do?`
       );
-    } else if (results) {
-      const confirmationEmbed = new Discord.MessageEmbed()
-        .setColor(embedcolor)
-        .setAuthor(
-          `Initiated by ${message.author.tag}`,
-          message.author.displayAvatarURL({ dynamic: true })
-        ).setDescription(`
-You will attempt to remove **${target.tag}** from the bot staff team.
-Please confirm your choice by reacting to a check mark or a cross to abort.     
-        `);
-      const msg = await message.reply(confirmationEmbed);
-      await msg.react(checkMark);
-      await msg.react(cross);
+    }
 
-      msg
-        .awaitReactions(
-          (reaction, user) =>
-            user.id == message.author.id &&
-            (reaction.emoji.name == "scrubgreenlarge" ||
-              reaction.emoji.name == "scrubredlarge"),
-          { max: 1, time: 30000 }
-        )
-        .then(async (collected) => {
-          if (collected.first().emoji.name == "scrubgreenlarge") {
+    const confirmBtn = new disbut.MessageButton()
+      .setStyle("green")
+      .setLabel("Confirm")
+      .setID(confirmId);
+
+    const abortBtn = new disbut.MessageButton()
+      .setStyle("red")
+      .setLabel("Abort")
+      .setID(abortId);
+
+    const row = new disbut.MessageActionRow().addComponents([
+      confirmBtn,
+      abortBtn,
+    ]);
+
+    const msg = await message.reply(
+      `
+You are attempting to remove **${target.tag}** from the bot staff team.      
+Please confirm your choice by clicking one of the buttons below.
+      `,
+      row
+    );
+
+    const filter = (button) => button.clicker.user.id === message.author.id;
+
+    msg
+      .awaitButtons(filter, { max: 1, time: 30000 })
+      .then(async (collected) => {
+        const confirmBtnEdit = new disbut.MessageButton()
+          .setStyle("green")
+          .setLabel("Confirm")
+          .setID(confirmId)
+          .setDisabled();
+
+        const abortBtnEdit = new disbut.MessageButton()
+          .setStyle("red")
+          .setLabel("Abort")
+          .setID(abortId)
+          .setDisabled();
+
+        const rowEdit = new disbut.MessageActionRow().addComponents([
+          confirmBtnEdit,
+          abortBtnEdit,
+        ]);
+
+        switch (collected.first().id) {
+          case confirmId:
             try {
-              await message.channel.send(
-                `You've made your choice to remove **${target.tag}** from the bot staff team.\nOperation complete.`
-              );
-            } finally {
               await botStaffSchema.findOneAndDelete({
                 userId,
               });
+            } finally {
+              await collected
+                .first()
+                .message.edit(
+                  `You've made your choice to remove **${target.tag}** from the bot staff team.\nOperation complete.`,
+                  rowEdit
+                );
             }
-          } else message.channel.send("Operation aborted.");
-        })
-        .catch(() => {
-          message.channel.send(
-            "No reaction after 30 seconds, operation aborted."
-          );
-        });
-    }
+            break;
+          case abortId:
+            await collected.first().message.edit("Operation aborted.", rowEdit);
+            break;
+        }
+
+        collected.first().defer();
+      })
+      .catch(() => {
+        message.channel.send(
+          `${message.author}, No reaction after 30 seconds, operation aborted.`
+        );
+      });
   }
 };

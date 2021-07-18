@@ -1,10 +1,9 @@
 const Commando = require("discord.js-commando");
-const Discord = require("discord.js");
+const disbut = require("discord-buttons");
 const guildBlacklistSchema = require("../../models/guild-blacklist-schema");
 
-const { embedcolor } = require("../../assets/json/colors.json");
-const checkMark = "<:scrubgreenlarge:797816509967368213>";
-const cross = "<:scrubredlarge:797816510579998730>";
+const confirmId = "confirmGuildBlacklist";
+const abortId = "cancelGuildBlacklist";
 
 module.exports = class ServerBlacklistCommand extends Commando.Command {
   constructor(client) {
@@ -62,65 +61,89 @@ module.exports = class ServerBlacklistCommand extends Commando.Command {
       guildId,
     });
 
-    if (results) {
-      switch (args[1]) {
-        case "--force":
-          return message.reply(
-            `The guild with this ID: **${guildId}** has already been blacklisted. What are you trying to do?`
-          );
-        case "":
-          return message.reply(
-            `**${target.name}** has already been blacklisted. What are you trying to do?`
-          );
-      }
-    } else {
-      const confirmationEmbed = new Discord.MessageEmbed()
-        .setColor(embedcolor)
-        .setAuthor(
-          `Initiated by ${message.author.tag}`,
-          message.author.displayAvatarURL({ dynamic: true })
-        );
-      if (!args[1]) {
-        confirmationEmbed.setDescription(`
-You will attempt to blacklist this guild: **${target.name}**.
-Please confirm your choice by reacting to a check mark or a cross to abort.     
-        `);
-      } else if (args[1].toLowerCase() === "--force") {
-        confirmationEmbed.setDescription(`
-You will attempt to blacklist this guild: **${guildId}**.
-Please confirm your choice by reacting to a check mark or a cross to abort.     
-        `);
-      }
-      const msg = await message.reply(confirmationEmbed);
-      await msg.react(checkMark);
-      await msg.react(cross);
+    if (results)
+      return message.reply(
+        `The guild with this ID: **${guildId}** has already been blacklisted. What are you trying to do?`
+      );
 
-      msg
-        .awaitReactions(
-          (reaction, user) =>
-            user.id == message.author.id &&
-            (reaction.emoji.name == "scrubgreenlarge" ||
-              reaction.emoji.name == "scrubredlarge"),
-          { max: 1, time: 30000 }
-        )
-        .then(async (collected) => {
-          if (collected.first().emoji.name == "scrubgreenlarge") {
+    let response = "";
+    if (!args[1]) {
+      response = `
+You will attempt to blacklist this guild: **${target.name}**.
+Please confirm your choice by clicking one of the buttons below.         
+      `;
+    } else if (args[1].toLowerCase() === "--force") {
+      response = `
+You will attempt to blacklist this guild: **${guildId}**.
+Please confirm your choice by clicking one of the buttons below.      
+      `;
+    }
+
+    const confirmBtn = new disbut.MessageButton()
+      .setStyle("green")
+      .setLabel("Confirm")
+      .setID(confirmId);
+
+    const abortBtn = new disbut.MessageButton()
+      .setStyle("red")
+      .setLabel("Abort")
+      .setID(abortId);
+
+    const row = new disbut.MessageActionRow().addComponents([
+      confirmBtn,
+      abortBtn,
+    ]);
+
+    const msg = await message.reply(response, row);
+
+    const filter = (button) => button.clicker.user.id === message.author.id;
+
+    msg
+      .awaitButtons(filter, { max: 1, time: 30000 })
+      .then(async (collected) => {
+        const confirmBtnEdit = new disbut.MessageButton()
+          .setStyle("green")
+          .setLabel("Confirm")
+          .setID(confirmId)
+          .setDisabled();
+
+        const abortBtnEdit = new disbut.MessageButton()
+          .setStyle("red")
+          .setLabel("Abort")
+          .setID(abortId)
+          .setDisabled();
+
+        const rowEdit = new disbut.MessageActionRow().addComponents([
+          confirmBtnEdit,
+          abortBtnEdit,
+        ]);
+
+        switch (collected.first().id) {
+          case confirmId:
             try {
-              await message.channel.send(
-                "You've made your choice to blacklist **that following guild**.\nOperation complete."
-              );
-            } finally {
               await new guildBlacklistSchema({
                 guildId,
               }).save();
+            } finally {
+              await collected
+                .first()
+                .message.edit(
+                  "You've made your choice to blacklist **that following guild**.\nOperation complete.",
+                  rowEdit
+                );
             }
-          } else message.channel.send("Operation aborted.");
-        })
-        .catch(() => {
-          message.channel.send(
-            "No reaction after 30 seconds, operation aborted."
-          );
-        });
-    }
+            break;
+          case abortId:
+            await collected.first().message.edit("Operation aborted.", rowEdit);
+            break;
+        }
+
+        collected.first().defer();
+      })
+      .catch(() => {
+        message.channel.send(
+          `${message.author}, No reaction after 30 seconds, operation aborted.`
+        );
+      });
   }
 };
