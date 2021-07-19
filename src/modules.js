@@ -10,12 +10,12 @@ module.exports.trim = (string, max) => {
   return string.length > max ? `${string.slice(0, max - 3)}...` : string;
 };
 
-function formatInt(int) {
-  if (int < 10) return `0${int}`;
-  return `${int}`;
-}
-
 module.exports.formatDuration = (milliseconds) => {
+  function formatInt(int) {
+    if (int < 10) return `0${int}`;
+    return int;
+  }
+
   if (!milliseconds || !parseInt(milliseconds)) return "00:00";
   const seconds = Math.floor((milliseconds % 60000) / 1000);
   const minutes = Math.floor((milliseconds % 3600000) / 60000);
@@ -43,10 +43,19 @@ module.exports.urlify = (string) => {
 
   const pattern = /^((ftp|http|https):\/\/)?(www\.)?([^\s$.?#]+)\.([^\s]{2,})/gm;
 
-  return string.replace(pattern, function (url) {
-    // eslint-disable-next-line quotes
-    return '<a href="' + url + '">' + url + "</a>";
-  });
+  const strSplit = string.split(" ");
+  let testString = "";
+
+  for (let i = 0; i < strSplit.length; i++) {
+    const strPiece = strSplit[i];
+    const patternReplace = strPiece.replace(pattern, function (url) {
+      // eslint-disable-next-line quotes
+      return '<a href="' + url + '">' + url + "</a>";
+    });
+    testString += patternReplace;
+  }
+
+  return testString;
 };
 
 module.exports.compareMaps = (map1, map2) => {
