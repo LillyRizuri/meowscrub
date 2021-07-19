@@ -285,8 +285,7 @@ _ _\n[ ${badgeDisplayed} **\`${message.author.tag}\` - \`${message.guild.name}\`
               return;
             }
 
-            const attachmentToSend = new Discord.MessageAttachment(attachment);
-            if (!attachmentToSend.height || !attachmentToSend.width) {
+            if (!attachment.height || !attachment.width) {
               const prohibitedAttachmentNotice =
                 "*The user attempted to send something other than image and video.*";
               await channel
@@ -306,7 +305,7 @@ _ _\n[ ${badgeDisplayed} **\`${message.author.tag}\` - \`${message.guild.name}\`
                   message.content
                     ? `${usernamePart}\n${message.content}`
                     : `${usernamePart}`,
-                  attachmentToSend
+                  attachment
                 )
                 .catch((err) => {
                   try {
