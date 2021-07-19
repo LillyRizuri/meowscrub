@@ -44,7 +44,7 @@ module.exports.urlify = (string) => {
   const pattern = /^((ftp|http|https):\/\/)?(www\.)?([^\s$.?#]+)\.([^\s]{2,})/gm;
 
   const strSplit = string.split(" ");
-  let testString = "";
+  const testArray = [];
 
   for (let i = 0; i < strSplit.length; i++) {
     const strPiece = strSplit[i];
@@ -52,10 +52,10 @@ module.exports.urlify = (string) => {
       // eslint-disable-next-line quotes
       return '<a href="' + url + '">' + url + "</a>";
     });
-    testString += patternReplace;
+    testArray.push(patternReplace);
   }
 
-  return testString;
+  return testArray.join(" ");
 };
 
 module.exports.compareMaps = (map1, map2) => {
