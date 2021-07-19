@@ -20,8 +20,8 @@ const client = new Commando.CommandoClient({
   intents: new Discord.Intents(Discord.Intents.ALL),
 });
 
-const disbut = require("discord-buttons");
-disbut(client);
+require("discord-buttons")(client);
+client.discordTogether = new DiscordTogether(client);
 
 client.distube = new DisTube(client, {
   searchSongs: false,
@@ -31,8 +31,6 @@ client.distube = new DisTube(client, {
   updateYouTubeDL: true,
   youtubeCookie: process.env.YTCOOKIE,
 });
-
-client.discordTogether = new DiscordTogether(client);
 
 client.on("ready", async () => {
   client.registry
