@@ -105,7 +105,7 @@ module.exports = class SetTicketCategoryCommand extends Commando.Command {
           const channelEmbed = new Discord.MessageEmbed()
             .setColor(what)
             .setDescription(
-              `<:scrubnull:797476323533783050> **Current Ticket Category Configuration:** ${ticketCategoryName} (${results.ticketCategory})`
+              `<:scrubnull:797476323533783050> **Current Ticket Category Configuration:** \`${ticketCategoryName} - ${results.ticketCategory}\``
             );
           return message.channel.send(channelEmbed);
         }
