@@ -1,4 +1,5 @@
 const Commando = require("discord.js-commando");
+const disbut = require("discord-buttons");
 
 module.exports = class TogetherCommand extends Commando.Command {
   constructor(client) {
@@ -29,8 +30,15 @@ module.exports = class TogetherCommand extends Commando.Command {
       message.member.voice.channelID,
       "youtube"
     );
+
+    const togetherCode = new disbut.MessageButton()
+      .setStyle("url")
+      .setURL(together.code)
+      .setLabel("Initiate the activity: YouTube Together");
+
     await message.reply(
-      `Click on the invite and not the play button to start the activity. The "play" button is reserved for people who wants to join the activity. ONLY APPLICABLE FOR DESKTOP USERS!\n${together.code}`
+      "Click on the button to start the activity. ONLY APPLICABLE FOR DESKTOP USERS!",
+      togetherCode
     );
   }
 };
