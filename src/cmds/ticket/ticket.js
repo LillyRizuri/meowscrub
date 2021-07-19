@@ -2,8 +2,9 @@ const Commando = require("discord.js-commando");
 const Discord = require("discord.js");
 
 const settingsSchema = require("../../models/settings-schema");
+const ticketSchema = require("../../models/ticket-schema");
 
-const { red, green } = require("../../assets/json/colors.json");
+const { green } = require("../../assets/json/colors.json");
 
 module.exports = class TicketCommand extends Commando.Command {
   constructor(client) {
@@ -29,16 +30,32 @@ module.exports = class TicketCommand extends Commando.Command {
 
   async run(message, args) {
     const guildId = message.guild.id;
-    let channel;
 
-    const channelNameCache = message.guild.channels.cache.find(
-      (ch) => ch.name === `ticket-${message.author.id}`
-    );
+    const existingTicket = await ticketSchema.findOne({
+      guildId: message.guild.id,
+      userId: message.author.id,
+    });
 
-    if (channelNameCache)
-      return message.reply(
-        "<:scrubred:797476323169533963> Your ticket is already open. Check again."
+    if (existingTicket) {
+      const existingChannel = message.guild.channels.cache.get(
+        existingTicket.channelId
       );
+
+      if (!existingChannel) {
+        message.reply(
+          "Huh... It seems like your old ticket is forcefully deleted by a server manager."
+        );
+
+        await ticketSchema.findOneAndDelete({
+          guildId: message.guild.id,
+          userId: message.author.id,
+        });
+      } else if (existingChannel) {
+        return message.reply(
+          `<:scrubred:797476323169533963> You already have a ticket present. [${existingChannel}]`
+        );
+      }
+    }
 
     if (!args)
       return message.reply(
@@ -65,92 +82,71 @@ module.exports = class TicketCommand extends Commando.Command {
         "<:scrubnull:797476323533783050> There's no ticket category config. set. This is important to keep your ticket channel organized."
       );
 
-    try {
-      channel = await message.guild.channels.create(
-        `ticket-${message.author.id}`,
-        {
-          type: "text",
-          topic: `[By @${message.author.tag}] ${args}`,
-          reason: `Ticket created by ${message.author.tag}`,
-        }
+    const parentChannelPermissions = parentChannel
+      .permissionsFor(this.client.user.id)
+      .toArray();
+
+    const cantSendMessages = parentChannelPermissions.includes("SEND_MESSAGES");
+    const cantSendEmbed = parentChannelPermissions.includes("EMBED_LINKS");
+    const cantViewChannel = parentChannelPermissions.includes("VIEW_CHANNEL");
+
+    // eslint-disable-next-line no-empty
+    if (cantSendMessages && cantSendEmbed && cantViewChannel) {
+    } else {
+      return message.reply(
+        "<:scrubred:797476323169533963> It seems like I somehow can't manage the ticket channel's category properly. Please contact your nearest server manager to give me these permissions:\n`Send Messages, Embed Links, View Channel`"
       );
-
-      channel.setParent(parentChannel);
-
-      channel.updateOverwrite(message.guild.id, {
-        SEND_MESSAGE: false,
-        VIEW_CHANNEL: false,
-      });
-      channel.updateOverwrite(message.author, {
-        SEND_MESSAGE: true,
-        VIEW_CHANNEL: true,
-      });
-    } catch (err) {
-      const missingPermissionsEmbed = new Discord.MessageEmbed()
-        .setColor(red)
-        .setDescription(
-          "<:scrubred:797476323169533963> I can't properly modify your ticket channel. Please contact a server manager to:\n**Whitelist me in the current Ticket Category.**"
-        )
-        .setFooter(
-          "Req. Permissions: View Channels, Send Messages, Manage Channels, Add Reactions"
-        );
-      return message.reply(missingPermissionsEmbed);
     }
+
+    const channel = await message.guild.channels.create(
+      `${message.author.username}-${message.author.discriminator}`,
+      {
+        type: "text",
+        topic: `[By @${message.author.tag}] ${args}`,
+        reason: `Ticket created by ${message.author.tag}`,
+      }
+    );
+
+    await channel.setParent(parentChannel.id, { lockPermissions: true });
+
+    await channel.updateOverwrite(message.guild.id, {
+      SEND_MESSAGES: false,
+      VIEW_CHANNEL: false,
+    });
+    await channel.updateOverwrite(message.author, {
+      SEND_MESSAGES: true,
+      VIEW_CHANNEL: true,
+    });
 
     const ticketResponseEmbed = new Discord.MessageEmbed()
       .setColor("GREEN")
+      .setTitle("New Ticket From Someone")
       .setDescription(
-        `Support will be here with you shortly with this following reason of opening your ticket:\n\`${args}\``
+        `
+• Member: ${message.author} \`(${message.author.id})\`    
+• Reason: \`${args}\`    
+        `
       )
-      .setFooter(
-        "🔒 = Lock Ticket | ⛔ = Delete Ticket (Resort to make changes to this ticket manually if I restarts)"
-      );
+      .setFooter("support will be here for you shortly.");
 
-    const ticketResponse = await channel.send(
-      `${message.author} Welcome!`,
-      ticketResponseEmbed
-    );
+    await channel.send(`${message.author} Welcome!`, ticketResponseEmbed);
 
-    try {
-      await ticketResponse.react("🔒");
-      await ticketResponse.react("⛔");
-    } catch (err) {
-      channel.send("Huh. Can't set any reactions.");
-    }
-
-    const collector = ticketResponse.createReactionCollector(
-      (reaction, user) =>
-        message.guild.members.cache
-          .find((member) => member.id === user.id)
-          .hasPermission("ADMINISTRATOR"),
-      {
-        dispose: true,
-      }
-    );
-
-    collector.on("collect", (reaction) => {
-      switch (reaction.emoji.name) {
-        case "🔒":
-          channel.updateOverwrite(message.author, {
-            SEND_MESSAGES: false,
-          });
-          break;
-        case "⛔":
-          channel.send("This ticket will self-destruct in 5 seconds.");
-          setTimeout(() => channel.delete(), 5000);
-          break;
-      }
-    });
+    await new ticketSchema({
+      guildId: message.guild.id,
+      channelId: channel.id,
+      userId: message.author.id,
+      locked: false,
+    }).save();
 
     const ticketCreatedEmbed = new Discord.MessageEmbed()
       .setColor(green)
       .setDescription(
-        `<:scrubgreen:797476323316465676> Thank you. Support will be here for you shortly. [${channel}]`
+        `<:scrubgreen:797476323316465676> Successfully created a ticket. [${channel}]\nSupport will be here for you shortly.`
       )
       .setFooter("good luck.")
       .setTimestamp();
 
-    message.channel.send(ticketCreatedEmbed).then((msg) => {
+    await message.channel.send(ticketCreatedEmbed).then((msg) => {
       setTimeout(() => {
         msg.delete();
       }, 7000);
