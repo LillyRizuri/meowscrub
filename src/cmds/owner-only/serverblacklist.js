@@ -49,7 +49,7 @@ module.exports = class ServerBlacklistCommand extends Commando.Command {
         );
       }
       guildId = target.id;
-    } else if (args[1].toLowerCase() === "--force") {
+    } else if (args[1] && args[1].toLowerCase() === "--force") {
       guildId = args[0];
     } else {
       return message.reply(
@@ -72,7 +72,7 @@ module.exports = class ServerBlacklistCommand extends Commando.Command {
 You will attempt to blacklist this guild: **${target.name}**.
 Please confirm your choice by clicking one of the buttons below.         
       `;
-    } else if (args[1].toLowerCase() === "--force") {
+    } else if (args[1] && args[1].toLowerCase() === "--force") {
       response = `
 You will attempt to blacklist this guild: **${guildId}**.
 Please confirm your choice by clicking one of the buttons below.      
