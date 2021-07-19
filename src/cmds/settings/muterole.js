@@ -62,7 +62,9 @@ module.exports = class SetMuteRoleCommand extends Commando.Command {
           .setDescription(
             `<:scrubgreen:797476323316465676> **Set the Muted Role to:** ${role}\n\nRemember to deny these permissions for the role in all channels' settings.:\n**Send Messages, Add Reactions, Speak, Video**.`
           )
-          .setFooter("we may not be held responsible for overridden roles. make sure no roles have these above permissions given entirely.");
+          .setFooter(
+            "we may not be held responsible for overridden roles. make sure no roles have these above permissions given entirely."
+          );
         message.channel.send(confirmationEmbed);
         break;
       case "disable":
@@ -89,24 +91,21 @@ module.exports = class SetMuteRoleCommand extends Commando.Command {
         message.channel.send(confirmationRemovalEmbed);
         return;
       case "":
-        const results = await settingsSchema.find({
+        const results = await settingsSchema.findOne({
           guildId,
         });
 
-        for (let i = 0; i < results.length; i++) {
-          const { muteRole } = results[i];
-          if (!muteRole) {
-            return message.reply(
-              "<:scrubnull:797476323533783050> The muted role hasn't been set yet."
+        if (!results.muteRole) {
+          return message.reply(
+            "<:scrubnull:797476323533783050> The muted role hasn't been set yet."
+          );
+        } else if (results.muteRole) {
+          const channelEmbed = new Discord.MessageEmbed()
+            .setColor(what)
+            .setDescription(
+              `<:scrubnull:797476323533783050> **Current Muted Role Configuration:** <@&${results.muteRole}>`
             );
-          } else if (muteRole) {
-            const channelEmbed = new Discord.MessageEmbed()
-              .setColor(what)
-              .setDescription(
-                `<:scrubnull:797476323533783050> **Current Muted Role Configuration:** <@&${muteRole}>`
-              );
-            return message.channel.send(channelEmbed);
-          }
+          return message.channel.send(channelEmbed);
         }
     }
   }

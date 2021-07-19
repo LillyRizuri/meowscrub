@@ -93,24 +93,21 @@ module.exports = class SetChatbotChannelCommand extends Commando.Command {
         message.channel.send(confirmationRemovalEmbed);
         return;
       case "":
-        const results = await settingsSchema.find({
+        const results = await settingsSchema.findOne({
           guildId,
         });
 
-        for (let i = 0; i < results.length; i++) {
-          const { chatbotChannel } = results[i];
-          if (!chatbotChannel) {
-            return message.reply(
-              "<:scrubnull:797476323533783050> The text channel hasn't been set yet."
+        if (!results.chatbotChannel) {
+          return message.reply(
+            "<:scrubnull:797476323533783050> The text channel hasn't been set yet."
+          );
+        } else if (results.chatbotChannel) {
+          const channelEmbed = new Discord.MessageEmbed()
+            .setColor(what)
+            .setDescription(
+              `<:scrubnull:797476323533783050> **Current Chatbot Channel Configuration:** <#${results.chatbotChannel}>`
             );
-          } else if (chatbotChannel) {
-            const channelEmbed = new Discord.MessageEmbed()
-              .setColor(what)
-              .setDescription(
-                `<:scrubnull:797476323533783050> **Current Chatbot Channel Configuration:** <#${chatbotChannel}>`
-              );
-            return message.channel.send(channelEmbed);
-          }
+          return message.channel.send(channelEmbed);
         }
     }
   }

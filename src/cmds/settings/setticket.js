@@ -10,7 +10,7 @@ module.exports = class SetTicketCategoryCommand extends Commando.Command {
   constructor(client) {
     super(client, {
       name: "setticket",
-      aliases: ["setticketcategory", "setticketparent"],
+      aliases: ["ticketcategory", "ticketparent"],
       group: "settings",
       memberName: "setticket",
       description: "Set a category for the tickets channel.",
@@ -63,7 +63,7 @@ module.exports = class SetTicketCategoryCommand extends Commando.Command {
         const confirmationEmbed = new Discord.MessageEmbed()
           .setColor(green)
           .setDescription(
-            `<:scrubgreen:797476323316465676> **Set the Ticket Category to:** ${channel.name} (${channel.id})\nRemember to set the category's user permissions accordingly.`
+            `<:scrubgreen:797476323316465676> **Set the Ticket Category to:** \`${channel.name} - ${channel.id})\`\nRemember to set the category's user permissions for staffs accordingly.`
           );
         message.channel.send(confirmationEmbed);
         break;
@@ -91,27 +91,23 @@ module.exports = class SetTicketCategoryCommand extends Commando.Command {
         message.channel.send(confirmationRemovalEmbed);
         return;
       case "":
-        const results = await settingsSchema.find({
+        const results = await settingsSchema.findOne({
           guildId,
         });
 
-        for (let i = 0; i < results.length; i++) {
-          const { ticketCategory } = results[i];
-          if (!ticketCategory) {
-            return message.reply(
-              "<:scrubnull:797476323533783050> The category ID hasn't been set yet."
+        if (!results.ticketCategory) {
+          return message.reply(
+            "<:scrubnull:797476323533783050> The category ID hasn't been set yet."
+          );
+        } else if (results.ticketCategory) {
+          const ticketCategoryName =
+            message.guild.channels.cache.get(results.ticketCategory).name;
+          const channelEmbed = new Discord.MessageEmbed()
+            .setColor(what)
+            .setDescription(
+              `<:scrubnull:797476323533783050> **Current Ticket Category Configuration:** ${ticketCategoryName} (${results.ticketCategory})`
             );
-          } else if (ticketCategory) {
-            const ticketCategoryName = message.guild.channels.cache.get(
-              ticketCategory
-            ).name;
-            const channelEmbed = new Discord.MessageEmbed()
-              .setColor(what)
-              .setDescription(
-                `<:scrubnull:797476323533783050> **Current Ticket Category Configuration:** ${ticketCategoryName} (${ticketCategory})`
-              );
-            return message.channel.send(channelEmbed);
-          }
+          return message.channel.send(channelEmbed);
         }
     }
   }

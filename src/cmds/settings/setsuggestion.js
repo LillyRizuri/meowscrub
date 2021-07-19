@@ -97,20 +97,17 @@ module.exports = class SetChatbotChannelCommand extends Commando.Command {
           guildId,
         });
 
-        for (let i = 0; i < results.length; i++) {
-          const { suggestionsChannel } = results[i];
-          if (!suggestionsChannel) {
-            return message.reply(
-              "<:scrubnull:797476323533783050> The text channel hasn't been set yet."
+        if (!results.suggestionsChannel) {
+          return message.reply(
+            "<:scrubnull:797476323533783050> The text channel hasn't been set yet."
+          );
+        } else if (results.suggestionsChannel) {
+          const channelEmbed = new Discord.MessageEmbed()
+            .setColor(what)
+            .setDescription(
+              `<:scrubnull:797476323533783050> **Current Chatbot Channel Configuration:** <#${results.suggestionsChannel}>`
             );
-          } else if (suggestionsChannel) {
-            const channelEmbed = new Discord.MessageEmbed()
-              .setColor(what)
-              .setDescription(
-                `<:scrubnull:797476323533783050> **Current Chatbot Channel Configuration:** <#${suggestionsChannel}>`
-              );
-            return message.channel.send(channelEmbed);
-          }
+          return message.channel.send(channelEmbed);
         }
     }
   }

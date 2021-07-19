@@ -94,24 +94,21 @@ module.exports = class SetGlobalChatChannelCommand extends Commando.Command {
         message.channel.send(confirmationRemovalEmbed);
         return;
       case "":
-        const results = await settingsSchema.find({
+        const results = await settingsSchema.findOne({
           guildId,
         });
 
-        for (let i = 0; i < results.length; i++) {
-          const { globalChat } = results[i];
-          if (!globalChat) {
-            return message.reply(
-              "<:scrubnull:797476323533783050> The text channel hasn't been set yet."
+        if (!results.globalChat) {
+          return message.reply(
+            "<:scrubnull:797476323533783050> The text channel hasn't been set yet."
+          );
+        } else if (results.globalChat) {
+          const channelEmbed = new Discord.MessageEmbed()
+            .setColor(what)
+            .setDescription(
+              `<:scrubnull:797476323533783050> **Current Global Chat Configuration:** <#${results.globalChat}>`
             );
-          } else if (globalChat) {
-            const channelEmbed = new Discord.MessageEmbed()
-              .setColor(what)
-              .setDescription(
-                `<:scrubnull:797476323533783050> **Current Global Chat Configuration:** <#${globalChat}>`
-              );
-            return message.channel.send(channelEmbed);
-          }
+          return message.channel.send(channelEmbed);
         }
     }
   }
