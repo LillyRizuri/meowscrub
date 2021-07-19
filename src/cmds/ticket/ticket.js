@@ -102,12 +102,11 @@ module.exports = class TicketCommand extends Commando.Command {
       `${message.author.username}-${message.author.discriminator}`,
       {
         type: "text",
+        parent: parentChannel.id,
         topic: `[By @${message.author.tag}] ${args}`,
         reason: `Ticket created by ${message.author.tag}`,
       }
     );
-
-    await channel.setParent(parentChannel.id, { lockPermissions: true });
 
     await channel.updateOverwrite(message.guild.id, {
       SEND_MESSAGES: false,
