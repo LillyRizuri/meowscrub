@@ -88,13 +88,13 @@ module.exports = class CloseTicketCommand extends Commando.Command {
           today.getSeconds();
 
         fs.writeFileSync(
-          `../${ticketCreator.username}-${ticketCreator.discriminator}.txt`,
+          `${ticketCreator.username}-${ticketCreator.discriminator}.txt`,
           results.transcript.join("\n\n")
         );
 
         const transcriptFile = new Discord.MessageAttachment(
           fs.createReadStream(
-            `../${ticketCreator.username}-${ticketCreator.discriminator}.txt`
+            `${ticketCreator.username}-${ticketCreator.discriminator}.txt`
           )
         );
 
