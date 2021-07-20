@@ -20,6 +20,8 @@ const client = new Commando.CommandoClient({
   intents: new Discord.Intents(Discord.Intents.ALL),
 });
 
+client.playSongLog;
+
 require("discord-buttons")(client);
 client.discordTogether = new DiscordTogether(client);
 

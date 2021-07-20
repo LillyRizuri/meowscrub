@@ -1,3 +1,4 @@
+/* eslint-disable no-empty */
 const Discord = require("discord.js");
 const modules = require("../modules");
 
@@ -14,6 +15,12 @@ module.exports = {
       })
 
       .on("playSong", async (message, queue, song) => {
+        try {
+          if (!client.playSongLog) {
+          } else if (client.playSongLog) {
+            client.playSongLog.delete();
+          }
+        } catch (err) {}
         const playingEmbed = new Discord.MessageEmbed()
           .setColor(green)
           .setThumbnail(song.thumbnail)
@@ -25,14 +32,17 @@ module.exports = {
           )
           .setFooter(`Requested by: ${song.user.tag}`)
           .setTimestamp();
-        message.channel.send(playingEmbed);
+        client.playSongLog = await message.channel.send(playingEmbed);
       })
 
       .on("addSong", (message, queue, song) => {
         let estimatedTime = modules.formatDuration(
           queue.duration * 1000 - song.duration * 1000 - queue.currentTime
         );
-        if (queue.songs[0].formattedDuration === "Live" || queue.repeatMode === 1)
+        if (
+          queue.songs[0].formattedDuration === "Live" ||
+          queue.repeatMode === 1
+        )
           estimatedTime = "Until you skip, that is";
         else if (
           queue.filter &&
@@ -55,7 +65,13 @@ Estimated Time Until Playing: **${estimatedTime}**
         message.channel.send(addSongEmbed);
       })
 
-      .on("playList", (message, queue, playlist, song) => {
+      .on("playList", async (message, queue, playlist, song) => {
+        try {
+          if (!client.playSongLog) {
+          } else if (client.playSongLog) {
+            client.playSongLog.delete();
+          }
+        } catch (err) {}
         const playlistEmbed = new Discord.MessageEmbed()
           .setColor(green)
           .setThumbnail(song.thumbnail)
@@ -70,14 +86,17 @@ Estimated Time Until Playing: **${estimatedTime}**
           )
           .setFooter(`Requested by: ${song.user.tag}`)
           .setTimestamp();
-        message.channel.send(playlistEmbed);
+        client.playSongLog = await message.channel.send(playlistEmbed);
       })
 
       .on("addList", (message, queue, playlist) => {
         let estimatedTime = modules.formatDuration(
           queue.duration * 1000 - playlist.duration * 1000 - queue.currentTime
         );
-        if (queue.songs[0].formattedDuration === "Live" || queue.repeatMode === 1)
+        if (
+          queue.songs[0].formattedDuration === "Live" ||
+          queue.repeatMode === 1
+        )
           estimatedTime = "Until you skip, that is";
         else if (
           queue.filter &&
@@ -101,18 +120,36 @@ Estimated Time Until Playing: **${estimatedTime}**
       })
 
       .on("empty", (message) => {
+        try {
+          if (!client.playSongLog) {
+          } else if (client.playSongLog) {
+            client.playSongLog.delete();
+          }
+        } catch (err) {}
         message.channel.send(
           "<:scrubnull:797476323533783050> **The VC I'm in is empty. Leaving the channel...**"
         );
       })
 
       .on("noRelated", (message) => {
+        try {
+          if (!client.playSongLog) {
+          } else if (client.playSongLog) {
+            client.playSongLog.delete();
+          }
+        } catch (err) {}
         message.channel.send(
           "<:scrubnull:797476323533783050> **No related music can be found. Attempting to leave the VC...**"
         );
       })
 
       .on("finish", (message) => {
+        try {
+          if (!client.playSongLog) {
+          } else if (client.playSongLog) {
+            client.playSongLog.delete();
+          }
+        } catch (err) {}
         message.channel.send(
           "<:scrubnull:797476323533783050> **The queue is now empty. Leaving the VC...**"
         );

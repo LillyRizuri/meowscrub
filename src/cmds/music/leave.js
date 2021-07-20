@@ -40,6 +40,14 @@ module.exports = class StopMusicCommand extends Commando.Command {
       );
 
     this.client.distube.stop(message);
+    try {
+      // eslint-disable-next-line no-empty
+      if (!this.client.playSongLog) {
+      } else if (this.client.playSongLog) {
+        this.client.playSongLog.delete();
+      }
+    // eslint-disable-next-line no-empty
+    } catch (err) {}
     message.channel.send(
       "<:scrubgreen:797476323316465676> **Stopped the track, and cleaned the queue.**"
     );
