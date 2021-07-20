@@ -82,12 +82,12 @@ Please do so by using the \`${client.commandPrefix}globalchat-notice\` command, 
             )
             .setFooter(`Please contact ${botOwner.tag} if you're confused.`);
 
-            const msg = await message.reply(holdUpEmbed);
+          const msg = await message.reply(holdUpEmbed);
 
-            setTimeout(() => {
-              msg.delete();
-            }, 5000);
-            return;
+          setTimeout(() => {
+            msg.delete();
+          }, 5000);
+          return;
         }
 
         // if the target's message is over 1024 characters, return
@@ -173,39 +173,24 @@ Please do so by using the \`${client.commandPrefix}globalchat-notice\` command, 
 
         // transform all user mentions in message content to usernames and tags
         let modifiedMessageContent;
-        message.mentions.users.each(async (user) => {
-          modifiedMessageContent = message.content
-            .split(`<@!${user.id}>`)
-            .join(`@${user.tag}`);
-
-          // check if nothing has changed
-          if (modifiedMessageContent === message.content)
+        if (message.mentions.users.first()) {
+          message.mentions.users.each(async (user) => {
             modifiedMessageContent = message.content
-              .split(`<@${user.id}>`)
+              .split(`<@!${user.id}>`)
               .join(`@${user.tag}`);
 
-          message.content = modifiedMessageContent;
-        });
+            // check if nothing has changed
+            if (modifiedMessageContent === message.content)
+              modifiedMessageContent = message.content
+                .split(`<@${user.id}>`)
+                .join(`@${user.tag}`);
+
+            message.content = modifiedMessageContent;
+          });
+        }
 
         // get the first message attachment
         const attachment = message.attachments.first();
-
-        // check if the target didn't send a sufficient number of messages to post attachments
-        if (attachment) {
-          // eslint-disable-next-line no-empty
-          if (client.isOwner(message.author) || isBotStaff) {
-          } else if (gcInfo.messageCount < requiredMsgForVerification) {
-            message.reply(
-              "Can't send attachments due to the status of being a newbie."
-            );
-          }
-
-          if (!attachment.height || !attachment.width) {
-            message.reply(
-              "You can't send something other than image and video."
-            );
-          }
-        }
 
         // depends on account status, have a designated badge append with their username
         let badgeDisplayed = "";
@@ -224,11 +209,10 @@ Please do so by using the \`${client.commandPrefix}globalchat-notice\` command, 
         sameUserLog.clear();
         sameUserLog.set(message.author.id, message.guild.id);
 
+        await message.delete();
+
         // for each guilds that the client was in
         client.guilds.cache.forEach(async (guild) => {
-          // if the guild that the client chose happens to be the same guild the message was sent in, return
-          if (guild === message.guild) return;
-
           // fetch to see if the guild that the client chose have a global chat channel
           const otherGuildResults = await settingsSchema.findOne({
             guildId: guild.id,
