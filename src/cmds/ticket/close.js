@@ -87,16 +87,15 @@ module.exports = class CloseTicketCommand extends Commando.Command {
           ":" +
           today.getSeconds();
 
-        fs.writeFileSync(
-          `${ticketCreator.username}-${ticketCreator.discriminator}.txt`,
-          results.transcript.join("\n\n")
-        );
+        const fileName = `${ticketCreator.username}-${ticketCreator.discriminator}.txt`;
+
+        fs.writeFileSync(`./${fileName}`, results.transcript.join("\n\n"));
 
         const transcriptFile = new Discord.MessageAttachment(
-          fs.createReadStream(
-            `${ticketCreator.username}-${ticketCreator.discriminator}.txt`
-          )
+          fs.createReadStream(`./${fileName}`)
         );
+
+        fs.unlinkSync(`./${fileName}`);
 
         transcriptChannel.send(
           `\`[${time} ${timezone}]\` ❌ **${ticketCreator.tag} (${ticketCreator.id})**'s ticket has been closed by **${message.author.tag} (${message.author.id})**.\nThe full transcript is down below:`,
