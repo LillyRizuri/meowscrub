@@ -8,7 +8,7 @@ module.exports = {
       guildId: message.guild.id,
     });
 
-    if (!guildSettings && !guildSettings.transcriptLog) return;
+    if (!guildSettings || !guildSettings.transcriptLog) return;
     if (message.channel.parentID !== guildSettings.ticketCategory) return;
 
     const ticketProfile = await ticketSchema.findOne({

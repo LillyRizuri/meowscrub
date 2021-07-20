@@ -68,6 +68,11 @@ module.exports = class CloseTicketCommand extends Commando.Command {
       guildId: message.guild.id,
     });
 
+    function formatInt(int) {
+      if (int < 10) return `0${int}`;
+      return int;
+    }
+
     if (guildSettings && guildSettings.transcriptLog) {
       const transcriptChannel = message.guild.channels.cache.get(
         guildSettings.transcriptLog
@@ -81,11 +86,11 @@ module.exports = class CloseTicketCommand extends Commando.Command {
         const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
         const today = new Date();
         const time =
-          today.getHours() +
+          formatInt(today.getHours()) +
           ":" +
-          today.getMinutes() +
+          formatInt(today.getMinutes()) +
           ":" +
-          today.getSeconds();
+          formatInt(today.getSeconds());
 
         const fileName = `${ticketCreator.username}-${ticketCreator.discriminator}.txt`;
 
