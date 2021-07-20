@@ -1,6 +1,6 @@
 {
   "name": "meowscrub",
-  "version": "2.3",
+  "version": "2.3.1",
   "description": "General bot. But it's very lacking.",
   "engines": {
     "node": "14.15.3"
