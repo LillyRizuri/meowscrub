@@ -109,7 +109,6 @@ module.exports = class TicketCommand extends Commando.Command {
     );
 
     await channel.updateOverwrite(message.guild.id, {
-      SEND_MESSAGES: false,
       VIEW_CHANNEL: false,
     });
     await channel.updateOverwrite(message.author, {
