@@ -1,6 +1,9 @@
 const Commando = require("discord.js-commando");
+const Discord = require("discord.js");
+const fs = require("fs");
 
 const ticketSchema = require("../../models/ticket-schema");
+const settingsSchema = require("../../models/settings-schema");
 
 module.exports = class CloseTicketCommand extends Commando.Command {
   constructor(client) {
@@ -58,6 +61,49 @@ module.exports = class CloseTicketCommand extends Commando.Command {
       );
 
     message.channel.send("Attempting to close the ticket channel...");
+
+    const ticketCreator = await this.client.users.fetch(results.userId);
+
+    const guildSettings = await settingsSchema.findOne({
+      guildId: message.guild.id,
+    });
+
+    if (guildSettings && guildSettings.transcriptLog) {
+      const transcriptChannel = message.guild.channels.cache.get(
+        guildSettings.transcriptLog
+      );
+
+      if (!transcriptChannel) {
+        message.channel.send(
+          "Can't find the current transcript log channel. Maybe it was deleted."
+        );
+      } else if (transcriptChannel) {
+        const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        const today = new Date();
+        const time =
+          today.getHours() +
+          ":" +
+          today.getMinutes() +
+          ":" +
+          today.getSeconds();
+
+        fs.writeFileSync(
+          `../${ticketCreator.username}-${ticketCreator.discriminator}.txt`,
+          results.transcript.join("\n\n")
+        );
+
+        const transcriptFile = new Discord.MessageAttachment(
+          fs.createReadStream(
+            `../${ticketCreator.username}-${ticketCreator.discriminator}.txt`
+          )
+        );
+
+        transcriptChannel.send(
+          `\`[${time} ${timezone}]\` ❌ **${ticketCreator.tag} (${ticketCreator.id})**'s ticket has been closed by **${message.author.tag} (${message.author.id})**.\nThe full transcript is down below:`,
+          transcriptFile
+        );
+      }
+    }
 
     await ticketSchema.findOneAndDelete({
       guildId: message.guild.id,

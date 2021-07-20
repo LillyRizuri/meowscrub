@@ -9,6 +9,10 @@ const ticketSchema = mongoose.Schema({
   guildId: reqString,
   channelId: reqString,
   userId: reqString,
+  transcript: {
+    type: Array,
+    required: true,
+  },
   locked: {
     type: Boolean,
     required: true,

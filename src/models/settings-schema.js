@@ -15,6 +15,7 @@ const settingsSchema = mongoose.Schema({
   chatbotChannel: reqString,
   suggestionsChannel: reqString,
   ticketCategory: reqString,
+  transcriptLog: reqString,
   globalChat: reqString,
   muteRole: reqString,
 });
