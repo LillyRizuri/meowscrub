@@ -47,6 +47,11 @@ module.exports = class SetChatbotChannelCommand extends Commando.Command {
             "<:scrubred:797476323169533963> It isn't a valid text channel."
           );
 
+        if (!channel.viewable)
+          return message.reply(
+            "<:scrubred:797476323169533963> I can't view your specified channel."
+          );
+
         await settingsSchema.findOneAndUpdate(
           {
             guildId,
