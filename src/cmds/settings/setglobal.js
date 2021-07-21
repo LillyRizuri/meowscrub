@@ -6,19 +6,19 @@ const settingsSchema = require("../../models/settings-schema");
 
 const { green, what } = require("../../assets/json/colors.json");
 
-module.exports = class SetGlobalChatChannelCommand extends Commando.Command {
+module.exports = class SetGlobalChannelCommand extends Commando.Command {
   constructor(client) {
     super(client, {
-      name: "setglobalchat",
-      aliases: ["setglobalchatchannel"],
+      name: "setglobal",
+      aliases: ["setglobalchat"],
       group: "settings",
-      memberName: "setglobalchat",
+      memberName: "setglobal",
       description: "Set a Global Chat channel.",
       details:
         "Replace the syntax with `disable` if you wish to remove the configuration.",
       argsType: "single",
       format: "<channel/channelID>",
-      examples: ["setglobalchat #global", "setglobalchat 830823819505303584"],
+      examples: ["setglobal #global", "setglobal 830823819505303584"],
       userPermissions: ["ADMINISTRATOR"],
       clientPermissions: ["EMBED_LINKS", "USE_EXTERNAL_EMOJIS"],
       throttling: {
