@@ -59,7 +59,7 @@ module.exports = {
         ) {
         } else {
           return message.reply(
-            "<:scrubred:797476323169533963> It seems like I somehow can't manage the ticket channel's category properly. Please contact your nearest server manager to give me these permissions:\n`Send Messages, Embed Links, View Channel, Read Message History`"
+            "<:scrubred:797476323169533963> It seems like I somehow can't accerss this global chat channel properly. Please contact your nearest server manager to give me these permissions:\n`Send Messages, Embed Links, View Channel, Read Message History`"
           );
         }
         // await message.delete();
