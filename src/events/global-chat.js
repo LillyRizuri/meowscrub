@@ -47,12 +47,14 @@ module.exports = {
         const canReadMsgHistory = channelPermissions.has(
           "READ_MESSAGE_HISTORY"
         );
+        const canManageMessages = channelPermissions.has("MANAGE_MESSAGES");
 
         if (
           canSendMessages &&
           canSendEmbed &&
           canViewChannel &&
-          canReadMsgHistory
+          canReadMsgHistory &&
+          canManageMessages
           // eslint-disable-next-line no-empty
         ) {
         } else {
