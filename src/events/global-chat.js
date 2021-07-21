@@ -37,14 +37,14 @@ module.exports = {
         message.channel.id === currentGuildResults.globalChat &&
         !message.author.bot
       ) {
-        const channelPermissions = message.channel
-          .permissionsFor(client.user.id)
-          .toArray();
+        const channelPermissions = message.channel.permissionsFor(
+          message.client.user
+        );
 
-        const canSendMessages = channelPermissions.includes("SEND_MESSAGES");
-        const canSendEmbed = channelPermissions.includes("EMBED_LINKS");
-        const canViewChannel = channelPermissions.includes("VIEW_CHANNEL");
-        const canReadMsgHistory = channelPermissions.includes(
+        const canSendMessages = channelPermissions.has("SEND_MESSAGES");
+        const canSendEmbed = channelPermissions.has("EMBED_LINKS");
+        const canViewChannel = channelPermissions.has("VIEW_CHANNEL");
+        const canReadMsgHistory = channelPermissions.has(
           "READ_MESSAGE_HISTORY"
         );
 
@@ -53,7 +53,7 @@ module.exports = {
           canSendEmbed &&
           canViewChannel &&
           canReadMsgHistory
-        // eslint-disable-next-line no-empty
+          // eslint-disable-next-line no-empty
         ) {
         } else {
           return message.reply(
