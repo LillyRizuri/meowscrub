@@ -91,8 +91,13 @@ module.exports = class TicketCommand extends Commando.Command {
     const canViewChannel = parentChannelPermissions.includes("VIEW_CHANNEL");
     const canReadMsgHistory = parentChannelPermissions.includes("READ_MESSAGE_HISTORY");
 
+    if (
+      canSendMessages &&
+      canSendEmbed &&
+      canViewChannel &&
+      canReadMsgHistory
     // eslint-disable-next-line no-empty
-    if (canSendMessages && canSendEmbed && canViewChannel && canReadMsgHistory) {
+    ) {
     } else {
       return message.reply(
         "<:scrubred:797476323169533963> It seems like I somehow can't manage the ticket channel's category properly. Please contact your nearest server manager to give me these permissions:\n`Send Messages, Embed Links, View Channel, Read Message History`"

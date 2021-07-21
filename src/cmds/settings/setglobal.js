@@ -20,7 +20,7 @@ module.exports = class SetGlobalChannelCommand extends Commando.Command {
       format: "<channel/channelID>",
       examples: ["setglobal #global", "setglobal 830823819505303584"],
       userPermissions: ["ADMINISTRATOR"],
-      clientPermissions: ["EMBED_LINKS", "USE_EXTERNAL_EMOJIS"],
+      clientPermissions: ["EMBED_LINKS", "USE_EXTERNAL_EMOJIS", "MANAGE_MESSAGES"],
       throttling: {
         usages: 1,
         duration: 5,

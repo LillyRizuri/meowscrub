@@ -37,6 +37,29 @@ module.exports = {
         message.channel.id === currentGuildResults.globalChat &&
         !message.author.bot
       ) {
+        const channelPermissions = message.channel
+          .permissionsFor(client.user.id)
+          .toArray();
+
+        const canSendMessages = channelPermissions.includes("SEND_MESSAGES");
+        const canSendEmbed = channelPermissions.includes("EMBED_LINKS");
+        const canViewChannel = channelPermissions.includes("VIEW_CHANNEL");
+        const canReadMsgHistory = channelPermissions.includes(
+          "READ_MESSAGE_HISTORY"
+        );
+
+        if (
+          canSendMessages &&
+          canSendEmbed &&
+          canViewChannel &&
+          canReadMsgHistory
+        // eslint-disable-next-line no-empty
+        ) {
+        } else {
+          return message.reply(
+            "<:scrubred:797476323169533963> It seems like I somehow can't manage the ticket channel's category properly. Please contact your nearest server manager to give me these permissions:\n`Send Messages, Embed Links, View Channel, Read Message History`"
+          );
+        }
         // await message.delete();
         // const msg = await message.reply(
         //   `The chat is closed due to a potential raider. For more information, please get in touch wtih **${botOwner.tag}**.`
