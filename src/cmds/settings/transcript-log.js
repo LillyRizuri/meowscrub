@@ -120,7 +120,7 @@ module.exports = class SetTranscriptLogCommand extends Commando.Command {
           const channelEmbed = new Discord.MessageEmbed()
             .setColor(what)
             .setDescription(
-              `<:scrubnull:797476323533783050> **Current Transcript Log Channel Configuration:** <#${results.transcriptLogf}>`
+              `<:scrubnull:797476323533783050> **Current Transcript Log Channel Configuration:** <#${results.transcriptLog}>`
             );
           return message.channel.send(channelEmbed);
         }
