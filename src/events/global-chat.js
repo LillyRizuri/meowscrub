@@ -41,10 +41,10 @@ module.exports = {
           .permissionsFor(client.user.id)
           .toArray();
 
-        const canSendMessages = channelPermissions.has("SEND_MESSAGES");
-        const canSendEmbed = channelPermissions.has("EMBED_LINKS");
-        const canViewChannel = channelPermissions.has("VIEW_CHANNEL");
-        const canReadMsgHistory = channelPermissions.has(
+        const canSendMessages = channelPermissions.includes("SEND_MESSAGES");
+        const canSendEmbed = channelPermissions.includes("EMBED_LINKS");
+        const canViewChannel = channelPermissions.includes("VIEW_CHANNEL");
+        const canReadMsgHistory = channelPermissions.includes(
           "READ_MESSAGE_HISTORY"
         );
 
