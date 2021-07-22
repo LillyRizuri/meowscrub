@@ -11,6 +11,8 @@ const sameUserLog = new Map();
 
 const badge = require("../assets/json/badge-emoji.json");
 const { red } = require("../assets/json/colors.json");
+const referralDomains = require("../assets/json/referral-domains.json");
+const safeDomains = require("../assets/json/safe-domains.json");
 
 module.exports = {
   name: "message",
@@ -79,7 +81,7 @@ module.exports = {
         if (results) {
           await message.delete();
           const msg = await message.channel.send(
-            `**${message.author.tag}**, You are blacklisted from using this functionality. For that, your message won't be delivered.`
+            `**${message.author}**, You are blacklisted from using this functionality. For that, your message won't be delivered.`
           );
 
           setTimeout(() => {
@@ -118,8 +120,8 @@ Please do so by using the \`${client.commandPrefix}globalchat-notice\` command, 
         // if the target's message is over 1024 characters, return
         if (message.content.length > 1024) {
           await message.delete();
-          const msg = await thisChannel.send(
-            `**${message.author.tag}**, Your message musn't be more than 1024 characters.`
+          const msg = await message.channel.send(
+            `**${message.author}**, Your message musn't be more than 1024 characters.`
           );
 
           setTimeout(() => {
@@ -141,8 +143,39 @@ Please do so by using the \`${client.commandPrefix}globalchat-notice\` command, 
           const urlify = modules.urlify(message.content);
           if (urlify !== message.content) {
             await message.delete();
-            const msg = await thisChannel.send(
-              `**${message.author.tag}**, Links are not allowed for new members using this chat.`
+            const msg = await message.channel.send(
+              `**${message.author}**, Links are not allowed for new members using this chat.`
+            );
+
+            setTimeout(() => {
+              msg.delete();
+            }, 5000);
+            return;
+          }
+        }
+
+        if (
+          referralDomains.some((v) => message.content.toLowerCase().includes(v))
+        ) {
+          await message.delete();
+          const msg = await message.channel.send(
+            `**${message.author}**, Referral links are prohibited for all members.`
+          );
+
+          setTimeout(() => {
+            msg.delete();
+          }, 5000);
+          return;
+        }
+
+        const urlify = modules.urlify(message.content);
+        if (urlify !== message.content) {
+          if (
+            !safeDomains.some((v) => message.content.toLowerCase().includes(v))
+          ) {
+            await message.delete();
+            const msg = await message.channel.send(
+              `${message.author}, That site you posted isn't one of the safe domains.\nIf the site is safe, consider suggesting **${botOwner.tag}** to add it into the list of safe domains.`
             );
 
             setTimeout(() => {
@@ -157,8 +190,8 @@ Please do so by using the \`${client.commandPrefix}globalchat-notice\` command, 
         if (cooldown) {
           const remaining = humanizeDuration(cooldown - Date.now());
           await message.delete();
-          const msg = await thisChannel.send(
-            `**${message.author.tag}**, You are in cooldown for ${remaining}.`
+          const msg = await message.channel.send(
+            `**${message.author}**, You are in cooldown for ${remaining}.`
           );
 
           setTimeout(() => {

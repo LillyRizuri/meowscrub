@@ -28,7 +28,7 @@ module.exports = class CloseTicketCommand extends Commando.Command {
   async run(message, args) {
     let channel;
 
-    if (!args[0])
+    if (!args)
       return message.reply(
         "<:scrubnull:797476323533783050> Please provide the channel by mentioning them or provide their ID."
       );
@@ -38,7 +38,7 @@ module.exports = class CloseTicketCommand extends Commando.Command {
     } else if (args) {
       channel =
         message.mentions.channels.first() ||
-        message.guild.channels.cache.get(args[0]);
+        message.guild.channels.cache.get(args);
       if (!channel)
         return message.reply(
           "<:scrubnull:797476323533783050> That's NOT a valid Channel ID."
