@@ -4,6 +4,7 @@ const ticketSchema = require("../models/ticket-schema");
 module.exports = {
   name: "message",
   async execute(message) {
+    if (message.channel.type === "dm") return;
     const guildSettings = await settingsSchema.findOne({
       guildId: message.guild.id,
     });
