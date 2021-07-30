@@ -1,6 +1,7 @@
 const Commando = require("discord.js-commando");
 const Discord = require("discord.js");
 const moment = require("moment");
+const botStaffSchema = require("../../models/bot-staff-schema");
 
 const { embedcolor } = require("../../assets/json/colors.json");
 
@@ -12,6 +13,9 @@ module.exports = class ServerInfoCommand extends Commando.Command {
       group: "utility",
       memberName: "serverinfo",
       description: "Shows some informations about this very guild.",
+      argsType: "single",
+      format: "[guildID]",
+      examples: ["serverinfo", "serverinfo 692346925428506777"],
       clientPermissions: ["EMBED_LINKS"],
       throttling: {
         usages: 1,
@@ -21,7 +25,8 @@ module.exports = class ServerInfoCommand extends Commando.Command {
     });
   }
 
-  async run(message) {
+  async run(message, args) {
+    let guild;
     const dateTimeOptions = {
       weekday: "short",
       year: "numeric",
@@ -32,87 +37,99 @@ module.exports = class ServerInfoCommand extends Commando.Command {
       timeZoneName: "short",
     };
 
-    const serverOwner = await this.client.users.fetch(message.guild.ownerID);
+    const isBotStaff = await botStaffSchema.findOne({
+      userId: message.author.id,
+    });
 
-    const createdAt = new Date(message.guild.createdAt).toLocaleDateString(
+    if (!args) {
+      guild = message.guild;
+    } else if (args) {
+      if (isBotStaff || this.client.isOwner(message.author)) {
+        guild = this.client.guilds.cache.get(args);
+      } else {
+        guild = message.guild;
+      }
+    }
+
+    if (!guild)
+      return message.reply(
+        "<:scrubred:797476323169533963> That is NOT a valid Guild ID. But if it's valid, make sure that I'm in that provided server."
+      );
+
+    const serverOwner = await this.client.users.fetch(guild.ownerID);
+
+    const createdAt = new Date(guild.createdAt).toLocaleDateString(
       "en-US",
       dateTimeOptions
     );
 
-    const createdAtFromNow = moment(message.guild.createdAt).fromNow();
+    const createdAtFromNow = moment(guild.createdAt).fromNow();
 
-    const allRoles = (message.guild.roles.cache.size - 1).toLocaleString();
+    const allRoles = (guild.roles.cache.size - 1).toLocaleString();
 
-    const allEmojis = message.guild.emojis.cache.size.toLocaleString();
+    const allEmojis = guild.emojis.cache.size.toLocaleString();
 
-    const allBoosts = message.guild.premiumSubscriptionCount.toLocaleString();
+    const allBoosts = guild.premiumSubscriptionCount.toLocaleString();
 
-    const serverTier = message.guild.premiumTier.toLocaleString();
+    const serverTier = guild.premiumTier.toLocaleString();
 
     const memberCount = (
-      message.guild.memberCount -
-      message.guild.members.cache.filter((m) => m.user.bot).size
+      guild.memberCount - guild.members.cache.filter((m) => m.user.bot).size
     ).toLocaleString();
 
-    const botCount = message.guild.members.cache
+    const botCount = guild.members.cache
       .filter((m) => m.user.bot)
       .size.toLocaleString();
 
-    const maximumMembers = message.guild.maximumMembers.toLocaleString();
+    const maximumMembers = guild.maximumMembers.toLocaleString();
 
-    const guildDescription = message.guild.description
-      ? `${message.guild.description}`
+    const guildDescription = guild.description
+      ? `${guild.description}`
       : "None";
 
-    const rulesChannel = message.guild.rulesChannelID
-      ? `#${
-          message.guild.channels.cache.get(message.guild.rulesChannelID).name
-        }`
+    const rulesChannel = guild.rulesChannelID
+      ? `#${guild.channels.cache.get(guild.rulesChannelID).name}`
       : "None";
 
-    const systemChannel = message.guild.systemChannelID
-      ? `#${
-          message.guild.channels.cache.get(message.guild.systemChannelID).name
-        }`
+    const systemChannel = guild.systemChannelID
+      ? `#${guild.channels.cache.get(guild.systemChannelID).name}`
       : "None";
 
-    const textChannels = message.guild.channels.cache.filter(
+    const textChannels = guild.channels.cache.filter(
       (channel) => channel.type == "text"
     ).size;
 
-    const voiceChannels = message.guild.channels.cache.filter(
+    const voiceChannels = guild.channels.cache.filter(
       (channel) => channel.type == "voice"
     ).size;
 
-    const parentChannels = message.guild.channels.cache.filter(
+    const parentChannels = guild.channels.cache.filter(
       (channel) => channel.type == "category"
     ).size;
 
-    const newsChannels = message.guild.channels.cache.filter(
+    const newsChannels = guild.channels.cache.filter(
       (channel) => channel.type == "news"
     ).size;
 
     let afkChannel = "";
     let afkTimeout = "";
-    if (message.guild.afkChannelID) {
-      afkChannel = `"${
-        message.guild.channels.cache.get(message.guild.afkChannelID).name
-      }"`;
-      afkTimeout = ` - ${message.guild.afkTimeout}s Timeout`;
-    } else if (!message.guild.afkChannelID) {
+    if (guild.afkChannelID) {
+      afkChannel = `"${guild.channels.cache.get(guild.afkChannelID).name}"`;
+      afkTimeout = ` - ${guild.afkTimeout}s Timeout`;
+    } else if (!guild.afkChannelID) {
       afkChannel = "None";
     }
 
-    const defaultMsgNotif = message.guild.defaultMessageNotifications
+    const defaultMsgNotif = guild.defaultMessageNotifications
       .replace("ALL", "All messages")
       .replace("MENTIONS", "Only @mentions");
 
-    const explicitContentFilter = message.guild.explicitContentFilter
+    const explicitContentFilter = guild.explicitContentFilter
       .split("_")
       .join(" ")
       .toProperCase();
 
-    const verificationLevel = message.guild.verificationLevel
+    const verificationLevel = guild.verificationLevel
       .split("_")
       .join(" ")
       .toProperCase()
@@ -120,7 +137,7 @@ module.exports = class ServerInfoCommand extends Commando.Command {
       .replace("High", "(╯°□°）╯︵ ┻━┻");
 
     const communityFeatures =
-      message.guild.features
+      guild.features
         .join(", ")
         .toString()
         .split("_")
@@ -129,8 +146,8 @@ module.exports = class ServerInfoCommand extends Commando.Command {
 
     const serverInfoEmbed = new Discord.MessageEmbed()
       .setColor(embedcolor)
-      .setAuthor(`Reports for: ${message.guild.name}`, message.guild.iconURL())
-      .setThumbnail(message.guild.iconURL({ format: "png", dynamic: true }))
+      .setAuthor(`Reports for: ${guild.name}`, guild.iconURL())
+      .setThumbnail(guild.iconURL({ format: "png", dynamic: true }))
       .addFields(
         {
           name: "Overview",
@@ -164,7 +181,7 @@ module.exports = class ServerInfoCommand extends Commando.Command {
           value: `• \`${communityFeatures}\``,
         }
       )
-      .setFooter(`GuildID: ${message.guild.id}`)
+      .setFooter(`GuildID: ${guild.id}`)
       .setTimestamp();
     message.channel.send(serverInfoEmbed);
   }
