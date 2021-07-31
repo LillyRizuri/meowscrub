@@ -9,7 +9,8 @@ module.exports = {
         guildId: guild.id,
       });
 
-      if (results) guild.leave();
+      if (results || guild.members.cache.filter((m) => m.user.bot).size > 30)
+        guild.leave();
     });
   },
 };
