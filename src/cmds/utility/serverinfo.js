@@ -121,8 +121,8 @@ module.exports = class ServerInfoCommand extends Commando.Command {
     }
 
     const defaultMsgNotif = guild.defaultMessageNotifications
-      .replace("ALL", "All messages")
-      .replace("MENTIONS", "Only @mentions");
+      .replace("ALL", "all messages")
+      .replace("MENTIONS", "only @mentions");
 
     const explicitContentFilter = guild.explicitContentFilter
       .split("_")
@@ -157,7 +157,7 @@ module.exports = class ServerInfoCommand extends Commando.Command {
 • Description: \`${guildDescription}\`
 • \`${memberCount} Member(s) | ${botCount} Bot(s) | Maximum of ${maximumMembers} members\`
 • \`${allRoles} Role(s) | ${allEmojis} Emoji(s) | ${allBoosts} Boost(s) | Tier ${serverTier}\`
-• \`${defaultMsgNotif} will be notified by default\`   
+• \`Everyone will receive ${defaultMsgNotif} by default\`   
           `,
         },
         {
