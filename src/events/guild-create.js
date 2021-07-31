@@ -1,4 +1,5 @@
 const Discord = require("discord.js");
+const serverBlacklistSchema = require("../models/guild-blacklist-schema");
 const { embedcolor } = require("../assets/json/colors.json");
 
 module.exports = {
@@ -37,8 +38,26 @@ module.exports = {
         channelToSend = channel;
     });
 
-    if (!channelToSend) return;
+    const results = await serverBlacklistSchema.findOne({
+      guildId: guild.id,
+    });
 
-    channelToSend.send(welcomeMsgEmbed);
+    // eslint-disable-next-line no-empty
+    if (!channelToSend) {
+    } else if (channelToSend) {
+      if (results) {
+        await channelToSend.send("This server is blacklisted. Why even bother?");
+      } else if (guild.members.cache.filter((m) => m.user.bot).size > 30) {
+        await channelToSend.send(
+          "This server has too many bots. Please remove any that's unnecessary."
+        );
+      } else {
+        await channelToSend.send(welcomeMsgEmbed);
+      }
+    }
+
+    if (results || guild.members.cache.filter((m) => m.user.bot).size > 30) {
+      await guild.leave();
+    }
   },
 };
