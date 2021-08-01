@@ -12,7 +12,6 @@ module.exports = class WorkCommand extends Commando.Command {
   constructor(client) {
     super(client, {
       name: "work",
-      aliases: ["lolwork"],
       group: "economy",
       memberName: "work",
       description: "Work to get yourself money.",
@@ -31,19 +30,20 @@ module.exports = class WorkCommand extends Commando.Command {
       );
     }
 
-    const guildId = message.guild.id;
-    const rngCoins = Math.floor(Math.random() * 1500 + 200);
+    const rngCoins = Math.floor(Math.random() * 1400 + 100);
     const randomWorkResponse = Math.floor(Math.random() * workResponse.length);
 
-    await economy.addCoins(guildId, message.author.id, rngCoins);
+    await economy.addCoins(message.author.id, rngCoins);
 
     const addbalEmbed = new Discord.MessageEmbed()
       .setColor(green)
       .setAuthor(message.author.tag, message.author.displayAvatarURL())
       .setDescription(workResponse[randomWorkResponse])
-      .setFooter(`Money Got: ¢${rngCoins}`)
+      .setFooter(`Money Got: ¢${rngCoins.toLocaleString()}`)
       .setTimestamp();
     message.channel.send(addbalEmbed);
+
+    await economy.bankCapIncrease(message.author.id);
 
     cooldowns.set(message.author.id, Date.now() + 30000);
     setTimeout(() => {

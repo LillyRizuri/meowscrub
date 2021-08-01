@@ -1,20 +1,11 @@
-const profileSchema = require("./models/profile-schema");
+const economySchema = require("./models/economy-schema");
 
-const coinsCache = {};
-const coinBankCache = {};
-// { 'guildId-userId': coins }
-
-// eslint-disable-next-line no-empty-function, no-unused-vars
-module.exports = (client) => {};
-
-module.exports.addCoins = async (guildId, userId, coins) => {
-  const result = await profileSchema.findOneAndUpdate(
+module.exports.addCoins = async (userId, coins) => {
+  const result = await economySchema.findOneAndUpdate(
     {
-      guildId,
       userId,
     },
     {
-      guildId,
       userId,
       $inc: {
         coins,
@@ -26,19 +17,15 @@ module.exports.addCoins = async (guildId, userId, coins) => {
     }
   );
 
-  coinsCache[`${guildId}-${userId}`] = result.coins;
-
   return result.coins;
 };
 
-module.exports.coinBank = async (guildId, userId, coinBank) => {
-  const result = await profileSchema.findOneAndUpdate(
+module.exports.coinBank = async (userId, coinBank) => {
+  const result = await economySchema.findOneAndUpdate(
     {
-      guildId,
       userId,
     },
     {
-      guildId,
       userId,
       $inc: {
         coinBank,
@@ -50,24 +37,15 @@ module.exports.coinBank = async (guildId, userId, coinBank) => {
     }
   );
 
-  coinBankCache[`${guildId}-${userId}`] = result.coinBank;
-
   return result.coinBank;
 };
 
-module.exports.getCoins = async (guildId, userId) => {
-  const cachedValue = coinsCache[`${guildId}-${userId}`];
-  if (cachedValue) {
-    return cachedValue;
-  }
-
-  const result = await profileSchema.findOne({
-    guildId,
+module.exports.getCoins = async (userId) => {
+  const result = await economySchema.findOne({
     userId,
   });
 
   let coins = 0;
-  const coinBank = 0;
   if (result) {
     coins = result.coins;
   } else if (
@@ -75,32 +53,23 @@ module.exports.getCoins = async (guildId, userId) => {
     typeof result.coins === "undefined" ||
     typeof result.coinBank === "undefined"
   ) {
-    await new profileSchema({
-      guildId,
+    await new economySchema({
       userId,
       coins,
-      coinBank,
+      coinBank: 0,
+      bankCapacity: 500,
     }).save();
   }
-
-  coinsCache[`${guildId}-${userId}`] = coins;
 
   return coins;
 };
 
-module.exports.getCoinBank = async (guildId, userId) => {
-  const cachedValue = coinBankCache[`${guildId}-${userId}`];
-  if (cachedValue) {
-    return cachedValue;
-  }
-
-  const result = await profileSchema.findOne({
-    guildId,
+module.exports.getCoinBank = async (userId) => {
+  const result = await economySchema.findOne({
     userId,
   });
 
   let coinBank = 0;
-  const coins = 0;
   if (result) {
     coinBank = result.coinBank;
   } else if (
@@ -108,15 +77,54 @@ module.exports.getCoinBank = async (guildId, userId) => {
     typeof result.coins === "undefined" ||
     typeof result.coinBank === "undefined"
   ) {
-    await new profileSchema({
-      guildId,
+    await new economySchema({
       userId,
-      coins,
+      coins: 0,
       coinBank,
+      bankCapacity: 500,
     }).save();
   }
 
-  coinBankCache[`${guildId}-${userId}`] = coinBank;
-
   return coinBank;
+};
+
+module.exports.bankCapIncrease = async (userId) => {
+  const bankCapacity = Math.floor(Math.random() * 1000 + 100);
+  const result = await economySchema.findOneAndUpdate(
+    {
+      userId,
+    },
+    {
+      userId,
+      $inc: {
+        bankCapacity,
+      },
+    },
+    {
+      upsert: true,
+      new: true,
+    }
+  );
+
+  return result.bankCapacity;
+};
+
+module.exports.getBankCap = async (userId) => {
+  const result = await economySchema.findOne({
+    userId,
+  });
+
+  let bankCap = 2000;
+  if (result) {
+    bankCap = result.bankCapacity;
+  } else if (!result) {
+    await new economySchema({
+      userId,
+      coins: 0,
+      coinBank: 0,
+      bankCapacity: 500,
+    }).save();
+  }
+
+  return bankCap;
 };

@@ -1,5 +1,6 @@
 const Commando = require("discord.js-commando");
 const Discord = require("discord.js");
+const collection = new Discord.Collection();
 
 const { embedcolor } = require("../../assets/json/colors.json");
 
@@ -12,42 +13,50 @@ module.exports = class LeaderboardCommand extends Commando.Command {
       aliases: ["lb", "top"],
       group: "economy",
       memberName: "leaderboard",
-      description: "Check the server's economy leaderboard.",
+      description: "Check 1op 10 richest members in the leaderboard.",
       clientPermissions: ["EMBED_LINKS"],
       guildOnly: true,
     });
   }
 
   async run(message) {
-    const collection = new Discord.Collection();
+    if (collection.size === 0) {
+      await Promise.all(
+        message.guild.members.cache.map(async (member) => {
+          const id = member.id;
+          const bal = await economy.getCoins(member.id);
+          return bal !== 0
+            ? collection.set(id, {
+                id,
+                bal,
+              })
+            : null;
+        })
+      );
 
-    await Promise.all(
-      message.guild.members.cache.map(async (member) => {
-        const id = member.id;
-        const coins = await economy.getCoins(message.guild.id, member.id);
-        const coinBank = await economy.getCoinBank(message.guild.id, member.id);
-        const bal = coins + coinBank;
-        return bal !== 0
-          ? collection.set(id, {
-              id,
-              bal,
-            })
-          : null;
-      })
-    );
+      setTimeout(() => {
+        collection.clear();
+      }, 60000);
+    }
 
     const data = collection.sort((a, b) => b.bal - a.bal).first(10);
-    const leaderboardMap = data.map((v, i) => {
-      return `**${i + 1}.** ${this.client.users.cache.get(v.id).tag} • **¢${
-        v.bal
-      }**`;
-    });
+    let leaderboardMap = data
+      .map((v, i) =>
+        `**${i + 1}.** ${
+          this.client.users.cache.get(v.id).tag
+        } • **¢${v.bal.toLocaleString()}**`
+      )
+      .join("\n");
+
+    if (collection.size === 0) leaderboardMap = "There's nothing here :(";
 
     const leaderboardEmbed = new Discord.MessageEmbed()
       .setColor(embedcolor)
-      .setAuthor(`Top 10's in ${message.guild.name}`)
+      .setTitle(`Richest members in ${message.guild.name}`)
       .setDescription(leaderboardMap)
-      .setFooter("on hand + on bank account");
+      .setFooter(
+        "this is WALLETS, not net worth, and the data is cached for 1 minute"
+      );
     message.channel.send(leaderboardEmbed);
   }
 };

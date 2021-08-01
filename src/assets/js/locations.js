@@ -1,0 +1,73 @@
+module.exports = [
+  {
+    name: "car",
+    chosenNumber: 3,
+    rngCoins: 2000 + 100,
+    successResponse: "Guess the car owner didn't even bother to lock the door.",
+    failResponse: "The police caught you trying to break in and beat you up.",
+  },
+  {
+    name: "bathroom",
+    chosenNumber: 6,
+    rngCoins: 750 + 100,
+    successResponse: "The bathroom stinks as heck.",
+    failResponse: "The bad smell of the bathroom caught you off-guard.",
+  },
+  {
+    name: "laptop",
+    chosenNumber: null,
+    rngCoins: 1250 + 100,
+    successResponse: "Oh hey, some leftover money.",
+    failResponse: "You must have used hacks to get here.",
+  },
+  {
+    name: "street",
+    chosenNumber: 3,
+    rngCoins: 1500 + 100,
+    successResponse: "You jaywalked, and didn't get caught or called out.",
+    failResponse: "A car ran over you while you attempted to jaywalk.",
+  },
+  {
+    name: "bushes",
+    chosenNumber: 6,
+    rngCoins: 1100 + 100,
+    successResponse: "You're just glad you didn't get pricked.",
+    failResponse:
+      "Your luck has ran out, because you got poisoned by needles somehow.",
+  },
+  {
+    name: "paper",
+    chosenNumber: null,
+    rngCoins: 1000 + 100,
+    successResponse: "Hey, some money leftovers from crumpled paper!",
+    failResponse: "You must have used hacks to get here.",
+  },
+  {
+    name: "pocket",
+    chosenNumber: null,
+    rngCoins: 1200 + 100,
+    successResponse: "And you put those money into your pocket.",
+    failResponse: "You must have used hacks to get here.",
+  },
+  {
+    name: "park",
+    chosenNumber: null,
+    rngCoins: 1000 + 100,
+    successResponse: "What are you doing on the playground?",
+    failResponse: "You must have used hacks to get here.",
+  },
+  {
+    name: "neighborhood",
+    chosenNumber: 6,
+    rngCoins: 1500 + 100,
+    successResponse: "Be glad that the neighbors haven't noticed you yet.",
+    failResponse: "A neighbor beat you up for trespassing onto their lawn.",
+  },
+  {
+    name: "air",
+    chosenNumber: 6,
+    rngCoins: 1450 + 100,
+    successResponse: "How is that even possible?",
+    failResponse: "You didn't aware that you are inhaling poisonous gas.",
+  },
+];

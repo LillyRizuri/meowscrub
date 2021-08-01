@@ -5,8 +5,7 @@ const reqString = {
   required: true,
 };
 
-const profileSchema = mongoose.Schema({
-  guildId: reqString,
+const economySchema = mongoose.Schema({
   userId: reqString,
   coins: {
     type: Number,
@@ -18,6 +17,11 @@ const profileSchema = mongoose.Schema({
     required: true,
     default: 0
   },
+  bankCapacity: {
+    type: Number,
+    required: true,
+    default: 500
+  }
 });
 
-module.exports = mongoose.model("profiles", profileSchema);
+module.exports = mongoose.model("economy", economySchema);

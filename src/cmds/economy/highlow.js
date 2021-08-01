@@ -69,7 +69,7 @@ Respond with \`high\`, \`low\`, or \`jackpot\`.
       )
       .setDescription(
         `
-**You won ¢${preppedMoney}!**
+**You won ¢${preppedMoney.toLocaleString()}!**
 The hint was **${hintedNumber}**, and the actual number was **${actualNumber}**.
               `
       )
@@ -100,10 +100,10 @@ The hint was **${hintedNumber}**, and the actual number was **${actualNumber}**.
           case "high":
             if (actualNumber > hintedNumber) {
               await economy.addCoins(
-                message.guild.id,
                 message.author.id,
                 preppedMoney
               );
+              await economy.bankCapIncrease(message.author.id);
               collectedMessage.first().reply(passedResponse);
             } else {
               collectedMessage.first().reply(failedResponse);
@@ -112,10 +112,10 @@ The hint was **${hintedNumber}**, and the actual number was **${actualNumber}**.
           case "low":
             if (actualNumber < hintedNumber) {
               await economy.addCoins(
-                message.guild.id,
                 message.author.id,
                 preppedMoney
               );
+              await economy.bankCapIncrease(message.author.id);
               collectedMessage.first().reply(passedResponse);
             } else {
               collectedMessage.first().reply(failedResponse);
@@ -124,10 +124,10 @@ The hint was **${hintedNumber}**, and the actual number was **${actualNumber}**.
           case "jackpot":
             if (actualNumber === hintedNumber) {
               await economy.addCoins(
-                message.guild.id,
                 message.author.id,
                 preppedMoney
               );
+              await economy.bankCapIncrease(message.author.id);
               collectedMessage.first().reply(passedResponse);
             } else {
               collectedMessage.first().reply(failedResponse);

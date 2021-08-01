@@ -1,9 +1,6 @@
 const Commando = require("discord.js-commando");
-const Discord = require("discord.js");
 
 const economy = require("../../economy");
-
-const { green } = require("../../assets/json/colors.json");
 
 module.exports = class DepositCommand extends Commando.Command {
   constructor(client) {
@@ -22,51 +19,56 @@ module.exports = class DepositCommand extends Commando.Command {
   }
   async run(message, args) {
     let coinsToDeposit = args;
-    const guildId = message.guild.id;
     const userId = message.author.id;
-    const coinsOwned = await economy.getCoins(guildId, userId);
+    const coinsOwned = await economy.getCoins(userId);
+    const bankCap = await economy.getBankCap(userId);
+    const coinBank = await economy.getCoinBank(userId);
     if (!coinsToDeposit)
       return message.reply(
-        "<:scrubnull:797476323533783050> Request for your money amount is needed."
+        "<:scrubnull:797476323533783050> Please input a number of coins."
       );
 
-    if (coinsToDeposit === "all") coinsToDeposit = coinsOwned;
-    if (isNaN(coinsToDeposit))
-      return message.reply(
-        "<:scrubred:797476323169533963> Depositing text is illegal, and we prohibited you from doing it."
-      );
+    if (coinBank >= bankCap) {
+      return message.reply("<:scrubred:797476323169533963> Your bank is full.");
+    }
 
-    if (coinsToDeposit < 0)
-      return message.reply(
-        "<:scrubred:797476323169533963> Don't even try breaking me using a simple negative value."
-      );
+    if (args.toLowerCase() === "all") {
+      if (coinsOwned + coinBank > bankCap) {
+        coinsToDeposit = bankCap - coinBank;
+      } else {
+        coinsToDeposit = coinsOwned;
+      }
+    } else {
+      if (isNaN(coinsToDeposit))
+        return message.reply(
+          "<:scrubred:797476323169533963> Depositing text is illegal, and we prohibits you from doing it."
+        );
 
-    if (coinsOwned < coinsToDeposit)
-      return message.reply(
-        `<:scrubred:797476323169533963> Your argument should be no more than what you have in your pocket. **[¢${coinsOwned}]**`
-      );
+      if (!Number.isInteger(Number(coinsToDeposit)))
+        return message.reply(
+          "<:scrubred:797476323169533963> Integer value only."
+        );
 
-    const remainingCoins = await economy.addCoins(
-      guildId,
-      userId,
-      coinsToDeposit * -1
+      if (coinsToDeposit < 0)
+        return message.reply(
+          "<:scrubred:797476323169533963> Don't even try breaking me using a simple negative value."
+        );
+
+      if (coinsOwned < coinsToDeposit)
+        return message.reply(
+          `<:scrubred:797476323169533963> Your argument should be no more than what you have in your pocket. **[¢${coinsOwned.toLocaleString()}]**`
+        );
+    }
+
+    await economy.addCoins(userId, coinsToDeposit * -1);
+    const newCoinBank = await economy.coinBank(userId, coinsToDeposit);
+
+    message.reply(
+      `<:scrubgreen:797476323316465676> Successfully deposited your **¢${Number(
+        coinsToDeposit
+      ).toLocaleString()}**, current bank balance is **¢${Number(
+        newCoinBank
+      ).toLocaleString()}**`
     );
-    const currentBankAcc = await economy.coinBank(
-      guildId,
-      userId,
-      coinsToDeposit
-    );
-
-    const addbalEmbed = new Discord.MessageEmbed()
-      .setColor(green)
-      .setDescription(
-        `
-<:scrubgreen:797476323316465676> Successfully deposited your **¢${coinsToDeposit}**.
-**Your Wallet: ¢${remainingCoins}**
-**Your Bank Account: ¢${currentBankAcc}**`
-      )
-      .setFooter("hmmmmmm")
-      .setTimestamp();
-    message.reply(addbalEmbed);
   }
 };

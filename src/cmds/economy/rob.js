@@ -15,7 +15,7 @@ module.exports = class RobCommand extends Commando.Command {
       aliases: ["steal"],
       group: "economy",
       memberName: "rob",
-      description: "Imagine trying to rob though.",
+      description: "Imagine trying to rob though. That's lame.",
       argsType: "single",
       format: "<@user>",
       examples: ["rob @frockles"],
@@ -25,19 +25,19 @@ module.exports = class RobCommand extends Commando.Command {
   }
 
   async run(message, args) {
-    const timeout = 86400000;
-    const cooldown = await db.fetch(
-      `rob_${message.guild.id}_${message.author.id}`
-    );
+    const timeout = 30000;
+    const cooldown = await db.fetch(`rob_${message.author.id}`);
 
-    if (cooldown !== null && cooldown - Date.now() > 0) {
+    if (cooldown && cooldown - Date.now() > 0) {
       const remaining = humanizeDuration(cooldown - Date.now(), {
         round: true,
       });
-      return message.reply(`Please refrain yourself from robbing for another **${remaining}**.`);
+      return message.reply(
+        `Please refrain yourself from robbing for another **${remaining}**.`
+      );
+    } else {
+      db.delete(`rob_${message.author.id}`);
     }
-
-    const guildId = message.guild.id;
 
     if (!args)
       return message.reply(
@@ -67,13 +67,23 @@ module.exports = class RobCommand extends Commando.Command {
         "<:scrubred:797476323169533963> Neither can you steal, or give money to them."
       );
 
-    const robberBal = await economy.getCoins(guildId, message.author.id);
+    const isRobbed = await db.fetch(`robbed_${target.id}`);
+
+    if (isRobbed && isRobbed - Date.now() > 0) {
+      return message.reply(
+        "<:scrubred:797476323169533963> That person was already robbed. Leave them alone."
+      );
+    } else {
+      db.delete(`robbed_${target.id}`);
+    }
+
+    const robberBal = await economy.getCoins(message.author.id);
     if (robberBal < 10000)
       return message.reply(
-        "<:scrubred:797476323169533963> You need at least **¢10000** to try and rob someone."
+        "<:scrubred:797476323169533963> You need at least **¢10,000** to try and rob someone."
       );
 
-    const targetBal = await economy.getCoins(guildId, target.id);
+    const targetBal = await economy.getCoins(target.id);
     if (targetBal < 2000)
       return message.reply(
         "<:scrubred:797476323169533963> You can't rob from a person with little cash on hand. Get out of my sight."
@@ -81,18 +91,15 @@ module.exports = class RobCommand extends Commando.Command {
 
     const randomRobChance = Math.floor(Math.random() * 2 + 1);
     // 50/50 chance
-    await db.set(
-      `rob_${message.guild.id}_${message.author.id}`,
-      Date.now() + timeout
-    );
+    await db.set(`rob_${message.author.id}`, Date.now() + timeout);
+    await db.set(`robbed_${target.id}`, Date.now() + 600000);
     switch (randomRobChance) {
       case 1: {
         const coinsToSteal = Math.floor(Math.random() * (targetBal / 2));
 
-        await economy.addCoins(guildId, target.id, coinsToSteal * -1);
+        await economy.addCoins(target.id, coinsToSteal * -1);
 
         const robberCoins = await economy.addCoins(
-          guildId,
           message.author.id,
           coinsToSteal
         );
@@ -101,8 +108,10 @@ module.exports = class RobCommand extends Commando.Command {
           .setColor(green)
           .setDescription(
             `
-<:scrubgreen:797476323316465676> You robbed **¢${coinsToSteal}** out of **${target.tag}**. 
-**Now you have: ¢${robberCoins}**
+<:scrubgreen:797476323316465676> You robbed **¢${coinsToSteal.toLocaleString()}** out of **${
+              target.tag
+            }**. 
+**Now you have: ¢${robberCoins.toLocaleString()}**
 `
           )
           .setFooter("ruthless.")
@@ -111,19 +120,17 @@ module.exports = class RobCommand extends Commando.Command {
         return;
       }
       case 2: {
-        const coinsToPayback = Math.floor(
-          Math.random() * ((robberBal - 10000) / 2)
-        );
+        const coinsToPayback = Math.floor(Math.random() * (robberBal / 2));
 
-        await economy.addCoins(guildId, target.id, coinsToPayback);
-        await economy.addCoins(guildId, message.author.id, coinsToPayback * -1);
+        await economy.addCoins(target.id, coinsToPayback);
+        await economy.addCoins(message.author.id, coinsToPayback * -1);
 
         const stolenFailedEmbed = new Discord.MessageEmbed()
           .setColor(red)
           .setDescription(
-            `<:scrubred:797476323169533963> **You got caught LMAOOOOO**\nYou paid the person you attempted to stole **¢${coinsToPayback}**.`
+            `<:scrubred:797476323169533963> **You got caught LMAOOOOO**\nYou paid the person you attempted to stole **¢${coinsToPayback.toLocaleString()}**.`
           )
-          .setFooter("sike")
+          .setFooter("psych")
           .setTimestamp();
         message.reply(stolenFailedEmbed);
         return;

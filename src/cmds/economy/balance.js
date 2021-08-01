@@ -12,7 +12,7 @@ module.exports = class BalCommand extends Commando.Command {
       aliases: ["bal"],
       group: "economy",
       memberName: "balance",
-      description: "Check your/someone else's pocket.",
+      description: "Check your/someone else's balance.",
       argsType: "single",
       format: "[@user/userID]",
       examples: ["balance", "balance @frockles", "balance 693832549943869493"],
@@ -44,18 +44,44 @@ module.exports = class BalCommand extends Commando.Command {
 
     const targetTag = target.tag;
 
-    const guildId = message.guild.id;
     const userId = target.id;
 
-    const coins = await economy.getCoins(guildId, userId);
-    const coinBank = await economy.getCoinBank(guildId, userId);
+    const coins = await economy.getCoins(userId);
+    const coinBank = await economy.getCoinBank(userId);
+    const bankCap = await economy.getBankCap(userId);
 
     const balEmbed = new Discord.MessageEmbed()
       .setColor(embedcolor)
       .setTitle(`${targetTag}'s Balance`)
-      .setDescription(`**Wallet:** ¢${coins}\n**Bank:** ¢${coinBank}`)
-      .setFooter("what a scrub")
+      .setFooter("interesting")
       .setTimestamp();
+
+    if (!args)
+      balEmbed.addFields(
+        {
+          name: "Wallet",
+          value: `\`\`\`css\n¢${coins.toLocaleString()}\`\`\``,
+          inline: true,
+        },
+        {
+          name: "Bank",
+          value: `\`\`\`css\n¢${coinBank.toLocaleString()} / ${bankCap.toLocaleString()}\`\`\``,
+          inline: true,
+        }
+      );
+    else if (args)
+      balEmbed.addFields(
+        {
+          name: "Wallet",
+          value: `\`\`\`css\n¢${coins.toLocaleString()}\`\`\``,
+          inline: true,
+        },
+        {
+          name: "Bank",
+          value: `\`\`\`css\n¢${coinBank.toLocaleString()}\`\`\``,
+          inline: true,
+        }
+      );
     message.reply(balEmbed);
   }
 };
