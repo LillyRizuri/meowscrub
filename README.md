@@ -12,6 +12,7 @@ PREFIX=
 OWNERID=
 GUILD_TEST=
 DISCORDINVITE=
+TOPGG_TOKEN=
 TOKEN=
 GENIUS=
 MONGO=
@@ -23,6 +24,7 @@ BRAINSHOP_API_KEY=
  - `OWNERID` is your User ID. Or someone else's ID if you'd like. (`OWNERID2` also exists in this source code, so if you want to have only one bot owner, delete `process.env.OWNERID2` somewhere in  `./src/index.js`)
  - `GUILD_TEST` is (your guild to test your bot)'s ID. (used for logging user id to that guild for the global chat feature)
  - `DISCORDINVITE` is your invite link to your server (surround it with these: <>)
+ - `TOPGG_TOKEN` is the bot's Top.gg Token (the bot must be in top.gg)
  - `TOKEN` is your Discord Bot Token
  - `GENIUS` is for the lyrics command. Obtain it here: http://genius.com/api-clients
  - `MONGO` is your connection string to your MongoDB database, cloud or local.
