@@ -37,11 +37,11 @@ module.exports = class VoteCommand extends Commando.Command {
 
     switch (resJson.voted) {
       case 0:
-        voteDesc = `You haven't voted for **${this.client.user.username}** yet!\n[Click here to vote](https://top.gg/bot/${this.client.user.id}/vote)`;
-        button.setDisabled();
+        voteDesc = `You haven't voted for **${this.client.user.username}** yet!`;
         break;
       default:
         voteDesc = `You've voted for **${this.client.user.username}** already!`;
+        button.setDisabled();
         break;
     }
 
