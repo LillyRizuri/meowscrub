@@ -1,4 +1,5 @@
 const Commando = require("discord.js-commando");
+const disbut = require("discord-buttons");
 const Discord = require("discord.js");
 const fetch = require("node-fetch");
 
@@ -27,11 +28,17 @@ module.exports = class VoteCommand extends Commando.Command {
       }
     ).then((res) => res.json());
 
+    const button = new disbut.MessageButton()
+      .setStyle("url")
+      .setURL(`https://top.gg/bot/${this.client.user.id}/vote`)
+      .setLabel(`Vote for ${this.client.user.username}`);
+
     let voteDesc = "";
 
     switch (resJson.voted) {
       case 0:
         voteDesc = `You haven't voted for **${this.client.user.username}** yet!\n[Click here to vote](https://top.gg/bot/${this.client.user.id}/vote)`;
+        button.setDisabled();
         break;
       default:
         voteDesc = `You've voted for **${this.client.user.username}** already!`;
@@ -46,6 +53,6 @@ module.exports = class VoteCommand extends Commando.Command {
       )
       .setDescription(voteDesc);
 
-    message.channel.send(voteEmbed);
+    message.channel.send({ embed: voteEmbed, component: button });
   }
 };
