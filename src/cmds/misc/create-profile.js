@@ -67,7 +67,7 @@ This action is permanent. Click on the button to proceed.
           .first()
           .message.edit("Successfully created your profile.", rowEdit);
 
-        collected.first().defer();
+        collected.first().reply.defer();
       })
       .catch(() => {
         message.channel.send(

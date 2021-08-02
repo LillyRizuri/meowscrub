@@ -76,14 +76,14 @@ Please confirm your choice by clicking one of the buttons below.
                 "*Restarted the client. Should be up at anytime now.*",
                 rowEdit
               );
-            await collected.first().defer();
+            await collected.first().reply.defer();
           } finally {
             this.client.destroy();
             await this.client.login(process.env.TOKEN);
           }
         } else if (collected.first().id === abortId) {
           await collected.first().message.edit("Operation aborted.", rowEdit);
-          collected.first().defer();
+          await collected.first().reply.defer();
         }
       })
       .catch(() => {

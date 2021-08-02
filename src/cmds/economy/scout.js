@@ -115,7 +115,7 @@ module.exports = class WorkCommand extends Commando.Command {
           }
         }
 
-        collected.first().defer();
+        collected.first().reply.defer();
       })
       .catch(() => {
         message.reply(

@@ -151,7 +151,7 @@ Please confirm your choice by clicking one of the buttons below.
             break;
         }
 
-        collected.first().defer();
+        collected.first().reply.defer();
       })
       .catch(() => {
         message.channel.send(

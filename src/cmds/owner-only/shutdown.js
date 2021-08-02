@@ -73,7 +73,7 @@ Please confirm your choice by clicking one of the buttons below.
             await collected
               .first()
               .message.edit("*The client has been put to rest.*", rowEdit);
-            await collected.first().defer();
+            await collected.first().reply.defer();
           } finally {
             process.exit();
           }
@@ -81,7 +81,7 @@ Please confirm your choice by clicking one of the buttons below.
           await collected
             .first()
             .message.edit("Operation aborted. Phew.", rowEdit);
-          collected.first().defer();
+          collected.first().reply.defer();
         }
       })
       .catch(() => {
