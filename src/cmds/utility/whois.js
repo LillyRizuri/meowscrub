@@ -2,6 +2,7 @@ const Commando = require("discord.js-commando");
 const Discord = require("discord.js");
 const moment = require("moment");
 
+const perms = require("../../assets/json/mod-permissions.json");
 const { embedcolor } = require("../../assets/json/colors.json");
 
 module.exports = class WhoIsCommand extends Commando.Command {
@@ -123,6 +124,13 @@ module.exports = class WhoIsCommand extends Commando.Command {
     if (rolemap.length > 800) rolemap = "`Too many roles to display.`";
     if (member.roles.cache.size - 1 === 0) rolemap = "`No roles to display.`";
 
+    const permsArray = [];
+
+    perms.forEach((perm) => {
+      if (message.channel.permissionsFor(target.id).has(perm))
+        permsArray.push(perm.split("_").join(" ").toProperCase());
+    });
+
     const infoEmbed = new Discord.MessageEmbed()
       .setColor(member.displayHexColor)
       .setAuthor(`Information for ${target.username}`, avatar)
@@ -156,6 +164,9 @@ module.exports = class WhoIsCommand extends Commando.Command {
         })
       )
       .setTimestamp();
+
+    if (permsArray.length > 0)
+      infoEmbed.addField("Key Permissions", permsArray.join(", "));
     message.channel.send(infoEmbed);
   }
 };
