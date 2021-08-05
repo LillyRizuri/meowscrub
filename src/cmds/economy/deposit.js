@@ -17,6 +17,7 @@ module.exports = class DepositCommand extends Commando.Command {
       guildOnly: true,
     });
   }
+
   async run(message, args) {
     let coinsToDeposit = args;
     const userId = message.author.id;

@@ -37,6 +37,7 @@ module.exports = class BalCommand extends Commando.Command {
         "<:scrubred:797476323169533963> What is that User ID."
       );
     }
+
     if (target.bot === true)
       return message.reply(
         "<:scrubred:797476323169533963> Neither can you check a bot's balance, or give money to them."

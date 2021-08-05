@@ -34,6 +34,8 @@ client.distube = new DisTube(client, {
   youtubeCookie: process.env.YTCOOKIE,
 });
 
+module.exports = client;
+
 client.on("ready", async () => {
   client.registry
     .registerGroups([

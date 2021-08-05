@@ -5,22 +5,27 @@ const reqString = {
   required: true,
 };
 
+const reqNumber = {
+  type: Number,
+  required: true,
+  default: 0
+};
+
 const economySchema = mongoose.Schema({
   userId: reqString,
-  coins: {
-    type: Number,
-    required: true,
-    default: 0
-  },
-  coinBank: {
-    type: Number,
-    required: true,
-    default: 0
-  },
+  coins: reqNumber,
+  coinBank: reqNumber,
+  dailyStreak: reqNumber,
+  dailyLastClaimed: reqNumber,
   bankCapacity: {
     type: Number,
     required: true,
     default: 500
+  },
+  inventory: {
+    type: Array,
+    required: true,
+    default: []
   }
 });
 

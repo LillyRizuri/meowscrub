@@ -7,8 +7,6 @@ const cooldowns = new Map();
 
 const locations = require("../../assets/js/locations");
 
-const buttons = [];
-
 module.exports = class WorkCommand extends Commando.Command {
   constructor(client) {
     super(client, {
@@ -20,7 +18,7 @@ module.exports = class WorkCommand extends Commando.Command {
     });
   }
   async run(message) {
-    buttons.splice(0, buttons.length);
+    const buttons = [];
     const cooldown = cooldowns.get(message.author.id);
     if (cooldown) {
       const remaining = humanizeDuration(cooldown - Date.now(), {
@@ -70,7 +68,7 @@ module.exports = class WorkCommand extends Commando.Command {
 
         const rowEdit = new disbut.MessageActionRow().addComponents(buttons);
 
-        const rngCoins = Math.floor(Math.random() * selectedLocation.rngCoins);
+        const rngCoins = Math.floor(Math.random() * selectedLocation.rngCoins + 100);
         let randomNumber = 1;
 
         if (selectedLocation.chosenNumber) {

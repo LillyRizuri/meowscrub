@@ -7,7 +7,7 @@ const cooldowns = new Map();
 
 const economy = require("../../economy");
 
-module.exports = class LeaderboardCommand extends Commando.Command {
+module.exports = class HighLowCommand extends Commando.Command {
   constructor(client) {
     super(client, {
       name: "high-low",

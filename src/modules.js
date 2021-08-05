@@ -29,6 +29,10 @@ module.exports.formatDuration = (milliseconds) => {
   return `00:${formatInt(seconds)}`;
 };
 
+module.exports.round = (number, decimals) => {
+  return Number(Math.round(number + "e" + decimals) + "e-" + decimals);
+};
+
 module.exports.urlify = (string) => {
   // not suitable
   // const pattern = new RegExp(
@@ -41,7 +45,8 @@ module.exports.urlify = (string) => {
   //   "i"
   // ); // fragment locator
 
-  const pattern = /^((ftp|http|https):\/\/)?(www\.)?([^\s$.?#]+)\.([^\s]{2,})/gm;
+  const pattern =
+    /^((ftp|http|https):\/\/)?(www\.)?([^\s$.?#]+)\.([^\s]{2,})/gm;
 
   const strSplit = string.split(" ");
   const testArray = [];
@@ -56,6 +61,14 @@ module.exports.urlify = (string) => {
   }
 
   return testArray.join(" ");
+};
+
+module.exports.splitString = (string, numberOfLines) => {
+  const number = Number(numberOfLines);
+  if (isNaN(number)) return null;
+
+  const regex = new RegExp(`(?:^.*$\n?){1,${number}}`, "gm");
+  return string.match(regex);
 };
 
 module.exports.compareMaps = (map1, map2) => {
