@@ -149,7 +149,7 @@ module.exports = class PostMemeCommand extends Commando.Command {
                 await economy.addCoins(message.author.id, rngCoins);
                 chooseMemeEmbed
                   .setDescription(
-                    `Your meme is on TRENDING!\n\nYou earned\`¢${rngCoins}\` from your efforts.`
+                    `Your meme is on TRENDING!\n\nYou earned\`¢${rngCoins.toLocaleString()}\` from your efforts.`
                   )
                   .setFooter("what a gamble");
                 break;
@@ -158,7 +158,7 @@ module.exports = class PostMemeCommand extends Commando.Command {
                 chooseMemeEmbed
                   .setColor(green)
                   .setDescription(
-                    `Your meme got a decent response online!\n\nYou earned\`¢${rngCoins}\` from your efforts.`
+                    `Your meme got a decent response online!\n\nYou earned\`¢${rngCoins.toLocaleString()}\` from your efforts.`
                   )
                   .setFooter("nice, hopefully you will have more luck");
                 break;
