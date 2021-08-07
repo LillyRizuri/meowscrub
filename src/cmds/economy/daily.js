@@ -88,10 +88,8 @@ module.exports = class DailyCommand extends Commando.Command {
       return message.reply(noDailyYet);
     }
 
-    let newResults;
-
     if (diffDays === 1)
-      newResults = await economySchema.findOneAndUpdate(
+      await economySchema.findOneAndUpdate(
         {
           userId: message.author.id,
         },
@@ -102,7 +100,7 @@ module.exports = class DailyCommand extends Commando.Command {
         }
       );
     else if (diffDays > 1)
-      newResults = await economySchema.findOneAndUpdate(
+      await economySchema.findOneAndUpdate(
         {
           userId: message.author.id,
         },
@@ -113,7 +111,11 @@ module.exports = class DailyCommand extends Commando.Command {
         }
       );
 
-    const totalRewards = baseCoin + streakReward * newResults.dailyStreak;
+    results = await economySchema.findOne({
+      userId: message.author.id,
+    });
+
+    const totalRewards = baseCoin + streakReward * results.dailyStreak;
 
     await economy.addCoins(message.author.id, totalRewards);
 
@@ -129,8 +131,8 @@ Your next daily will be ready in:
 `
       )
       .setFooter(
-        `Streak: ${newResults.dailyStreak} day(s) [+¢${(
-          streakReward * newResults.dailyStreak
+        `Streak: ${results.dailyStreak} day(s) [+¢${(
+          streakReward * results.dailyStreak
         ).toLocaleString()}]`
       );
 
