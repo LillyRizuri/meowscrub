@@ -76,7 +76,7 @@ module.exports.coinBank = async (userId, coinBank) => {
 
 module.exports.bankCapIncrease = async (userId) => {
   checkIfResults(userId);
-  const bankCapacity = Math.floor(Math.random() * 1000 + 100);
+  const bankCapacity = Math.floor(Math.random() * 800 + 100);
   const result = await economySchema.findOneAndUpdate(
     {
       userId,
