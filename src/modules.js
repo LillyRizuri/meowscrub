@@ -46,7 +46,7 @@ module.exports.urlify = (string) => {
   // ); // fragment locator
 
   const pattern =
-    /^((ftp|http|https):\/\/)?(www\.)?([^\s$.?#]+)\.([^\s]{2,})/gm;
+    /^((ftp|http|https):\/\/)?(www\.)?([^\s$.?#]+)\.([^...|js|exp\s]{2,})/gm;
 
   const strSplit = string.split(" ");
   const testArray = [];
