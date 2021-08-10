@@ -74,7 +74,7 @@ module.exports = class BalCommand extends Commando.Command {
 
     const splitString = modules.splitString(inventory, 15);
 
-    if (!inventory) inventory = "There's nothing here :(";
+    if (!results || !inventory) inventory = "There's nothing here :(";
 
     if (splitString.length === 1) {
       const embed = new Discord.MessageEmbed()

@@ -44,7 +44,7 @@ module.exports = class SellCommand extends Commando.Command {
       userId: message.author.id,
     });
 
-    if (!results)
+    if (!results || results.inventory.length < 0)
       return message.reply(
         "<:scrubred:797476323169533963> You have no items on hand."
       );

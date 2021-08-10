@@ -41,7 +41,7 @@ module.exports = class PostMemeCommand extends Commando.Command {
       userId: message.author.id,
     });
 
-    if (!results.inventory.some((i) => i.name.toLowerCase() === "laptop"))
+    if (!results || !results.inventory.some((i) => i.name.toLowerCase() === "laptop"))
       return message.reply(
         "<:scrubred:797476323169533963> You don't have a `laptop`. Please go to the store and buy one."
       );

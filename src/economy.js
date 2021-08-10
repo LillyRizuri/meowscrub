@@ -133,6 +133,9 @@ module.exports.addItem = async (userId, itemName, amount) => {
           $push: {
             inventory: params,
           },
+        },
+        {
+          upsert: true,
         }
       );
     } else if (hasItem) {
@@ -152,6 +155,9 @@ module.exports.addItem = async (userId, itemName, amount) => {
               name: item.name,
             },
           },
+        },
+        {
+          upsert: true,
         }
       );
 
@@ -164,6 +170,9 @@ module.exports.addItem = async (userId, itemName, amount) => {
           $push: {
             inventory: params,
           },
+        },
+        {
+          upsert: true,
         }
       );
 
@@ -213,6 +222,9 @@ module.exports.removeItem = async (userId, itemName, amount) => {
               name: item.name,
             },
           },
+        },
+        {
+          upsert: true,
         }
       );
 
@@ -227,6 +239,9 @@ module.exports.removeItem = async (userId, itemName, amount) => {
             $push: {
               inventory: params,
             },
+          },
+          {
+            upsert: true,
           }
         );
     }
