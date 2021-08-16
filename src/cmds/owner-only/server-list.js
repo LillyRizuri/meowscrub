@@ -39,7 +39,7 @@ module.exports = class ServerListCommand extends Commando.Command {
           a.members.cache.get(this.client.user.id).joinedTimestamp
       )
       .map((guild) => {
-        const owner = this.client.users.cache.get(guild.ownerId);
+        const owner = this.client.users.cache.get(guild.ownerID);
         const memberCount =
           guild.memberCount -
           guild.members.cache.filter((m) => m.user.bot).size;
@@ -49,7 +49,7 @@ module.exports = class ServerListCommand extends Commando.Command {
         return `**+ ${guild.name}**\n⠀• ID: \`${guild.id}\`\n⠀• Owner: \`${
           owner.tag
         } (${
-          guild.ownerId
+          guild.ownerID
         })\`\n⠀• \`${memberCount.toLocaleString()} member(s) | ${botCount.toLocaleString()} bot(s)\`\n`;
       })
       .join("\n");
