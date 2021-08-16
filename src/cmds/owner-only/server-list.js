@@ -33,17 +33,25 @@ module.exports = class ServerListCommand extends Commando.Command {
     const clientGuilds = this.client.guilds.cache;
 
     const serverList = clientGuilds
-      .map(
-        (guild) =>
-          `**+ ${guild.name}**\n⠀• ID: \`${guild.id}\`\n⠀• Owner: \`${
-            guild.owner.user.tag
-          } (${guild.ownerID})\`\n⠀• \`${(
-            guild.memberCount -
-            guild.members.cache.filter((m) => m.user.bot).size
-          ).toLocaleString()} member(s) | ${guild.members.cache
-            .filter((m) => m.user.bot)
-            .size.toLocaleString()} bot(s)\`\n`
+      .sort(
+        (a, b) =>
+          b.members.cache.get(this.client.user.id).joinedTimestamp -
+          a.members.cache.get(this.client.user.id).joinedTimestamp
       )
+      .map((guild) => {
+        const owner = this.client.users.cache.get(guild.ownerId);
+        const memberCount =
+          guild.memberCount -
+          guild.members.cache.filter((m) => m.user.bot).size;
+
+        const botCount = guild.members.cache.filter((m) => m.user.bot).size;
+
+        return `**+ ${guild.name}**\n⠀• ID: \`${guild.id}\`\n⠀• Owner: \`${
+          owner.tag
+        } (${
+          guild.ownerId
+        })\`\n⠀• \`${memberCount.toLocaleString()} member(s) | ${botCount.toLocaleString()} bot(s)\`\n`;
+      })
       .join("\n");
 
     const splitOutput = Discord.Util.splitMessage(serverList, {
