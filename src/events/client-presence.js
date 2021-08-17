@@ -11,7 +11,7 @@ module.exports = {
     });
 
     // changing status for the 10 minutes interval
-    setTimeout(async () => {
+    setInterval(async () => {
       const status = require("../assets/json/bot-status.json");
       const randomStatus = Math.floor(Math.random() * status.length);
 
