@@ -39,7 +39,9 @@ module.exports = class SkipMusicCommand extends Commando.Command {
         "<:scrubred:797476323169533963> You need to be in the same VC as the bot in order to continue."
       );
 
-    if (!queue.autoplay || queue.songs.length === 1)
+    // eslint-disable-next-line no-empty
+    if (queue.songs.length > 1 || queue.autoplay) {
+    } else
       return message.reply(
         "<:scrubnull:797476323533783050> There's nowhere to skip."
       );
