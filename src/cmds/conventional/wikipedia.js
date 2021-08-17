@@ -3,7 +3,6 @@ const Discord = require("discord.js");
 const fetch = require("node-fetch");
 const utf8 = require("utf8");
 
-
 module.exports = class WikipediaCommand extends Commando.Command {
   constructor(client) {
     super(client, {

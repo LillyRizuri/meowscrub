@@ -26,7 +26,7 @@ module.exports = class StealEmojiCommand extends Commando.Command {
   run(message, args) {
     if (!args)
       return message.reply(
-        "<:scrubnull:797476323533783050> Specify at least ONE emoji to advance."
+        "<:scrubnull:797476323533783050> Specify one emoji to advance."
       );
 
     try {

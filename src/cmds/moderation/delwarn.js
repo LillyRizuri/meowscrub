@@ -92,7 +92,7 @@ module.exports = class DeleteWarnCommand extends Commando.Command {
             guildId,
           });
 
-          if (guildSettings && guildSettings.dmPunishment) {
+          if (guildSettings && guildSettings.settings.dmPunishment) {
             const dmReasonEmbed = new Discord.MessageEmbed()
               .setColor("RANDOM")
               .setTitle(`Your warn got deleted in ${message.guild.name}.`)

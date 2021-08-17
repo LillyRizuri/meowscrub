@@ -12,7 +12,7 @@ module.exports = class LoopMusicCommand extends Commando.Command {
       details:
         "There are 3 values to choose: `song`, `queue`, or turn it `off`.",
       format: "[value]",
-      examples: ["loop 1"],
+      examples: ["loop song", "loop queue", "loop off"],
       throttling: {
         usages: 1,
         duration: 5,
@@ -28,7 +28,7 @@ module.exports = class LoopMusicCommand extends Commando.Command {
 
     if (!voiceChannel)
       return message.reply(
-        "<:scrubnull:797476323533783050> Join an appropriate voice channel to loop the music."
+        "<:scrubnull:797476323533783050> Join an appropriate voice channel to configure that."
       );
 
     if (!queue)

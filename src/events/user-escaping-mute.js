@@ -17,7 +17,7 @@ module.exports = {
     if (user === -1) return;
 
     const mutedRole = member.guild.roles.cache.find(
-      (e) => e.id === settingsOutput.muteRole
+      (e) => e.id === settingsOutput.settings.muteRole
     );
 
     member.roles.add(mutedRole, `${member.user.tag} attempted to escape their mute`);

@@ -40,7 +40,7 @@ module.exports = class SetTranscriptLogCommand extends Commando.Command {
       guildId,
     });
 
-    if (!guildSettings || !guildSettings.ticketCategory)
+    if (!guildSettings || !guildSettings.settings.ticketCategory)
       return message.reply(
         "<:scrubred:797476323169533963> You must have a ticket category channel set up with the `setticket` command."
       );
@@ -69,7 +69,7 @@ module.exports = class SetTranscriptLogCommand extends Commando.Command {
           {
             guildId,
             $set: {
-              transcriptLog: channel.id,
+              "settings.transcriptLog": channel.id,
             },
           },
           {
@@ -92,7 +92,7 @@ module.exports = class SetTranscriptLogCommand extends Commando.Command {
           {
             guildId,
             $set: {
-              transcriptLog: null,
+              "settings.transcriptLog": null,
             },
           },
           {
@@ -112,15 +112,15 @@ module.exports = class SetTranscriptLogCommand extends Commando.Command {
           guildId,
         });
 
-        if (!results.transcriptLog) {
+        if (!results.settings.transcriptLog) {
           return message.reply(
             "<:scrubnull:797476323533783050> The text channel hasn't been set yet."
           );
-        } else if (results.transcriptLog) {
+        } else if (results.settings.transcriptLog) {
           const channelEmbed = new Discord.MessageEmbed()
             .setColor(what)
             .setDescription(
-              `<:scrubnull:797476323533783050> **Current Transcript Log Channel Configuration:** <#${results.transcriptLog}>`
+              `<:scrubnull:797476323533783050> **Current Transcript Log Channel Configuration:** <#${results.settings.transcriptLog}>`
             );
           return message.channel.send(channelEmbed);
         }

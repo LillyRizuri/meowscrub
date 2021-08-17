@@ -16,7 +16,7 @@ module.exports = class CloseTicketCommand extends Commando.Command {
         "close 866721249640448071",
       ],
       clientPermissions: ["MANAGE_CHANNELS"],
-      userPermissions: ["MANAGE_GUILD"],
+      userPermissions: ["MANAGE_CHANNELS"],
       throttling: {
         usages: 1,
         duration: 5,
@@ -27,11 +27,6 @@ module.exports = class CloseTicketCommand extends Commando.Command {
 
   async run(message, args) {
     let channel;
-
-    if (!args)
-      return message.reply(
-        "<:scrubnull:797476323533783050> Please provide the channel by mentioning them or provide their ID."
-      );
 
     if (!args) {
       channel = message.channel;

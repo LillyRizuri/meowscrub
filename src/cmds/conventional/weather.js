@@ -30,7 +30,7 @@ module.exports = class WeatherCommand extends Commando.Command {
 
       message.channel.send("Attempting to retrieve weather data...");
 
-      if (typeof result === undefined || result.length === 0)
+      if (typeof result === "undefined" || result.length === 0)
         return message.reply(
           "<:scrubred:797476323169533963> THIS is not a location. What's that."
         );

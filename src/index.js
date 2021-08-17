@@ -78,6 +78,8 @@ for (const file of eventFiles) {
   }
 }
 
+process.on("uncaughtException", console.log);
+
 client
   .on("debug", console.log)
   .on("warn", console.log)

@@ -80,7 +80,7 @@ module.exports = class AFKCommand extends Commando.Command {
 
     await message.member
       .setNickname(
-        `AFK | ${
+        `[AFK] ${
           message.member.nickname === null
             ? `${message.author.username}`
             : `${message.member.nickname}`

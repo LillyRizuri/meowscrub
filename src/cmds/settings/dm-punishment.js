@@ -33,7 +33,7 @@ module.exports = class SetChatbotChannelCommand extends Commando.Command {
       guildId,
     });
 
-    if (!results || !results.dmPunishment) {
+    if (!results || !results.settings.dmPunishment) {
       await settingsSchema.findOneAndUpdate(
         {
           guildId,
@@ -41,7 +41,7 @@ module.exports = class SetChatbotChannelCommand extends Commando.Command {
         {
           guildId,
           $set: {
-            dmPunishment: true,
+            "settings.dmPunishment": true,
           },
         }
       );
@@ -52,7 +52,7 @@ module.exports = class SetChatbotChannelCommand extends Commando.Command {
           "<:scrubgreen:797476323316465676> Toggled `dmPunishment` to **Enabled**."
         );
       message.channel.send(confirmationEmbed);
-    } else if (results && results.dmPunishment) {
+    } else if (results && results.settings.dmPunishment) {
       await settingsSchema.findOneAndUpdate(
         {
           guildId,
@@ -60,7 +60,7 @@ module.exports = class SetChatbotChannelCommand extends Commando.Command {
         {
           guildId,
           $set: {
-            dmPunishment: false,
+            "settings.dmPunishment": false,
           },
         }
       );

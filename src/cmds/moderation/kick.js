@@ -88,7 +88,7 @@ module.exports = class KickCommand extends Commando.Command {
       guildId: message.guild.id,
     });
 
-    if (guildSettings && guildSettings.dmPunishment) {
+    if (guildSettings && guildSettings.settings.dmPunishment) {
       const dmReasonEmbed = new Discord.MessageEmbed()
         .setColor("RANDOM")
         .setTitle(`You were kicked in ${guild.name}.`)

@@ -45,7 +45,7 @@ module.exports = class AsciiCommand extends Commando.Command {
           return message.channel.send(
             "```No Output. Please Try Again.```"
           );
-        message.channel.send(`\`\`\`${data}\`\`\``);
+        message.channel.send(`\`\`\`\n${data}\n\`\`\``);
       }
     );
   }

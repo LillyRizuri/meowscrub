@@ -122,7 +122,7 @@ module.exports = class WarnCommand extends Commando.Command {
         guildId,
       });
 
-      if (guildSettings && guildSettings.dmPunishment) {
+      if (guildSettings && guildSettings.settings.dmPunishment) {
         const dmReasonEmbed = new Discord.MessageEmbed()
           .setColor("RANDOM")
           .setTitle(`You got warned in ${message.guild.name}.`)

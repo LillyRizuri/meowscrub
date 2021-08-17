@@ -18,7 +18,7 @@ const mapping = {
 };
 
 "abcdefghijklmnopqrstuvwxyz".split("").forEach((c) => {
-  mapping[c] = mapping[c.toUpperCase()] = ` :regional_indicator_${c}:`;
+  mapping[c] = mapping[c.toUpperCase()] = `:regional_indicator_${c}:`;
 });
 
 module.exports = class EmojifyCommand extends Commando.Command {

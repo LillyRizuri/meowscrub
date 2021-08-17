@@ -59,7 +59,7 @@ module.exports = class SetGlobalChannelCommand extends Commando.Command {
           {
             guildId,
             $set: {
-              globalChat: channel.id,
+              "settings.globalChat": channel.id,
             },
           },
           {
@@ -83,7 +83,7 @@ module.exports = class SetGlobalChannelCommand extends Commando.Command {
           {
             guildId,
             $set: {
-              globalChat: null,
+              "settings.globalChat": null,
             },
           },
           {
@@ -103,15 +103,15 @@ module.exports = class SetGlobalChannelCommand extends Commando.Command {
           guildId,
         });
 
-        if (!results.globalChat) {
+        if (!results.settings.globalChat) {
           return message.reply(
             "<:scrubnull:797476323533783050> The text channel hasn't been set yet."
           );
-        } else if (results.globalChat) {
+        } else if (results.settings.globalChat) {
           const channelEmbed = new Discord.MessageEmbed()
             .setColor(what)
             .setDescription(
-              `<:scrubnull:797476323533783050> **Current Global Chat Configuration:** <#${results.globalChat}>`
+              `<:scrubnull:797476323533783050> **Current Global Chat Configuration:** <#${results.settings.globalChat}>`
             );
           return message.channel.send(channelEmbed);
         }

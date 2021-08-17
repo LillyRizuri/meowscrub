@@ -15,7 +15,7 @@ module.exports = {
         guildId,
       });
 
-      const channel = results.chatbotChannel;
+      const channel = results.settings.chatbotChannel;
 
       if (message.author.bot) return;
       if (channel.includes(message.channel.id)) {

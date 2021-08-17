@@ -14,7 +14,7 @@ module.exports = class CloseTicketCommand extends Commando.Command {
       group: "ticket",
       memberName: "tickets",
       description: "Display open and locked tickets.",
-      userPermissions: ["MANAGE_GUILD"],
+      userPermissions: ["MANAGE_MESSAGES"],
       throttling: {
         usages: 1,
         duration: 5,

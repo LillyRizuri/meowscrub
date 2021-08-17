@@ -15,7 +15,7 @@ module.exports = class DictionaryCommand extends Commando.Command {
       memberName: "urbandictionary",
       argsType: "single",
       description:
-        "Search a word within Urban Dictionary, not intended for serious stuff.",
+        "Search a word within Urban Dictionary. Beware of inappropriate definitions.",
       format: "<string>",
       examples: ["urbandictionary cookie"],
       clientPermissions: ["EMBED_LINKS"],

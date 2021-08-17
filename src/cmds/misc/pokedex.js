@@ -41,37 +41,37 @@ module.exports = class PokeDexCommand extends Commando.Command {
         .addFields(
           {
             name: "Species",
-            value: pkmnData.species,
+            value: pkmnData.species.toString(),
             inline: true,
           },
           {
             name: "Type",
-            value: pkmnData.type,
+            value: pkmnData.type.toString(),
             inline: true,
           },
           {
             name: "Height",
-            value: pkmnData.height,
+            value: pkmnData.height.toString(),
             inline: true,
           },
           {
             name: "Weight",
-            value: pkmnData.weight,
+            value: pkmnData.weight.toString(),
             inline: true,
           },
           {
             name: "Gender Rate",
-            value: pkmnData.gender,
+            value: pkmnData.gender.toString(),
             inline: true,
           },
           {
             name: "Abilities",
-            value: pkmnData.abilities,
+            value: pkmnData.abilities.toString(),
             inline: true,
           },
           {
             name: "Pokémon Description",
-            value: pkmnData.description,
+            value: pkmnData.description.toString(),
           }
         )
         .setFooter("Results Provided by Some Random Api")

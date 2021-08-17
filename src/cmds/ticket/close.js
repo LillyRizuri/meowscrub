@@ -19,7 +19,7 @@ module.exports = class CloseTicketCommand extends Commando.Command {
         "close 866721249640448071",
       ],
       clientPermissions: ["MANAGE_CHANNELS"],
-      userPermissions: ["MANAGE_GUILD"],
+      userPermissions: ["MANAGE_CHANNELS"],
       throttling: {
         usages: 1,
         duration: 5,
@@ -73,9 +73,9 @@ module.exports = class CloseTicketCommand extends Commando.Command {
       return int;
     }
 
-    if (guildSettings && guildSettings.transcriptLog) {
+    if (guildSettings && guildSettings.settings.transcriptLog) {
       const transcriptChannel = message.guild.channels.cache.get(
-        guildSettings.transcriptLog
+        guildSettings.settings.transcriptLog
       );
 
       if (!transcriptChannel) {
@@ -102,7 +102,7 @@ module.exports = class CloseTicketCommand extends Commando.Command {
 
         fs.unlinkSync(`./${fileName}`);
 
-        transcriptChannel.send(
+        await transcriptChannel.send(
           `\`[${time} ${timezone}]\` ❌ **${ticketCreator.tag} (${ticketCreator.id})**'s ticket has been closed by **${message.author.tag} (${message.author.id})**.\nThe full transcript is down below:`,
           transcriptFile
         );

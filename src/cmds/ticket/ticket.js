@@ -15,7 +15,7 @@ module.exports = class TicketCommand extends Commando.Command {
       memberName: "ticket",
       description: "Create a basic ticket for you and staffs to talk.",
       argsType: "single",
-      format: "[string]",
+      format: "<string>",
       examples: [
         "ticket ok someone is constantly pinging everyone and i can't handle it",
       ],
@@ -66,7 +66,7 @@ module.exports = class TicketCommand extends Commando.Command {
 
     if (args.length > 512)
       return message.reply(
-        "<:scrubred:797476323169533963> Limit your reason to just 512 characters only."
+        "<:scrubred:797476323169533963> Limit your reason's character count to just 512 characters only."
       );
 
     const results = await settingsSchema.findOne({
@@ -74,7 +74,7 @@ module.exports = class TicketCommand extends Commando.Command {
     });
 
     const parentChannel = message.guild.channels.cache.get(
-      results.ticketCategory
+      results.settings.ticketCategory
     );
 
     if (!parentChannel)
@@ -110,7 +110,7 @@ module.exports = class TicketCommand extends Commando.Command {
         type: "text",
         parent: parentChannel.id,
         topic: `[By @${message.author.tag}] ${args}`,
-        reason: `Ticket created by ${message.author.tag}`,
+        reason: `Ticket created by ${message.author.tag}: ${args}`,
       }
     );
 

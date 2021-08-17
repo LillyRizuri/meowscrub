@@ -18,8 +18,8 @@ module.exports = class SkipMusicCommand extends Commando.Command {
 
   async run(message) {
     const queue = await this.client.distube.getQueue(message);
-
     const voiceChannel = message.member.voice.channel;
+
     if (!voiceChannel)
       return message.reply(
         "<:scrubnull:797476323533783050> Go to the same VC that I'm blasting music out to do that action."
@@ -39,7 +39,7 @@ module.exports = class SkipMusicCommand extends Commando.Command {
         "<:scrubred:797476323169533963> You need to be in the same VC as the bot in order to continue."
       );
 
-    if (queue.autoplay || queue.songs.length === 1)
+    if (!queue.autoplay || queue.songs.length === 1)
       return message.reply(
         "<:scrubnull:797476323533783050> There's nowhere to skip."
       );

@@ -21,22 +21,22 @@ module.exports = {
     const botOwner = await client.users.fetch(process.env.OWNERID);
     const requiredMsgForVerification = 100;
     try {
-      const currentGuildResults = await settingsSchema.findOne({
+      const msgGuildRes = await settingsSchema.findOne({
         guildId: message.guild.id,
       });
 
-      if (!currentGuildResults) return;
-      if (!currentGuildResults.globalChat) return;
+      if (!msgGuildRes) return;
+      if (!msgGuildRes.settings.globalChat) return;
 
       const thisChannel = message.guild.channels.cache.get(
-        currentGuildResults.globalChat
+        msgGuildRes.settings.globalChat
       );
 
       if (!thisChannel) return;
 
       // check if the message was sent in a global chat channel, and if the target wasn't a bot
       if (
-        message.channel.id === currentGuildResults.globalChat &&
+        message.channel.id === msgGuildRes.settings.globalChat &&
         !message.author.bot
       ) {
         const channelPermissions = message.channel.permissionsFor(
@@ -272,15 +272,15 @@ Please do so by using the \`${client.commandPrefix}globalchat-notice\` command, 
         // for each guilds that the client was in
         client.guilds.cache.forEach(async (guild) => {
           // fetch to see if the guild that the client chose have a global chat channel
-          const otherGuildResults = await settingsSchema.findOne({
+          const otherGuildRes = await settingsSchema.findOne({
             guildId: guild.id,
           });
 
-          if (!otherGuildResults) return;
-          if (!otherGuildResults.globalChat) return;
+          if (!otherGuildRes) return;
+          if (!otherGuildRes.settings.globalChat) return;
 
           const channel = guild.channels.cache.get(
-            otherGuildResults.globalChat
+            otherGuildRes.settings.globalChat
           );
 
           // if there's none, return

@@ -7,17 +7,23 @@ const reqString = {
 
 const settingsSchema = mongoose.Schema({
   guildId: reqString,
-  dmPunishment: {
-    type: Boolean,
+  settings: {
+    type: Object,
     required: true,
-    default: false,
+    default: {
+      dmPunishment: {
+        type: Boolean,
+        required: true,
+        default: false,
+      },
+      chatbotChannel: reqString,
+      suggestionChannel: reqString,
+      ticketCategory: reqString,
+      transcriptLog: reqString,
+      globalChat: reqString,
+      muteRole: reqString,
+    },
   },
-  chatbotChannel: reqString,
-  suggestionsChannel: reqString,
-  ticketCategory: reqString,
-  transcriptLog: reqString,
-  globalChat: reqString,
-  muteRole: reqString,
 });
 
 module.exports = mongoose.model("guildSettings", settingsSchema);

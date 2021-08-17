@@ -14,7 +14,7 @@ module.exports = class SuggestCommand extends Commando.Command {
       aliases: ["suggestion", "idea"],
       group: "misc",
       memberName: "suggest",
-      description: "Suggest an idea to forward it into a suggestions channel.",
+      description: "Suggest an idea to forward it into a suggestion channel.",
       argsType: "single",
       format: "<string>",
       examples: [
@@ -38,7 +38,7 @@ module.exports = class SuggestCommand extends Commando.Command {
     });
 
     const channel = message.guild.channels.cache.get(
-      results.suggestionsChannel
+      results.settings.suggestionChannel
     );
 
     if (!channel)

@@ -18,7 +18,7 @@ module.exports = class SetTicketCategoryCommand extends Commando.Command {
         "Replace the syntax with `disable` if you wish to remove the configuration.",
       argsType: "single",
       format: "<categoryID>",
-      examples: ["setchatbot 800959164493856858", "setchatbot disable"],
+      examples: ["setticket 800959164493856858", "setticket disable"],
       userPermissions: ["ADMINISTRATOR"],
       clientPermissions: ["EMBED_LINKS"],
       throttling: {
@@ -57,7 +57,7 @@ module.exports = class SetTicketCategoryCommand extends Commando.Command {
           {
             guildId,
             $set: {
-              ticketCategory: channel.id,
+              "settings.ticketCategory": channel.id,
             },
           },
           {
@@ -82,7 +82,7 @@ And, you may want to use the \`transcript-log\` command to log every ticket chan
           guildId,
         });
 
-        if (guildSettings && guildSettings.transcriptLog)
+        if (guildSettings && guildSettings.settings.transcriptLog)
           return message.reply(
             "<:scrubred:797476323169533963> First, please remove the configuration for Transcript Log using the `transcript-log disable` command."
           );
@@ -94,7 +94,7 @@ And, you may want to use the \`transcript-log\` command to log every ticket chan
           {
             guildId,
             $set: {
-              ticketCategory: null,
+              "settings.ticketCategory": null,
             },
           },
           {
@@ -114,18 +114,18 @@ And, you may want to use the \`transcript-log\` command to log every ticket chan
           guildId,
         });
 
-        if (!results.ticketCategory) {
+        if (!results.settings.ticketCategory) {
           return message.reply(
             "<:scrubnull:797476323533783050> The category ID hasn't been set yet."
           );
-        } else if (results.ticketCategory) {
+        } else if (results.settings.ticketCategory) {
           const ticketCategoryName = message.guild.channels.cache.get(
             results.ticketCategory
           ).name;
           const channelEmbed = new Discord.MessageEmbed()
             .setColor(what)
             .setDescription(
-              `<:scrubnull:797476323533783050> **Current Ticket Category Configuration:** \`${ticketCategoryName} - ${results.ticketCategory}\``
+              `<:scrubnull:797476323533783050> **Current Ticket Category Configuration:** \`${ticketCategoryName} - ${results.settings.ticketCategory}\``
             );
           return message.channel.send(channelEmbed);
         }

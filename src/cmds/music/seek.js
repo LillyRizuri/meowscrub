@@ -14,7 +14,6 @@ module.exports = class SeekMusicCommand extends Commando.Command {
       description: "Seek the playhead by providing the timestamp.",
       format: "<hh:mm:ss> | <mm:ss> | <ss>",
       examples: ["seek 26", "seek 10:40", "seek 01:25:40"],
-
       guildOnly: true,
     });
   }
@@ -73,10 +72,8 @@ module.exports = class SeekMusicCommand extends Commando.Command {
       }
     }
 
-    if (isNaN(milliseconds) || !Number.isInteger(milliseconds)) {
-      message.reply(notTimestampMsg);
-      return;
-    }
+    if (isNaN(milliseconds) || !Number.isInteger(milliseconds))
+      return message.reply(notTimestampMsg);
 
     this.client.distube.seek(message, Number(milliseconds));
     message.channel.send(

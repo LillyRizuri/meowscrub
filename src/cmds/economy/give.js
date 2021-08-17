@@ -39,7 +39,7 @@ module.exports = class GiveCommand extends Commando.Command {
     try {
       target =
         message.mentions.users.first() ||
-        message.guild.members.cache.get(args).user;
+        message.guild.members.cache.get(args[0]).user;
     } catch (err) {
       return message.reply(
         "<:scrubred:797476323169533963> What is that User ID."

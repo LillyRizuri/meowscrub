@@ -73,13 +73,13 @@ module.exports = class MuteCommand extends Commando.Command {
       guildId: message.guild.id,
     });
 
-    if (!guildSettings || !guildSettings.muteRole)
+    if (!guildSettings || !guildSettings.settings.muteRole)
       return message.reply(
         "<:scrubred:797476323169533963> There's no muted role set in this server.\nPlease set one using the `muterole` command."
       );
 
     const mutedRole = message.guild.roles.cache.find(
-      (e) => e.id === guildSettings.muteRole
+      (e) => e.id === guildSettings.settings.muteRole
     );
 
     if (!mutedRole)

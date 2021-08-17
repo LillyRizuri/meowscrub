@@ -18,7 +18,7 @@ module.exports = class SetMuteRoleCommand extends Commando.Command {
         "Replace the syntax with `disable` if you wish to remove the configuration.",
       argsType: "single",
       format: "<@role/roleID>",
-      examples: ["muterole @Muted", "setchatbot disable"],
+      examples: ["muterole @Muted", "muterole disable"],
       userPermissions: ["ADMINISTRATOR"],
       clientPermissions: ["EMBED_LINKS"],
       throttling: {
@@ -49,7 +49,7 @@ module.exports = class SetMuteRoleCommand extends Commando.Command {
           {
             guildId,
             $set: {
-              muteRole: role.id,
+              "settings.muteRole": role.id,
             },
           },
           {
@@ -75,7 +75,7 @@ module.exports = class SetMuteRoleCommand extends Commando.Command {
           {
             guildId,
             $set: {
-              muteRole: null,
+              "settings.muteRole": null,
             },
           },
           {
@@ -95,15 +95,15 @@ module.exports = class SetMuteRoleCommand extends Commando.Command {
           guildId,
         });
 
-        if (!results.muteRole) {
+        if (!results.settings.muteRole) {
           return message.reply(
             "<:scrubnull:797476323533783050> The muted role hasn't been set yet."
           );
-        } else if (results.muteRole) {
+        } else if (results.settings.muteRole) {
           const channelEmbed = new Discord.MessageEmbed()
             .setColor(what)
             .setDescription(
-              `<:scrubnull:797476323533783050> **Current Muted Role Configuration:** <@&${results.muteRole}>`
+              `<:scrubnull:797476323533783050> **Current Muted Role Configuration:** <@&${results.settings.muteRole}>`
             );
           return message.channel.send(channelEmbed);
         }

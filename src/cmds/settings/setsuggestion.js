@@ -18,7 +18,7 @@ module.exports = class SetChatbotChannelCommand extends Commando.Command {
         "Replace the syntax with `disable` if you wish to remove the configuration.",
       argsType: "single",
       format: "<#channel/channelID>",
-      examples: ["setsuggestion #chatbot", "setsuggestion disable"],
+      examples: ["setsuggestion #suggestions", "setsuggestion disable"],
       userPermissions: ["ADMINISTRATOR"],
       clientPermissions: ["EMBED_LINKS"],
       throttling: {
@@ -59,7 +59,7 @@ module.exports = class SetChatbotChannelCommand extends Commando.Command {
           {
             guildId,
             $set: {
-              suggestionsChannel: channel.id,
+              "settings.suggestionChannel": channel.id,
             },
           },
           {
@@ -82,7 +82,7 @@ module.exports = class SetChatbotChannelCommand extends Commando.Command {
           {
             guildId,
             $set: {
-              suggestionsChannel: null,
+              "settings.suggestionChannel": null,
             },
           },
           {
@@ -93,7 +93,7 @@ module.exports = class SetChatbotChannelCommand extends Commando.Command {
         const confirmationRemovalEmbed = new Discord.MessageEmbed()
           .setColor(green)
           .setDescription(
-            "<:scrubgreen:797476323316465676> **Removed the configuration for the Chatbot Channel.**"
+            "<:scrubgreen:797476323316465676> **Removed the configuration for the Suggestion Channel.**"
           );
         message.channel.send(confirmationRemovalEmbed);
         return;
@@ -102,15 +102,15 @@ module.exports = class SetChatbotChannelCommand extends Commando.Command {
           guildId,
         });
 
-        if (!results.suggestionsChannel) {
+        if (!results.settings.suggestionChannel) {
           return message.reply(
             "<:scrubnull:797476323533783050> The text channel hasn't been set yet."
           );
-        } else if (results.suggestionsChannel) {
+        } else if (results.settings.suggestionChannel) {
           const channelEmbed = new Discord.MessageEmbed()
             .setColor(what)
             .setDescription(
-              `<:scrubnull:797476323533783050> **Current Chatbot Channel Configuration:** <#${results.suggestionsChannel}>`
+              `<:scrubnull:797476323533783050> **Current Suggestion Channel Configuration:** <#${results.settings.suggestionChannel}>`
             );
           return message.channel.send(channelEmbed);
         }

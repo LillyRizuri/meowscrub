@@ -88,7 +88,7 @@ module.exports = class BanCommand extends Commando.Command {
         guildId: message.guild.id,
       });
 
-      if (guildSettings && guildSettings.dmPunishment) {
+      if (guildSettings && guildSettings.settings.dmPunishment) {
         const dmReasonEmbed = new Discord.MessageEmbed()
           .setColor("RANDOM")
           .setTitle(`You were banned in ${message.guild.name}.`)
