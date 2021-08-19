@@ -21,7 +21,7 @@ BRAINSHOP_BRAIN_ID=
 BRAINSHOP_API_KEY=
 ```
  - `PREFIX` is your bot's prefix
- - `OWNERS` is a string being split using the space character, effectively creating an array containing each User ID
+ - `OWNERS` is a string being split using commas, effectively creating an array containing each User ID
  - `GUILD_TEST` is (your guild to test your bot)'s ID. (used for logging user id to that guild for the global chat feature)
  - `DISCORDINVITE` is your invite link to your server (surround it with these: <>)
  - `TOPGG_TOKEN` is the bot's Top.gg Token (the bot must be in top.gg)

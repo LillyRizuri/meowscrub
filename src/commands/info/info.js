@@ -31,7 +31,7 @@ module.exports = {
     const memTotalInMB = (memTotal / 1024 / 1024).toFixed(2);
 
     const memUsedPercentage = ((memUsed / memTotal) * 100).toFixed(2) + "%";
-    const author = await client.users.fetch(process.env.OWNERS);
+    const author = await client.users.fetch(client.owner[0]);
 
     const totalGuild = client.guilds.cache.size;
 

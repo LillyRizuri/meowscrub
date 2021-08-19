@@ -49,7 +49,6 @@ module.exports = {
             repliedUser: false,
           },
         });
-        return message.channel.stopTyping(true);
       }
       // eslint-disable-next-line no-empty
     } catch (err) {}

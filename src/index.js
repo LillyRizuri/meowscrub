@@ -34,7 +34,7 @@ mongoose
     console.log("Successfully connected to your MongoDB Database.");
   });
 
-client.owner = process.env.OWNERS.split(" ");
+client.owner = process.env.OWNERS.split(",");
 client.guildPrefixes = {};
 client.commands = new Discord.Collection();
 client.registryGroups = new Discord.Collection();

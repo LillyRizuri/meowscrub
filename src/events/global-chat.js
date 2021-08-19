@@ -18,7 +18,7 @@ module.exports = {
   name: "messageCreate",
   async execute(message, client) {
     if (!message.guild) return;
-    const botOwner = await client.users.fetch(process.env.OWNERS);
+    const botOwner = await client.users.fetch(client.owner[0]);
     const requiredMsgForVerification = 100;
     try {
       const msgGuildRes = await settingsSchema.findOne({

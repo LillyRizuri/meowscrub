@@ -1,16 +1,6 @@
 /* eslint-disable no-inline-comments */
 const client = require("../index");
 
-module.exports.isOwner = (owners, user) => {
-  // owners is owner id in a string or an array
-  user = client.users.resolve(user);
-  if (!user) throw new Error("Unable to resolve user.");
-  if (typeof owners === "string") return user.id === owners;
-  if (owners instanceof Array) return owners.includes(user.id);
-  if (owners instanceof Set) return owners.has(user.id);
-  throw new Error("The owner option is an unknown value.");
-};
-
 module.exports.findCommands = (searchString = String) => {
   const lcSearch = searchString.toLowerCase();
   const matchedCommands = Array.from(
