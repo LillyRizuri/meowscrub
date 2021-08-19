@@ -1,11 +1,12 @@
 const Discord = require("discord.js");
+const modules = require("../util/modules");
 const serverBlacklistSchema = require("../models/guild-blacklist-schema");
 const { embedcolor } = require("../assets/json/colors.json");
 
 module.exports = {
   name: "guildCreate",
   async execute(guild, client) {
-    const botOwner = await client.users.fetch(process.env.OWNERID);
+    const botOwner = await client.users.fetch(client.owner[0]);
     const welcomeMsgEmbed = new Discord.MessageEmbed()
       .setColor(embedcolor)
       .setAuthor(`A message from ${botOwner.tag}`)
@@ -14,7 +15,7 @@ module.exports = {
       .addFields(
         {
           name: "Getting Started",
-          value: `Use \`${client.commandPrefix}help\` to let the bot provide the full list of commands available. Hope you utilize all commands present in there.`,
+          value: `Use \`${await modules.getPrefix(guild.id)}help\` to let the bot provide the full list of commands available. Hope you utilize all commands present in there.`,
         },
         {
           name: "Needing help or get involved in our community?",
@@ -31,7 +32,7 @@ module.exports = {
     let channelToSend;
     guild.channels.cache.forEach((channel) => {
       if (
-        channel.type === "text" &&
+        channel.type === "GUILD_TEXT" &&
         !channelToSend &&
         channel.permissionsFor(guild.me).has("SEND_MESSAGES")
       )
@@ -46,13 +47,15 @@ module.exports = {
     if (!channelToSend) {
     } else if (channelToSend) {
       if (results) {
-        await channelToSend.send("This server is blacklisted. Why even bother?");
+        await channelToSend.send(
+          "This server is blacklisted. Why even bother?"
+        );
       } else if (guild.members.cache.filter((m) => m.user.bot).size > 30) {
         await channelToSend.send(
           "This server has too many bots. Please remove any that's unnecessary."
         );
       } else {
-        await channelToSend.send(welcomeMsgEmbed);
+        await channelToSend.send({ embeds: [welcomeMsgEmbed] });
       }
     }
 

@@ -1,6 +1,6 @@
 const Discord = require("discord.js");
 const humanizeDuration = require("humanize-duration");
-const modules = require("../modules");
+const modules = require("../util/modules");
 const settingsSchema = require("../models/settings-schema");
 const globalChatSchema = require("../models/global-chat-schema");
 const userBlacklistSchema = require("../models/user-blacklist-schema");
@@ -15,10 +15,10 @@ const referralDomains = require("../assets/json/referral-domains.json");
 const safeDomains = require("../assets/json/safe-domains.json");
 
 module.exports = {
-  name: "message",
+  name: "messageCreate",
   async execute(message, client) {
-    if (message.channel.type === "dm") return;
-    const botOwner = await client.users.fetch(process.env.OWNERID);
+    if (!message.guild) return;
+    const botOwner = await client.users.fetch(process.env.OWNERS);
     const requiredMsgForVerification = 100;
     try {
       const msgGuildRes = await settingsSchema.findOne({
@@ -104,12 +104,14 @@ module.exports = {
             .setDescription(
               `
 If you receive this messaage while trying to use Global Chat, you probably haven't read through Global Chat's Notice yet.
-Please do so by using the \`${client.commandPrefix}globalchat-notice\` command, then you may proceed through the next step provided by the command.
+Please do so by using the \`${await modules.getPrefix(
+                message.guild.id
+              )}globalchat-notice\` command, then you may proceed through the next step provided by the command.
 `
             )
             .setFooter(`Please contact ${botOwner.tag} if you're confused.`);
 
-          const msg = await message.reply(holdUpEmbed);
+          const msg = await message.reply({ embeds: [holdUpEmbed] });
 
           setTimeout(() => {
             msg.delete();
@@ -370,6 +372,8 @@ _ _\n[ ${badgeDisplayed} **\`${message.author.tag}\` - \`${message.guild.name}\`
       }
 
       // eslint-disable-next-line no-empty
-    } catch (err) {}
+    } catch (err) {
+      console.log(err);
+    }
   },
 };

@@ -11,6 +11,7 @@ const settingsSchema = mongoose.Schema({
     type: Object,
     required: true,
     default: {
+      prefix: reqString,
       dmPunishment: {
         type: Boolean,
         required: true,

@@ -1,12 +1,11 @@
 const fetch = require("node-fetch");
-const utf8 = require("utf8");
 const settingsSchema = require("../models/settings-schema");
 const userBlacklistSchema = require("../models/user-blacklist-schema");
 
 module.exports = {
-  name: "message",
+  name: "messageCreate",
   async execute(message) {
-    if (message.channel.type === "dm") return;
+    if (!message.guild) return;
     try {
       const guildId = message.guild.id;
       const input = encodeURIComponent(message.content);
@@ -26,7 +25,7 @@ module.exports = {
         if (blacklistResults) {
           await message.delete();
           const msg = await message.channel.send(
-            `**${message.author.username}**: You are blacklisted from using this functionality. For that, your message won't be delivered.`
+            `**${message.author.tag}**: You are blacklisted from using this functionality. For that, your message won't be delivered.`
           );
 
           setTimeout(() => {
@@ -40,14 +39,16 @@ module.exports = {
             "i can't chat properly when your message contains any user/channel mentions."
           );
 
-        message.channel.startTyping();
-        const response = await fetch(
-          utf8.encode(
-            `http://api.brainshop.ai/get?bid=${process.env.BRAINSHOP_BRAIN_ID}&key=${process.env.BRAINSHOP_API_KEY}&uid=${message.author.id}&msg=${input}`
-          )
-        );
-        const json = await response.json();
-        message.reply(json.cnt.toLowerCase());
+        message.channel.sendTyping();
+        const json = await fetch(
+          `http://api.brainshop.ai/get?bid=${process.env.BRAINSHOP_BRAIN_ID}&key=${process.env.BRAINSHOP_API_KEY}&uid=${message.author.id}&msg=${input}`
+        ).then((res) => res.json());
+        message.reply({
+          content: `${json.cnt.toString().toLowerCase()}`,
+          allowedMentions: {
+            repliedUser: false,
+          },
+        });
         return message.channel.stopTyping(true);
       }
       // eslint-disable-next-line no-empty
