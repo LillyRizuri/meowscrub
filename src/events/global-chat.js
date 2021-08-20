@@ -251,6 +251,7 @@ Please do so by using the \`${await modules.getPrefix(
 
         // get the first message attachment
         const attachment = message.attachments.first();
+        if (!attachment) if (!message.content) return;
 
         // depends on account status, have a designated badge append with their username
         let badgeDisplayed = "";
@@ -345,12 +346,12 @@ _ _\n[ ${badgeDisplayed} **\`${message.author.tag}\` - \`${message.guild.name}\`
                 });
             } else {
               await channel
-                .send(
-                  message.content
+                .send({
+                  content: message.content
                     ? `${usernamePart}\n${message.content}`
                     : `${usernamePart}`,
-                  attachment
-                )
+                  files: [attachment],
+                })
                 .catch((err) => {
                   try {
                     // try to send a notice if the bot can't send attachment to the guild chosen
