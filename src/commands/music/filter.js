@@ -7,7 +7,8 @@ module.exports = {
   description: "Set multiple music filters for the queue.",
   details: `
 To remove all filters, type "off" instead of a normal audio filter name.
-To remove one filter that's applied to the queue, type the audio filter that you want to remove.`,
+To remove one filter that's applied to the queue, type the audio filter that you want to remove.
+All effects can be found here: https://distube.js.org/#/docs/DisTube/beta/typedef/defaultFilters`,
   // eslint-disable-next-line quotes
   format: '[filterName/"off"]',
   cooldown: 5,
@@ -43,7 +44,7 @@ To remove one filter that's applied to the queue, type the audio filter that you
     else if (!args && queue.filters.length <= 1)
       return message.reply(
         emoji.missingEmoji +
-          " There's no audio filter set in this server's queue.\nPlease set one by referring to this site: <https://distube.js.org/#/docs/DisTube/3.0.0-beta.35/typedef/DefaultFilters>"
+          " There's no audio filter set in this server's queue.\nPlease set one by referring to this site: <https://distube.js.org/#/docs/DisTube/beta/typedef/defaultFilters>"
       );
 
     if (args.toLowerCase() === "off" && queue.filters.length >= 1) {

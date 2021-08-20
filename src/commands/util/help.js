@@ -41,24 +41,24 @@ ${command.guildOnly ? " [Usable only in servers]" : ""} ${
           .setAuthor(
             `${registryCommand.name}: ${command.aliases[0]} (${registryCommand.id}:${command.memberName})`
           )
-          .setTitle(command.description)
+          .setTitle(command.description.trim())
           .setDescription(help)
           .addField(
             "Format",
-            `⠀• \`${prefix}${command.aliases[0]}${cmdFormat}\`\n⠀• \`@${client.user.tag} ${command.aliases[0]}${cmdFormat}\``
+            `⠀• ${prefix}${command.aliases[0]}${cmdFormat}\n⠀• ${client.user.tag} ${command.aliases[0]}${cmdFormat}`
           )
           .setFooter("<required> | [optional]")
           .setTimestamp();
 
         if (aliases.length > 0)
-          helpEmbed.addField("Aliases", `⠀• \`${aliases.join(", ")}\``);
+          helpEmbed.addField("Aliases", `⠀• ${aliases.join(", ")}`);
 
         if (command.details)
-          helpEmbed.addField("Details", `⠀• \`${command.details}\``);
+          helpEmbed.addField("Details", `⠀• ${command.details.trim()}`);
         if (command.examples) {
           const examples = [];
           for (let i = 0; i < command.examples.length; i++) {
-            examples.push(`⠀• \`${command.examples[i]}\``);
+            examples.push(`⠀• ${command.examples[i]}`);
           }
 
           helpEmbed.addField("Examples", examples.join("\n"));
