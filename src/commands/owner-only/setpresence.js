@@ -22,7 +22,7 @@ module.exports = {
       client.user.setPresence({
         activities: [
           {
-            name: pickedPresence,
+            name: pickedPresence + ` | @${client.user.username} help`,
             type: "WATCHING",
           },
         ],
