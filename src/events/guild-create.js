@@ -7,6 +7,11 @@ module.exports = {
   name: "guildCreate",
   async execute(guild, client) {
     const botOwner = await client.users.fetch(client.owner[0]);
+    const clientInvite = client.generateInvite({
+      scopes: ["applications.commands", "bot"],
+      // eslint-disable-next-line no-undef
+      permissions: BigInt(258171333879),
+    });
     const welcomeMsgEmbed = new Discord.MessageEmbed()
       .setColor(embedcolor)
       .setAuthor(`A message from ${botOwner.tag}`)
@@ -23,7 +28,7 @@ module.exports = {
         },
         {
           name: "Adding it to your server?",
-          value: `You can be one of the testers and invite the bot with this link: [Here.](https://discord.com/oauth2/authorize?client_id=${client.user.id}&scope=bot&permissions=2083911167)`,
+          value: `You can be one of the testers and invite the bot with this link: [Here.](${clientInvite})`,
         }
       )
       .setFooter("i can only hope for the bot to run smoothly")

@@ -5,7 +5,7 @@ const emoji = require("../../assets/json/tick-emoji.json");
 module.exports = {
   aliases: ["docs", "djs", "discordjs"],
   memberName: "docs",
-  group: "util",
+  group: "info",
   description: "View documentations for Discord.JS.",
   format: "<searchString>",
   examples: ["docs Message"],
