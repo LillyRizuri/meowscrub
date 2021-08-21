@@ -10,6 +10,15 @@ const settingsSchema = mongoose.Schema({
   settings: {
     type: Object,
     required: true,
+    default: {
+      prefix: null,
+      chatbotChannel: null,
+      suggestionChannel: null,
+      ticketCategory: null,
+      transcriptLog: null,
+      globalChat: null,
+      muteRole: null,
+    },
   },
   commands: {
     type: Object,
