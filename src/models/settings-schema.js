@@ -10,21 +10,11 @@ const settingsSchema = mongoose.Schema({
   settings: {
     type: Object,
     required: true,
-    default: {
-      prefix: reqString,
-      dmPunishment: {
-        type: Boolean,
-        required: true,
-        default: false,
-      },
-      chatbotChannel: reqString,
-      suggestionChannel: reqString,
-      ticketCategory: reqString,
-      transcriptLog: reqString,
-      globalChat: reqString,
-      muteRole: reqString,
-    },
   },
+  commands: {
+    type: Object,
+    required: true,
+  }
 });
 
 module.exports = mongoose.model("guildSettings", settingsSchema);
