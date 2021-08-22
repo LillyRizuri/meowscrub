@@ -17,6 +17,7 @@ module.exports = {
   examples: ["addbotstaff 693832549943869493"],
   singleArgs: true,
   ownerOnly: true,
+  guarded: true,
   hidden: true,
   callback: async (client, message, args) => {
     if (!args)

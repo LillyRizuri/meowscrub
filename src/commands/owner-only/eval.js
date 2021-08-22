@@ -57,15 +57,16 @@ Object.defineProperty(this, "_sensitivePattern", {
 module.exports = {
   aliases: ["eval", "execute"],
   memberName: "eval",
-  group: "util",
+  group: "owner-only",
   description: "Execute JavaScript code.",
   details:
     "This command can potentially display sensitive information, so only the bot owner(s) may use this command.",
-  format: "<code>",
+  format: "<javascript-code>",
   // eslint-disable-next-line quotes
   examples: ["eval new Date()", 'eval message.channel.send("eval moment")'],
   singleArgs: true,
   ownerOnly: true,
+  guarded: true,
   callback: async (client, message, args) => {
     if (!args)
       return message.reply(

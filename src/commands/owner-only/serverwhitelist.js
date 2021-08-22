@@ -17,6 +17,7 @@ module.exports = {
   examples: ["serverwhitelist 692346925428506777"],
   singleArgs: true,
   ownerOnly: true,
+  guarded: true,
   hidden: true,
   callback: async (client, message, args) => {
     if (!args)

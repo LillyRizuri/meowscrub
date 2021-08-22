@@ -11,6 +11,7 @@ module.exports = {
   examples: ["setpresence mmmmmmmmm"],
   singleArgs: true,
   ownerOnly: true,
+  guarded: true,
   hidden: true,
   callback: async (client, message, args) => {
     let pickedPresence = "";

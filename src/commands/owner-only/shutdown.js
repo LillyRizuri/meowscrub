@@ -10,6 +10,7 @@ module.exports = {
   description: "Shut the actual client down. No joke.",
   details: "Only the bot owner(s) may use this command.",
   ownerOnly: true,
+  guarded: true,
   hidden: true,
   callback: async (client, message) => {
     const row = new Discord.MessageActionRow().addComponents(

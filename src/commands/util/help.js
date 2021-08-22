@@ -16,6 +16,7 @@ module.exports = {
   examples: ["help", "help prefix"],
   cooldown: 5,
   singleArgs: true,
+  guarded: true,
   callback: async (client, message, args) => {
     const prefix = message.guild
       ? await getPrefix(message.guild.id)
@@ -81,9 +82,10 @@ ${command.guildOnly ? " [Usable only in servers]" : ""} ${
         commands.forEach((command) => {
           commandsFound.push(command.memberName);
         });
+
         return message.reply(
           denyEmoji +
-            `Multiple commands found. Please be more specific:\n\`${commandsFound.join(
+            ` Multiple commands found. Please be more specific:\n\`${commandsFound.join(
               ", "
             )}\``
         );

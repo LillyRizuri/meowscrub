@@ -6,11 +6,12 @@ const humanizeDuration = require("humanize-duration");
 
 const { getPrefix } = require("../util/modules");
 
+const settingsSchema = require("../models/settings-schema");
+const userBlacklistSchema = require("../models/user-blacklist-schema");
+
 const { denyEmoji } = require("../assets/json/tick-emoji.json");
 const modPerms = require("../assets/json/mod-permissions.json");
 const normalPerms = require("../assets/json/normal-permissions.json");
-
-const userBlacklistSchema = require("../models/user-blacklist-schema");
 
 const cooldowns = new Map();
 
@@ -41,6 +42,7 @@ module.exports = async (client, commandOptions) => {
     singleArgs = false, // if argument shouldn't be split every whitespace characters
     guildOnly = false, // make the command work on servers only
     ownerOnly = false, // make the command only accessible for bot owners
+    guarded = false, // prevent the command from being disabled
     hidden = false, // make the command hidden from the help command
     nsfw = false, // make the command usable for nsfw channels only
     callback, // (client, message, args)
@@ -121,22 +123,23 @@ module.exports = async (client, commandOptions) => {
   for (const alias of aliases) {
     allCommands[alias] = {
       ...commandOptions,
-      aliases, // [REQUIRED] the command's name and aliases
-      memberName, // [REQUIRED] the command id
-      group, // [REQUIRED] which group it belongs
-      description, // [REQUIRED] basic description on a command
-      details, // further details on a command
-      format, // how to use the command
-      examples, // command examples
-      clientPermissions, // required user permissions for the client
-      userPermissions, // required user permissions for the excecutor
-      cooldown, // command cooldown in seconds
-      singleArgs, // boolean
-      guildOnly, // make the command work on servers only
-      ownerOnly, // make the command only accessible for bot owners
-      hidden, // make the command hidden from the help command
-      nsfw, // make the command usable for nsfw channels only
-      callback, // (client, message, args)
+      aliases,
+      memberName,
+      group,
+      description,
+      details,
+      format,
+      examples,
+      clientPermissions,
+      userPermissions,
+      cooldown,
+      singleArgs,
+      guildOnly,
+      ownerOnly,
+      guarded,
+      hidden,
+      nsfw,
+      callback,
     };
   }
 
@@ -189,22 +192,23 @@ module.exports.listen = (client) => {
       if (!command) return;
 
       const {
-        aliases, // [REQUIRED] the command's name and aliases
-        memberName, // [REQUIRED] the command id
-        group, // [REQUIRED] which group it belongs
-        description, // [REQUIRED] basic description on a command
-        details, // further details on a command
-        format, // how to use the command
-        examples, // command examples
-        clientPermissions, // required user permissions for the client
-        userPermissions, // required user permissions for the excecutor
-        cooldown, // command cooldown in seconds
-        singleArgs, // boolean
-        guildOnly, // make the command work on servers only
-        ownerOnly, // make the command only accessible for bot owners
-        hidden, // make the command hidden from the help command
-        nsfw, // make the command usable for nsfw channels only
-        callback, // (client, message, args)
+        aliases,
+        memberName,
+        group,
+        description,
+        details,
+        format,
+        examples,
+        clientPermissions,
+        userPermissions,
+        cooldown,
+        singleArgs,
+        guildOnly,
+        ownerOnly,
+        guarded,
+        hidden,
+        nsfw,
+        callback,
       } = command;
 
       console.log(`Running command ${group}:${aliases[0]}`);
@@ -217,6 +221,17 @@ module.exports.listen = (client) => {
         return message.reply(
           "You are blacklisted from the bot. The only way for you to use my functionality again is to appeal."
         );
+
+      const settings = await settingsSchema.findOne({
+        guildId: message.guild.id,
+      });
+
+      if (settings && settings.commands)
+        if (memberName in settings.commands)
+          if (!settings.commands[memberName])
+            return message.reply(
+              denyEmoji + " That command is disabled in this server."
+            );
 
       if (ownerOnly)
         if (!client.isOwner(message.author))

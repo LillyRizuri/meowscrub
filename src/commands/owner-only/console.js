@@ -12,6 +12,7 @@ module.exports = {
   examples: ["console node -v"],
   singleArgs: true,
   ownerOnly: true,
+  guarded: true,
   hidden: true,
   callback: async (client, message, args) => {
     if (!args)

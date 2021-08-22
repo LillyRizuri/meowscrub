@@ -15,6 +15,7 @@ module.exports = {
   examples: ["prefix", "prefix +", "prefix omg!", "prefix default"],
   singleArgs: true,
   cooldown: 5,
+  guarded: true,
   callback: async (client, message, args) => {
     if (!args) {
       const prefix = await getPrefix(message.guild.id);

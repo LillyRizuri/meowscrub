@@ -17,6 +17,7 @@ module.exports = {
   format: "<@user/userID>",
   examples: ["blacklist 693832549943869493"],
   singleArgs: true,
+  guarded: true,
   hidden: true,
   callback: async (client, message, args) => {
     const isBotStaff = await botStaffSchema.findOne({

@@ -19,6 +19,7 @@ module.exports = {
     "serverblacklist 692346925428506777 force",
   ],
   ownerOnly: true,
+  guarded: true,
   hidden: true,
   callback: async (client, message, args) => {
     if (!args[0])

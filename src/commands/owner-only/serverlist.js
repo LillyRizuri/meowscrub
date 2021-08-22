@@ -10,6 +10,7 @@ module.exports = {
   group: "owner-only",
   description: "List all servers that I'm in.",
   details: "Only the bot owner(s) and bot staff(s) may use this command.",
+  guarded: true,
   hidden: true,
   callback: async (client, message) => {
     const isBotStaff = await botStaffSchema.findOne({
