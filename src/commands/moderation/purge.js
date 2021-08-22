@@ -8,7 +8,7 @@ module.exports = {
     "Clean a number of messages with or without flags. The command will not acknowledge pinned messages.",
   details:
     "All flags you can use at the end of the command argument:\n@user, bots, embeds",
-  format: "<number> [@user/userID]",
+  format: "<number> [flags]",
   examples: ["purge 25", "purge 60 @frockles"],
   clientPermissions: ["MANAGE_MESSAGES", "READ_MESSAGE_HISTORY", "EMBED_LINKS"],
   userPermissions: ["MANAGE_MESSAGES", "READ_MESSAGE_HISTORY"],
@@ -66,6 +66,8 @@ module.exports = {
         filterUsed.push("embeds");
       }
     }
+
+    if (filterUsed.length === 0) filterUsed.push("None");
 
     deletable = deletable.first(amountToDelete);
 
