@@ -36,6 +36,7 @@
     "npm": "^7.20.6",
     "reconlx": "^2.0.1",
     "search-npm-registry": "^2.0.3",
+    "tweetnacl": "^1.0.3",
     "twemoji-parser": "^13.1.0",
     "utf8": "^3.0.0",
     "util": "^0.12.4",
