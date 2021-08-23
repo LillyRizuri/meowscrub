@@ -67,6 +67,7 @@ module.exports = {
   singleArgs: true,
   ownerOnly: true,
   guarded: true,
+  hidden: true,
   callback: async (client, message, args) => {
     if (!args)
       return message.reply(
