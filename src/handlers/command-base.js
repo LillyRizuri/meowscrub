@@ -12,6 +12,7 @@ const userBlacklistSchema = require("../models/user-blacklist-schema");
 const { denyEmoji } = require("../assets/json/tick-emoji.json");
 const modPerms = require("../assets/json/mod-permissions.json");
 const normalPerms = require("../assets/json/normal-permissions.json");
+const { MessageActionRow } = require("discord.js");
 
 const cooldowns = new Map();
 
@@ -222,16 +223,18 @@ module.exports.listen = (client) => {
           "You are blacklisted from the bot. The only way for you to use my functionality again is to appeal."
         );
 
-      const settings = await settingsSchema.findOne({
-        guildId: message.guild.id,
-      });
+      if (message.guild) {
+        const settings = await settingsSchema.findOne({
+          guildId: message.guild.id,
+        });
 
-      if (settings && settings.commands)
-        if (memberName in settings.commands)
-          if (!settings.commands[memberName])
-            return message.reply(
-              denyEmoji + " That command is disabled in this server."
-            );
+        if (settings && settings.commands)
+          if (memberName in settings.commands)
+            if (!settings.commands[memberName])
+              return message.reply(
+                denyEmoji + " That command is disabled in this server."
+              );
+      }
 
       if (ownerOnly)
         if (!client.isOwner(message.author))
