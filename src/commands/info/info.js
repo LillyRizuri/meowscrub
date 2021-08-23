@@ -23,8 +23,6 @@ module.exports = {
       permissions: BigInt(258171333879),
     });
 
-    console.log(clientInvite);
-
     const memUsed = process.memoryUsage().heapUsed;
     const memTotal = process.memoryUsage().heapTotal;
     const memUsedInMB = (memUsed / 1024 / 1024).toFixed(2);
@@ -44,20 +42,41 @@ module.exports = {
       .setThumbnail(client.user.displayAvatarURL())
       .addFields(
         {
-          name: "Stats",
-          value: `
-• Version: \`${version}\`
-• Memory Used: \`${memUsedInMB}/${memTotalInMB}MB (${memUsedPercentage})\`        
-• Library: [\`discord.js v13\`](https://discord.js.org/)
-• Servers in: \`${totalGuild}\` 
-• Online for: \`${days} days, ${hours} hrs, ${minutes} min, ${seconds} sec\` 
-      `,
+          name: "Version",
+          value: version.toString(),
+          inline: true,
+        },
+        {
+          name: "Library",
+          value: "[discord.js v13](https://discord.js.org/)",
+          inline: true,
+        },
+        {
+          name: "Total Servers",
+          value: totalGuild.toLocaleString(),
+          inline: true,
+        },
+        {
+          name: "Memory Used",
+          value: `${memUsedInMB}/${memTotalInMB}MB (${memUsedPercentage})`,
+          inline: true,
+        },
+        {
+          name: "Online for",
+          value: `${days} days, ${hours} hrs, ${minutes} min, ${seconds} sec`,
+          inline: true,
         },
         {
           name: "Links",
           value: `
-• [\`Client Invite\`](${clientInvite})\`|\`[\`Source Code\`](https://github.com/scrubthispie/meowscrub)\`|\`[\`Server Invite\`](${process.env.DISCORDINVITE})    
-      `,
+[Bot Invite](${clientInvite}) | [Source Code](https://github.com/scrubthispie/meowscrub) | [Server Invite](${process.env.DISCORDINVITE})    
+`,
+        },
+        {
+          name: "Voting Site",
+          value: `
+[top.gg](https://top.gg/bot/${client.user.id})
+`,
         }
       )
       .setFooter(`2020 - 2021 ${author.tag}`);
