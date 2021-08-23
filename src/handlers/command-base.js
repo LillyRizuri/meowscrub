@@ -12,7 +12,6 @@ const userBlacklistSchema = require("../models/user-blacklist-schema");
 const { denyEmoji } = require("../assets/json/tick-emoji.json");
 const modPerms = require("../assets/json/mod-permissions.json");
 const normalPerms = require("../assets/json/normal-permissions.json");
-const { MessageActionRow } = require("discord.js");
 
 const cooldowns = new Map();
 
