@@ -42,6 +42,24 @@ module.exports.trim = (string = String, max = 2048) => {
   return string.length > max ? `${string.slice(0, max - 3)}...` : string;
 };
 
+module.exports.shuffleArray = (array = []) => {
+  let m = array.length;
+  let t;
+  let i;
+
+  while (m) {
+    i = Math.floor(Math.random() * m--);
+
+    t = array[m];
+    array[m] = array[i];
+    array[i] = t;
+
+    console.log(array);
+  }
+
+  return array;
+};
+
 module.exports.formatDuration = (milliseconds) => {
   function formatInt(int) {
     if (int < 10) return `0${int}`;

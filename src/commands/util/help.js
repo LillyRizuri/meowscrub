@@ -46,7 +46,7 @@ ${command.guildOnly ? " [Usable only in servers]" : ""} ${
           .setDescription(help)
           .addField(
             "Format",
-            `⠀• ${prefix}${command.aliases[0]}${cmdFormat}\n⠀• ${client.user.tag} ${command.aliases[0]}${cmdFormat}`
+            `⠀• ${prefix}${command.aliases[0]}${cmdFormat}\n⠀• @${client.user.tag} ${command.aliases[0]}${cmdFormat}`
           )
           .setFooter("<required> | [optional]")
           .setTimestamp();
