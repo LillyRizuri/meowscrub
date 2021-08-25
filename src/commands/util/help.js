@@ -2,7 +2,10 @@ const Discord = require("discord.js");
 
 const { findCommands, getPrefix } = require("../../util/modules");
 
-const { denyEmoji } = require("../../assets/json/tick-emoji.json");
+const {
+  denyEmoji,
+  successEmoji,
+} = require("../../assets/json/tick-emoji.json");
 
 module.exports = {
   aliases: ["help", "commands"],
@@ -153,15 +156,20 @@ __**Select available command categories in ${message.guild || "this DM"}.**__`
       ];
 
       try {
-        const initialMessage = await message.channel.send({
+        const initialMessage = await message.author.send({
           embeds: [embed],
           components: components(false),
         });
 
+        if (message.guild)
+          message.channel.send(
+            successEmoji + " Sent you a DM with information."
+          );
+
         const filter = (interaction) =>
           interaction.user.id === message.author.id;
 
-        const collector = message.channel.createMessageComponentCollector({
+        const collector = initialMessage.createMessageComponentCollector({
           filter,
           componentType: "SELECT_MENU",
           time: 60000,
