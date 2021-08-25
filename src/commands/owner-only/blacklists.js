@@ -53,8 +53,6 @@ module.exports = {
       });
     }
 
-    console.log(blacklistedUsers);
-
     let blacklistedList = "";
 
     for (const data of blacklistedUsers) {
