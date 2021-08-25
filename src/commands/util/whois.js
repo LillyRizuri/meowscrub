@@ -23,8 +23,7 @@ module.exports = {
         target = message.author;
       } else {
         target =
-          message.mentions.users.first() ||
-          (await client.users.fetch(args));
+          message.mentions.users.first() || (await client.users.fetch(args));
       }
     } catch (err) {
       return message.reply(
@@ -91,22 +90,26 @@ module.exports = {
       dateTimeOptions
     );
 
-    const userPresence = member.presence.activities[0]
-      ? member.presence.activities[0].name
-      : "None";
-
+    let userPresence = "";
+    let userStatus = "";
     let userPresenceState = "";
-    if (member.presence.activities[0]) {
+
+    if (member.presence) {
+      userStatus = member.presence.status
+        .replace("dnd", "Do Not Disturb")
+        .toProperCase();
+
+      userPresence = member.presence.activities[0].name;
+
       if (member.presence.activities[0].state) {
         userPresenceState = `: ${member.presence.activities[0].state}`;
       } else if (!member.presence.activities[0].state) {
         userPresenceState = "";
       }
+    } else {
+      userStatus = "Offline";
+      userPresence = "None";
     }
-
-    const userStatus = member.presence.status
-      .replace("dnd", "Do Not Disturb")
-      .toProperCase();
 
     let rolemap = member.roles.cache
       .sort((a, b) => b.position - a.position)
