@@ -32,6 +32,7 @@ module.exports = {
     const author = await client.users.fetch(client.owner[0]);
 
     const totalGuild = client.guilds.cache.size;
+    const totalMembers = client.users.cache.filter((u) => !u.bot).size;
 
     const infoEmbed = new Discord.MessageEmbed()
       .setColor("RANDOM")
@@ -42,7 +43,7 @@ module.exports = {
       .setThumbnail(client.user.displayAvatarURL())
       .addFields(
         {
-          name: "Version",
+          name: "Client Version",
           value: version.toString(),
           inline: true,
         },
@@ -52,8 +53,8 @@ module.exports = {
           inline: true,
         },
         {
-          name: "Total Servers",
-          value: totalGuild.toLocaleString(),
+          name: "Total Servers & Members",
+          value: `${totalGuild.toLocaleString()} Servers | ${totalMembers.toLocaleString()} Members`,
           inline: true,
         },
         {
