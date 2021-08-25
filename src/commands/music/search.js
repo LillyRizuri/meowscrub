@@ -17,7 +17,7 @@ module.exports = {
   guildOnly: true,
   callback: async (client, message, args) => {
     const music = args;
-    const queue = await client.distube.getQueue(message);
+    let queue = await client.distube.getQueue(message);
     const voiceChannel = message.member.voice.channel;
 
     if (!voiceChannel)
@@ -71,6 +71,8 @@ module.exports = {
           .setPlaceholder(
             state ? "Selection unavailable." : "Awaiting for music selection..."
           )
+          .setMinValues(1)
+          .setMaxValues(10)
           .setDisabled(state)
           .addOptions(
             results.map((song, id) => {
@@ -80,8 +82,9 @@ module.exports = {
               } else {
                 duration = song.formattedDuration;
               }
+
               return {
-                label: modules.trim(`${id + 1}. ${song.name}`, 100),
+                label: modules.trim(song.name, 100),
                 value: (id + 1).toString(),
                 description: modules.trim(
                   `${song.uploader.name} - ${duration}`
@@ -93,7 +96,7 @@ module.exports = {
     ];
 
     const initialMessage = await message.channel.send({
-      content: "Please make a selection below.",
+      content: "Please choose single, or multiple songs below. (Maximum of 10 songs)",
       components: components(false),
     });
 
@@ -106,25 +109,29 @@ module.exports = {
       })
       .then(async (interaction) => {
         interaction.deferUpdate();
-        const [value] = interaction.values;
-        const chosenSong = results[value - 1];
-        let duration = "";
-        if (chosenSong.duration === 0) {
-          duration = "Live";
-        } else {
-          duration = chosenSong.formattedDuration;
-        }
         initialMessage.edit({
-          content: `Song selected: **${chosenSong.name} - ${duration}**`,
+          content: `**Selected ${interaction.values.length} song(s).**`,
           components: components(true),
         });
 
+        for (const value of interaction.values) {
+          const chosenSong = results[value - 1];
+          if (queue) queue.searched = true;
+
+          await client.distube.play(message, chosenSong);
+
+          if (!queue) {
+            queue = await client.distube.getQueue(message);
+            queue.searched = true;
+          }
+        }
+
         message.channel.send(
-          "🎶 **Now attempting to add the selected result...**"
+          `🎶 **Added ${interaction.values.length} song(s) to the server queue.**`
         );
-        client.distube.play(message, chosenSong);
       })
-      .catch(() => {
+      .catch((err) => {
+        console.log(err);
         initialMessage.edit({
           content: "No chosen song after 1 minute, operation canceled.",
           components: components(true),
