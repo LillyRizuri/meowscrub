@@ -50,8 +50,11 @@ module.exports = {
       })
 
       .on("addSong", (queue, song) => {
+        if (queue.searched) return delete queue.searched;
         let estimatedTime = modules.formatDuration(
-          queue.duration * 1000 - song.duration * 1000 - queue.currentTime * 1000
+          queue.duration * 1000 -
+            song.duration * 1000 -
+            queue.currentTime * 1000
         );
         if (
           queue.songs[0].formattedDuration === "Live" ||
@@ -83,7 +86,9 @@ Estimated Time Until Playing: **${estimatedTime}**
 
       .on("addList", (queue, playlist) => {
         let estimatedTime = modules.formatDuration(
-          queue.duration * 1000 - playlist.duration * 1000 - queue.currentTime * 1000
+          queue.duration * 1000 -
+            playlist.duration * 1000 -
+            queue.currentTime * 1000
         );
         if (
           queue.songs[0].formattedDuration === "Live" ||
