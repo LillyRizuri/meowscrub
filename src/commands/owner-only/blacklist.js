@@ -128,6 +128,7 @@ Please confirm your choice by clicking one of the buttons below.
             try {
               await new blacklistSchema({
                 userId,
+                timestamp: new Date().getTime()
               }).save();
             } finally {
               await interaction.message.edit({

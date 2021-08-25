@@ -27,21 +27,24 @@ module.exports = {
         emoji.missingEmoji + " You need a valid Guild ID in order to continue."
       );
 
-    let target;
+    let guild;
     let guildId;
+    let guildName;
 
     if (!args[1]) {
       try {
-        target = await client.guilds.fetch(args[0]);
+        guild = await client.guilds.fetch(args[0]);
       } catch (err) {
         return message.reply(
           emoji.denyEmoji +
             " What is this ID. Please explain.\nBut if the guild you provided DOES exist, use `force` alongside with the Guild ID."
         );
       }
-      guildId = target.id;
+      guildId = guild.id;
+      guildName = guild.name;
     } else if (args[1] && args[1].toLowerCase() === "force") {
       guildId = args[0];
+      guildName = "null";
     } else {
       return message.reply(
         emoji.denyEmoji + " Did you type in the wrong flag? Please try again."
@@ -61,7 +64,7 @@ module.exports = {
     let response = "";
     if (!args[1]) {
       response = `
-You will attempt to blacklist this guild: **${target.name}**.
+You will attempt to blacklist this guild: **${guild.name}**.
 Please confirm your choice by clicking one of the buttons below.         
       `;
     } else if (args[1] && args[1].toLowerCase() === "force") {
@@ -104,6 +107,8 @@ Please confirm your choice by clicking one of the buttons below.
             try {
               await new guildBlacklistSchema({
                 guildId,
+                guildName,
+                timestamp: new Date().getTime(),
               }).save();
 
               if (client.guilds.cache.get(guildId))
