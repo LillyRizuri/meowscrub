@@ -42,14 +42,14 @@ module.exports = {
 
     const audioFilter = queue.filters.join(", ") || "No filters present";
 
-    const nowPlaying = `[${queue.songs[0].name}](${queue.songs[0].url}) | \`${queue.songs[0].formattedDuration} Requested by: ${queue.songs[0].user.tag}\``;
+    const nowPlaying = `[${queue.songs[0].name}](${queue.songs[0].url})\n⠀• \`${queue.songs[0].formattedDuration} Requested by: ${queue.songs[0].user.tag}\``;
 
     const mainQueue = [...queue.songs];
     mainQueue.shift();
     const queueMap = mainQueue
       .map(
         (song, id) =>
-          `\`${id + 1}.\` [${song.name}](${song.url}) | \`${
+          `\`${id + 1}.\` [${song.name}](${song.url})\n⠀• \`${
             song.formattedDuration
           } Requested by: ${song.user.tag}\`\n`
       )
