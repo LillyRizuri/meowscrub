@@ -7,6 +7,7 @@ const humanizeDuration = require("humanize-duration");
 const { getPrefix } = require("../util/modules");
 
 const settingsSchema = require("../models/settings-schema");
+const tagsSchema = require("../models/tags-schema");
 const userBlacklistSchema = require("../models/user-blacklist-schema");
 
 const { denyEmoji } = require("../assets/json/tick-emoji.json");
@@ -187,6 +188,19 @@ module.exports.listen = (client) => {
     if (pattern.test(message.content)) {
       // setup arguments
       let text = message.content.replace(patternRemovePrefix, "").split(/\s+/);
+
+      // check if it's a custom command
+      const tagsConfig = await tagsSchema.findOne({
+        guildId: message.guild.id,
+      });
+
+      if (tagsConfig) {
+        const tag = tagsConfig.tags.find(
+          (i) => i.name.toLowerCase() === text[0].toLowerCase()
+        );
+
+        if (tag) message.channel.send(tag.response);
+      }
 
       const command = allCommands[text[0].toLowerCase()];
       if (!command) return;

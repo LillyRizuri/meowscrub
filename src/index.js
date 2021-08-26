@@ -53,6 +53,7 @@ client.commandGroups = [
   ["owner-only", "Owner-Only Tools", "👮‍♂️"],
   ["settings", "Server Settings", "<:gear:877813686180405248>"],
   ["soundboard", "Soundboard!", "🎹"],
+  ["tags", "Tags / Custom Commands", "<:console:880332764266758204>"],
   ["ticket", "Ticket-Related Commands", "🎫"],
   ["util", "Utility", "🔧"],
 ];
