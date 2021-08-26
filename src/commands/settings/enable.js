@@ -76,7 +76,7 @@ module.exports = {
       }
     );
 
-    message.reply(
+    await message.reply(
       emoji.successEmoji +
         ` Successfully enabled the **${command.memberName}** command.`
     );

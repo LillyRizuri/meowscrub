@@ -94,7 +94,7 @@ module.exports = {
       }
     );
 
-    message.reply(
+    await message.reply(
       emoji.successEmoji +
         ` Successfully disabled the **${command.memberName}** command.`
     );

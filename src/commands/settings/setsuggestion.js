@@ -25,7 +25,7 @@ module.exports = {
       message.mentions.channels.first() ||
       message.guild.channels.cache.get(args);
 
-    switch (args) {
+    switch (args.toLowerCase()) {
       default: {
         if (!channel)
           return message.reply(
@@ -61,7 +61,8 @@ module.exports = {
         const confirmationEmbed = new Discord.MessageEmbed()
           .setColor(color.green)
           .setDescription(
-            emoji.successEmoji + ` **Set the Suggestion Channel to:** ${channel}`
+            emoji.successEmoji +
+              ` **Set the Suggestion Channel to:** ${channel}`
           );
         message.channel.send({ embeds: [confirmationEmbed] });
         break;
@@ -96,11 +97,11 @@ module.exports = {
           guildId,
         });
 
-        if (!results.settings.suggestionChannel) {
+        if (!results || !results.settings.suggestionChannel) {
           return message.reply(
             emoji.missingEmoji + " The text channel hasn't been set yet."
           );
-        } else if (results.settings.suggestionChannel) {
+        } else if (results && results.settings.suggestionChannel) {
           const channelEmbed = new Discord.MessageEmbed()
             .setColor(color.green)
             .setDescription(

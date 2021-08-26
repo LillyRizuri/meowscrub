@@ -28,7 +28,7 @@ module.exports = {
       ) ||
       message.guild.roles.cache.find((e) => e.id === args);
 
-    switch (args) {
+    switch (args.toLowerCase()) {
       default: {
         if (!role)
           return message.reply(
@@ -92,11 +92,11 @@ module.exports = {
           guildId,
         });
 
-        if (!results.settings.muteRole) {
+        if (!results || !results.settings.muteRole) {
           return message.reply(
             "<:scrubnull:797476323533783050> The muted role hasn't been set yet."
           );
-        } else if (results.settings.muteRole) {
+        } else if (results && results.settings.muteRole) {
           const channelEmbed = new Discord.MessageEmbed()
             .setColor(color.green)
             .setDescription(

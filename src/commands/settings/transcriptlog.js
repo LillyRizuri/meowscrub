@@ -35,7 +35,7 @@ module.exports = {
         "<:scrubred:797476323169533963> You must have a ticket category channel set up with the `setticket` command."
       );
 
-    switch (args) {
+    switch (args.toLowerCase()) {
       default: {
         if (!channel)
           return message.reply(
@@ -107,11 +107,11 @@ module.exports = {
           guildId,
         });
 
-        if (!results.settings.transcriptLog) {
+        if (!results || !results.settings.transcriptLog) {
           return message.reply(
             emoji.missingEmoji + " The text channel hasn't been set yet."
           );
-        } else if (results.settings.transcriptLog) {
+        } else if (results && results.settings.transcriptLog) {
           const channelEmbed = new Discord.MessageEmbed()
             .setColor(color.green)
             .setDescription(

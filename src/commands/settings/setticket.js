@@ -23,7 +23,7 @@ module.exports = {
     const guildId = message.guild.id;
     const channel = message.guild.channels.cache.get(args);
 
-    switch (args) {
+    switch (args.toLowerCase()) {
       default: {
         if (!channel)
           return message.reply(
@@ -110,11 +110,11 @@ And, you may want to use the \`transcript-log\` command to log every ticket chan
           guildId,
         });
 
-        if (!results.settings.ticketCategory) {
+        if (!results || !results.settings.ticketCategory) {
           return message.reply(
             emoji.missingEmoji + " The category channel ID hasn't been set yet."
           );
-        } else if (results.settings.ticketCategory) {
+        } else if (results && results.settings.ticketCategory) {
           const ticketCategoryName = message.guild.channels.cache.get(
             results.ticketCategory
           ).name;

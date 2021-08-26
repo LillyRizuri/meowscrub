@@ -25,7 +25,7 @@ module.exports = {
       message.mentions.channels.first() ||
       message.guild.channels.cache.get(args);
 
-    switch (args) {
+    switch (args.toLowerCase()) {
       default: {
         if (!channel)
           return message.reply(
@@ -97,11 +97,11 @@ module.exports = {
           guildId,
         });
 
-        if (!results.settings.globalChat) {
+        if (!results || !results.settings.globalChat) {
           return message.reply(
             emoji.missingEmoji + " The text channel hasn't been set yet."
           );
-        } else if (results.settings.globalChat) {
+        } else if (results && results.settings.globalChat) {
           const channelEmbed = new Discord.MessageEmbed()
             .setColor(color.green)
             .setDescription(
