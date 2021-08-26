@@ -11,7 +11,6 @@ module.exports = {
   description: "Disable a command to prevent members from running them.",
   format: "<commandName>",
   examples: ["disable pokedex", "disable docs"],
-  clientPermissions: ["EMBED_LINKS"],
   userPermissions: ["ADMINISTRATOR"],
   singleArgs: true,
   cooldown: 5,

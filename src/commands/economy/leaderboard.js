@@ -2,8 +2,6 @@ const Discord = require("discord.js");
 
 const economySchema = require("../../models/economy-schema");
 
-const { embedcolor } = require("../../assets/json/colors.json");
-
 module.exports = {
   aliases: ["leaderboard", "lb", "top", "rich"],
   memberName: "leaderboard",
@@ -44,7 +42,7 @@ module.exports = {
     if (collection.size === 0) leaderboardMap = "There's nothing here :(";
 
     const leaderboardEmbed = new Discord.MessageEmbed()
-      .setColor(embedcolor)
+      .setColor("RANDOM")
       .setTitle(`Top 10 richest members in ${message.guild.name}`)
       .setDescription(`\`\`\`css\n${leaderboardMap}\`\`\``)
       .setFooter("this is WALLETS, not net worth");

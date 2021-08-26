@@ -79,20 +79,6 @@ module.exports = {
       append: "",
     });
 
-    if (splitQueue.length === 1) {
-      const embed = new Discord.MessageEmbed()
-        .setColor("RANDOM")
-        .setTitle(
-          `${howManySongs} | Queue Duration: ${queue.formattedDuration}`
-        )
-        .setDescription(splitQueue[0])
-        .setFooter(
-          `Volume: ${queue.volume}% - ${audioFilter} - ${loopSetting} - Autoplay ${autoplaySetting}`
-        )
-        .setTimestamp();
-      return message.channel.send({ embeds: [embed] });
-    }
-
     const embeds = [];
     for (let i = 0; i < splitQueue.length; i++) {
       const embed = new Discord.MessageEmbed()

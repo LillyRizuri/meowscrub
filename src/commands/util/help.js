@@ -162,7 +162,7 @@ __**Select available command categories in ${message.guild || "this DM"}.**__`
         });
 
         if (message.guild)
-          message.channel.send(
+          message.reply(
             successEmoji + " Sent you a DM with information."
           );
 
