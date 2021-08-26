@@ -190,16 +190,18 @@ module.exports.listen = (client) => {
       let text = message.content.replace(patternRemovePrefix, "").split(/\s+/);
 
       // check if it's a custom command
-      const tagsConfig = await tagsSchema.findOne({
-        guildId: message.guild.id,
-      });
+      if (message.guild) {
+        const tagsConfig = await tagsSchema.findOne({
+          guildId: message.guild.id,
+        });
 
-      if (tagsConfig) {
-        const tag = tagsConfig.tags.find(
-          (i) => i.name.toLowerCase() === text[0].toLowerCase()
-        );
+        if (tagsConfig) {
+          const tag = tagsConfig.tags.find(
+            (i) => i.name.toLowerCase() === text[0].toLowerCase()
+          );
 
-        if (tag) message.channel.send(tag.response);
+          if (tag) message.channel.send(tag.response);
+        }
       }
 
       const command = allCommands[text[0].toLowerCase()];
