@@ -157,7 +157,7 @@ module.exports.urlify = (string) => {
   return testArray.join(" ");
 };
 
-module.exports.splitString = (string, numberOfLines) => {
+module.exports.splitString = (string = "", numberOfLines = Number) => {
   const number = Number(numberOfLines);
   if (isNaN(number)) return null;
 
