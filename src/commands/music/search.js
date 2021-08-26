@@ -4,6 +4,8 @@ const modules = require("../../util/modules");
 
 const emoji = require("../../assets/json/tick-emoji.json");
 
+const abortId = "cancelSearch";
+
 module.exports = {
   aliases: ["search", "findsong"],
   memberName: "search",
@@ -57,17 +59,18 @@ module.exports = {
           " Your search query musn't be longer than/equal 1024 characters."
       );
 
-    message.channel.send(`🔍 **Searching for:** \`${music}\``);
+    message.channel.send(
+      `🔍 **Searching for: \`${music}\` and adding selections...**`
+    );
     const results = await client.distube.search(music, {
       safeSearch: true,
       limit: 25,
     });
 
-    await message.channel.send("🔧 **Adding selections...**");
-    const components = (state) => [
+    const component1 = (state) =>
       new Discord.MessageActionRow().addComponents(
         new Discord.MessageSelectMenu()
-          .setCustomId("search-menu")
+          .setCustomId("searchMenu")
           .setPlaceholder(
             state ? "Selection unavailable." : "Awaiting for music selection..."
           )
@@ -92,12 +95,21 @@ module.exports = {
               };
             })
           )
-      ),
-    ];
+      );
+
+    const component2 = (state) =>
+      new Discord.MessageActionRow().addComponents(
+        new Discord.MessageButton()
+          .setStyle("DANGER")
+          .setCustomId(abortId)
+          .setLabel("Cancel Operation")
+          .setDisabled(state)
+      );
 
     const initialMessage = await message.channel.send({
-      content: "Please choose single, or multiple songs below. (Maximum of 10 songs)",
-      components: components(false),
+      content:
+        "Please choose single, or multiple songs below. (Maximum of 10 songs)",
+      components: [component1(false), component2(false)],
     });
 
     const filter = (interaction) => interaction.user.id === message.author.id;
@@ -105,14 +117,18 @@ module.exports = {
       .awaitMessageComponent({
         filter,
         time: 30000,
-        componentType: "SELECT_MENU",
       })
       .then(async (interaction) => {
-        interaction.deferUpdate();
-        initialMessage.edit({
-          content: `**Selected ${interaction.values.length} song(s).**`,
-          components: components(true),
-        });
+        if (interaction.customId === abortId) {
+          await interaction.deferUpdate();
+          await initialMessage.edit({
+            content: "**Cancelled the operation.**",
+            components: [component1(true), component2(true)],
+          });
+          return;
+        // eslint-disable-next-line no-empty
+        } else {
+        }
 
         for (const value of interaction.values) {
           const chosenSong = results[value - 1];
@@ -126,15 +142,16 @@ module.exports = {
           }
         }
 
-        message.channel.send(
-          `🎶 **Added ${interaction.values.length} song(s) to the server queue.**`
-        );
+        await interaction.deferUpdate();
+        await initialMessage.edit({
+          content: `🎶 **Added ${interaction.values.length} song(s) to the server queue.**`,
+          components: [component1(true), component2(true)],
+        });
       })
-      .catch((err) => {
-        console.log(err);
-        initialMessage.edit({
-          content: "No chosen song after 1 minute, operation canceled.",
-          components: components(true),
+      .catch(async () => {
+        await initialMessage.edit({
+          content: "**No chosen song after 1 minute, operation canceled.**",
+          components: [component1(true), component2(true)],
         });
       });
   },
