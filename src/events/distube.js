@@ -16,10 +16,7 @@ module.exports = {
 
       .on("playSong", async (queue, song) => {
         try {
-          if (!client.playSongLog) {
-          } else if (client.playSongLog) {
-            client.playSongLog.delete();
-          }
+          if (client.playSongLog) client.playSongLog.delete();
         } catch (err) {}
         const playingEmbed = new Discord.MessageEmbed()
           .setColor(green)
@@ -30,17 +27,19 @@ module.exports = {
           playingEmbed.setDescription(
             `
 <:scrubgreen:797476323316465676> **Now Playing Playlist:**
-[${song.playlist.name}](${song.playlist.url}) - **${song.playlist.formattedDuration}** - **${song.playlist.songs.length} songs**
+[${decodeURI(song.playlist.name)}](${song.playlist.url}) - **${
+              song.playlist.formattedDuration
+            }** - **${song.playlist.songs.length} songs**
 
 <:scrubgreen:797476323316465676> **Playing First:**
-[${song.name}](${song.url}) - **${song.formattedDuration}**
+[${decodeURI(song.name)}](${song.url}) - **${song.formattedDuration}**
           `
           );
         } else {
           playingEmbed.setDescription(
             `
 <:scrubgreen:797476323316465676> **Now Playing:**
-[${song.name}](${song.url}) - **${song.formattedDuration}**
+[${decodeURI(song.name)}](${song.url}) - **${song.formattedDuration}**
   `
           );
         }
@@ -74,7 +73,7 @@ module.exports = {
           .setDescription(
             `
 <:scrubnull:797476323533783050> **Added the following song to the queue:**
-[${song.name}](${song.url}) - **${song.formattedDuration}**
+[${decodeURI(song.name)}](${song.url}) - **${song.formattedDuration}**
 
 Estimated Time Until Playing: **${estimatedTime}**
   `
@@ -108,7 +107,9 @@ Estimated Time Until Playing: **${estimatedTime}**
           .setDescription(
             `
 <:scrubnull:797476323533783050> **Added the following playlist to the queue:**
-[${playlist.name}](${playlist.url}) - **${playlist.formattedDuration}** - **${playlist.songs.length} songs**
+[${decodeURI(playlist.name)}](${playlist.url}) - **${
+              playlist.formattedDuration
+            }** - **${playlist.songs.length} songs**
 
 Estimated Time Until Playing: **${estimatedTime}**
   `
@@ -120,10 +121,7 @@ Estimated Time Until Playing: **${estimatedTime}**
 
       .on("empty", (queue) => {
         try {
-          if (!client.playSongLog) {
-          } else if (client.playSongLog) {
-            client.playSongLog.delete();
-          }
+          if (client.playSongLog) client.playSongLog.delete();
         } catch (err) {}
         queue.textChannel.send(
           "<:scrubnull:797476323533783050> **The VC I'm in is empty. Leaving the channel...**"
@@ -132,10 +130,7 @@ Estimated Time Until Playing: **${estimatedTime}**
 
       .on("noRelated", (queue) => {
         try {
-          if (!client.playSongLog) {
-          } else if (client.playSongLog) {
-            client.playSongLog.delete();
-          }
+          if (client.playSongLog) client.playSongLog.delete();
         } catch (err) {}
         queue.textChannel.send(
           "<:scrubnull:797476323533783050> **No related music can be found. Attempting to leave the VC...**"
@@ -144,10 +139,7 @@ Estimated Time Until Playing: **${estimatedTime}**
 
       .on("finish", (queue) => {
         try {
-          if (!client.playSongLog) {
-          } else if (client.playSongLog) {
-            client.playSongLog.delete();
-          }
+          if (client.playSongLog) client.playSongLog.delete();
         } catch (err) {}
         queue.textChannel.send(
           "<:scrubnull:797476323533783050> **The queue is now empty. Leaving the VC...**"

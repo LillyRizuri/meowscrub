@@ -126,12 +126,15 @@ module.exports = {
             components: [component1(true), component2(true)],
           });
           return;
-        // eslint-disable-next-line no-empty
+          // eslint-disable-next-line no-empty
         } else {
         }
 
+        let outsideValue;
+
         for (const value of interaction.values) {
           const chosenSong = results[value - 1];
+          outsideValue = chosenSong;
           if (queue) queue.searched = true;
 
           await client.distube.play(message, chosenSong);
@@ -143,10 +146,17 @@ module.exports = {
         }
 
         await interaction.deferUpdate();
-        await initialMessage.edit({
-          content: `🎶 **Added ${interaction.values.length} song(s) to the server queue.**`,
-          components: [component1(true), component2(true)],
-        });
+        if (interaction.values.length === 1) {
+          await initialMessage.edit({
+            content: `🎶 Queued **${outsideValue.name} - ${outsideValue.formattedDuration}**`,
+            components: [component1(true), component2(true)],
+          });
+        } else {
+          await initialMessage.edit({
+            content: `🎶 **Added ${interaction.values.length} song(s) to the server queue.**`,
+            components: [component1(true), component2(true)],
+          });
+        }
       })
       .catch(async () => {
         await initialMessage.edit({
