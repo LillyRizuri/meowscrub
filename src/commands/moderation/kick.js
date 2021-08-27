@@ -10,7 +10,7 @@ module.exports = {
   memberName: "kick",
   group: "moderation",
   description: "Kick a member in the current server.",
-  format: "<@user/userID> [reason]",
+  format: "<@user | userID> [reason]",
   examples: ["ban @frockles broken a rule"],
   clientPermissions: ["KICK_MEMBERS", "EMBED_LINKS"],
   userPermissions: ["KICK_MEMBERS"],

@@ -14,7 +14,7 @@ module.exports = {
   group: "economy",
   description:
     "Return an item to the shop for a fraction of the original price.",
-  format: '<itemName> [amount/"all"]',
+  format: '<itemName> [amount | "all"]',
   examples: ["sell apple", "sell banana 3", "sell apple all"],
   clientPermissions: ["EMBED_LINKS"],
   cooldown: 5,

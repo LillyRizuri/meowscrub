@@ -7,7 +7,7 @@ module.exports = {
   memberName: "avatar",
   group: "util",
   description: "Return your/someone else's avatar.",
-  format: "[@user/userID]",
+  format: "[@user | userID]",
   examples: ["avatar", "avatar @frockles", "avatar 693832549943869493"],
   singleArgs: true,
   cooldown: 5,

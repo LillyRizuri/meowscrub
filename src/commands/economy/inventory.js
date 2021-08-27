@@ -13,7 +13,7 @@ module.exports = {
   memberName: "inventory",
   group: "economy",
   description: "Check your/someone else's inventory of items.",
-  format: "[@user/userID]",
+  format: "[@user | userID]",
   examples: [
     "inventory",
     "inventory @frockles",

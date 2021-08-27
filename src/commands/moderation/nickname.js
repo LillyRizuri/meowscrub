@@ -5,7 +5,7 @@ module.exports = {
   memberName: "nickname",
   group: "moderation",
   description: "Change a member's nickname. Don't abuse it.",
-  format: "<@user/userID> <string>",
+  format: "<@user | userID> <string>",
   examples: ["nick @frockles ManagedNIckname.mp4"],
   clientPermissions: ["MANAGE_NICKNAMES", "EMBED_LINKS"],
   userPermissions: ["MANAGE_NICKNAMES"],

@@ -10,8 +10,8 @@ module.exports = {
   memberName: "warnings",
   group: "moderation",
   description:
-    "Displays the warn list of a specified user in the current server.",
-  format: "<@user/userID>",
+    "Displays all warnings from a specified user in the current server.",
+  format: "<@user | userID>",
   examples: ["warnings @frockles"],
   clientPermissions: ["EMBED_LINKS"],
   userPermissions: ["BAN_MEMBERS"],

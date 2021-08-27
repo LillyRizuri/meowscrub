@@ -11,7 +11,7 @@ module.exports = {
   memberName: "warn",
   group: "moderation",
   description: "Issue a warn for an user in the server.",
-  format: "<@user/userID> [reason]",
+  format: "<@user | userID> [reason]",
   examples: ["warn @frockles spamming"],
   clientPermissions: ["EMBED_LINKS"],
   userPermissions: ["BAN_MEMBERS"],

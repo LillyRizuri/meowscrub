@@ -11,7 +11,7 @@ module.exports = {
   memberName: "prefix",
   group: "util",
   description: "Shows or set the command prefix.",
-  format: '[prefix/"default"]',
+  format: '[prefix | "default"]',
   examples: ["prefix", "prefix +", "prefix omg!", "prefix default"],
   singleArgs: true,
   cooldown: 5,

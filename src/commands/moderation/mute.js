@@ -10,7 +10,7 @@ module.exports = {
   memberName: "mute",
   group: "moderation",
   description: "Mute a member in the current server. No timed mute yet.",
-  format: "<@user/userID> [reason]",
+  format: "<@user | userID> [reason]",
   examples: ["mute @frockles attempting to annoy members"],
   clientPermissions: ["MANAGE_ROLES", "EMBED_LINKS"],
   userPermissions: ["MANAGE_ROLES"],

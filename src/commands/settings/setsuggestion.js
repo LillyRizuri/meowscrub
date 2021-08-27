@@ -12,7 +12,7 @@ module.exports = {
   description: "Set a suggestion logging channel for this server.",
   details:
     "Replace the syntax with `disable` if you wish to remove the configuration.",
-  format: "<channel/channelID>",
+  format: "<#channel | channelID>",
   examples: ["setsuggestion #suggestions", "setsuggestion disable"],
   clientPermissions: ["EMBED_LINKS"],
   userPermissions: ["ADMINISTRATOR"],

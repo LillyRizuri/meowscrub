@@ -7,7 +7,7 @@ module.exports = {
   memberName: "nuke",
   group: "moderation",
   description: "Clone and delete a specified channel. ISTG don't mess with it.",
-  format: "[#channel/channelID]",
+  format: "[#channel | channelID]",
   examples: ["nuke #potato", "nuke"],
   clientPermissions: [
     "MANAGE_MESSAGES",

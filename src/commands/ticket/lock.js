@@ -8,8 +8,8 @@ module.exports = {
   group: "ticket",
   description: "Lock/Unlock an existing ticket created by me.",
   details:
-    "Using this command on a locked ticket will unlock that ticket, and vice versa.",
-  format: "[#channel/channelID]",
+    "Using this command on a locked ticket will unlock that ticket, and vice versa.\nLeave the parameter blank to let me identify the channel the command was ran in.",
+  format: "[#channel | channelID]",
   examples: ["lock #frockles-4339", "lock 866721249640448071"],
   clientPermissions: ["MANAGE_CHANNELS"],
   userPermissions: ["MANAGE_CHANNELS"],

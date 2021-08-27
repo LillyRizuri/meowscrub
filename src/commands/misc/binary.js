@@ -8,7 +8,7 @@ module.exports = {
   group: "misc",
   description: "Convert your text to binaries and vice versa.",
   details: "All text output will be encoded in UTF-8.",
-  format: '<"encode"/"decode"> <string>',
+  format: '<"encode" | "decode"> <string>',
   examples: [
     "binary never",
     "binary decode 01101110 01100101 01110110 01100101 01110010",

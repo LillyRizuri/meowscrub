@@ -11,7 +11,7 @@ module.exports = {
   memberName: "delwarn",
   group: "moderation",
   description: "Delete an user's warn using their Warn ID.",
-  format: "<@user/userID> <warnID> [reason]",
+  format: "<@user | userID> <warnID> [reason]",
   examples: ["delwarn @frockles _g7tfhtshw apologized"],
   clientPermissions: ["EMBED_LINKS"],
   userPermissions: ["BAN_MEMBERS"],

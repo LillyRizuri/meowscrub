@@ -10,7 +10,7 @@ To remove all filters, type "off" instead of a normal audio filter name.
 To remove one filter that's applied to the queue, type the audio filter that you want to remove.
 All effects can be found here: https://distube.js.org/#/docs/DisTube/beta/typedef/defaultFilters`,
   // eslint-disable-next-line quotes
-  format: '[filterName/"off"]',
+  format: '[filterName | "off"]',
   cooldown: 5,
   singleArgs: true,
   guildOnly: true,

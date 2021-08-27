@@ -7,7 +7,7 @@ module.exports = {
   memberName: "deposit",
   group: "economy",
   description: "Deposit your money to the bank.",
-  format: '<number/"all">',
+  format: '<number | "all">',
   examples: ["deposit 10000", "deposit all"],
   cooldown: 5,
   singleArgs: true,

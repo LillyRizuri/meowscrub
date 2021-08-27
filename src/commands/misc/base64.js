@@ -9,7 +9,7 @@ module.exports = {
   group: "misc",
   description: "Convert your text to Base64 and vice versa.",
   details: "All text output will be encoded in UTF-8.",
-  format: '<"encode"/"decode"> <string>',
+  format: '<"encode" | "decode"> <string>',
   examples: [
     "base64 encode never gonna give you up",
     "base64 decode bmV2ZXIgZ29ubmEgZ2l2ZSB5b3UgdXA=",

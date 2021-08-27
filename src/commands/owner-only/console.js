@@ -8,7 +8,7 @@ module.exports = {
   group: "owner-only",
   description: "Run the bot's own terminal.",
   details: "Only the bot owner(s) may use this command.",
-  format: "<string>",
+  format: "<command>",
   examples: ["console node -v"],
   singleArgs: true,
   ownerOnly: true,

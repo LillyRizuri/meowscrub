@@ -12,7 +12,7 @@ module.exports = {
   description: "Set a muted role for this server.",
   details:
     "Replace the syntax with `disable` if you wish to remove the configuration.",
-  format: "<@role/roleID>",
+  format: "[@role | roleName | roleID]",
   examples: ["muterole @Muted", "muterole disable"],
   clientPermissions: ["EMBED_LINKS"],
   userPermissions: ["ADMINISTRATOR"],

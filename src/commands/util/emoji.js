@@ -8,7 +8,7 @@ module.exports = {
   memberName: "emoji",
   group: "util",
   description: "Extract your specified custom emoji from a guild.",
-  format: "<:emojiName:>",
+  format: "<emojiName>",
   examples: ["emoji :what:"],
   clientPermissions: ["EMBED_LINKS"],
   cooldown: 5,

@@ -13,7 +13,7 @@ module.exports = {
     "Set a channel for ticket transcript logging. Must have a ticket category channel set up.",
   details:
     "Replace the syntax with `disable` if you wish to remove the configuration.",
-  format: "<channel/channelID>",
+  format: "<#channel | channelID>",
   examples: ["transcript-log #log", "transcript-log disable"],
   clientPermissions: ["EMBED_LINKS"],
   userPermissions: ["ADMINISTRATOR"],

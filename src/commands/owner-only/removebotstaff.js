@@ -13,7 +13,7 @@ module.exports = {
   group: "owner-only",
   description: "Remove an user who is currently the bot staff.",
   details: "Only the bot owner(s) may use this command.",
-  format: "<@user/userID>",
+  format: "<@user | userID>",
   examples: ["removebotstaff 693832549943869493"],
   singleArgs: true,
   ownerOnly: true,

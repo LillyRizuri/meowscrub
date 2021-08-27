@@ -8,7 +8,7 @@ module.exports = {
   memberName: "unban",
   group: "moderation",
   description: "Unban a member in the current server.",
-  format: "<@user/userID> [reason]",
+  format: "<@user | userID> [reason]",
   examples: ["unban @frockles appealed"],
   clientPermissions: ["BAN_MEMBERS", "EMBED_LINKS"],
   userPermissions: ["BAN_MEMBERS"],

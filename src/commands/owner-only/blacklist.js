@@ -14,7 +14,7 @@ module.exports = {
   group: "owner-only",
   description: "Blacklist an user from using my stuff.",
   details: "Only the bot owner(s) and bot staff(s) may use this command.",
-  format: "<@user/userID>",
+  format: "<@user | userID>",
   examples: ["blacklist 693832549943869493"],
   singleArgs: true,
   guarded: true,

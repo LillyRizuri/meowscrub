@@ -11,7 +11,7 @@ module.exports = {
   description: "Set cooldown for a channel.",
   details:
     "Leave the channel parameter blank to set a cooldown to the channel where the command was ran on.",
-  format: "<number><s/m/h> [#channel/channelID]",
+  format: "<time> [#channel/channelID]",
   examples: [
     "slowmode 10s #general",
     "slowmode 1m #vote",

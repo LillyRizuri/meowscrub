@@ -12,7 +12,7 @@ module.exports = {
   description: "Set a chatbot channel for this server.",
   details:
     "Replace the syntax with `disable` if you wish to remove the configuration.",
-  format: "<channel/channelID>",
+  format: "<#channel | channelID>",
   examples: ["setchatbot #chatbot", "setchatbot disable"],
   clientPermissions: ["EMBED_LINKS"],
   userPermissions: ["ADMINISTRATOR"],

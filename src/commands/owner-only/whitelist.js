@@ -14,7 +14,7 @@ module.exports = {
   group: "owner-only",
   description: "Whitelist an user that exists in the database.",
   details: "Only the bot owner(s) and bot staff(s) may use this command.",
-  format: "<@user/userID>",
+  format: "<@user | userID>",
   examples: ["whitelist @frockles#4339", "whitelist 693832549943869493"],
   singleArgs: true,
   guarded: true,

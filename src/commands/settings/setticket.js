@@ -12,7 +12,7 @@ module.exports = {
   description: "Set a category to host ticket channels for this server.",
   details:
     "Replace the syntax with `disable` if you wish to remove the configuration.",
-  format: "<categoryID>",
+  format: "<channelCategoryID>",
   examples: ["setticket 123456789012345678", "setticket disable"],
   clientPermissions: ["EMBED_LINKS"],
   userPermissions: ["ADMINISTRATOR"],

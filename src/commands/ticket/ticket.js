@@ -9,7 +9,7 @@ module.exports = {
   aliases: ["ticket", "suppport"],
   memberName: "ticket",
   group: "ticket",
-  description: "Open a ticket to communicate with staffs.",
+  description: "Open a ticket to communicate with staff members.",
   format: "<string>",
   examples: ["ticket someone is annoying me, and only me"],
   clientPermissions: ["MANAGE_CHANNELS", "ADD_REACTIONS", "EMBED_LINKS"],

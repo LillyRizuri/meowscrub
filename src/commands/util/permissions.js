@@ -11,7 +11,7 @@ module.exports = {
   description: "Shows your, or a specified user's permissions",
   details:
     "This command checks permissions in the channel where the command was last ran. Leave the argument blank to display your permissions.",
-  format: "[@user/userID]",
+  format: "[@user | userID]",
   examples: ["permissions @frockles", "permissions 693832549943869493"],
   clientPermissions: ["EMBED_LINKS"],
   cooldown: 5,

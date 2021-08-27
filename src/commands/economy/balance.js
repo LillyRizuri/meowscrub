@@ -10,7 +10,7 @@ module.exports = {
   memberName: "balance",
   group: "economy",
   description: "Check your/someone else's balance.",
-  format: "[@user/userID]",
+  format: "[@user | userID]",
   examples: ["balance", "balance @frockles", "balance 693832549943869493"],
   clientPermissions: ["EMBED_LINKS"],
   cooldown: 5,

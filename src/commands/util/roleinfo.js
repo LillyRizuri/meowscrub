@@ -7,7 +7,7 @@ module.exports = {
   memberName: "roleinfo",
   group: "util",
   description: "Displays a specified role's information.",
-  format: "[@role/roleName/roleID]",
+  format: "[@role | roleName | roleID]",
   examples: [
     "roleinfo Member",
     "roleinfo @Member",

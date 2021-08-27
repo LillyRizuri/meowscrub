@@ -15,7 +15,7 @@ module.exports = {
   memberName: "give",
   group: "economy",
   description: "Share some coins to another user",
-  format: "<@user/userID> <number>",
+  format: "<@user | userID> <number>",
   examples: ["give @frockles 1000"],
   clientPermissions: ["EMBED_LINKS"],
   cooldown: 5,

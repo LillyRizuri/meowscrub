@@ -13,7 +13,7 @@ module.exports = {
   group: "owner-only",
   description: "Add an user to be the bot staff.",
   details: "Only the bot owner(s) may use this command.",
-  format: "<@user/userID>",
+  format: "<@user | userID>",
   examples: ["addbotstaff 693832549943869493"],
   singleArgs: true,
   ownerOnly: true,

@@ -7,7 +7,7 @@ module.exports = {
   memberName: "withdraw",
   group: "economy",
   description: "Take out your money from the bank.",
-  format: '<number/"all">',
+  format: '<number | "all">',
   examples: ["withdraw 10000", "withdraw all"],
   cooldown: 5,
   singleArgs: true,

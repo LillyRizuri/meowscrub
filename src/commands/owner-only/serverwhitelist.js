@@ -13,7 +13,7 @@ module.exports = {
   group: "owner-only",
   description: "Whitelist a server that exists in the database.",
   details: "Only the bot owner(s) may use this command.",
-  format: "<@user/userID>",
+  format: "<@user | userID>",
   examples: ["serverwhitelist 692346925428506777"],
   singleArgs: true,
   ownerOnly: true,

@@ -12,7 +12,7 @@ module.exports = {
   description: "Set a Global Chat channel for this server.",
   details:
     "Replace the syntax with `disable` if you wish to remove the configuration.",
-  format: "<channel/channelID>",
+  format: "<#channel | channelID>",
   examples: ["setglobal #global", "setglobal disable"],
   clientPermissions: ["EMBED_LINKS"],
   userPermissions: ["ADMINISTRATOR"],

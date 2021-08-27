@@ -11,7 +11,7 @@ module.exports = {
   group: "moderation",
   description:
     "Unmute a member in the current server and delete their associated mute data.",
-  format: "<@user/userID> [reason]",
+  format: "<@user | userID> [reason]",
   examples: ["unmute @frockles forgiven"],
   clientPermissions: ["MANAGE_ROLES", "EMBED_LINKS"],
   userPermissions: ["MANAGE_ROLES"],

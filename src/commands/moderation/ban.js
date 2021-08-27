@@ -10,7 +10,7 @@ module.exports = {
   memberName: "ban",
   group: "moderation",
   description: "Ban a member in the current server.",
-  format: "<@user/userID> [reason]",
+  format: "<@user | userID> [reason]",
   examples: ["ban @frockles not complying to the rules"],
   clientPermissions: ["BAN_MEMBERS", "EMBED_LINKS"],
   userPermissions: ["BAN_MEMBERS"],
