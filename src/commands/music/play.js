@@ -4,15 +4,19 @@ module.exports = {
   aliases: ["play", "p"],
   memberName: "play",
   group: "music",
-  description: "Very simple music command with no additional stuff whatsoever.",
-  format: "<searchString>",
+  description:
+    "Very simple music command with the ability to play provided video/audio attachments.",
+  format: "<searchString | videoAttachment | audioAttachment>",
   examples: ["play very noise"],
   clientPermissions: ["EMBED_LINKS"],
   cooldown: 5,
   singleArgs: true,
   guildOnly: true,
   callback: async (client, message, args) => {
-    const music = args;
+    const music = message.attachments.first()
+      ? message.attachments.first().url
+      : args;
+
     const queue = await client.distube.getQueue(message);
     const voiceChannel = message.member.voice.channel;
 
