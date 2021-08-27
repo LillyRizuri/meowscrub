@@ -13,6 +13,20 @@ module.exports = {
   singleArgs: true,
   guildOnly: true,
   callback: async (client, message, args) => {
+    function isFileImage(file) {
+      return file && file.contentType.split("/")[0] === "image";
+    }
+
+    if (message.attachments.first()) {
+      const attachment = message.attachments.first();
+
+      if (isFileImage(attachment))
+        return message.reply(
+          emoji.denyEmoji +
+            " That's an IMAGE. I'm not going to put that in a queue."
+        );
+    }
+
     const music = message.attachments.first()
       ? message.attachments.first().url
       : args;
