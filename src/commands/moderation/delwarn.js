@@ -10,9 +10,11 @@ module.exports = {
   aliases: ["delwarn", "pardon", "delstrike"],
   memberName: "delwarn",
   group: "moderation",
-  description: "Delete an user's warn using their Warn ID.",
-  format: "<@user | userID> <warnID> [reason]",
-  examples: ["delwarn @frockles _g7tfhtshw apologized"],
+  description: "Delete a member's warning with their Warn ID.",
+  details:
+    "Since August 28th 2021, the unique ID is genereated using UUID; so there's no need for an user paramenter since it has a very low probability in being repeated.",
+  format: "<warnID> [reason]",
+  examples: ["delwarn 279a5851-71fa-4b85-9b25-6d938af16b02 apologized"],
   clientPermissions: ["EMBED_LINKS"],
   userPermissions: ["BAN_MEMBERS"],
   cooldown: 5,
@@ -22,19 +24,33 @@ module.exports = {
     if (!args[0])
       return message.reply(
         emoji.missingEmoji +
-          " At least provide at least one user to delete a warn for."
+          " Please provide a valid Warn ID in order to continue."
       );
 
-    let target;
+    const guildId = message.guild.id;
+    const result = await warnSchema.findOne({
+      guildId,
+      "warnings.warnId": args[0],
+    });
+
+    if (!result)
+      return message.reply(
+        emoji.denyEmoji +
+          " The Warn ID you provided isn't a valid ID assigned for anybody."
+      );
+
+    console.log(result);
+
+    const identifiedWarning = result.warnings.find(
+      (warn) => warn.warnId === args[0]
+    );
+
+    const target = await client.users.fetch(result.userId);
+    const executor = await client.users.fetch(identifiedWarning.authorId);
+    const warnId = identifiedWarning.warnId;
+    const reason = identifiedWarning.reason;
     let reasonForRevoking;
 
-    try {
-      target =
-        message.mentions.users.first() ||
-        (await client.users.fetch(args[0]));
-    } catch (err) {
-      return message.reply(emoji.denyEmoji + " THAT'S not a valid user.");
-    }
     const member = message.guild.members.cache.get(target.id);
 
     if (message.guild.members.resolve(target.id)) {
@@ -49,16 +65,9 @@ module.exports = {
         );
     }
 
-    const guildId = message.guild.id;
     const userId = target.id;
 
-    if (!args[1])
-      return message.reply(
-        emoji.missingEmoji +
-          ` You need a Warn ID assigned for **${target.tag}**.`
-      );
-
-    const reasonMessage = args.slice(2).join(" ");
+    const reasonMessage = args.slice(1).join(" ");
 
     if (reasonMessage.length > 200)
       return message.reply(
@@ -66,89 +75,71 @@ module.exports = {
           " Consider lowering your reason's length to be just under 200 characters."
       );
 
-    if (args[2]) {
+    if (args[1]) {
       reasonForRevoking = reasonMessage;
     } else {
       reasonForRevoking = "No reason provided.";
     }
 
-    const results = await warnSchema.findOne({
-      guildId,
-      userId,
-    });
+    if (message.guild.members.resolve(target.id)) {
+      const guildSettings = await settingsSchema.findOne({
+        guildId,
+      });
 
-    for (let i = 0; i < results.warnings.length; i++) {
-      const { author, authorId, warnId, reason } = results.warnings[i];
-      if (args[1] === warnId) {
-        if (message.guild.members.resolve(target.id)) {
-          const guildSettings = await settingsSchema.findOne({
-            guildId,
-          });
-
-          if (guildSettings && guildSettings.settings.dmPunishment) {
-            const dmReasonEmbed = new Discord.MessageEmbed()
-              .setColor("RANDOM")
-              .setTitle(`Your warn got deleted in ${message.guild.name}.`)
-              .addFields(
-                {
-                  name: "Performed By",
-                  value: `${message.author.tag} (${message.author.id})`,
-                },
-                {
-                  name: "Content of The Deleted Warn",
-                  value: `ID: \`${warnId} - ${reason}\`\nExecutor: \`${author} (${authorId})\``,
-                },
-                {
-                  name: "Reason for Deleting",
-                  value: reasonForRevoking,
-                }
-              )
-              .setFooter("Hmmm...")
-              .setTimestamp();
-            await member.send({ embeds: [dmReasonEmbed] }).catch(() => {
-              message.channel.send(
-                "Can't send the reason to the target. Maybe they have their DM disabled."
-              );
-            });
-          }
-        }
-
-        await warnSchema.findOneAndUpdate(
-          {
-            guildId,
-            userId,
-          },
-          {
-            guildId,
-            userId,
-            $pull: {
-              warnings: {
-                warnId,
-              },
+      if (guildSettings && guildSettings.settings.dmPunishment) {
+        const dmReasonEmbed = new Discord.MessageEmbed()
+          .setColor("RANDOM")
+          .setTitle(`Your warn got deleted in ${message.guild.name}.`)
+          .addFields(
+            {
+              name: "Performed By",
+              value: `${message.author.tag} (${message.author.id})`,
             },
-          }
-        );
-
-        const confirmationEmbed = new Discord.MessageEmbed()
-          .setColor(green)
-          .setDescription(
-            `<:scrubgreen:797476323316465676> Deleted a warn with this ID:\n**\`${warnId}\` for ${target.tag}.**`
+            {
+              name: "Content of The Deleted Warn",
+              value: `
+**ID: ${warnId}**
+⠀• Was Warned By \`${executor.tag} (${executor.id})\`
+⠀• Reason: \`${reason}\``,
+            },
+            {
+              name: "Reason for Deleting",
+              value: reasonForRevoking,
+            }
           )
-          .setFooter("is this fine?")
+          .setFooter("Hmmm...")
           .setTimestamp();
-        return message.channel.send({ embeds: [confirmationEmbed] });
+        await member.send({ embeds: [dmReasonEmbed] }).catch(() => {
+          message.channel.send(
+            "Can't send the reason to the target. Maybe they have their DM disabled."
+          );
+        });
       }
     }
 
-    const afterProcess = await warnSchema.findOne({
-      guildId,
-      userId,
-    });
+    await warnSchema.findOneAndUpdate(
+      {
+        guildId,
+        userId,
+      },
+      {
+        guildId,
+        userId,
+        $pull: {
+          warnings: {
+            warnId,
+          },
+        },
+      }
+    );
 
-    if ((results.warnings = afterProcess.warnings))
-      return message.reply(
-        emoji.denyEmoji +
-          ` The Warn ID you provided isn't a valid ID assigned for **${target.tag}**.`
-      );
+    const confirmationEmbed = new Discord.MessageEmbed()
+      .setColor(green)
+      .setDescription(
+        `<:scrubgreen:797476323316465676> Deleted a warn with this ID:\n**\`${warnId}\` for ${target.tag}.**`
+      )
+      .setFooter("is this fine?")
+      .setTimestamp();
+    message.channel.send({ embeds: [confirmationEmbed] });
   },
 };

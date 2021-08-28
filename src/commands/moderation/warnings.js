@@ -55,15 +55,22 @@ module.exports = {
     let output = "";
 
     try {
+      results.warnings = results.warnings.sort(
+        (a, b) => b.timestamp - a.timestamp
+      );
+
       for (const warning of results.warnings) {
-        const { author, authorId, timestamp, warnId, reason } = warning;
+        const { authorId, timestamp, warnId, reason } = warning;
 
         const formattedTimestamp = new Date(timestamp).toLocaleDateString(
           "en-US",
           dateTimeOptions
         );
 
-        output += `\`${warnId}: ${formattedTimestamp}\` - By **${author}** (${authorId})\n**Reason:** ${reason}\n\n`;
+        const author = await client.users.fetch(authorId);
+
+        // output += `\`${warnId}: ${formattedTimestamp}\` - By **${author.tag}** (${authorId})\n**Reason:** ${reason}\n\n`;
+        output += `**${warnId}**\n⠀• Date: \`${formattedTimestamp}\`\n⠀• By: \`${author.tag} (${authorId})\`\n⠀• Reason: \`${reason}\`\n\n`;
       }
     } catch (err) {
       return message.reply(
@@ -83,24 +90,14 @@ module.exports = {
       append: "",
     });
 
-    if (splitOutput.length === 1) {
-      const embed = new Discord.MessageEmbed()
-        .setColor("RANDOM")
-        .setAuthor(`Previous warnings for ${userTag} (${userId})`, userAvatar)
-        .setTitle(`${results.warnings.length} warn(s) in total`)
-        .setDescription(splitOutput[0])
-        .setTimestamp();
-      return message.channel.send({ embeds: [embed] });
-    }
-
     const embeds = [];
 
     for (let i = 0; i < splitOutput.length; i++) {
       const embed = new Discord.MessageEmbed()
         .setColor("RANDOM")
         .setAuthor(`Previous warnings for ${userTag} (${userId})`, userAvatar)
-        .setTitle(`${results.warnings.length} warn(s) in total`)
         .setDescription(splitOutput[i])
+        .setFooter(`${results.warnings.length} warn(s) in total`)
         .setTimestamp();
       embeds.push(embed);
     }

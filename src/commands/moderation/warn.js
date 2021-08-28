@@ -1,4 +1,5 @@
 const Discord = require("discord.js");
+const uuid = require("uuid");
 
 const warnSchema = require("../../models/warn-schema");
 const settingsSchema = require("../../models/settings-schema");
@@ -11,6 +12,8 @@ module.exports = {
   memberName: "warn",
   group: "moderation",
   description: "Issue a warn for an user in the server.",
+  details:
+    "Since August 28th 2021, the unique ID is genereated using UUID version 4; so the generated ID has a very low probability in being repeated.",
   format: "<@user | userID> [reason]",
   examples: ["warn @frockles spamming"],
   clientPermissions: ["EMBED_LINKS"],
@@ -64,7 +67,8 @@ module.exports = {
         emoji.denyEmoji + " Warning a bot user is useless y'know."
       );
 
-    const warnId = "_" + Math.random().toString(36).substr(2, 9);
+    // const warnId = "_" + Math.random().toString(36).substr(2, 9);
+    const warnId = uuid.v4();
 
     args.shift();
 
@@ -84,7 +88,6 @@ module.exports = {
       );
 
     const warning = {
-      author: message.author.tag,
       authorId: message.author.id,
       timestamp: new Date().getTime(),
       warnId,
@@ -124,11 +127,11 @@ module.exports = {
             },
             {
               name: "Reason for Warning",
-              value: `ID: ${warnId} - ${reason}`,
+              value: `**ID: ${warnId}**\n⠀• Reason: \`${reason}\``,
             }
           )
           .setFooter("Hmmm...")
-          .setTimestamp();
+          .setTinmestamp();
         await member.send({ embeds: [dmReasonEmbed] }).catch(() => {
           message.channel.send(
             "Can't send the reason to the target. Maybe they have their DM disabled."
