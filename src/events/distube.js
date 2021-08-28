@@ -26,7 +26,7 @@ module.exports = {
 
         try {
           if (!client.playSongLog) {
-          } else if (client.playSongLog) client.playSongLog.delete();
+          } else if (client.playSongLog) await client.playSongLog.delete();
         } catch (err) {}
 
         song.name = decodeURIComponent(song.name);
@@ -143,30 +143,30 @@ Estimated Time Until Playing: **${estimatedTime}**
         queue.textChannel.send({ embeds: [addListEmbed] });
       })
 
-      .on("empty", (queue) => {
+      .on("empty", async (queue) => {
         try {
           if (!client.playSongLog) {
-          } else if (client.playSongLog) client.playSongLog.delete();
+          } else if (client.playSongLog) await client.playSongLog.delete();
         } catch (err) {}
         queue.textChannel.send(
           "<:scrubnull:797476323533783050> **The VC I'm in is empty. Leaving the channel...**"
         );
       })
 
-      .on("noRelated", (queue) => {
+      .on("noRelated", async (queue) => {
         try {
           if (!client.playSongLog) {
-          } else if (client.playSongLog) client.playSongLog.delete();
+          } else if (client.playSongLog) await client.playSongLog.delete();
         } catch (err) {}
         queue.textChannel.send(
           "<:scrubnull:797476323533783050> **No related music can be found. Attempting to leave the VC...**"
         );
       })
 
-      .on("finish", (queue) => {
+      .on("finish", async (queue) => {
         try {
           if (!client.playSongLog) {
-          } else if (client.playSongLog) client.playSongLog.delete();
+          } else if (client.playSongLog) await client.playSongLog.delete();
         } catch (err) {}
         queue.textChannel.send(
           "<:scrubnull:797476323533783050> **The queue is now empty. Leaving the VC...**"
@@ -189,11 +189,14 @@ Estimated Time Until Playing: **${estimatedTime}**
           dateTimeOptions
         );
 
+        const stringErr = err.toString();
+
         console.log(err);
+        console.log(stringErr);
         channel.send(
           `
 An unexpected error occurred whie executing the event.
-You shouldn't receive an error like this. Please contact my owner and report the error with the text below.
+Please contact my owner and report the error with the text below.
 \`\`\`
 Last Ran: ${currentDate}
 

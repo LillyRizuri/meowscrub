@@ -88,7 +88,7 @@ module.exports = {
 
               return {
                 label: modules.trim(song.name, 100),
-                value: (id + 1).toString(),
+                value: id.toString(),
                 description: modules.trim(
                   `${song.uploader.name} - ${duration}`
                 ),
@@ -130,11 +130,14 @@ module.exports = {
         } else {
         }
 
-        let outsideValue;
+        await interaction.deferUpdate();
+        await initialMessage.edit({
+          content: "Please wait...",
+          components: [component1(true), component2(true)],
+        });
 
         for (const value of interaction.values) {
-          const chosenSong = results[value - 1];
-          outsideValue = chosenSong;
+          const chosenSong = results[value];
           if (queue) queue.searched = true;
 
           await client.distube.play(message, chosenSong);
@@ -145,17 +148,15 @@ module.exports = {
           }
         }
 
-        await interaction.deferUpdate();
         if (interaction.values.length === 1) {
-          await initialMessage.edit({
-            content: `🎶 Queued **${outsideValue.name} - ${outsideValue.formattedDuration}**`,
-            components: [component1(true), component2(true)],
-          });
+          const [value] = interaction.values;
+          await initialMessage.edit(
+            `🎶 Queued **${results[value].name} - ${results[value].formattedDuration}**`
+          );
         } else {
-          await initialMessage.edit({
-            content: `🎶 **Added ${interaction.values.length} song(s) to the server queue.**`,
-            components: [component1(true), component2(true)],
-          });
+          await initialMessage.edit(
+            `🎶 **Added ${interaction.values.length} song(s) to the server queue.**`
+          );
         }
       })
       .catch(async () => {
