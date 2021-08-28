@@ -59,13 +59,34 @@ ${command.guildOnly ? " [Usable only in servers]" : ""} ${
 
         if (command.details)
           helpEmbed.addField("Details", `⠀• ${command.details.trim()}`);
+
         if (command.examples) {
           const examples = [];
-          for (let i = 0; i < command.examples.length; i++) {
-            examples.push(`⠀• ${command.examples[i]}`);
+          for (const example of command.examples) {
+            examples.push(`⠀• ${example}`);
           }
 
           helpEmbed.addField("Examples", examples.join("\n"));
+        }
+
+        if (command.clientPermissions && command.clientPermissions.length !== 0) {
+          const botPermsArray = [];
+          for (const clientPermission of command.clientPermissions) {
+            botPermsArray.push(
+              clientPermission.split("_").join(" ").toProperCase()
+            );
+          }
+          helpEmbed.addField("Bot Permission(s)", `⠀• ${botPermsArray.join(", ")}`, true);
+        }
+
+        if (command.userPermissions && command.userPermissions.length !== 0) {
+          const userPermsArray = [];
+          for (const userPermission of command.userPermissions) {
+            userPermsArray.push(
+              userPermission.split("_").join(" ").toProperCase()
+            );
+          }
+          helpEmbed.addField("User Permission(s)", `⠀• ${userPermsArray.join(", ")}`, true);
         }
 
         try {
@@ -162,9 +183,7 @@ __**Select available command categories in ${message.guild || "this DM"}.**__`
         });
 
         if (message.guild)
-          message.reply(
-            successEmoji + " Sent you a DM with information."
-          );
+          message.reply(successEmoji + " Sent you a DM with information.");
 
         const filter = (interaction) =>
           interaction.user.id === message.author.id;
