@@ -1,7 +1,7 @@
 const Discord = require("discord.js");
 const { getSong, searchSong } = require("genius-lyrics-api");
 
-const modules = require("../../util/modules");
+const util = require("../../util/util");
 
 const emoji = require("../../assets/json/tick-emoji.json");
 
@@ -36,7 +36,7 @@ module.exports = {
 
     try {
       const splitLyrics = Discord.Util.splitMessage(
-        modules.trim(song.lyrics, 5700),
+        util.trim(song.lyrics, 5700),
         {
           maxLength: 1024,
           char: "\n",

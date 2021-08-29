@@ -1,6 +1,6 @@
 const Discord = require("discord.js");
 const humanizeDuration = require("humanize-duration");
-const modules = require("../util/modules");
+const util = require("../util/util");
 const settingsSchema = require("../models/settings-schema");
 const globalChatSchema = require("../models/global-chat-schema");
 const userBlacklistSchema = require("../models/user-blacklist-schema");
@@ -104,7 +104,7 @@ module.exports = {
             .setDescription(
               `
 If you receive this messaage while trying to use Global Chat, you probably haven't read through Global Chat's Notice yet.
-Please do so by using the \`${await modules.getPrefix(
+Please do so by using the \`${await util.getPrefix(
                 message.guild.id
               )}globalchat-notice\` command, then you may proceed through the next step provided by the command.
 `
@@ -142,7 +142,7 @@ Please do so by using the \`${await modules.getPrefix(
         // eslint-disable-next-line no-empty
         if (client.isOwner(message.author) || isBotStaff) {
         } else if (gcInfo.messageCount < requiredMsgForVerification) {
-          const urlify = modules.urlify(message.content);
+          const urlify = util.urlify(message.content);
           if (urlify !== message.content) {
             await message.delete();
             const msg = await message.channel.send(
@@ -170,7 +170,7 @@ Please do so by using the \`${await modules.getPrefix(
           return;
         }
 
-        const urlify = modules.urlify(message.content);
+        const urlify = util.urlify(message.content);
         if (urlify !== message.content) {
           if (
             !safeDomains.some((v) => message.content.toLowerCase().includes(v))
@@ -292,7 +292,7 @@ Please do so by using the \`${await modules.getPrefix(
           let usernamePart = "";
 
           // check the guild is/isn't a guild test
-          if (!modules.compareMaps(sameUserLog, sameUserOld)) {
+          if (!util.compareMaps(sameUserLog, sameUserOld)) {
             if (
               !process.env.GUILD_TEST ||
               guild.id !== process.env.GUILD_TEST
@@ -303,7 +303,7 @@ Please do so by using the \`${await modules.getPrefix(
 _ _\n[ ${badgeDisplayed} **\`${message.author.tag}\` - \`${message.guild.name}\`** ]
 **userID: \`${message.author.id}\` - guildID: \`${message.guild.id}\`**`;
             }
-          } else if (modules.compareMaps(sameUserLog, sameUserOld)) {
+          } else if (util.compareMaps(sameUserLog, sameUserOld)) {
             usernamePart = "";
           }
 
@@ -373,8 +373,6 @@ _ _\n[ ${badgeDisplayed} **\`${message.author.tag}\` - \`${message.guild.name}\`
       }
 
       // eslint-disable-next-line no-empty
-    } catch (err) {
-      console.log(err);
-    }
+    } catch (err) {}
   },
 };

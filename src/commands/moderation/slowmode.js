@@ -1,6 +1,6 @@
 const ms = require("ms");
 
-const modules = require("../../util/modules");
+const util = require("../../util/util");
 
 const emoji = require("../../assets/json/tick-emoji.json");
 
@@ -43,7 +43,7 @@ module.exports = {
           " What do you want the cooldown timer to be set to?\nPlease set the cooldown value with this format: `<number><s/m/h>`."
       );
 
-    if (!modules.endsWithAny(["s", "m", "h"], args[0].toLowerCase()))
+    if (!util.endsWithAny(["s", "m", "h"], args[0].toLowerCase()))
       return message.reply(
         emoji.denyEmoji +
           " Your cooldown timer doesn't end with `s/m/h`. Try again."

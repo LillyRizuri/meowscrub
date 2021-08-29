@@ -1,6 +1,6 @@
 const Discord = require("discord.js");
 
-const { findCommands, getPrefix } = require("../../util/modules");
+const util = require("../../util/util");
 
 const {
   denyEmoji,
@@ -22,10 +22,10 @@ module.exports = {
   guarded: true,
   callback: async (client, message, args) => {
     const prefix = message.guild
-      ? await getPrefix(message.guild.id)
-      : await getPrefix();
+      ? await util.getPrefix(message.guild.id)
+      : await util.getPrefix();
     const groups = client.registryGroups;
-    const commands = findCommands(args);
+    const commands = util.findCommands(args.toLowerCase());
 
     if (args) {
       if (commands.length === 1) {

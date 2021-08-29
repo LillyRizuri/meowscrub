@@ -2,7 +2,7 @@ const Discord = require("discord.js");
 const { pagination } = require("reconlx");
 const { parse } = require("twemoji-parser");
 
-const modules = require("../../util/modules");
+const util = require("../../util/util");
 
 const economySchema = require("../../models/economy-schema");
 
@@ -41,7 +41,7 @@ module.exports = {
             " There's no stuff for sale. Please check back later."
         );
 
-      const splitString = modules.splitString(shopList, 15);
+      const splitString = util.splitString(shopList, 15);
 
       if (splitString.length === 1) {
         const embed = new Discord.MessageEmbed()
@@ -49,7 +49,7 @@ module.exports = {
           .setTitle("Items on Stock")
           .setDescription(shopList)
           .setFooter(
-            `See more info on an item by using ${await modules.getPrefix(
+            `See more info on an item by using ${await util.getPrefix(
               message.guild.id
             )}shop [itemName]`
           )
@@ -64,7 +64,7 @@ module.exports = {
             .setTitle("Items on Stock")
             .setDescription(splitString[i])
             .setFooter(
-              `See more info on an item by using ${await modules.getPrefix(
+              `See more info on an item by using ${await util.getPrefix(
                 message.guild.id
               )}shop [itemName]`
             )

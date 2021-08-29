@@ -1,9 +1,14 @@
+const Discord = require("discord.js");
 const path = require("path");
 const fs = require("fs");
 
-const { getPrefix } = require("../util/modules");
+const { getPrefix } = require("../util/util");
 
 module.exports = async (client) => {
+  client.commands = new Discord.Collection();
+  client.registryGroups = new Discord.Collection();
+  client.guildPrefixes = {};
+
   const arrayOfCommands = [];
   const baseFile = "command-base.js";
   const commandBase = require(`./${baseFile}`);
@@ -17,18 +22,18 @@ module.exports = async (client) => {
       } else if (file !== baseFile) {
         const option = require(path.join(__dirname, dir, file));
 
-        // const newAliases = [];
-        // for (let i = 0; i < option.aliases.length; i++) {
-        //   const aliasPiece = option.aliases[i];
-        //   const patternReplace = aliasPiece.split(/-/g).join(/(?:.+)?/g);
-        //   // eslint-disable-next-line no-empty
-        //   if (patternReplace === aliasPiece) {
-        //   } else {
-        //     newAliases.push(patternReplace);
-        //   }
-        // }
+        const newAliases = [];
+        for (let i = 0; i < option.aliases.length; i++) {
+          const aliasPiece = option.aliases[i];
+          const patternReplace = aliasPiece.split(/-/g).join("");
+          // eslint-disable-next-line no-empty
+          if (patternReplace === aliasPiece) {
+          } else {
+            newAliases.push(patternReplace);
+          }
+        }
 
-        // option.aliases = option.aliases.concat(newAliases);
+        option.aliases = option.aliases.concat(newAliases);
 
         arrayOfCommands.push(option);
         client.commands.set(option.memberName, option);
@@ -58,7 +63,7 @@ module.exports = async (client) => {
       client.guildPrefixes[guildId] = result;
     }
 
-    console.log("Loaded all prefix for all guilds.");
+    client.emit("debug", "Loaded all prefix for all guilds.");
   }
 
   await loadPrefixes();

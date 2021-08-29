@@ -1,7 +1,7 @@
 const Discord = require("discord.js");
 const fetch = require("node-fetch");
 
-const { trim } = require("../../util/modules");
+const util = require("../../util/util");
 const emoji = require("../../assets/json/tick-emoji.json");
 
 module.exports = {
@@ -42,13 +42,13 @@ module.exports = {
 
       if (response.type === "disambiguation") {
         wikiEmbed.setDescription(
-          trim(response.extract, 3072) +
+          util.trim(response.extract, 3072) +
             `\n\n[${response.title} also refers to...](${response.content_urls.desktop.page})`
         );
       } else {
         wikiEmbed
           .setThumbnail(response.thumbnail.source)
-          .setDescription(trim(response.extract, 4096));
+          .setDescription(util.trim(response.extract, 4096));
       }
 
       message.channel.send({ embeds: [wikiEmbed] });

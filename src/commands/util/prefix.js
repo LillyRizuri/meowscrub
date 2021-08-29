@@ -1,4 +1,4 @@
-const { prefixChange, getPrefix } = require("../../util/modules");
+const util = require("../../util/util");
 
 const {
   denyEmoji,
@@ -18,7 +18,7 @@ module.exports = {
   guarded: true,
   callback: async (client, message, args) => {
     if (!args) {
-      const prefix = await getPrefix(message.guild.id);
+      const prefix = await util.getPrefix(message.guild.id);
       return message.reply(
         `${
           prefix
@@ -49,13 +49,13 @@ module.exports = {
     let response = "";
 
     if (prefix === "default") {
-      await prefixChange(message.guild.id, null);
+      await util.prefixChange(message.guild.id, null);
       const current = defaultPrefix ? `\`${defaultPrefix}\`` : "no prefix";
       response =
         successEmoji +
         ` Reset the command prefix to the default (currently ${current}).`;
     } else {
-      const newPrefix = await prefixChange(message.guild.id, prefix);
+      const newPrefix = await util.prefixChange(message.guild.id, prefix);
       response = newPrefix
         ? successEmoji + ` Set the command prefix to \`${newPrefix}\`.`
         : successEmoji + " Removed the command prefix entirely.";
@@ -63,7 +63,7 @@ module.exports = {
 
     // set prefix to cache
     const guildId = message.guild.id;
-    prefix = await getPrefix(guildId);
+    prefix = await util.getPrefix(guildId);
     client.guildPrefixes[guildId] = prefix;
 
     await message.reply(

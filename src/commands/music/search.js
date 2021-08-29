@@ -1,6 +1,6 @@
 const Discord = require("discord.js");
 
-const modules = require("../../util/modules");
+const util = require("../../util/util");
 
 const emoji = require("../../assets/json/tick-emoji.json");
 
@@ -87,9 +87,9 @@ module.exports = {
               }
 
               return {
-                label: modules.trim(song.name, 100),
+                label: util.trim(song.name, 100),
                 value: id.toString(),
-                description: modules.trim(
+                description: util.trim(
                   `${song.uploader.name} - ${duration}`
                 ),
               };

@@ -1,7 +1,7 @@
 const Discord = require("discord.js");
 const { pagination } = require("reconlx");
 
-const modules = require("../../util/modules");
+const util = require("../../util/util");
 
 const economySchema = require("../../models/economy-schema");
 
@@ -71,7 +71,7 @@ module.exports = {
         )
         .join("\n\n");
 
-    const splitString = modules.splitString(inventory, 15);
+    const splitString = util.splitString(inventory, 15);
 
     if (splitString.length === 1) {
       const embed = new Discord.MessageEmbed()

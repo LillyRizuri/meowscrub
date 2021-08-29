@@ -1,4 +1,4 @@
-const modules = require("../../util/modules");
+const util = require("../../util/util");
 const economy = require("../../util/economy");
 
 const emoji = require("../../assets/json/tick-emoji.json");
@@ -93,7 +93,7 @@ module.exports = {
     else if (d < coinsToGive + 1 < e) taxPercentage = 20;
     else if (e < coinsToGive + 1 < f) taxPercentage = 30;
 
-    const taxCoins = modules.round(
+    const taxCoins = util.round(
       coinsToGive - (coinsToGive / 100) * taxPercentage,
       0
     );

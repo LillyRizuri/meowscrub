@@ -1,6 +1,6 @@
 const Discord = require("discord.js");
 
-const modules = require("../../util/modules");
+const util = require("../../util/util");
 
 const globalChatSchema = require("../../models/global-chat-schema");
 
@@ -48,7 +48,7 @@ Trying to argue with us for stupid reasons and you will regret it. Impersonating
     });
 
     if (!gcInfo)
-      notice = `${notice}\n+ Lastly, please use the \`${modules.getPrefix(
+      notice = `${notice}\n+ Lastly, please use the \`${util.getPrefix(
         message.guild.id
       )}create-profile\` command to join in with other users that are using Global Chat after you've read the entirity of the notice.`;
 

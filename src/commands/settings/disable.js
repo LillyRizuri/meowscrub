@@ -1,4 +1,4 @@
-const modules = require("../../util/modules");
+const util = require("../../util/util");
 
 const settingsSchema = require("../../models/settings-schema");
 
@@ -22,7 +22,7 @@ module.exports = {
         emoji.missingEmoji + " Please specify what command should be disabled."
       );
 
-    const commands = modules.findCommands(args);
+    const commands = util.findCommands(args.toLowerCase());
 
     if (commands.length <= 0)
       return message.reply(

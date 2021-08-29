@@ -1,5 +1,5 @@
 const Discord = require("discord.js");
-const modules = require("../util/modules");
+const util = require("../util/util");
 const serverBlacklistSchema = require("../models/guild-blacklist-schema");
 const { embedcolor } = require("../assets/json/colors.json");
 
@@ -20,7 +20,7 @@ module.exports = {
       .addFields(
         {
           name: "Getting Started",
-          value: `Use \`${await modules.getPrefix(guild.id)}help\` to let the bot provide the full list of commands available. Hope you utilize all commands present in there.`,
+          value: `Use \`${await util.getPrefix(guild.id)}help\` to let the bot provide the full list of commands available. Hope you utilize all commands present in there.`,
         },
         {
           name: "Needing help or get involved in our community?",

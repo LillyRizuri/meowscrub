@@ -4,7 +4,7 @@
 const Discord = require("discord.js");
 const humanizeDuration = require("humanize-duration");
 
-const { getPrefix } = require("../util/modules");
+const util = require("../util/util");
 
 const settingsSchema = require("../models/settings-schema");
 const tagsSchema = require("../models/tags-schema");
@@ -144,7 +144,7 @@ module.exports = async (client, commandOptions) => {
     };
   }
 
-  console.log(`Registered command ${group}:${memberName}`);
+  client.emit("debug", `Registered command ${group}:${memberName}`);
 };
 
 module.exports.listen = (client) => {
@@ -155,10 +155,13 @@ module.exports.listen = (client) => {
 
     if (message.guild) {
       if (!client.guildPrefixes[message.guild.id]) {
-        const result = await getPrefix(message.guild.id);
+        const result = await util.getPrefix(message.guild.id);
         client.guildPrefixes[message.guild.id] = result;
-        console.log(
-          `Loaded this prefix for this guild ${message.guild.id}: ${prefix}`
+        client.emit(
+          "debug",
+          `Loaded the prefix for the guild with this Id ${message.guild.id}: ${
+            client.guildPrefixes[message.guild.id]
+          }`
         );
       }
       prefix = client.guildPrefixes[message.guild.id] || process.env.PREFIX;
@@ -227,7 +230,7 @@ module.exports.listen = (client) => {
         callback,
       } = command;
 
-      console.log(`Running command ${group}:${aliases[0]}`);
+      client.emit("debug", `Running command ${group}:${aliases[0]}`);
       // check if the user is blacklisted
       const blacklistedRes = await userBlacklistSchema.findOne({
         userId: message.author.id,

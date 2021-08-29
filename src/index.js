@@ -35,10 +35,6 @@ mongoose
   });
 
 client.owner = process.env.OWNERS.split(",");
-client.guildPrefixes = {};
-client.commands = new Discord.Collection();
-client.registryGroups = new Discord.Collection();
-client.playSongLog;
 client.commandGroups = [
   ["covid", "Covid-Related Commands", "<:virus:877817262692769813>"],
   ["discord-together", "Discord Together", "🎮"],
@@ -61,7 +57,6 @@ client.discordTogether = new DiscordTogether(client);
 client.distube = new DisTube.default(client, {
   emitAddSongWhenCreatingQueue: false,
   emitAddListWhenCreatingQueue: false,
-  emitNewSongOnly: true,
   leaveOnFinish: true,
   youtubeDL: true,
   updateYouTubeDL: true,
@@ -75,9 +70,8 @@ client.isOwner = function isOwner(user) {
   if (client.owner instanceof Set) return client.owner.has(user.id);
   throw new Error("The owner option is an unknown value.");
 };
-module.exports = client;
 
-require("./handlers/event-handler")(client);
+module.exports = client;
 
 client.on("ready", async () => {
   await require("./handlers/command-handler")(client);
@@ -86,6 +80,8 @@ client.on("ready", async () => {
     "Initialized frockles (meowscrub) successfully. Give it a warm welcome."
   );
 });
+
+require("./handlers/event-handler")(client);
 
 process.on("uncaughtException", console.log);
 client

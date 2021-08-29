@@ -1,6 +1,6 @@
 /* eslint-disable no-empty */
 const Discord = require("discord.js");
-const modules = require("../util/modules");
+const util = require("../util/util");
 const { getAudioDurationInSeconds } = require("get-audio-duration");
 
 const { green, what } = require("../assets/json/colors.json");
@@ -8,6 +8,7 @@ const { green, what } = require("../assets/json/colors.json");
 module.exports = {
   name: "ready",
   async execute(client) {
+    client.playSongLog;
     client.distube
 
       .on("initQueue", (queue) => {
@@ -19,7 +20,7 @@ module.exports = {
         if (song.duration === 0)
           try {
             song.duration = await getAudioDurationInSeconds(song.url);
-            song.formattedDuration = modules.formatDuration(
+            song.formattedDuration = util.formatDuration(
               song.duration * 1000
             );
           } catch (err) {}
@@ -65,12 +66,12 @@ module.exports = {
         if (song.duration === 0)
           try {
             song.duration = await getAudioDurationInSeconds(song.url);
-            song.formattedDuration = modules.formatDuration(
+            song.formattedDuration = util.formatDuration(
               song.duration * 1000
             );
           } catch (err) {}
 
-        let estimatedTime = modules.formatDuration(
+        let estimatedTime = util.formatDuration(
           queue.duration * 1000 -
             song.duration * 1000 -
             queue.currentTime * 1000
@@ -107,7 +108,7 @@ Estimated Time Until Playing: **${estimatedTime}**
       })
 
       .on("addList", (queue, playlist) => {
-        let estimatedTime = modules.formatDuration(
+        let estimatedTime = util.formatDuration(
           queue.duration * 1000 -
             playlist.duration * 1000 -
             queue.currentTime * 1000

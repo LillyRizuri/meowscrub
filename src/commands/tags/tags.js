@@ -1,7 +1,7 @@
 const Discord = require("discord.js");
 const { pagination } = require("reconlx");
 
-const modules = require("../../util/modules");
+const util = require("../../util/util");
 
 const emoji = require("../../assets/json/tick-emoji.json");
 
@@ -29,7 +29,7 @@ module.exports = {
         .map((tag, i) => `#${i + 1} • ${tag.name}`)
         .join("\n");
 
-    const listSplit = modules.splitString(tagsList, 10);
+    const listSplit = util.splitString(tagsList, 10);
 
     const embeds = [];
     for (let i = 0; i < listSplit.length; i++) {

@@ -12,7 +12,7 @@ module.exports = {
       status: "idle",
     });
 
-    // changing status for the 10 minutes interval
+    // changing status for the 5 minutes interval
     setInterval(async () => {
       const status = require("../assets/json/bot-status.json");
       const randomStatus = status[Math.floor(Math.random() * status.length)];
