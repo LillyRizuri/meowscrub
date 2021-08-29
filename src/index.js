@@ -73,6 +73,8 @@ client.isOwner = function isOwner(user) {
 
 module.exports = client;
 
+require("./handlers/event-handler")(client);
+
 client.on("ready", async () => {
   await require("./handlers/command-handler")(client);
 
@@ -81,7 +83,6 @@ client.on("ready", async () => {
   );
 });
 
-require("./handlers/event-handler")(client);
 
 process.on("uncaughtException", console.log);
 client
