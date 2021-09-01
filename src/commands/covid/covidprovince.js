@@ -45,8 +45,6 @@ module.exports = {
         dateTimeOptions
       );
 
-      console.log(stats);
-
       // const recovered = `${stats.recovered.toLocaleString()} (${(
       //   (stats.recovered / stats.confirmed) *
       //   100
@@ -63,10 +61,10 @@ module.exports = {
         .setColor("RANDOM")
         .setAuthor(`${obj.province}, ${obj.country}`)
         .setDescription(
-          `
-• Confirmed Cases: \`${stats.confirmed.toLocaleString()}\`
-• Deaths: \`${deaths}\`
-        `
+`\`\`\`css
+• Confirmed Cases: ${stats.confirmed.toLocaleString()}
+• Deaths:          ${deaths}
+\`\`\``
         )
         .setFooter(`Last Updated: ${updatedTime}`);
       message.channel.send({ embeds: [covidProvinceEmbed] });

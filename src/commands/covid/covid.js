@@ -62,21 +62,21 @@ module.exports = {
           .addFields(
             {
               name: "Cases",
-              value: `
-• All Cases: \`${totalStats.cases.toLocaleString()}\`            
-• Active Cases: \`${active}\`
-• Critical Cases: \`${totalStats.critical.toLocaleString()}\`
-            `,
-              inline: true,
+              value:
+`\`\`\`css
+• All Cases:      ${totalStats.cases.toLocaleString()}
+• Active Cases:   ${active}
+• Critical Cases: ${totalStats.critical.toLocaleString()}
+\`\`\``,
             },
             {
               name: "Recovered/Deaths/Tests",
-              value: `
-• Recovered: \`${recovered}\`
-• Deaths: \`${deaths}\`
-• Tests: \`${totalStats.tests.toLocaleString()}\`
-            `,
-              inline: true,
+              value:
+`\`\`\`css
+• Recovered: ${recovered}
+• Deaths:    ${deaths}
+• Tests:     ${totalStats.tests.toLocaleString()}
+\`\`\``,
             }
           )
           .setFooter(`Last Updated: ${updatedTime}`),
@@ -90,24 +90,24 @@ module.exports = {
           .addFields(
             {
               name: "Today",
-              value: `
-• Today Cases: \`+ ${totalStats.todayCases.toLocaleString()}\`
-• Today Recovered: \`+ ${totalStats.todayRecovered.toLocaleString()}\`  
-• Today Deaths: \`+ ${totalStats.todayDeaths.toLocaleString()}\`          
-              `,
-              inline: true,
+              value:
+`\`\`\`css
+• Today Cases:     + ${totalStats.todayCases.toLocaleString()}
+• Today Recovered: + ${totalStats.todayRecovered.toLocaleString()}
+• Today Deaths:    + ${totalStats.todayDeaths.toLocaleString()}        
+\`\`\``,
             },
             {
               name: "Per One Million",
-              value: `
-• Cases Per Mil: \`${totalStats.casesPerOneMillion.toLocaleString()}\`  
-• Deaths Per Mil: \`${totalStats.deathsPerOneMillion.toLocaleString()}\`
-• Tests Per Mil: \`${totalStats.testsPerOneMillion.toLocaleString()}\`
-• Active Per Mil: \`${totalStats.activePerOneMillion.toLocaleString()}\`
-• Recovered Per Mil: \`${totalStats.recoveredPerOneMillion.toLocaleString()}\`
-• Critical Per MIl: \`${totalStats.criticalPerOneMillion.toLocaleString()}\`
-              `,
-              inline: true,
+              value:
+`\`\`\`css
+• Cases Per Mil:     ${totalStats.casesPerOneMillion.toLocaleString()}
+• Deaths Per Mil:    ${totalStats.deathsPerOneMillion.toLocaleString()}
+• Tests Per Mil:     ${totalStats.testsPerOneMillion.toLocaleString()}
+• Active Per Mil:    ${totalStats.activePerOneMillion.toLocaleString()}
+• Recovered Per Mil: ${totalStats.recoveredPerOneMillion.toLocaleString()}
+• Critical Per MIl:  ${totalStats.criticalPerOneMillion.toLocaleString()}
+\`\`\``,
             }
           )
           .setFooter(`Last Updated: ${updatedTime}`),
@@ -225,21 +225,21 @@ module.exports = {
             .addFields(
               {
                 name: "Cases",
-                value: `
-• All Cases: \`${country.cases.toLocaleString()}\`
-• Active Cases: \`${active}\`
-• Critical Cases: \`${country.critical.toLocaleString()}\`
-                `,
-                inline: true,
+                value:
+`\`\`\`css
+• All Cases:      ${country.cases.toLocaleString()}
+• Active Cases:   ${active}
+• Critical Cases: ${country.critical.toLocaleString()}
+\`\`\``,
               },
               {
                 name: "Recovered/Deaths/Tests",
-                value: `
-• Recovered: \`${recovered}\`
-• Deaths: \`${deaths}\`
-• Tests: \`${country.tests.toLocaleString()}\`              
-                `,
-                inline: true,
+                value:
+`\`\`\`css
+• Recovered: ${recovered}
+• Deaths:    ${deaths}
+• Tests:     ${country.tests.toLocaleString()}
+\`\`\``,
               }
             )
             .setFooter(`Last Updated: ${updatedTime}`),
@@ -258,24 +258,24 @@ module.exports = {
             .addFields(
               {
                 name: "Today",
-                value: `
-• Today Cases: \`+ ${country.todayCases.toLocaleString()}\`
-• Today Recovered: \`+ ${country.todayRecovered.toLocaleString()}\`  
-• Today Deaths: \`+ ${country.todayDeaths.toLocaleString()}\`         
-                `,
-                inline: true,
+                value:
+`\`\`\`css
+• Today Cases:     + ${country.todayCases.toLocaleString()}
+• Today Recovered: + ${country.todayRecovered.toLocaleString()}
+• Today Deaths:    + ${country.todayDeaths.toLocaleString()}
+\`\`\``,
               },
               {
                 name: "Per One Million",
-                value: `
-• Cases Per Mil: \`${country.casesPerOneMillion.toLocaleString()}\`  
-• Deaths Per Mil: \`${country.deathsPerOneMillion.toLocaleString()}\`
-• Tests Per Mil: \`${country.testsPerOneMillion.toLocaleString()}\`
-• Active Per Mil: \`${country.activePerOneMillion.toLocaleString()}\`
-• Recovered Per Mil: \`${country.recoveredPerOneMillion.toLocaleString()}\`
-• Critical Per MIl: \`${country.criticalPerOneMillion.toLocaleString()}\`
-                `,
-                inline: true,
+                value:
+`\`\`\`css
+• Cases Per Mil:     ${country.casesPerOneMillion.toLocaleString()}  
+• Deaths Per Mil:    ${country.deathsPerOneMillion.toLocaleString()}
+• Tests Per Mil:     ${country.testsPerOneMillion.toLocaleString()}
+• Active Per Mil:    ${country.activePerOneMillion.toLocaleString()}
+• Recovered Per Mil: ${country.recoveredPerOneMillion.toLocaleString()}
+• Critical Per MIl:  ${country.criticalPerOneMillion.toLocaleString()}
+\`\`\``,
               }
             )
             .setFooter(`Last Updated: ${updatedTime}`),

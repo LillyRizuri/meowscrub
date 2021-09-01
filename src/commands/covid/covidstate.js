@@ -76,7 +76,7 @@ module.exports = {
       const recovered = `${state.recovered.toLocaleString()} (${(
         (state.recovered / state.cases) *
         100
-      ).toFixed(2)})%`;
+      ).toFixed(2)}%)`;
 
       const deaths = `${state.deaths.toLocaleString()} (${(
         (state.deaths / state.cases) *
@@ -92,20 +92,20 @@ module.exports = {
           .addFields(
             {
               name: "Cases",
-              value: `
-• All Cases: \`${state.cases.toLocaleString()}\`
-• Active Cases: \`${active}\`   
-            `,
-              inline: true,
+              value:
+`\`\`\`css
+• All Cases:    ${state.cases.toLocaleString()}
+• Active Cases: ${active}
+\`\`\``,
             },
             {
               name: "Recovered/Deaths/Tests",
-              value: `
-• Recovered: \`${recovered}\`
-• Deaths: \`${deaths}\`
-• Tests: \`${state.tests.toLocaleString()}\`            
-            `,
-              inline: true,
+              value:
+`\`\`\`css
+• Recovered: ${recovered}
+• Deaths:    ${deaths}
+• Tests:     ${state.tests.toLocaleString()}
+\`\`\``,
             }
           )
           .setFooter(`Last Updated: ${updatedTime}`),
@@ -118,20 +118,20 @@ module.exports = {
           .addFields(
             {
               name: "Today",
-              value: `
-• Today Cases: \`+ ${state.todayCases.toLocaleString()}\`
-• Today Deaths: \`+ ${state.todayDeaths.toLocaleString()}\`
-              `,
-              inline: true,
+              value:
+`\`\`\`css
+• Today Cases:  + ${state.todayCases.toLocaleString()}
+• Today Deaths: + ${state.todayDeaths.toLocaleString()}
+\`\`\``,
             },
             {
               name: "Per One Million",
-              value: `
-• Cases Per Mil: \`${state.casesPerOneMillion.toLocaleString()}\`  
-• Deaths Per Mil: \`${state.deathsPerOneMillion.toLocaleString()}\`
-• Tests Per Mil: \`${state.testsPerOneMillion.toLocaleString()}\`
-              `,
-              inline: true,
+              value:
+`\`\`\`css
+• Cases Per Mil:  ${state.casesPerOneMillion.toLocaleString()}
+• Deaths Per Mil: ${state.deathsPerOneMillion.toLocaleString()}
+• Tests Per Mil:  ${state.testsPerOneMillion.toLocaleString()}
+\`\`\``,
             }
           )
           .setFooter(`Last Updated: ${updatedTime}`),

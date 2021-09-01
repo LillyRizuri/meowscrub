@@ -16,9 +16,9 @@ module.exports = {
 
     for (let i = 0; i < 10; i++) {
       const country = sortedCountries[i];
-      topCountries += `${i + 1}. **${country.country}**:  ${
-        country.cases
-      } Cases - ${country.deaths} Deaths - ${country.recovered} Recovered\n`;
+      topCountries += `${i + 1}. **${
+        country.country
+      }**:  ${country.cases.toLocaleString()} Cases - ${country.deaths.toLocaleString()} Deaths - ${country.recovered.toLocaleString()} Recovered\n`;
     }
 
     const top10Embed = new Discord.MessageEmbed()
