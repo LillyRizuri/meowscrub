@@ -78,15 +78,15 @@ module.exports = async (client) => {
 
   try {
     // register guild-specific slash commands
-    await rest.put(
-      Routes.applicationGuildCommands(client.user.id, process.env.GUILD_TEST),
-      { body: arrayOfCommands }
-    );
+    // await rest.put(
+    //   Routes.applicationGuildCommands(client.user.id, process.env.GUILD_TEST),
+    //   { body: arrayOfCommands }
+    // );
 
     // register slash commands globally (cached for 1 hour)
-    // await rest.put(Routes.applicationCommands(client.user.id), {
-    //   body: arrayOfCommands,
-    // });
+    await rest.put(Routes.applicationCommands(client.user.id), {
+      body: arrayOfCommands,
+    });
 
     console.log("Successfully registered application commands.");
   } catch (err) {
