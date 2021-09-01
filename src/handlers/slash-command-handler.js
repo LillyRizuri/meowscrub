@@ -25,12 +25,33 @@ module.exports = async (client) => {
         const initialFormat = [];
         if (option.data.options.length > 0) {
           option.data.options.forEach((opt) => {
+            if (opt.constructor.name === "SlashCommandSubcommandBuilder")
+              return;
             if (opt.required) initialFormat.push(`<${opt.name}>`);
             else initialFormat.push(`[${opt.name}]`);
           });
         }
-
         option.format = initialFormat.join(" ");
+
+        const initialSubcommands = [];
+        if (option.data.options.length > 0) {
+          option.data.options.forEach((opt) => {
+            if (opt.constructor.name !== "SlashCommandSubcommandBuilder")
+              return;
+              const options = opt.options;
+              const subCmdFormat = [];
+              if (options.length > 0) {
+                options.forEach((optn) => {
+                  if (optn.required) subCmdFormat.push(`<${optn.name}>`);
+                  else subCmdFormat.push(`[${optn.name}]`);
+                });
+              }
+              initialSubcommands.push(`${opt.name} ${subCmdFormat.join(" ")}`);
+          });
+        }
+
+        option.subCommands = initialSubcommands;
+
         arrayOfCommands.push(option.data.toJSON());
         client.slashCommands.set(option.data.name, option);
         commandBase(client, option);
@@ -57,15 +78,15 @@ module.exports = async (client) => {
 
   try {
     // register guild-specific slash commands
-    // await rest.put(
-    //   Routes.applicationGuildCommands(client.user.id, process.env.GUILD_TEST),
-    //   { body: arrayOfCommands }
-    // );
+    await rest.put(
+      Routes.applicationGuildCommands(client.user.id, process.env.GUILD_TEST),
+      { body: arrayOfCommands }
+    );
 
     // register slash commands globally (cached for 1 hour)
-    await rest.put(Routes.applicationCommands(client.user.id), {
-      body: arrayOfCommands,
-    });
+    // await rest.put(Routes.applicationCommands(client.user.id), {
+    //   body: arrayOfCommands,
+    // });
 
     console.log("Successfully registered application commands.");
   } catch (err) {

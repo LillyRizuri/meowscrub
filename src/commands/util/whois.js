@@ -1,7 +1,7 @@
 const Discord = require("discord.js");
 const moment = require("moment");
 
-const perms = require("../../assets/json/mod-permissions.json");
+const modPerms = require("../../assets/json/mod-permissions.json");
 const emoji = require("../../assets/json/tick-emoji.json");
 const { embedcolor } = require("../../assets/json/colors.json");
 
@@ -122,7 +122,7 @@ module.exports = {
 
     const permsArray = [];
 
-    perms.forEach((perm) => {
+    modPerms.forEach((perm) => {
       if (message.channel.permissionsFor(target.id).has(perm))
         permsArray.push(perm.split("_").join(" ").toProperCase());
     });

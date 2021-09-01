@@ -45,6 +45,14 @@ module.exports = {
           .setFooter("<required> | [optional]")
           .setTimestamp();
 
+        if (command.subCommands.length > 0) {
+          const subCommands = [];
+          for (const subCommand of command.subCommands) {
+            subCommands.push(`⠀• ${subCommand}`);
+          }
+          helpEmbed.addField("Subcommand(s)", subCommands.join("\n"));
+        }
+
         if (command.details)
           helpEmbed.addField("Details", `⠀• ${command.details.trim()}`);
 

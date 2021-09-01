@@ -23,6 +23,7 @@ const allCommands = {};
 module.exports = async (client, commandOptions) => {
   let {
     data,
+    subCommands = [],
     memberName = "", // don't use in command files
     group = "",
     description = "", // don't use in command files
@@ -42,12 +43,31 @@ module.exports = async (client, commandOptions) => {
   const initialFormat = [];
   if (data.options.length > 0) {
     data.options.forEach((option) => {
+      if (option.constructor.name === "SlashCommandSubcommandBuilder") return;
       if (option.required) initialFormat.push(`<${option.name}>`);
       else initialFormat.push(`[${option.name}]`);
     });
   }
 
   format = initialFormat.join(" ");
+
+  const initialSubcommands = [];
+  if (data.options.length > 0) {
+    data.options.forEach((option) => {
+      if (option.constructor.name !== "SlashCommandSubcommandBuilder") return;
+      const options = option.options;
+      const subCmdFormat = [];
+      if (options.length > 0) {
+        options.forEach((opt) => {
+          if (opt.required) subCmdFormat.push(`<${opt.name}>`);
+          else subCmdFormat.push(`[${opt.name}]`);
+        });
+      }
+      initialSubcommands.push(`${option.name} ${subCmdFormat.join(" ")}`);
+    });
+  }
+
+  subCommands = initialSubcommands;
 
   if (typeof examples === "string") examples = [examples];
 
@@ -91,6 +111,7 @@ module.exports = async (client, commandOptions) => {
 
   allCommands[memberName] = {
     data,
+    subCommands,
     memberName,
     group,
     description,

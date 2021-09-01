@@ -8,8 +8,7 @@ module.exports = {
     const pingMessage = await message.reply("Ping...");
     return pingMessage.edit(
       `🏓 Pong! The message round-trip took ${
-        (pingMessage.editedTimestamp || pingMessage.createdTimestamp) -
-        (message.editedTimestamp || message.createdTimestamp)
+        pingMessage.createdTimestamp - message.createdTimestamp
       }ms. ${
         client.ws.ping
           ? `The API latency time is around ${Math.round(client.ws.ping)}ms.`

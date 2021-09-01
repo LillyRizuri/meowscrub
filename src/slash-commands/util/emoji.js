@@ -1,24 +1,24 @@
 const Discord = require("discord.js");
+const { SlashCommandBuilder } = require("@discordjs/builders");
 const { parse } = require("twemoji-parser");
 
 const emoji = require("../../assets/json/tick-emoji.json");
 
 module.exports = {
-  aliases: ["emoji", "steal-emoji", "e"],
-  memberName: "emoji",
+  data: new SlashCommandBuilder()
+    .setName("emoji")
+    .setDescription("Extract your specified custom emoji from a server.")
+    .addStringOption((option) =>
+      option
+        .setName("emoji-name")
+        .setDescription("The specified emoji")
+        .setRequired(true)
+    ),
   group: "util",
-  description: "Extract your specified custom emoji from a server.",
-  format: "<emojiName>",
   examples: ["emoji :what:"],
   clientPermissions: ["ATTACH_FILES"],
-  cooldown: 5,
-  singleArgs: true,
-  callback: async (client, message, args) => {
-    if (!args)
-      return message.reply(
-        emoji.missingEmoji + " Specify one emoji in order to advance."
-      );
-
+  callback: async (client, interaction) => {
+    const args = interaction.options._hoistedOptions[0].value;
     let attachment;
 
     const parsedEmoji = Discord.Util.parseEmoji(args);
@@ -32,13 +32,17 @@ module.exports = {
     } else {
       const parsed = parse(args, { assetType: "png" });
       if (!parsed[0])
-        return message.reply(
-          emoji.denyEmoji + " Invalid emoji found. Try again."
-        );
+        return interaction.reply({
+          content: emoji.denyEmoji + " Invalid emoji found. Try again.",
+          ephemeral: true,
+        });
 
       attachment = new Discord.MessageAttachment(parsed[0].url);
     }
 
-    message.channel.send({ content: `Extracted the emoji! \`${args}\``, files: [attachment] });
+    interaction.reply({
+      content: `Extracted the emoji! \`${args}\``,
+      files: [attachment],
+    });
   },
 };

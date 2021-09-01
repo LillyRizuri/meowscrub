@@ -8,7 +8,7 @@ module.exports = {
   aliases: ["permissions", "perms", "checkperms"],
   memberName: "permissions",
   group: "util",
-  description: "Shows your, or a specified user's permissions",
+  description: "Shows your, or a specified user's permissions.",
   details:
     "This command checks permissions in the channel where the command was last ran. Leave the argument blank to display your permissions.",
   format: "[@user | userID]",
