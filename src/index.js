@@ -20,7 +20,8 @@ const client = new Discord.Client({
     repliedUser: true,
   },
   partials: ["USER", "CHANNEL", "GUILD_MEMBER", "MESSAGE", "REACTION"],
-  intents: 32767,
+  intents: ["GUILDS", "GUILD_MEMBERS", "GUILD_MESSAGES", "DIRECT_MESSAGES", "GUILD_VOICE_STATES"],
+  // intents: 32767,
 });
 
 // Connecting to MongoDB
