@@ -159,7 +159,7 @@ module.exports.listen = (client) => {
     const userMissingPerms = [];
     const clientMissingPerms = [];
 
-    if (interaction.member.guild) {
+    if (interaction.guild) {
       // check if the message author doesn't have the required permissions
       const channel = interaction.guild.channels.cache.get(
         interaction.channelId
