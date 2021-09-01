@@ -20,6 +20,25 @@ module.exports.findCommands = (searchString = String) => {
   return matchedCommands;
 };
 
+module.exports.findSlashCommands = (searchString = String) => {
+  const lcSearch = searchString.toLowerCase();
+  const matchedCommands = Array.from(
+    client.slashCommands
+      .filter((cmd) => {
+        return cmd.data.name.includes(lcSearch);
+      })
+      .values()
+  );
+
+  for (const command of matchedCommands) {
+    if (command.data.name === lcSearch) {
+      return [command];
+    }
+  }
+
+  return matchedCommands;
+};
+
 module.exports.endsWithAny = (suffixes = Array, string = String) => {
   // suffixes is an array
   return suffixes.some(function (suffix) {
@@ -53,8 +72,6 @@ module.exports.shuffleArray = (array = []) => {
     t = array[m];
     array[m] = array[i];
     array[i] = t;
-
-    console.log(array);
   }
 
   return array;

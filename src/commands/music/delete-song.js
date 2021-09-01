@@ -13,14 +13,14 @@ module.exports = {
   singleArgs: true,
   guildOnly: true,
   callback: async (client, message, args) => {
-    const queue = await client.distube.getQueue(message);
     const musicNumber = Number(args);
+    const queue = await client.distube.getQueue(message);
     const voiceChannel = message.member.voice.channel;
 
     if (!voiceChannel)
       return message.reply(
         emoji.missingEmoji +
-          " Go to the same VC that I'm blasting music out to do that action."
+          " Go to the same VC that I'm blasting music to do that action."
       );
 
     if (!queue)
@@ -52,10 +52,12 @@ module.exports = {
     try {
       try {
         await message.channel.send(
-          `
-  <:scrubgreen:797476323316465676> Removed this song which matches this music queue's ID:
-  \`${musicNumber}. ${queue.songs[musicNumber].name} - ${queue.songs[musicNumber].formattedDuration}\`
-  \`Music requested by ${queue.songs[musicNumber].user.tag}\`
+          emoji.successEmoji +
+            ` Removed this song which matches this music queue's ID:
+\`\`\`
+${musicNumber}. ${queue.songs[musicNumber].name} - ${queue.songs[musicNumber].formattedDuration}
+Music requested by ${queue.songs[musicNumber].user.tag}
+\`\`\`
               `
         );
       } finally {
@@ -63,7 +65,8 @@ module.exports = {
       }
     } catch (err) {
       message.reply(
-        "<:scrubred:797476323169533963> That ID doesn't match with any songs found in the queue."
+        emoji.denyEmoji +
+          " That ID doesn't match with any songs found in the queue."
       );
     }
   },

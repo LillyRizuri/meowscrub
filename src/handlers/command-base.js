@@ -238,7 +238,7 @@ module.exports.listen = (client) => {
 
       if (blacklistedRes)
         return message.reply(
-          "You are blacklisted from the bot. The only way for you to use my functionality again is to appeal."
+          "You are blacklisted from accessing my stuff. The only way for you to use my functionality again is to appeal."
         );
 
       if (message.guild) {

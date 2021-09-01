@@ -1,4 +1,5 @@
 const Discord = require("discord.js");
+const { SlashCommandBuilder } = require("@discordjs/builders");
 const { getSong, searchSong } = require("genius-lyrics-api");
 
 const util = require("../../util/util");
@@ -6,23 +7,32 @@ const util = require("../../util/util");
 const emoji = require("../../assets/json/tick-emoji.json");
 
 module.exports = {
-  aliases: ["lyrics", "lyric", "ly"],
-  memberName: "lyrics",
+  data: new SlashCommandBuilder()
+    .setName("lyrics")
+    .setDescription("Search for song lyrics using a song's name.")
+    .addStringOption((option) =>
+      option
+        .setName("search-string")
+        .setDescription("Input to search for song lyrics")
+    ),
   group: "music",
-  description: "Search for song lyrics using a song's name.",
-  format: "<searchString>",
   examples: ["lyrics here comes the sun"],
-  clientPermissions: ["EMBED_LINKS"],
-  cooldown: 5,
-  singleArgs: true,
-  callback: async (client, message, args) => {
-    let searchString = args ? args : "";
-    const queue = await client.distube.getQueue(message);
+  callback: async (client, interaction) => {
+    let searchString = interaction.options._hoistedOptions[0]
+      ? interaction.options._hoistedOptions[0].value
+      : "";
+
+    const queue = await client.distube.getQueue(interaction);
+
     if (!searchString && queue) {
       searchString = queue.songs[0].name;
     } else if (!searchString && !queue) {
-      return message.reply(emoji.missingEmoji + " The search query is blank.");
+      return interaction.reply({
+        content: emoji.missingEmoji + " The search query is blank.",
+        ephemeral: true,
+      });
     }
+
     const options = {
       apiKey: process.env.GENIUS,
       title: searchString,
@@ -30,7 +40,7 @@ module.exports = {
       optimizeQuery: false,
     };
 
-    message.channel.send(
+    interaction.reply(
       `🔍 **Searching for:** \`${searchString}\`\nPlease be patient, this will take a while...`
     );
 
@@ -62,9 +72,13 @@ module.exports = {
         });
       });
 
-      message.channel.send({ embeds: [lyricsEmbed] });
+      interaction.channel.send({ embeds: [lyricsEmbed] });
     } catch (err) {
-      message.reply(emoji.denyEmoji + ` No results for: **${searchString}**.`);
+      interaction.channel.send(
+        `${interaction.user.toString()} ` +
+          emoji.denyEmoji +
+          ` No results for: **${searchString}**.`
+      );
     }
   },
 };

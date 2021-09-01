@@ -11,6 +11,7 @@ To remove one filter that's applied to the queue, type the audio filter that you
 All effects can be found here: https://distube.js.org/#/docs/DisTube/beta/typedef/defaultFilters`,
   // eslint-disable-next-line quotes
   format: '[filterName | "off"]',
+  examples: ["filter vaporwave"],
   cooldown: 5,
   singleArgs: true,
   guildOnly: true,
@@ -21,7 +22,7 @@ All effects can be found here: https://distube.js.org/#/docs/DisTube/beta/typede
     if (!voiceChannel)
       return message.reply(
         emoji.missingEmoji +
-          " Go to the same VC that I'm blasting music out to configure filters."
+          " Go to the same VC that I'm blasting music to configure filters."
       );
 
     if (!queue)
@@ -36,43 +37,43 @@ All effects can be found here: https://distube.js.org/#/docs/DisTube/beta/typede
           " You need to be in the same VC with me in order to continue."
       );
 
-    if (!args && queue.filters.length >= 1)
+    if (!args && queue.filters.length > 0)
       return message.reply(
         emoji.successEmoji +
           ` Current audio filters: **${queue.filters.join(", ")}**`
       );
-    else if (!args && queue.filters.length <= 1)
+    else if (!args && queue.filters.length < 1)
       return message.reply(
         emoji.missingEmoji +
           " There's no audio filter set in this server's queue.\nPlease set one by referring to this site: <https://distube.js.org/#/docs/DisTube/beta/typedef/defaultFilters>"
       );
 
-    if (args.toLowerCase() === "off" && queue.filters.length >= 1) {
+    if (args.toLowerCase() === "off" && queue.filters.length > 0) {
       await client.distube.setFilter(message, queue.filters);
       return message.channel.send(
         emoji.successEmoji + " **Successfully removed all audio filters.**"
       );
-    }
+    } else if (args.toLowerCase() === "off" && queue.filters.length < 1)
+      return message.reply(
+        emoji.denyEmoji +
+          " There's no active audio filters. What are you doing?"
+      );
 
-    let placeholderText = "";
-    queue.filters.forEach(async (filter) => {
+    for (const filter of queue.filters) {
       if (args.toLowerCase() === filter) {
-        placeholderText = "placeholder";
         await client.distube.setFilter(message, filter);
         return message.channel.send(
           emoji.successEmoji +
             ` Successfully removed this audio filter: **${filter}**`
         );
       }
-    });
-
-    if (placeholderText) return;
+    }
 
     try {
       await client.distube.setFilter(message, args);
       await message.channel.send(
         emoji.successEmoji +
-          ` Successfully set the audio filter to **${args.toLowerCase()}**.`
+          ` Successfully added an audio filter: **${args.toLowerCase()}**.`
       );
     } catch (err) {
       message.reply(

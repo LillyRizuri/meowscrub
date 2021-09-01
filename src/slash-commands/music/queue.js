@@ -1,22 +1,26 @@
 const Discord = require("discord.js");
+const { SlashCommandBuilder } = require("@discordjs/builders");
 const { pagination } = require("reconlx");
 
 const emoji = require("../../assets/json/tick-emoji.json");
 
 module.exports = {
-  aliases: ["queue", "q"],
-  memberName: "queue",
+  data: new SlashCommandBuilder()
+    .setName("queue")
+    .setDescription("Display the server's music queue."),
   group: "music",
-  description: "Display the server's music queue.",
   clientPermissions: ["EMBED_LINKS"],
-  cooldown: 5,
   guildOnly: true,
-  callback: async (client, message) => {
-    const queue = await client.distube.getQueue(message);
+  callback: async (client, interaction) => {
+    const queue = await client.distube.getQueue(interaction);
 
-    if (!queue) return message.reply(emoji.missingEmoji + " There's no queue.");
+    if (!queue)
+      return interaction.reply({
+        content: emoji.missingEmoji + " There's no queue.",
+        ephemeral: true,
+      });
 
-    message.channel.send("🔍 **Fetching all data...**");
+    interaction.reply("🔍 **Fetching all data...**");
 
     const loopSetting = queue.repeatMode
       .toString()
@@ -87,8 +91,8 @@ module.exports = {
 
     pagination({
       embeds: embeds,
-      author: message.author,
-      channel: message.channel,
+      author: interaction.user,
+      channel: interaction.channel,
       fastSkip: true,
       time: 60000,
       button: [

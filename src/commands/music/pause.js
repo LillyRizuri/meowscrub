@@ -4,7 +4,8 @@ module.exports = {
   aliases: ["pause", "stop", "stahp"],
   memberName: "pause",
   group: "music",
-  description: "Pause the music playback.",
+  description: "Pause/Resume the music playback.",
+  details: "Running the command while the player is paused will resume it.",
   cooldown: 5,
   guildOnly: true,
   callback: async (client, message) => {

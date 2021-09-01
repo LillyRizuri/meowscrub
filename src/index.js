@@ -77,6 +77,7 @@ require("./handlers/event-handler")(client);
 
 client.on("ready", async () => {
   await require("./handlers/command-handler")(client);
+  await require("./handlers/slash-command-handler")(client);
 
   console.log(
     "Initialized frockles (meowscrub) successfully. Give it a warm welcome."

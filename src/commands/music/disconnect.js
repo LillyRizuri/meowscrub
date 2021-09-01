@@ -1,7 +1,7 @@
 const emoji = require("../../assets/json/tick-emoji.json");
 
 module.exports = {
-  aliases: ["leave", "dis", "disconnect", "fuckoff"],
+  aliases: ["disconnect", "dis", "leave", "fuckoff"],
   memberName: "leave",
   group: "music",
   description: "Stop the music playback and leave the voice channel.",
@@ -28,7 +28,12 @@ module.exports = {
           " You need to be in the same VC with me in order to continue."
       );
 
-    if (client.playSongLog) client.playSongLog.delete();
+    if (client.playSongLog)
+      try {
+        await client.playSongLog.delete();
+      // eslint-disable-next-line no-empty
+      } catch (err) {}
+
     await client.distube.stop(message);
     await message.channel.send(
       emoji.successEmoji + " **Stopped the track, and cleaned the queue.**"

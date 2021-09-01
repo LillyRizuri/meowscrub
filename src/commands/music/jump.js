@@ -13,14 +13,14 @@ module.exports = {
   singleArgs: true,
   guildOnly: true,
   callback: async (client, message, args) => {
-    const queue = await client.distube.getQueue(message);
     const musicNumber = Number(args);
+    const queue = await client.distube.getQueue(message);
     const voiceChannel = message.member.voice.channel;
 
     if (!voiceChannel)
       return message.reply(
         emoji.missingEmoji +
-          " Go to the same VC that I'm blasting music out to jump through music.."
+          " Go to the same VC that I'm blasting music out to jump through music."
       );
 
     if (!queue)
@@ -50,8 +50,8 @@ module.exports = {
       );
 
     try {
-      client.distube.jump(message, parseInt(musicNumber));
-      message.channel.send(
+      await client.distube.jump(message, parseInt(musicNumber));
+      await message.channel.send(
         `⏩ Jumped to a music with the song number: **${musicNumber}**.`
       );
     } catch (err) {

@@ -25,7 +25,7 @@ module.exports = {
 
     if (!queue)
       return message.reply(
-        emoji.missingEmoji + "A queue is required to do that action."
+        emoji.missingEmoji + " A queue is required to do that action."
       );
 
     if (message.guild.me.voice.channelId !== message.member.voice.channelId)
@@ -36,7 +36,7 @@ module.exports = {
 
     if (!seekValue)
       return message.reply(
-        "<:scrubnull:797476323533783050> There's no video timestamp provided."
+        emoji.missingEmoji + " There's no video timestamp provided."
       );
 
     let seconds = 0;

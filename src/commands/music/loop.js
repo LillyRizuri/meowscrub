@@ -1,20 +1,20 @@
 const emoji = require("../../assets/json/tick-emoji.json");
 
 module.exports = {
-  aliases: ["repeat", "loop"],
-  memberName: "repeat",
+  aliases: ["loop", "repeat"],
+  memberName: "loop",
   group: "music",
   description: "Repeat a single music or a queue.",
   details:
-    "Running the command with no arguments and the command output will display the current music repeat setting.",
+    "Running the command with no arguments and the command output will display the current music repeat config.",
   format: "[ song | queue | off ]",
   examples: ["loop song", "loop queue", "loop off"],
   cooldown: 5,
   singleArgs: true,
   guildOnly: true,
   callback: async (client, message, args) => {
-    const queue = await client.distube.getQueue(message);
     let mode = null;
+    const queue = await client.distube.getQueue(message);
     const voiceChannel = message.member.voice.channel;
 
     if (!voiceChannel)
@@ -57,7 +57,7 @@ module.exports = {
         break;
       default:
         return message.reply(
-          "<:scrubred:797476323169533963> THAT is not a valid value.\nEither it's `queue`, `song`, or turn `off`."
+          emoji.denyEmoji + " THAT is not a valid value.\nEither it's `queue`, `song`, or turn `off`."
         );
     }
 

@@ -2,10 +2,7 @@ const Discord = require("discord.js");
 
 const util = require("../../util/util");
 
-const {
-  denyEmoji,
-  successEmoji,
-} = require("../../assets/json/tick-emoji.json");
+const { denyEmoji } = require("../../assets/json/tick-emoji.json");
 
 module.exports = {
   aliases: ["help", "commands"],
@@ -29,7 +26,7 @@ module.exports = {
 
     if (args) {
       if (commands.length === 1) {
-        const command = commands[0];
+        const [command] = commands;
         const registryCommand = groups.get(command.group);
         const cmdFormat = command.format ? ` ${command.format}` : "";
         const aliases = [...command.aliases];
@@ -69,14 +66,21 @@ ${command.guildOnly ? " [Usable only in servers]" : ""} ${
           helpEmbed.addField("Examples", examples.join("\n"));
         }
 
-        if (command.clientPermissions && command.clientPermissions.length !== 0) {
+        if (
+          command.clientPermissions &&
+          command.clientPermissions.length !== 0
+        ) {
           const botPermsArray = [];
           for (const clientPermission of command.clientPermissions) {
             botPermsArray.push(
               clientPermission.split("_").join(" ").toProperCase()
             );
           }
-          helpEmbed.addField("Bot Permission(s)", `⠀• ${botPermsArray.join(", ")}`, true);
+          helpEmbed.addField(
+            "Bot Permission(s)",
+            `⠀• ${botPermsArray.join(", ")}`,
+            true
+          );
         }
 
         if (command.userPermissions && command.userPermissions.length !== 0) {
@@ -86,17 +90,14 @@ ${command.guildOnly ? " [Usable only in servers]" : ""} ${
               userPermission.split("_").join(" ").toProperCase()
             );
           }
-          helpEmbed.addField("User Permission(s)", `⠀• ${userPermsArray.join(", ")}`, true);
-        }
-
-        try {
-          await message.channel.send({ embeds: [helpEmbed] });
-        } catch (err) {
-          await message.reply(
-            denyEmoji +
-              " Unable to send you the help DM. You probably have DMs disabled."
+          helpEmbed.addField(
+            "User Permission(s)",
+            `⠀• ${userPermsArray.join(", ")}`,
+            true
           );
         }
+
+        await message.channel.send({ embeds: [helpEmbed] });
       } else if (commands.length > 15) {
         return message.reply(
           denyEmoji + " Multiple commands found. Please be more specific."
@@ -177,13 +178,10 @@ __**Select available command categories in ${message.guild || "this DM"}.**__`
       ];
 
       try {
-        const initialMessage = await message.author.send({
+        const initialMessage = await message.channel.send({
           embeds: [embed],
           components: components(false),
         });
-
-        if (message.guild)
-          message.reply(successEmoji + " Sent you a DM with information.");
 
         const filter = (interaction) =>
           interaction.user.id === message.author.id;

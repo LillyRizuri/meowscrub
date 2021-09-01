@@ -40,12 +40,12 @@ module.exports = {
     const volume = Number(args);
     if (isNaN(volume) || !Number.isInteger(volume))
       return message.reply(
-        "<:scrubred:797476323169533963> Percentage not valid. Try again."
+        emoji.denyEmoji + " Percentage not valid. Try again."
       );
 
     if (volume < 1 || volume > 200)
       return message.reply(
-        "<:scrubred:797476323169533963> The percentage you provided must be in-between 1 - 200%. No higher than that."
+        emoji.denyEmoji + " The percentage you provided must be in-between 1 - 200%. No higher than that."
       );
 
     await client.distube.setVolume(message, volume);
