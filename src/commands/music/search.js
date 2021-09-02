@@ -75,7 +75,6 @@ module.exports = {
             state ? "Selection unavailable." : "Awaiting for music selection..."
           )
           .setMinValues(1)
-          .setMaxValues(10)
           .setDisabled(state)
           .addOptions(
             results.map((song, id) => {
@@ -108,7 +107,7 @@ module.exports = {
 
     const initialMessage = await message.channel.send({
       content:
-        "Please choose single, or multiple songs below. (Maximum of 10 songs)",
+        "Please choose single, or multiple songs below.",
       components: [component1(false), component2(false)],
     });
 
