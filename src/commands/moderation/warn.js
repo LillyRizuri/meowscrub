@@ -131,7 +131,7 @@ module.exports = {
             }
           )
           .setFooter("Hmmm...")
-          .setTinmestamp();
+          .setTimestamp();
         await member.send({ embeds: [dmReasonEmbed] }).catch(() => {
           message.channel.send(
             "Can't send the reason to the target. Maybe they have their DM disabled."
