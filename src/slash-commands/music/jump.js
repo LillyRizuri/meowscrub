@@ -18,7 +18,7 @@ module.exports = {
   examples: ["jump 3"],
   guildOnly: true,
   callback: async (client, interaction) => {
-    const musicNumber = interaction.options._hoistedOptions[0].value;
+    const musicNumber = interaction.options.getInteger("music-id");
     const queue = await client.distube.getQueue(interaction);
     const voiceChannel = interaction.member.voice.channel;
 

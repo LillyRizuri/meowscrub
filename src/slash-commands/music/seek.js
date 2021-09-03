@@ -20,7 +20,7 @@ module.exports = {
   examples: ["seek 26", "seek 10:40", "seek 01:25:40"],
   guildOnly: true,
   callback: async (client, interaction) => {
-    const seekValue = interaction.options._hoistedOptions[0].value;
+    const seekValue = interaction.options.getString("timestamp");
     const actualSeekValue = seekValue.split(":");
     const queue = await client.distube.getQueue(interaction);
     const voiceChannel = interaction.member.voice.channel;

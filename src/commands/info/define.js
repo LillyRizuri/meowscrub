@@ -4,8 +4,8 @@ const lexico = require("lexico-dictionary");
 const emoji = require("../../assets/json/tick-emoji.json");
 
 module.exports = {
-  aliases: ["dictionary", "define", "df", "d"],
-  memberName: "dictionary",
+  aliases: ["define", "dictionary", "df", "d"],
+  memberName: "define",
   group: "info",
   description: "Search for an English word's definition using Lexico.",
   format: "<searchString>",

@@ -21,7 +21,7 @@ module.exports = {
   clientPermissions: ["EMBED_LINKS"],
   guildOnly: true,
   callback: async (client, interaction) => {
-    const music = interaction.options._hoistedOptions[0].value;
+    const music = interaction.options.getString("search-string");
     const queue = await client.distube.getQueue(interaction);
     const voiceChannel = interaction.member.voice.channel;
 

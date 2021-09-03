@@ -1,30 +1,31 @@
 const Discord = require("discord.js");
+const { SlashCommandBuilder } = require("@discordjs/builders");
 const weather = require("weather-js");
 
 const emoji = require("../../assets/json/tick-emoji.json");
 
 module.exports = {
-  aliases: ["weather"],
+  data: new SlashCommandBuilder()
+    .setName("weather")
+    .setDescription("Shows weather reports for a specific location.")
+    .addStringOption((option) =>
+      option
+        .setName("search-string")
+        .setDescription("The specified location")
+        .setRequired(true)
+    ),
   group: "info",
-  memberName: "weather",
-  description: "Shows weather reports for a specific location.",
-  format: "<location>",
   examples: ["weather hanoi"],
   clientPermissions: ["EMBED_LINKS"],
-  singleArgs: true,
-  cooldown: 5,
-  callback: async (client, message, args) => {
-    if (!args)
-      return message.reply(
-        emoji.missingEmoji + " Specify a location in order to continue."
-      );
-
-    message.channel.send("Attempting to retrieve weather data...");
+  callback: async (client, interaction) => {
+    const args = interaction.options.getString("search-string");
+    console.log(args);
     weather.find({ search: args, degreeType: "C" }, async (error, result) => {
       if (typeof result === "undefined" || result.length === 0)
-        return message.reply(
-          emoji.denyEmoji + " That is NOT a location. What's that."
-        );
+        return interaction.reply({
+          content: emoji.denyEmoji + " That is NOT a location. What's that.",
+          ephemeral: true,
+        });
 
       const current = result[0].current;
       const location = result[0].location;
@@ -70,7 +71,7 @@ module.exports = {
         )
         .setFooter("weather.service.msn.com")
         .setTimestamp();
-      message.channel.send({ embeds: [weatherInfoEmbed] });
+      interaction.reply({ embeds: [weatherInfoEmbed] });
     });
   },
 };

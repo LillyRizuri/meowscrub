@@ -25,9 +25,7 @@ All effects can be found here: https://distube.js.org/#/docs/DisTube/beta/typede
   guildOnly: true,
   // eslint-disable-next-line no-shadow
   callback: async (client, interaction) => {
-    const chosenFilter = interaction.options._hoistedOptions[0]
-      ? interaction.options._hoistedOptions[0].value
-      : "";
+    const chosenFilter = interaction.options.getString("filter-name");
     const queue = await client.distube.getQueue(interaction);
     const voiceChannel = interaction.member.voice.channel;
 

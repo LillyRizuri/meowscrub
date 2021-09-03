@@ -23,9 +23,7 @@ module.exports = {
   guildOnly: true,
   callback: async (client, interaction) => {
     let mode = null;
-    const args = interaction.options._hoistedOptions[0]
-      ? interaction.options._hoistedOptions[0].value
-      : "";
+    const args = interaction.options.getString("loop-option");
     const queue = await client.distube.getQueue(interaction);
     const voiceChannel = interaction.member.voice.channel;
 

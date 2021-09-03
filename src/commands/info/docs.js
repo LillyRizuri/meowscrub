@@ -13,15 +13,15 @@ module.exports = {
   cooldown: 5,
   singleArgs: true,
   callback: async (client, message, args) => {
-    const uri = `https://djsdocs.sorta.moe/v2/embed?src=stable&q=${encodeURIComponent(
-      args
-    )}`;
-
     if (!args)
       return message.reply(
         emoji.missingEmoji +
           " You must provide a serach query in order to continue."
       );
+
+    const uri = `https://djsdocs.sorta.moe/v2/embed?src=stable&q=${encodeURIComponent(
+      args
+    )}`;
 
     const result = await fetch(uri).then((res) => res.json());
 

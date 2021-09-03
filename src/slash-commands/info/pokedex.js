@@ -1,24 +1,24 @@
 const Discord = require("discord.js");
+const { SlashCommandBuilder } = require("@discordjs/builders");
 const fetch = require("node-fetch");
 
 const emoji = require("../../assets/json/tick-emoji.json");
 
 module.exports = {
-  aliases: ["pokedex", "pokemon", "pkmn"],
-  memberName: "pokedex",
+  data: new SlashCommandBuilder()
+    .setName("pokedex")
+    .setDescription("Search for a Pokémon's information.")
+    .addStringOption((option) =>
+      option
+        .setName("search-string")
+        .setDescription("The specified Pokémon")
+        .setRequired(true)
+    ),
   group: "info",
-  description: "Search for a Pokémon's information.",
-  format: "<searchString>",
   examples: ["pokedex pikachu"],
   clientPermissions: ["EMBED_LINKS"],
-  cooldown: 5,
-  singleArgs: true,
-  callback: async (client, message, args) => {
-    if (!args)
-      return message.reply(
-        emoji.missingEmoji + " Provide a specific Pokémon in order to continue."
-      );
-
+  callback: async (client, interaction) => {
+    const args = interaction.options.getString("search-string");
     try {
       const pkmnData = await fetch(
         `https://some-random-api.ml/pokedex?pokemon=${args.toLowerCase()}`
@@ -68,9 +68,12 @@ module.exports = {
         )
         .setFooter("results provided by some random api")
         .setTimestamp();
-      message.channel.send({ embeds: [embed] });
+      interaction.reply({ embeds: [embed] });
     } catch (err) {
-      message.reply(emoji.denyEmoji + " That's NOT a valid Pokémon name.");
+      interaction.reply({
+        content: emoji.denyEmoji + " That's NOT a valid Pokémon name.",
+        ephemeral: true,
+      });
     }
   },
 };

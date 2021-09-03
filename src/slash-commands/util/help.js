@@ -20,8 +20,8 @@ module.exports = {
     "The command may be part of a command name or a whole command name. If it isn't specified, all available commands will be listed.",
   examples: ["help", "help prefix"],
   callback: async (client, interaction) => {
-    const args = interaction.options._hoistedOptions[0]
-      ? interaction.options._hoistedOptions[0].value.toLowerCase()
+    const args = interaction.options.getString("command-name")
+      ? interaction.options.getString("command-name").toLowerCase()
       : "";
     const groups = client.slashRegistryGroups;
     const commands = util.findSlashCommands(args);

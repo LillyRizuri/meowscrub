@@ -5,9 +5,9 @@ const util = require("../../util/util");
 const emoji = require("../../assets/json/tick-emoji.json");
 
 module.exports = {
-  aliases: ["wikipedia", "wiki", "wikia", "wikip"],
+  aliases: ["wiki", "wikipedia", "wikia", "wikip"],
   group: "info",
-  memberName: "wikipedia",
+  memberName: "wiki",
   description: "Search for a Wikipedia entry.",
   format: "<searchString>",
   examples: ["wikipedia vietnam", "wikipedia phone"],
@@ -21,15 +21,8 @@ module.exports = {
     const input = encodeURIComponent(args);
     const url = `https://en.wikipedia.org/api/rest_v1/page/summary/${input}`;
 
-    let response;
+    const response = await fetch(url).then((res) => res.json());
 
-    try {
-      response = await fetch(url).then((res) => res.json());
-    } catch (err) {
-      message.reply(
-        "An error from the other side has occured. Please try again later."
-      );
-    }
     try {
       const wikiEmbed = new Discord.MessageEmbed()
         .setColor("#FAFAFA")
@@ -53,7 +46,7 @@ module.exports = {
 
       message.channel.send({ embeds: [wikiEmbed] });
     } catch (err) {
-      return message.reply(
+      message.reply(
         emoji.denyEmoji +
           " That search query brings no result. Please try again with another one."
       );

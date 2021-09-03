@@ -9,17 +9,14 @@ module.exports = {
       "Adjust the volume control of the server queue in percentage."
     )
     .addIntegerOption((option) =>
-      option
-        .setName("number")
-        .setDescription("Percentage of the audio volume")
-        .setRequired(true)
+      option.setName("number").setDescription("Percentage of the audio volume")
     ),
   group: "music",
   details: "List the queue to know which one to remove first.",
   examples: ["delete-song 2"],
   guildOnly: true,
   callback: async (client, interaction) => {
-    const args = interaction.options._hoistedOptions[0].value;
+    const args = interaction.options.getInteger("number");
     const queue = await client.distube.getQueue(interaction);
     const voiceChannel = interaction.member.voice.channel;
 
@@ -47,6 +44,12 @@ module.exports = {
           " You need to be in the same VC with me in order to continue.",
         ephemeral: true,
       });
+
+    if (!args)
+      return interaction.reply(
+        emoji.successEmoji +
+          ` Current audio playback volume: **${queue.volume}%**`
+      );
 
     const volume = Number(args);
     if (isNaN(volume) || !Number.isInteger(volume))

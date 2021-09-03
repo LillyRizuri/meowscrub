@@ -18,10 +18,7 @@ module.exports = {
   group: "music",
   examples: ["lyrics here comes the sun"],
   callback: async (client, interaction) => {
-    let searchString = interaction.options._hoistedOptions[0]
-      ? interaction.options._hoistedOptions[0].value
-      : "";
-
+    let searchString = interaction.options.getString("search-string");
     const queue = await client.distube.getQueue(interaction);
 
     if (!searchString && queue) {
@@ -40,10 +37,11 @@ module.exports = {
       optimizeQuery: false,
     };
 
-    interaction.reply(
-      `🔍 **Searching for:** \`${searchString}\`\nPlease be patient, this will take a while...`
-    );
+    // interaction.reply(
+    //   `🔍 **Searching for:** \`${searchString}\`\nPlease be patient, this will take a while...`
+    // );
 
+    interaction.deferReply();
     const song = await getSong(options);
     const searchSongInfo = await searchSong(options);
     try {
@@ -72,12 +70,10 @@ module.exports = {
         });
       });
 
-      interaction.channel.send({ embeds: [lyricsEmbed] });
+      interaction.editReply({ embeds: [lyricsEmbed] });
     } catch (err) {
-      interaction.channel.send(
-        `${interaction.user.toString()} ` +
-          emoji.denyEmoji +
-          ` No results for: **${searchString}**.`
+      interaction.editReply(
+        emoji.denyEmoji + ` No results for: **${searchString}**.`
       );
     }
   },

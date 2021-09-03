@@ -39,11 +39,11 @@ module.exports = {
   details: "Leave the `user` argument blank to fetch your user info.",
   examples: ["user avatar @frockles"],
   callback: async (client, interaction) => {
-    const target = interaction.options._hoistedOptions[0]
-      ? interaction.options._hoistedOptions[0].user
+    const target = interaction.options.getUser("user")
+      ? interaction.options.getUser("user")
       : interaction.user;
 
-    switch (interaction.options._subcommand) {
+    switch (interaction.options.getSubcommand()) {
       case "avatar": {
         const avatar = target.displayAvatarURL({
           format: "png",

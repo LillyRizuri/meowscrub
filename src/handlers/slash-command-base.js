@@ -147,7 +147,7 @@ module.exports.listen = (client) => {
       callback,
     } = command;
 
-    console.log(`Running slash command ${memberName}`);
+    console.log(`Running slash command ${group}:${memberName}`);
 
     const blacklistedRes = await userBlacklistSchema.findOne({
       userId: interaction.user.id,

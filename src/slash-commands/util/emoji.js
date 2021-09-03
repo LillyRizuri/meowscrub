@@ -18,7 +18,7 @@ module.exports = {
   examples: ["emoji :what:"],
   clientPermissions: ["ATTACH_FILES"],
   callback: async (client, interaction) => {
-    const args = interaction.options._hoistedOptions[0].value;
+    const args = interaction.options.getString("emoji-name");
     let attachment;
 
     const parsedEmoji = Discord.Util.parseEmoji(args);
