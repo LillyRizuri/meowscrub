@@ -57,7 +57,7 @@ ${command.guildOnly ? " [Usable only in servers]" : ""} ${
         if (command.details)
           helpEmbed.addField("Details", `⠀• ${command.details.trim()}`);
 
-        if (command.examples) {
+        if (command.examples && command.examples.length > 0) {
           const examples = [];
           for (const example of command.examples) {
             examples.push(`⠀• ${example}`);
@@ -66,10 +66,7 @@ ${command.guildOnly ? " [Usable only in servers]" : ""} ${
           helpEmbed.addField("Examples", examples.join("\n"));
         }
 
-        if (
-          command.clientPermissions &&
-          command.clientPermissions.length !== 0
-        ) {
+        if (command.clientPermissions && command.clientPermissions.length > 0) {
           const botPermsArray = [];
           for (const clientPermission of command.clientPermissions) {
             botPermsArray.push(
@@ -83,7 +80,7 @@ ${command.guildOnly ? " [Usable only in servers]" : ""} ${
           );
         }
 
-        if (command.userPermissions && command.userPermissions.length !== 0) {
+        if (command.userPermissions && command.userPermissions.length > 0) {
           const userPermsArray = [];
           for (const userPermission of command.userPermissions) {
             userPermsArray.push(

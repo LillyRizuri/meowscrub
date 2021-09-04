@@ -45,7 +45,7 @@ module.exports = {
           .setFooter("<required> | [optional]")
           .setTimestamp();
 
-        if (command.subCommands.length > 0) {
+        if (command.subCommands && command.subCommands.length > 0) {
           const subCommands = [];
           for (const subCommand of command.subCommands) {
             subCommands.push(`⠀• ${subCommand}`);
@@ -56,7 +56,7 @@ module.exports = {
         if (command.details)
           helpEmbed.addField("Details", `⠀• ${command.details.trim()}`);
 
-        if (command.examples) {
+        if (command.examples && command.examples.length > 0) {
           const examples = [];
           for (const example of command.examples) {
             examples.push(`⠀• ${example}`);
@@ -65,10 +65,7 @@ module.exports = {
           helpEmbed.addField("Examples", examples.join("\n"));
         }
 
-        if (
-          command.clientPermissions &&
-          command.clientPermissions.length !== 0
-        ) {
+        if (command.clientPermissions && command.clientPermissions.length > 0) {
           const botPermsArray = [];
           for (const clientPermission of command.clientPermissions) {
             botPermsArray.push(
@@ -82,7 +79,7 @@ module.exports = {
           );
         }
 
-        if (command.userPermissions && command.userPermissions.length !== 0) {
+        if (command.userPermissions && command.userPermissions.length > 0) {
           const userPermsArray = [];
           for (const userPermission of command.userPermissions) {
             userPermsArray.push(

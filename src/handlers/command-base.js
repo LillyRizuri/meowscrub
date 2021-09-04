@@ -28,7 +28,7 @@ function validatePerms(permissions) {
 
 const allCommands = {};
 
-module.exports = async (client, commandOptions) => {
+module.exports = (client, commandOptions) => {
   let {
     aliases = [], // [REQUIRED] the command's name and aliases
     memberName = "", // [REQUIRED] the command id

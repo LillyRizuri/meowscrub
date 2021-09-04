@@ -25,13 +25,13 @@ module.exports.findSlashCommands = (searchString = String) => {
   const matchedCommands = Array.from(
     client.slashCommands
       .filter((cmd) => {
-        return cmd.data.name.includes(lcSearch);
+        return cmd.data.name.toLowerCase().includes(lcSearch);
       })
       .values()
   );
 
   for (const command of matchedCommands) {
-    if (command.data.name === lcSearch) {
+    if (command.data.name.toLowerCase() === lcSearch) {
       return [command];
     }
   }

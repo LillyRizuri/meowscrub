@@ -1,5 +1,6 @@
 const Discord = require("discord.js");
 const { SlashCommandBuilder } = require("@discordjs/builders");
+const fetch = require("node-fetch");
 const moment = require("moment");
 
 const modPerms = require("../../assets/json/mod-permissions.json");
@@ -15,6 +16,14 @@ module.exports = {
       command
         .setName("avatar")
         .setDescription("Return your/someone else's avatar.")
+        .addUserOption((option) =>
+          option.setName("user").setDescription("An user")
+        )
+    )
+    .addSubcommand((command) =>
+      command
+        .setName("banner")
+        .setDescription("Return your/someone else's banner.")
         .addUserOption((option) =>
           option.setName("user").setDescription("An user")
         )
@@ -61,6 +70,60 @@ module.exports = {
           );
 
         interaction.reply({ embeds: [avatarEmbed] });
+        break;
+      }
+      case "banner": {
+        await interaction.deferReply();
+        let receive = "";
+        let banner =
+          "https://cdn.discordapp.com/attachments/829722741288337428/834016013678673950/banner_invisible.gif";
+
+        const res = await fetch(
+          `https://discord.com/api/v8/users/${target.id}`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bot ${process.env.TOKEN}`,
+            },
+          }
+        );
+
+        if (res.status !== 404) {
+          const json = await res.json();
+          receive = json["banner"];
+        }
+
+        if (receive) {
+          const res2 = await fetch(
+            `https://cdn.discordapp.com/banners/${target.id}/${receive}.gif`,
+            {
+              method: "GET",
+              headers: {
+                Authorization: `Bot ${process.env.TOKEN}`,
+              },
+            }
+          );
+
+          banner = `https://cdn.discordapp.com/banners/${target.id}/${receive}.gif?size=4096`;
+          if (res2.status === 415)
+            banner = `https://cdn.discordapp.com/banners/${target.id}/${receive}.png?size=4096`;
+        } else
+          return interaction.reply({
+            content:
+              emoji.denyEmoji + " Couldn't find any profile banner set up!",
+            ephemeral: true,
+          });
+
+        const bannerEmbed = new Discord.MessageEmbed()
+          .setColor("RANDOM")
+          .setAuthor(`${target.tag}'s Profile Banner`)
+          .setImage(banner)
+          .setFooter(
+            `Requested by ${interaction.user.tag}`,
+            interaction.user.displayAvatarURL({ dynamic: true })
+          );
+
+        await interaction.editReply({ embeds: [bannerEmbed] });
         break;
       }
       case "permissions": {
@@ -146,7 +209,7 @@ module.exports = {
           .replace("true", "Yes")
           .replace("false", "No");
 
-        if (!interaction.guild.members.resolve(target)) {
+        if (!interaction.guild || !interaction.guild.members.resolve(target)) {
           const infoEmbed = new Discord.MessageEmbed()
             .setColor(embedcolor)
             .setAuthor(`Information for ${target.username}`, avatar)
@@ -183,7 +246,7 @@ module.exports = {
         let userStatus = "";
         let userPresenceState = "";
 
-        if (member.presence) {
+        if (member.presence.activities[0]) {
           userStatus = member.presence.status
             .replace("dnd", "Do Not Disturb")
             .toProperCase();

@@ -12,49 +12,21 @@ module.exports = async (client) => {
   const baseFile = "slash-command-base.js";
   const commandBase = require(`./${baseFile}`);
 
-  function readCommands(dir) {
+  function readSlashCommands(dir) {
     const files = fs.readdirSync(path.join(__dirname, dir));
     for (const file of files) {
       const stat = fs.lstatSync(path.join(__dirname, dir, file));
       if (stat.isDirectory()) {
-        readCommands(path.join(dir, file));
+        readSlashCommands(path.join(dir, file));
       } else {
-        const option = require(path.join(__dirname, dir, file));
-        option.memberName = option.data.name;
-        option.description = option.data.description;
-        const initialFormat = [];
-        if (option.data.options.length > 0) {
-          option.data.options.forEach((opt) => {
-            if (opt.constructor.name === "SlashCommandSubcommandBuilder")
-              return;
-            if (opt.required) initialFormat.push(`<${opt.name}>`);
-            else initialFormat.push(`[${opt.name}]`);
-          });
+        let option = require(path.join(__dirname, dir, file));
+        option = commandBase(client, option);
+        if (dir.split("\\")[2].toLowerCase() === "context") {
+          arrayOfCommands.push(option.data);
+        } else {
+          arrayOfCommands.push(option.data.toJSON());
         }
-        option.format = initialFormat.join(" ");
-
-        const initialSubcommands = [];
-        if (option.data.options.length > 0) {
-          option.data.options.forEach((opt) => {
-            if (opt.constructor.name !== "SlashCommandSubcommandBuilder")
-              return;
-              const options = opt.options;
-              const subCmdFormat = [];
-              if (options.length > 0) {
-                options.forEach((optn) => {
-                  if (optn.required) subCmdFormat.push(`<${optn.name}>`);
-                  else subCmdFormat.push(`[${optn.name}]`);
-                });
-              }
-              initialSubcommands.push(`${opt.name} ${subCmdFormat.join(" ")}`);
-          });
-        }
-
-        option.subCommands = initialSubcommands;
-
-        arrayOfCommands.push(option.data.toJSON());
         client.slashCommands.set(option.data.name, option);
-        commandBase(client, option);
       }
     }
 
@@ -72,26 +44,38 @@ module.exports = async (client) => {
     });
   }
 
-  readCommands("../slash-commands");
+  readSlashCommands("../slash-commands");
 
   const rest = new REST({ version: "9" }).setToken(process.env.TOKEN);
 
-  try {
-    // register guild-specific slash commands
-    // await rest.put(
-    //   Routes.applicationGuildCommands(client.user.id, process.env.GUILD_TEST),
-    //   { body: arrayOfCommands }
-    // );
+  async function registerSlashCommands(globalCommand = false) {
+    try {
+      // for (const command of await client.api.applications(client.user.id).commands.get()) {
+      //   client.api.applications(client.user.id).commands(command.id).delete();
+      // }
 
-    // register slash commands globally (cached for 1 hour)
-    await rest.put(Routes.applicationCommands(client.user.id), {
-      body: arrayOfCommands,
-    });
+      if (!globalCommand) {
+        await rest.put(
+          Routes.applicationGuildCommands(
+            client.user.id,
+            process.env.GUILD_TEST
+          ),
+          { body: arrayOfCommands }
+        );
 
-    console.log("Successfully registered application commands.");
-  } catch (err) {
-    console.log(err);
+        console.log("Successfully registered guild-specific slash commands.");
+      } else if (globalCommand) {
+        await rest.put(Routes.applicationCommands(client.user.id), {
+          body: arrayOfCommands,
+        });
+
+        console.log("Successfully registered global slash commands.");
+      }
+    } catch (err) {
+      console.log(err);
+    }
   }
 
+  await registerSlashCommands(false);
   commandBase.listen(client);
 };

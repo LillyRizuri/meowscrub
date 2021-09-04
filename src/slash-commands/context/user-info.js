@@ -2,35 +2,17 @@ const Discord = require("discord.js");
 const moment = require("moment");
 
 const modPerms = require("../../assets/json/mod-permissions.json");
-const emoji = require("../../assets/json/tick-emoji.json");
 const { embedcolor } = require("../../assets/json/colors.json");
 
 module.exports = {
-  aliases: ["whois", "userinfo"],
-  memberName: "whois",
-  group: "util",
-  description: "Displays an user's information.",
-  details: "Leave the argument blank to display information about you.",
-  format: "[@user | userID]",
-  examples: ["whois @frockles"],
-  clientPermissions: ["EMBED_LINKS"],
-  cooldown: 5,
-  singleArgs: true,
-  callback: async (client, message, args) => {
-    let target;
-    try {
-      if (!args) {
-        target = message.author;
-      } else {
-        target =
-          message.mentions.users.first() || (await client.users.fetch(args));
-      }
-    } catch (err) {
-      return message.reply(
-        emoji.denyEmoji +
-          " What are you trying to do with that invalid user ID?"
-      );
-    }
+  data: {
+    name: "User Info",
+    type: 2,
+  },
+  memberName: "test",
+  group: "context",
+  callback: async (client, interaction) => {
+    const target = interaction.options.getUser("user");
 
     const dateTimeOptions = {
       weekday: "short",
@@ -56,7 +38,7 @@ module.exports = {
       .replace("true", "Yes")
       .replace("false", "No");
 
-    if (!message.guild || !message.guild.members.resolve(target)) {
+    if (!interaction.guild || !interaction.guild.members.resolve(target)) {
       const infoEmbed = new Discord.MessageEmbed()
         .setColor(embedcolor)
         .setAuthor(`Information for ${target.username}`, avatar)
@@ -69,19 +51,19 @@ module.exports = {
 • Username: \`${target.tag}\`
 • Created: \`${createdAt} (${moment(target.createdTimestamp).fromNow()})\`
 • Is Bot: \`${isBot}\`
-`,
+  `,
         })
         .setFooter(
-          `Requested by ${message.author.tag}`,
-          message.author.displayAvatarURL({
+          `Requested by ${interaction.user.tag}`,
+          interaction.user.displayAvatarURL({
             dynamic: true,
           })
         )
         .setTimestamp();
-      return message.channel.send({ embeds: [infoEmbed] });
+      return interaction.reply({ embeds: [infoEmbed] });
     }
 
-    const member = message.guild.members.cache.get(target.id);
+    const member = interaction.guild.members.cache.get(target.id);
 
     const nickname = member.nickname ? `"${member.nickname}"` : "None";
 
@@ -122,7 +104,7 @@ module.exports = {
     const permsArray = [];
 
     modPerms.forEach((perm) => {
-      if (message.channel.permissionsFor(target.id).has(perm))
+      if (interaction.channel.permissionsFor(target.id).has(perm))
         permsArray.push(perm.split("_").join(" ").toProperCase());
     });
 
@@ -149,12 +131,12 @@ module.exports = {
 • Joined: \`${joinedTimestamp} (${moment(member.joinedTimestamp).fromNow()})\`
 • Status: \`${userStatus}\`  
 • Top Activity: \`${userPresence}${userPresenceState}\`
-                    `,
+                  `,
         }
       )
       .setFooter(
-        `Requested by ${message.author.tag}`,
-        message.author.displayAvatarURL({
+        `Requested by ${interaction.user.tag}`,
+        interaction.user.displayAvatarURL({
           dynamic: true,
         })
       )
@@ -162,6 +144,6 @@ module.exports = {
 
     if (permsArray.length > 0)
       infoEmbed.addField("Key Permissions", permsArray.join(", "));
-    message.channel.send({ embeds: [infoEmbed] });
+    interaction.reply({ embeds: [infoEmbed], ephemeral: true });
   },
 };

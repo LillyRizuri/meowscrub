@@ -20,7 +20,7 @@ function validatePerms(permissions) {
 
 const allCommands = {};
 
-module.exports = async (client, commandOptions) => {
+module.exports = (client, commandOptions) => {
   let {
     data,
     subCommands = [],
@@ -41,7 +41,7 @@ module.exports = async (client, commandOptions) => {
   description = data.description;
 
   const initialFormat = [];
-  if (data.options.length > 0) {
+  if (data.options && data.options.length > 0) {
     data.options.forEach((option) => {
       if (option.constructor.name === "SlashCommandSubcommandBuilder") return;
       if (option.required) initialFormat.push(`<${option.name}>`);
@@ -52,7 +52,7 @@ module.exports = async (client, commandOptions) => {
   format = initialFormat.join(" ");
 
   const initialSubcommands = [];
-  if (data.options.length > 0) {
+  if (data.options && data.options.length > 0) {
     data.options.forEach((option) => {
       if (option.constructor.name !== "SlashCommandSubcommandBuilder") return;
       const options = option.options;
@@ -71,12 +71,21 @@ module.exports = async (client, commandOptions) => {
 
   if (typeof examples === "string") examples = [examples];
 
-  if (!description)
-    throw new Error(`The command ${memberName} must have a description.`);
-  if (typeof description !== "string")
-    throw new Error(
-      `The command ${memberName} must have the description as a string.`
-    );
+  if (data.type === 2 || data.type === 3) {
+    let commandType = "";
+    if (data.type === 2) commandType = "User";
+    else if (data.type === 3) commandType === "Message";
+    description = `Interact on the ${commandType} to initiate the command.`;
+  } else {
+    // eslint-disable-next-line no-lonely-if
+    if (!description)
+      throw new Error(`The command ${memberName} must have a description.`);
+
+    if (typeof description !== "string")
+      throw new Error(
+        `The command ${memberName} must have the description as a string.`
+      );
+  }
 
   if (!group)
     throw new Error(`The command ${memberName} must belong in a group.`);
@@ -124,13 +133,17 @@ module.exports = async (client, commandOptions) => {
     ownerOnly,
     callback,
   };
+
+  return allCommands[memberName];
 };
 
 module.exports.listen = (client) => {
   client.on("interactionCreate", async (interaction) => {
-    if (!interaction.isCommand()) return;
+    // eslint-disable-next-line no-empty
+    if (interaction.isCommand() || interaction.isContextMenu()) {
+    } else return;
 
-    const command = allCommands[interaction.commandName.toLowerCase()];
+    const command = allCommands[interaction.commandName];
     if (!command) return;
 
     const {

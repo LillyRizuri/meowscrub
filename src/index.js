@@ -37,6 +37,7 @@ mongoose
 
 client.owner = process.env.OWNERS.split(",");
 client.commandGroups = [
+  ["context", "Context Menu Commands", "<:context_menu:883737356283293726>"],
   ["covid", "Covid-Related Commands", "<:virus:877817262692769813>"],
   ["discord-together", "Discord Together", "🎮"],
   ["economy", "Economy System", "💵"],
