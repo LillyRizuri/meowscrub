@@ -144,6 +144,6 @@ module.exports = {
 
     if (permsArray.length > 0)
       infoEmbed.addField("Key Permissions", permsArray.join(", "));
-    interaction.reply({ embeds: [infoEmbed], ephemeral: true });
+    interaction.reply({ embeds: [infoEmbed] });
   },
 };
