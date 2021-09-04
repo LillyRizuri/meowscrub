@@ -3,7 +3,6 @@ const { SlashCommandBuilder } = require("@discordjs/builders");
 const translate = require("@iamtraction/google-translate");
 
 const languages = require("../../assets/json/languages.json");
-const emoji = require("../../assets/json/tick-emoji.json");
 
 module.exports = {
   data: new SlashCommandBuilder()
