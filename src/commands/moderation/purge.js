@@ -44,7 +44,7 @@ module.exports = {
     await message.delete();
 
     const filterUsed = [];
-    const fetched = await message.channel.messages.fetch();
+    const fetched = await message.channel.messages.fetch({ limit: 100 });
     let deletable = fetched.filter((msg) => !msg.pinned);
 
     if (args[1]) {
@@ -91,7 +91,7 @@ module.exports = {
         );
       }
     } catch (err) {
-      message.reply(
+      message.channel.send(
         emoji.denyEmoji +
           " Message older than 14 days can't be cleaned off due to how Discord API works."
       );
