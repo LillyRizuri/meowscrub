@@ -108,7 +108,7 @@ module.exports = {
           if (res2.status === 415)
             banner = `https://cdn.discordapp.com/banners/${target.id}/${receive}.png?size=4096`;
         } else
-          return interaction.reply({
+          return interaction.editReply({
             content:
               emoji.denyEmoji + " Couldn't find any profile banner set up!",
             ephemeral: true,
