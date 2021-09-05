@@ -21,7 +21,7 @@ module.exports = async (client) => {
       } else {
         let option = require(path.join(__dirname, dir, file));
         option = commandBase(client, option);
-        if (dir.split("\\")[2].toLowerCase() === "context") {
+        if (option.data.type === 2 || option.data.type === 3) {
           arrayOfCommands.push(option.data);
         } else {
           arrayOfCommands.push(option.data.toJSON());
