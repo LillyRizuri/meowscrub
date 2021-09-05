@@ -54,7 +54,7 @@ module.exports = {
   group: "moderation",
   details:
     "Since August 28th 2021, the unique ID is genereated using UUID version 4; so the generated ID has a very low probability in being repeated.",
-  examples: ["warn add @frockles spamming", "warn list @frockles"],
+  examples: ["warn add @frockles spamming", "warn list @frockles", "warn delete 279a5851-71fa-4b85-9b25-6d938af16b02 apologized"],
   clientPermissions: ["EMBED_LINKS"],
   userPermissions: ["BAN_MEMBERS"],
   guildOnly: true,
