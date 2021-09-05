@@ -62,9 +62,9 @@ module.exports = {
         );
     }
 
-    if (target.bot === true)
+    if (target.bot)
       return message.reply(
-        emoji.denyEmoji + " Warning a bot user is useless y'know."
+        emoji.denyEmoji + " Warning a bot user is useless, y'know."
       );
 
     // const warnId = "_" + Math.random().toString(36).substr(2, 9);
@@ -81,10 +81,10 @@ module.exports = {
         emoji.missingEmoji + ` State why do you want to warn ${target.tag}.`
       );
 
-    if (reason.length > 128)
+    if (reason.length > 200)
       return message.reply(
         emoji.denyEmoji +
-          " The reason for warning musn't be more than 128 characters."
+          " The reason for warning musn't be more than 200 characters."
       );
 
     const warning = {
@@ -143,10 +143,8 @@ module.exports = {
     const warnedEmbed = new Discord.MessageEmbed()
       .setColor(green)
       .setDescription(
-        `
-<:scrubgreen:797476323316465676> **${target.tag}** has been warned for this following reason:
-\`${reason}\`
-        `
+        emoji.successEmoji +
+          ` **${target.tag}** has been warned for this following reason\`${reason}\``
       )
       .setFooter(`WarnID: ${warnId}`)
       .setTimestamp();

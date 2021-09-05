@@ -6,24 +6,15 @@ const warnSchema = require("../../models/warn-schema");
 const emoji = require("../../assets/json/tick-emoji.json");
 
 module.exports = {
-  aliases: ["warnings", "warns", "warn-list", "strikes"],
-  memberName: "warnings",
-  group: "moderation",
-  description:
-    "Displays all warnings from a specified user in the current server.",
-  format: "<@user | userID>",
-  examples: ["warnings @frockles"],
+  data: {
+    name: "List Warnings",
+    type: 2,
+  },
+  memberName: "list-warnings",
+  group: "context",
   clientPermissions: ["EMBED_LINKS"],
   userPermissions: ["BAN_MEMBERS"],
-  cooldown: 5,
-  singleArgs: true,
-  guildOnly: true,
-  callback: async (client, message, args) => {
-    if (!args)
-      return message.reply(
-        emoji.missingEmoji + " No specified user for listing strikes."
-      );
-
+  callback: async (client, interaction) => {
     const dateTimeOptions = {
       weekday: "short",
       year: "numeric",
@@ -33,16 +24,9 @@ module.exports = {
       minute: "numeric",
     };
 
-    let target;
-    try {
-      target =
-        message.mentions.users.first() || (await client.users.fetch(args));
-    } catch (err) {
-      console.log(err);
-      return message.reply(emoji.denyEmoji + " THAT'S not a valid user.");
-    }
+    const target = interaction.options.getUser("user");
 
-    const guildId = message.guild.id;
+    const guildId = interaction.guild.id;
     const userTag = target.tag;
     const userAvatar = target.displayAvatarURL({ dynamic: true });
     const userId = target.id;
@@ -73,15 +57,19 @@ module.exports = {
         output += `**${warnId}**\n⠀• Date: \`${formattedTimestamp}\`\n⠀• By: \`${author.tag} (${authorId})\`\n⠀• Reason: \`${reason}\`\n\n`;
       }
     } catch (err) {
-      return message.reply(
-        emoji.denyEmoji + " There's no warnings for that user."
-      );
+      return interaction.reply({
+        content: emoji.denyEmoji + " There's no warnings for that user.",
+        ephemeral: true,
+      });
     }
 
     if (!output)
-      return message.reply(
-        emoji.denyEmoji + " There's no warnings for that user."
-      );
+      return interaction.reply({
+        content: emoji.denyEmoji + " There's no warnings for that user.",
+        ephemeral: true,
+      });
+
+    interaction.reply("Listing warnings for the specified user...");
 
     const splitOutput = Discord.Util.splitMessage(output, {
       maxLength: 1024,
@@ -104,8 +92,8 @@ module.exports = {
 
     pagination({
       embeds: embeds,
-      author: message.author,
-      channel: message.channel,
+      author: interaction.user,
+      channel: interaction.channel,
       fastSkip: true,
       time: 60000,
       button: [

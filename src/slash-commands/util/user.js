@@ -46,7 +46,12 @@ module.exports = {
     ),
   group: "util",
   details: "Leave the `user` argument blank to fetch your user info.",
-  examples: ["user avatar @frockles"],
+  examples: [
+    "user avatar @frockles",
+    "user banner @frockles",
+    "user permissions @frockles",
+    "user info @frockles",
+  ],
   callback: async (client, interaction) => {
     const target = interaction.options.getUser("user")
       ? interaction.options.getUser("user")

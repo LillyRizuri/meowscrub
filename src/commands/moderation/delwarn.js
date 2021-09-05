@@ -39,8 +39,6 @@ module.exports = {
           " The Warn ID you provided isn't a valid ID assigned for anybody."
       );
 
-    console.log(result);
-
     const identifiedWarning = result.warnings.find(
       (warn) => warn.warnId === args[0]
     );
@@ -66,7 +64,6 @@ module.exports = {
     }
 
     const userId = target.id;
-
     const reasonMessage = args.slice(1).join(" ");
 
     if (reasonMessage.length > 200)
@@ -136,7 +133,7 @@ module.exports = {
     const confirmationEmbed = new Discord.MessageEmbed()
       .setColor(green)
       .setDescription(
-        `<:scrubgreen:797476323316465676> Deleted a warn with this ID:\n**\`${warnId}\` for ${target.tag}.**`
+        emoji.successEmoji + ` Deleted a warn with this ID:\n**\`${warnId}\` for ${target.tag}.**`
       )
       .setFooter("is this fine?")
       .setTimestamp();
