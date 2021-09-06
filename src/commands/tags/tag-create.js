@@ -14,10 +14,11 @@ module.exports = {
   ],
   userPermissions: ["ADMINISTRATOR"],
   cooldown: 5,
+  singleArgs: true,
   guildOnly: true,
   callback: async (client, message, args) => {
-    const name = args[0].toLowerCase();
-    const response = args.slice(1).join(" ");
+    const name = args.split(/\s+/)[0].toLowerCase();
+    const response = args.replace(name, "");
 
     if (!name)
       return message.reply(
