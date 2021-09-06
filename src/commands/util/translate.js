@@ -15,20 +15,28 @@ module.exports = {
   examples: ["translate -en xin chào", "translate -vi hello", "translate hola"],
   clientPermissions: ["EMBED_LINKS"],
   cooldown: 5,
+  singleArgs: true,
   callback: async (client, message, args) => {
-    if (!args[0])
-      return message.reply(
-        emoji.missingEmoji + " Please provide some text for me to translate."
-      );
-
     let textToTranslate = "";
     let translateTo = "en";
-    if (args[0].startsWith("-")) {
-      textToTranslate = args.slice(1).join(" ");
-      translateTo = args[0].replace("-", "");
+    if (args.split(/\s+/)[0].startsWith("-")) {
+      textToTranslate = args.replace(args.split(/\s+/)[0], "");
+      translateTo = args.split(/\s+/)[0].replace("-", "");
     } else if (!args[0].startsWith("-")) {
-      textToTranslate = args.slice(0).join(" ");
+      textToTranslate = args;
     }
+
+    if (!textToTranslate)
+      return message.reply(
+        emoji.missingEmoji +
+          " You have to provide some input for me to translate."
+      );
+
+    if (!translateTo)
+      return message.reply(
+        emoji.denyEmoji +
+          " There's no specified language that you want your text to be translated to."
+      );
 
     const output = await translate(textToTranslate, { to: translateTo });
     const embed = new Discord.MessageEmbed()
@@ -42,13 +50,13 @@ module.exports = {
       )
       .addFields(
         {
-          name: "From",
-          value: `\`\`\`\n${textToTranslate}\n\`\`\``,
+          name: "Text",
+          value: textToTranslate,
           inline: true,
         },
         {
-          name: "To",
-          value: `\`\`\`\n${output.text}\n\`\`\``,
+          name: "Translation",
+          value: output.text,
           inline: true,
         }
       )

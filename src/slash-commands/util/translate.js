@@ -44,13 +44,13 @@ module.exports = {
       )
       .addFields(
         {
-          name: "From",
-          value: `\`\`\`\n${textToTranslate}\n\`\`\``,
+          name: "Text",
+          value: textToTranslate,
           inline: true,
         },
         {
-          name: "To",
-          value: `\`\`\`\n${output.text}\n\`\`\``,
+          name: "Translation",
+          value: output.text,
           inline: true,
         }
       )

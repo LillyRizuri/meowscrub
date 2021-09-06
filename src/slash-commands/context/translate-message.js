@@ -2,6 +2,7 @@ const Discord = require("discord.js");
 const translate = require("@iamtraction/google-translate");
 
 const languages = require("../../assets/json/languages.json");
+const emoji = require("../../assets/json/tick-emoji.json");
 
 module.exports = {
   data: {
@@ -13,7 +14,15 @@ module.exports = {
   callback: async (client, interaction) => {
     const textToTranslate = interaction.options.getMessage("message");
 
-    const output = await translate(textToTranslate, { to: "en" });
+    if (!textToTranslate.content)
+      return interaction.reply({
+        content:
+          emoji.denyEmoji +
+          " There's no message content in the chosen message.",
+        ephemeral: true,
+      });
+
+    const output = await translate(textToTranslate.content, { to: "en" });
     const embed = new Discord.MessageEmbed()
       .setColor("RANDOM")
       .setTitle(
@@ -21,13 +30,13 @@ module.exports = {
       )
       .addFields(
         {
-          name: "From",
-          value: `\`\`\`\n${textToTranslate}\n\`\`\``,
+          name: "Text",
+          value: textToTranslate.content,
           inline: true,
         },
         {
-          name: "To",
-          value: `\`\`\`\n${output.text}\n\`\`\``,
+          name: "Translation",
+          value: output.text,
           inline: true,
         }
       )
