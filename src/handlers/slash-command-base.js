@@ -26,7 +26,8 @@ module.exports = (client, commandOptions) => {
     subCommands = [],
     memberName = "", // don't use in command files
     group = "",
-    description = "", // don't use in command files
+    type = "", // don't use in command files
+    description = "", // only use if it's a context menu command
     details = "",
     format = "", // don't use in command files
     examples = [],
@@ -38,7 +39,7 @@ module.exports = (client, commandOptions) => {
   } = commandOptions;
 
   memberName = data.name;
-  description = data.description;
+  if (data.description) description = data.description;
 
   const initialFormat = [];
   if (data.options && data.options.length > 0) {
@@ -71,21 +72,26 @@ module.exports = (client, commandOptions) => {
 
   if (typeof examples === "string") examples = [examples];
 
-  if (data.type === 2 || data.type === 3) {
-    let commandType = "";
-    if (data.type === 2) commandType = "User";
-    else if (data.type === 3) commandType === "Message";
-    description = `Interact on the ${commandType} to initiate the command.`;
-  } else {
-    // eslint-disable-next-line no-lonely-if
-    if (!description)
-      throw new Error(`The command ${memberName} must have a description.`);
-
-    if (typeof description !== "string")
-      throw new Error(
-        `The command ${memberName} must have the description as a string.`
-      );
+  switch (data.type) {
+    default:
+      type = "Slash Command";
+      break;
+    case 2:
+      type = "User Context Menu";
+      break;
+    case 3:
+      type = "Message Context Menu";
+      break;
   }
+
+  // eslint-disable-next-line no-lonely-if
+  if (!description)
+    throw new Error(`The command ${memberName} must have a description.`);
+
+  if (typeof description !== "string")
+    throw new Error(
+      `The command ${memberName} must have the description as a string.`
+    );
 
   if (!group)
     throw new Error(`The command ${memberName} must belong in a group.`);
@@ -123,6 +129,7 @@ module.exports = (client, commandOptions) => {
     subCommands,
     memberName,
     group,
+    type,
     description,
     details,
     format,

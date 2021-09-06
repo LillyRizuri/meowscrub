@@ -10,6 +10,7 @@ module.exports = {
     type: 2,
   },
   memberName: "test",
+  description: "Displays an user's information.",
   group: "context",
   callback: async (client, interaction) => {
     const target = interaction.options.getUser("user");

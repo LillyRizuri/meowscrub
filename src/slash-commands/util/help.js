@@ -41,7 +41,7 @@ module.exports = {
           )
           .setTitle(command.description.trim())
           .setDescription(help)
-          .addField("Format", `⠀• ${command.memberName}${cmdFormat}`)
+          .addField(`${command.type} Format`, `⠀• ${command.memberName}${cmdFormat}`)
           .setFooter("<required> | [optional]")
           .setTimestamp();
 

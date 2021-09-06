@@ -11,6 +11,7 @@ module.exports = {
     type: 2,
   },
   memberName: "list-warnings",
+  description: "Displays all warnings from a specified user in the current server.",
   group: "context",
   clientPermissions: ["EMBED_LINKS"],
   userPermissions: ["BAN_MEMBERS"],

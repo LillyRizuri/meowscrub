@@ -10,6 +10,7 @@ module.exports = {
     type: 3,
   },
   memberName: "translate-message",
+  description: "Translate your provided input to English.",
   group: "context",
   callback: async (client, interaction) => {
     const textToTranslate = interaction.options.getMessage("message");
