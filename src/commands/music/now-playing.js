@@ -1,6 +1,9 @@
 const Discord = require("discord.js");
+const progressbar = require("string-progressbar");
 
 const emoji = require("../../assets/json/tick-emoji.json");
+
+const slider = "\\🔘";
 
 module.exports = {
   aliases: ["now-playing", "np", "song-info"],
@@ -18,16 +21,33 @@ module.exports = {
         emoji.missingEmoji + " No queue found for this server."
       );
 
-    let currentPlayhead = `${queue.formattedCurrentTime}/${queue.songs[0].formattedDuration}`;
+    let currentPlayhead = `${queue.formattedCurrentTime}/${queue.songs[0].formattedDuration}: `;
+    let progressBar = "";
 
-    if (queue.songs[0].isLive) currentPlayhead = "Live";
-    else if (
+    if (queue.songs[0].isLive) {
+      currentPlayhead = " ◉ LIVE: ";
+      progressBar = progressbar.splitBar(10, 10, 20, "▬", slider)[0];
+    } else if (
       queue.filters &&
       ["nightcore", "vaporwave", "reverse"].some((element) =>
         queue.filters.includes(element)
       )
     ) {
-      currentPlayhead = "No accurate playhead due to your filter";
+      currentPlayhead = "Inaccurate playhead due to your filter";
+    } else {
+      progressBar = progressbar.splitBar(
+        queue.songs[0].duration,
+        queue.currentTime,
+        20,
+        "▬",
+        slider
+      )[0];
+    }
+
+    if (progressBar) {
+      const betweenPlayhead = progressBar.split(slider);
+      betweenPlayhead[0] = `[${betweenPlayhead[0]}](${queue.songs[0].url})`;
+      progressBar = betweenPlayhead.join(slider);
     }
 
     const npEmbed = new Discord.MessageEmbed()
@@ -36,8 +56,8 @@ module.exports = {
       .setTitle(queue.songs[0].name)
       .setURL(queue.songs[0].url)
       .setThumbnail(queue.songs[0].thumbnail).setDescription(`
-• **Requested by:** \`${queue.songs[0].user.tag}\`
-• **Current Playhead:** \`${currentPlayhead}\`
+• Music Requested by: **${queue.songs[0].user.tag}**
+**${currentPlayhead}**${progressBar}
             `);
     message.channel.send({ embeds: [npEmbed] });
   },
