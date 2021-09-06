@@ -24,11 +24,11 @@ module.exports = {
       });
 
     let currentPlayhead = `${queue.formattedCurrentTime}/${queue.songs[0].formattedDuration}: `;
-    let progressBar = "";
+    let videoProgressBar = "";
 
     if (queue.songs[0].isLive) {
       currentPlayhead = " ◉ LIVE: ";
-      progressBar = progressbar.splitBar(10, 10, 20, "▬", slider)[0];
+      videoProgressBar = progressbar.splitBar(10, 10, 20, "▬", slider)[0];
     } else if (
       queue.filters &&
       ["nightcore", "vaporwave", "reverse"].some((element) =>
@@ -37,7 +37,7 @@ module.exports = {
     ) {
       currentPlayhead = "Inaccurate playhead due to your filter";
     } else {
-      progressBar = progressbar.splitBar(
+      videoProgressBar = progressbar.splitBar(
         queue.songs[0].duration,
         queue.currentTime,
         20,
@@ -46,10 +46,10 @@ module.exports = {
       )[0];
     }
 
-    if (progressBar) {
-      const betweenPlayhead = progressBar.split(slider);
+    if (videoProgressBar && videoProgressBar.includes(slider)) {
+      const betweenPlayhead = videoProgressBar.split(slider);
       betweenPlayhead[0] = `[${betweenPlayhead[0]}](${queue.songs[0].url})`;
-      progressBar = betweenPlayhead.join(slider);
+      videoProgressBar = betweenPlayhead.join(slider);
     }
 
     const npEmbed = new Discord.MessageEmbed()
@@ -59,7 +59,7 @@ module.exports = {
       .setURL(queue.songs[0].url)
       .setThumbnail(queue.songs[0].thumbnail).setDescription(`
 • Music Requested by: **${queue.songs[0].user.tag}**
-**${currentPlayhead}**${progressBar}
+**${currentPlayhead}**${videoProgressBar}
             `);
     interaction.reply({ embeds: [npEmbed] });
   },
