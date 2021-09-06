@@ -1,4 +1,3 @@
-const Discord = require("discord.js");
 const humanizeDuration = require("humanize-duration");
 const util = require("../util/util");
 const settingsSchema = require("../models/settings-schema");
@@ -10,7 +9,6 @@ const gcCooldowns = new Map();
 const sameUserLog = new Map();
 
 const badge = require("../assets/json/badge-emoji.json");
-const { red } = require("../assets/json/colors.json");
 const referralDomains = require("../assets/json/referral-domains.json");
 const safeDomains = require("../assets/json/safe-domains.json");
 
@@ -98,20 +96,13 @@ module.exports = {
         // if there isn't one, do not advance any further into the code
         if (!gcInfo) {
           await message.delete();
-          const holdUpEmbed = new Discord.MessageEmbed()
-            .setColor(red)
-            .setTitle("Hold Up!")
-            .setDescription(
-              `
+          const msg = await message.reply(`
+**Hold Up!**
 If you receive this messaage while trying to use Global Chat, you probably haven't read through Global Chat's Notice yet.
 Please do so by using the \`${await util.getPrefix(
-                message.guild.id
-              )}globalchat-notice\` command, then you may proceed through the next step provided by the command.
-`
-            )
-            .setFooter(`Please contact ${botOwner.tag} if you're confused.`);
-
-          const msg = await message.reply({ embeds: [holdUpEmbed] });
+            message.guild.id
+          )}globalchat-notice\` command, then you may proceed through the next step provided by the command.
+`);
 
           setTimeout(() => {
             msg.delete();
@@ -349,7 +340,7 @@ _ _\n[ ${badgeDisplayed} **\`${message.author.tag}\` - \`${message.guild.name}\`
                 .send({
                   content: message.content
                     ? `${usernamePart}\n${message.content}`
-                    : `${usernamePart}`,
+                    : `${usernamePart}_ _`,
                   files: [attachment],
                 })
                 .catch((err) => {
