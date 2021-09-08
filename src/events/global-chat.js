@@ -14,6 +14,7 @@ const safeDomains = require("../assets/json/safe-domains.json");
 
 let sameUserOld = "";
 let sameUserLog = "";
+let currentGCChannel = "";
 
 module.exports = {
   name: "messageCreate",
@@ -22,21 +23,28 @@ module.exports = {
     const botOwner = await client.users.fetch(client.owner[0]);
     const requiredMsgForVerification = 100;
     try {
-      const msgGuildRes = await settingsSchema.findOne({
-        guildId: message.guild.id,
-      });
+      if (client.globalChat[message.guild.id]) {
+        currentGCChannel = client.globalChat[message.guild.id];
+      } else if (!client.globalChat[message.guild.id]) {
+        const msgGuildRes = await settingsSchema.findOne({
+          guildId: message.guild.id,
+        });
 
-      if (!msgGuildRes || !msgGuildRes.settings.globalChat) return;
+        if (!msgGuildRes || !msgGuildRes.settings.globalChat) return;
 
-      const thisChannel = message.guild.channels.cache.get(
-        msgGuildRes.settings.globalChat
-      );
+        client.globalChat[message.guild.id] =
+          msgGuildRes.settings.globalChat;
+
+        currentGCChannel = client.globalChat[message.guild.id];
+      }
+
+      const thisChannel = message.guild.channels.cache.get(currentGCChannel);
 
       if (!thisChannel) return;
 
       // check if the message was sent in a global chat channel, and if the target wasn't a bot
       if (
-        message.channel.id === msgGuildRes.settings.globalChat &&
+        message.channel.id === currentGCChannel &&
         !message.author.bot
         // eslint-disable-next-line no-empty
       ) {
@@ -216,16 +224,23 @@ Please do so by using the \`${await util.getPrefix(
 
       // for each guilds that the client was in
       client.guilds.cache.forEach(async (guild) => {
-        // fetch to see if the guild that the client chose have a global chat channel
-        const otherGuildRes = await settingsSchema.findOne({
-          guildId: guild.id,
-        });
+        let otherGCChannel;
+        if (client.globalChat[guild.id]) {
+          otherGCChannel = client.globalChat[guild.id];
+        } else if (!client.globalChat[guild.id]) {
+          // fetch to see if the guild that the client chose have a global chat channel
+          const otherGuildRes = await settingsSchema.findOne({
+            guildId: guild.id,
+          });
 
-        if (!otherGuildRes || !otherGuildRes.settings.globalChat) return;
+          if (!otherGuildRes || !otherGuildRes.settings.globalChat) return;
 
-        const channel = guild.channels.cache.get(
-          otherGuildRes.settings.globalChat
-        );
+          client.globalChat[guild.id] =
+            otherGuildRes.settings.globalChat;
+          otherGCChannel = client.globalChat[guild.id];
+        }
+
+        const channel = guild.channels.cache.get(otherGCChannel);
 
         // if there's none, return
         if (!channel) return;

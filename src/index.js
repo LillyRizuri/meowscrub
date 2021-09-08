@@ -35,6 +35,7 @@ mongoose
     console.log("Successfully connected to your MongoDB Database.");
   });
 
+client.globalChat = {};
 client.owner = process.env.OWNERS.split(",");
 client.commandGroups = [
   ["context", "Context Menu Commands", "<:context_menu:883737356283293726>"],

@@ -6,7 +6,7 @@ const emoji = require("../../assets/json/tick-emoji.json");
 const color = require("../../assets/json/colors.json");
 
 module.exports = {
-  aliases: ["global", "setglobal"],
+  aliases: ["global", "setglobal", "global-chat"],
   memberName: "global",
   group: "settings",
   description: "Set a Global Chat channel for this server.",
@@ -58,6 +58,8 @@ module.exports = {
             useFindAndModify: false,
           }
         );
+        client.globalChat[message.guild.id] = channel.id;
+
         const confirmationEmbed = new Discord.MessageEmbed()
           .setColor(color.green)
           .setDescription(
@@ -83,6 +85,8 @@ module.exports = {
             useFindAndModify: false,
           }
         );
+        client.globalChat[message.guild.id] = null;
+
         const confirmationRemovalEmbed = new Discord.MessageEmbed()
           .setColor(color.green)
           .setDescription(
