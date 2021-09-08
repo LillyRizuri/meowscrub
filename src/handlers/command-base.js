@@ -231,15 +231,15 @@ module.exports.listen = (client) => {
       } = command;
 
       client.emit("debug", `Running command ${group}:${aliases[0]}`);
-      // check if the user is blacklisted
-      const blacklistedRes = await userBlacklistSchema.findOne({
-        userId: message.author.id,
-      });
 
-      if (blacklistedRes)
-        return message.reply(
-          "You are blacklisted from accessing my stuff. The only way for you to use my functionality again is to appeal."
-        );
+      // const blacklistedRes = await userBlacklistSchema.findOne({
+      //   userId: message.author.id,
+      // });
+
+      // if (blacklistedRes)
+      //   return message.reply(
+      //     "You are blacklisted from accessing my stuff. The only way for you to use my functionality again is to appeal."
+      //   );
 
       if (message.guild) {
         const settings = await settingsSchema.findOne({

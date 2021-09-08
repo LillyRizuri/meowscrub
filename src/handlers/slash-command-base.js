@@ -38,7 +38,7 @@ module.exports = (client, commandOptions) => {
     callback,
   } = commandOptions;
 
-  memberName = data.name;
+  memberName = data.name.toLowerCase().split(/\s+/).join("-");
   if (data.description) description = data.description;
 
   const initialFormat = [];
@@ -124,7 +124,7 @@ module.exports = (client, commandOptions) => {
     validatePerms(userPermissions);
   }
 
-  allCommands[memberName] = {
+  allCommands[data.name] = {
     data,
     subCommands,
     memberName,
@@ -141,7 +141,7 @@ module.exports = (client, commandOptions) => {
     callback,
   };
 
-  return allCommands[memberName];
+  return allCommands[data.name];
 };
 
 module.exports.listen = (client) => {
@@ -167,19 +167,19 @@ module.exports.listen = (client) => {
       callback,
     } = command;
 
-    console.log(`Running slash command ${group}:${memberName}`);
+    client.emit("debug", `Running application command ${group}:${memberName}`);
 
-    const blacklistedRes = await userBlacklistSchema.findOne({
-      userId: interaction.user.id,
-    });
+    // const blacklistedRes = await userBlacklistSchema.findOne({
+    //   userId: interaction.user.id,
+    // });
 
-    if (blacklistedRes)
-      return interaction.reply({
-        content:
-          denyEmoji +
-          " You are blacklisted from accessing my stuff. The only way for you to use my functionality again is to appeal.",
-        ephemeral: true,
-      });
+    // if (blacklistedRes)
+    //   return interaction.reply({
+    //     content:
+    //       denyEmoji +
+    //       " You are blacklisted from accessing my stuff. The only way for you to use my functionality again is to appeal.",
+    //     ephemeral: true,
+    //   });
 
     if (ownerOnly)
       if (!client.isOwner(interaction.user))
