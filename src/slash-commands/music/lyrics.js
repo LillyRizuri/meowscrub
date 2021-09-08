@@ -33,7 +33,7 @@ module.exports = {
     const options = {
       apiKey: process.env.GENIUS,
       title: searchString,
-      artist: "",
+      artist: " ",
       optimizeQuery: false,
     };
 

@@ -29,7 +29,7 @@
     "eslint": "^7.32.0",
     "ffmpeg-static": "^4.4.0",
     "figlet": "^1.5.2",
-    "genius-lyrics-api": "^3.0.6",
+    "genius-lyrics-api": "^3.1.1",
     "get-audio-duration": "^3.0.0",
     "humanize-duration": "^3.27.0",
     "lexico-dictionary": "^1.0.0",
