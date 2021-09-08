@@ -23,19 +23,19 @@ module.exports = {
     const botOwner = await client.users.fetch(client.owner[0]);
     const requiredMsgForVerification = 100;
     try {
-      if (client.globalChat[message.guild.id]) {
-        currentGCChannel = client.globalChat[message.guild.id];
-      } else if (!client.globalChat[message.guild.id]) {
+      if (client.cache.globalChat[message.guild.id]) {
+        currentGCChannel = client.cache.globalChat[message.guild.id];
+      } else if (!client.cache.globalChat[message.guild.id]) {
         const msgGuildRes = await settingsSchema.findOne({
           guildId: message.guild.id,
         });
 
         if (!msgGuildRes || !msgGuildRes.settings.globalChat) return;
 
-        client.globalChat[message.guild.id] =
+        client.cache.globalChat[message.guild.id] =
           msgGuildRes.settings.globalChat;
 
-        currentGCChannel = client.globalChat[message.guild.id];
+        currentGCChannel = client.cache.globalChat[message.guild.id];
       }
 
       const thisChannel = message.guild.channels.cache.get(currentGCChannel);
@@ -225,9 +225,9 @@ Please do so by using the \`${await util.getPrefix(
       // for each guilds that the client was in
       client.guilds.cache.forEach(async (guild) => {
         let otherGCChannel;
-        if (client.globalChat[guild.id]) {
-          otherGCChannel = client.globalChat[guild.id];
-        } else if (!client.globalChat[guild.id]) {
+        if (client.cache.globalChat[guild.id]) {
+          otherGCChannel = client.cache.globalChat[guild.id];
+        } else if (!client.cache.globalChat[guild.id]) {
           // fetch to see if the guild that the client chose have a global chat channel
           const otherGuildRes = await settingsSchema.findOne({
             guildId: guild.id,
@@ -235,9 +235,9 @@ Please do so by using the \`${await util.getPrefix(
 
           if (!otherGuildRes || !otherGuildRes.settings.globalChat) return;
 
-          client.globalChat[guild.id] =
+          client.cache.globalChat[guild.id] =
             otherGuildRes.settings.globalChat;
-          otherGCChannel = client.globalChat[guild.id];
+          otherGCChannel = client.cache.globalChat[guild.id];
         }
 
         const channel = guild.channels.cache.get(otherGCChannel);

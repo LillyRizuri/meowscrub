@@ -58,7 +58,7 @@ module.exports = {
             useFindAndModify: false,
           }
         );
-        client.globalChat[message.guild.id] = channel.id;
+        client.cache.globalChat[message.guild.id] = channel.id;
 
         const confirmationEmbed = new Discord.MessageEmbed()
           .setColor(color.green)
@@ -85,7 +85,7 @@ module.exports = {
             useFindAndModify: false,
           }
         );
-        client.globalChat[message.guild.id] = null;
+        client.cache.globalChat[message.guild.id] = null;
 
         const confirmationRemovalEmbed = new Discord.MessageEmbed()
           .setColor(color.green)

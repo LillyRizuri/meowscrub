@@ -20,7 +20,14 @@ const client = new Discord.Client({
     repliedUser: true,
   },
   partials: ["USER", "CHANNEL", "GUILD_MEMBER", "MESSAGE", "REACTION"],
-  intents: ["GUILDS", "GUILD_MEMBERS", "GUILD_MESSAGES", "DIRECT_MESSAGES", "GUILD_VOICE_STATES", "GUILD_PRESENCES"],
+  intents: [
+    "GUILDS",
+    "GUILD_MEMBERS",
+    "GUILD_MESSAGES",
+    "DIRECT_MESSAGES",
+    "GUILD_VOICE_STATES",
+    "GUILD_PRESENCES",
+  ],
   // intents: 32767,
 });
 
@@ -35,7 +42,9 @@ mongoose
     console.log("Successfully connected to your MongoDB Database.");
   });
 
-client.globalChat = {};
+client.cache = {
+  globalChat: {},
+};
 client.owner = process.env.OWNERS.split(",");
 client.commandGroups = [
   ["context", "Context Menu Commands", "<:context_menu:883737356283293726>"],
@@ -86,7 +95,6 @@ client.on("ready", async () => {
     "Initialized frockles (meowscrub) successfully. Give it a warm welcome."
   );
 });
-
 
 process.on("uncaughtException", console.log);
 client
