@@ -86,8 +86,8 @@ module.exports = {
       ? `#${guild.channels.cache.get(guild.rulesChannelId).name}`
       : "None";
 
-    const systemChannel = guild.channels.cache.get(guild.rulesChannelId)
-      ? `#${guild.channels.cache.get(guild.rulesChannelId).name}`
+    const systemChannel = guild.channels.cache.get(guild.systemChannelId)
+      ? `#${guild.channels.cache.get(guild.systemChannelId).name}`
       : "None";
 
     const textChannels = guild.channels.cache.filter(
