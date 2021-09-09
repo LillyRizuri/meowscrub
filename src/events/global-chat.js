@@ -11,6 +11,7 @@ const emoji = require("../assets/json/tick-emoji.json");
 const badge = require("../assets/json/badge-emoji.json");
 const referralDomains = require("../assets/json/referral-domains.json");
 const safeDomains = require("../assets/json/safe-domains.json");
+const profanities = require("../assets/json/profanities.json");
 
 let sameUserOld = "";
 let sameUserLog = "";
@@ -149,6 +150,13 @@ Please do so by using the \`${await util.getPrefix(
           );
       }
 
+      for (const profanity of profanities) {
+        if (message.content.toLowerCase().includes(profanity))
+          return message.channel.send(
+            `**${message.author}**, Watch your language.`
+          );
+      }
+
       // if the target is in cooldown, return
       const cooldown = gcCooldowns.get(message.author.id);
       if (cooldown) {
@@ -235,8 +243,7 @@ Please do so by using the \`${await util.getPrefix(
 
           if (!otherGuildRes || !otherGuildRes.settings.globalChat) return;
 
-          client.cache.globalChat[guild.id] =
-            otherGuildRes.settings.globalChat;
+          client.cache.globalChat[guild.id] = otherGuildRes.settings.globalChat;
           otherGCChannel = client.cache.globalChat[guild.id];
         }
 
