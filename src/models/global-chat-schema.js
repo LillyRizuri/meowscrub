@@ -7,6 +7,7 @@ const globalChatSchema = mongoose.Schema({
     required: true,
     default: 0,
   },
+  customBadge: String,
 });
 
 module.exports = mongoose.model("global-chat", globalChatSchema);

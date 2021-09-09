@@ -9,7 +9,6 @@ const gcCooldowns = new Map();
 
 const emoji = require("../assets/json/tick-emoji.json"),
   badge = require("../assets/json/badge-emoji.json"),
-  customBadge = require("../assets/json/custom-badge.json"),
   referralDomains = require("../assets/json/referral-domains.json"),
   safeDomains = require("../assets/json/safe-domains.json"),
   profanities = require("../assets/json/profanities.json"),
@@ -222,8 +221,8 @@ Please do so by using the \`${await util.getPrefix(
 
       // depends on account status, have a designated badge append with their username
       let badgeDisplayed = "";
-      if (customBadge[message.author.id]) {
-        badgeDisplayed = customBadge[message.author.id];
+      if (gcInfo.customBadge) {
+        badgeDisplayed = gcInfo.customBadge;
       } else if (client.isOwner(message.author)) {
         badgeDisplayed = badge.developer;
       } else if (isBotStaff) {
