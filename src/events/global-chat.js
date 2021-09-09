@@ -278,66 +278,70 @@ _ _\n[ ${badgeDisplayed} **\`${message.author.tag}\` - \`${message.guild.name}\`
 
         // check if the message contains any attachments
         if (!attachment) {
-          await channel
+          return await channel
             .send(`${usernamePart}\n${message.content}`)
             .catch((err) => {
               message.channel.send(
                 `Can't deliver the message to **${guild}** for: ${err}`
               );
             });
-        } else if (attachment) {
-          // eslint-disable-next-line no-empty
-          if (client.isOwner(message.author) || isBotStaff) {
-          } else if (gcInfo.messageCount < requiredMsgForVerification) {
-            const prohibitedMsg =
-              "*Can't send attachments due to the status of being a newbie.*";
-            await channel.send(
+        }
+
+        // eslint-disable-next-line no-empty
+        if (client.isOwner(message.author) || isBotStaff) {
+        } else if (gcInfo.messageCount < requiredMsgForVerification) {
+          const prohibitedMsg =
+            "*Can't send attachments due to the status of being a newbie.*";
+          return await channel
+            .send(
               message.content
                 ? `${usernamePart}\n${message.content}\n${prohibitedMsg}`
                 : `${usernamePart}\n${prohibitedMsg}`
-            );
-            return;
-          }
-
-          if (!attachment.height || !attachment.width) {
-            const prohibitedAttachmentNotice =
-              "*The user attempted to send something other than image and video.*";
-            await channel
-              .send(
-                message.content
-                  ? `${usernamePart}\n${message.content}\n${prohibitedAttachmentNotice}`
-                  : `${usernamePart}\n${prohibitedAttachmentNotice}`
-              )
-              .catch((err) => {
-                message.channel.send(
-                  `Can't deliver the message to **${guild}** for: ${err}`
-                );
-              });
-          } else {
-            await channel
-              .send({
-                content: message.content
-                  ? `${usernamePart}\n${message.content}`
-                  : `${usernamePart}_ _`,
-                files: [attachment],
-              })
-              .catch((err) => {
-                try {
-                  // try to send a notice if the bot can't send attachment to the guild chosen
-                  const errorMessage = `*Error sending attachment: ${err}*`;
-                  channel.send(
-                    message.content
-                      ? `${usernamePart}\n${message.content}\n${errorMessage}`
-                      : `${usernamePart}\n${errorMessage}`
-                  );
-                } catch (err) {
-                  message.channel.send(
-                    `Can't deliver the message to **${guild}** for: ${err}`
-                  );
-                }
-              });
-          }
+            )
+            .catch((err) => {
+              message.channel.send(
+                `Can't deliver the message to **${guild}** for: ${err}`
+              );
+            });
         }
+
+        if (!attachment.height || !attachment.width) {
+          const prohibitedMsg =
+            "*The user attempted to send something other than image and video.*";
+          return await channel
+            .send(
+              message.content
+                ? `${usernamePart}\n${message.content}\n${prohibitedMsg}`
+                : `${usernamePart}\n${prohibitedMsg}`
+            )
+            .catch((err) => {
+              message.channel.send(
+                `Can't deliver the message to **${guild}** for: ${err}`
+              );
+            });
+        }
+
+        return await channel
+          .send({
+            content: message.content
+              ? `${usernamePart}\n${message.content}`
+              : `${usernamePart}_ _`,
+            files: [attachment],
+          })
+          .catch((err) => {
+            try {
+              const errorMessage = `*Error sending attachment: ${err}*`;
+              channel.send(
+                message.content
+                  ? `${usernamePart}\n${message.content}\n${errorMessage}`
+                  : `${usernamePart}\n${errorMessage}`
+              );
+            } catch (err) {
+              message.channel.send(
+                `Can't deliver the message to **${guild}** for: ${err}`
+              );
+            }
+          });
       });
 
       // eslint-disable-next-line no-empty
