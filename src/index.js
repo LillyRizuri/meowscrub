@@ -36,7 +36,6 @@ mongoose
   .connect(process.env.MONGO, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    useFindAndModify: false,
   })
   .then(() => {
     console.log("Successfully connected to your MongoDB Database.");

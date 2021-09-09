@@ -1,5 +1,6 @@
 const Discord = require("discord.js");
 const { version } = require("../../../package.json");
+const { dependencies } = require("../../../package.json");
 
 module.exports = {
   aliases: ["info", "botinfo"],
@@ -34,6 +35,8 @@ module.exports = {
     const totalGuild = client.guilds.cache.size;
     const totalMembers = client.users.cache.filter((u) => !u.bot).size;
 
+    const discordJSVer = dependencies["discord.js"].replace("^", "");
+
     const infoEmbed = new Discord.MessageEmbed()
       .setColor("RANDOM")
       .setAuthor(
@@ -49,7 +52,7 @@ module.exports = {
         },
         {
           name: "Library",
-          value: "[discord.js v13](https://discord.js.org/)",
+          value: `[discord.js@${discordJSVer}](https://discord.js.org/)`,
           inline: true,
         },
         {
