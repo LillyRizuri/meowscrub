@@ -1,21 +1,23 @@
-const humanizeDuration = require("humanize-duration");
-const util = require("../util/util");
-const settingsSchema = require("../models/settings-schema");
-const globalChatSchema = require("../models/global-chat-schema");
-const userBlacklistSchema = require("../models/user-blacklist-schema");
-const botStaffSchema = require("../models/bot-staff-schema");
+const humanizeDuration = require("humanize-duration"),
+  util = require("../util/util"),
+  settingsSchema = require("../models/settings-schema"),
+  globalChatSchema = require("../models/global-chat-schema"),
+  userBlacklistSchema = require("../models/user-blacklist-schema"),
+  botStaffSchema = require("../models/bot-staff-schema");
 
 const gcCooldowns = new Map();
 
-const emoji = require("../assets/json/tick-emoji.json");
-const badge = require("../assets/json/badge-emoji.json");
-const referralDomains = require("../assets/json/referral-domains.json");
-const safeDomains = require("../assets/json/safe-domains.json");
-const profanities = require("../assets/json/profanities.json");
+const emoji = require("../assets/json/tick-emoji.json"),
+  badge = require("../assets/json/badge-emoji.json"),
+  customBadge = require("../assets/json/custom-badge.json"),
+  referralDomains = require("../assets/json/referral-domains.json"),
+  safeDomains = require("../assets/json/safe-domains.json"),
+  profanities = require("../assets/json/profanities.json"),
+  whitelistedWords = require("../assets/json/whitelisted-words.json");
 
-let sameUserOld = "";
-let sameUserLog = "";
-let currentGCChannel = "";
+let sameUserOld = "",
+  sameUserLog = "",
+  currentGCChannel = "";
 
 module.exports = {
   name: "messageCreate",
@@ -150,8 +152,13 @@ Please do so by using the \`${await util.getPrefix(
           );
       }
 
+      let placeholderMsg = message.content.toLowerCase();
+      for (const word of whitelistedWords) {
+        placeholderMsg = placeholderMsg.split(word.toLowerCase()).join("");
+      }
+
       for (const profanity of profanities) {
-        if (message.content.toLowerCase().includes(profanity))
+        if (placeholderMsg.includes(profanity))
           return message.channel.send(
             `**${message.author}**, Watch your language.`
           );
@@ -215,7 +222,9 @@ Please do so by using the \`${await util.getPrefix(
 
       // depends on account status, have a designated badge append with their username
       let badgeDisplayed = "";
-      if (client.isOwner(message.author)) {
+      if (customBadge[message.author.id]) {
+        badgeDisplayed = customBadge[message.author.id];
+      } else if (client.isOwner(message.author)) {
         badgeDisplayed = badge.developer;
       } else if (isBotStaff) {
         badgeDisplayed = badge.staff;
