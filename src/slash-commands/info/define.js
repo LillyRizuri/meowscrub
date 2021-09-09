@@ -22,7 +22,6 @@ module.exports = {
     try {
       interaction.reply("**🔍 Please wait... This will take a while...**");
       const results = await lexico.search(args.trim().toLowerCase());
-      const pos = results.pos.split(" ");
       const meanings = results.meanings.slice(0, 5);
       const examples = results.examples
         .filter((name) => name.split("‘").join(" ") !== name)
@@ -56,9 +55,7 @@ module.exports = {
         .setColor("RANDOM")
         .setTitle(`Definiton for: ${results.url.split("/").slice(-1)[0]}`)
         .setURL(results.url)
-        .setDescription(
-          `**${pos[0].toProperCase()} ${pos.slice(1).join(" ")}**`
-        )
+        .setDescription(`**${results.pos}**`)
         .addFields(
           {
             name: "Phonetic",
