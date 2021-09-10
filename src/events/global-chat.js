@@ -151,7 +151,7 @@ Please do so by using the \`${await util.getPrefix(
           );
       }
 
-      let placeholderMsg = message.content.toLowerCase().split(/\s+/).join("");
+      let placeholderMsg = message.content.toLowerCase();
       for (const word of whitelistedWords) {
         placeholderMsg = placeholderMsg.split(word.toLowerCase()).join("");
       }
