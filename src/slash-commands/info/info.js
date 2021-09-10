@@ -83,23 +83,19 @@ module.exports = {
           inline: true,
         },
         {
-          name: "Command Execution",
-          value: `${botInfo.cmdsExecuted.toLocaleString()} Success | ${botInfo.cmdsExecutedFails.toLocaleString()} Failed`,
-        },
-        {
           name: "Links",
           value: `
-    [Bot Invite](${clientInvite}) | [Source Code](https://github.com/scrubthispie/meowscrub) | [Server Invite](${process.env.DISCORDINVITE})    
-    `,
+[Bot Invite](${clientInvite}) | [Source Code](https://github.com/scrubthispie/meowscrub) | [Server Invite](${process.env.DISCORDINVITE})    
+`,
         },
         {
           name: "Voting Site",
           value: `
-    [top.gg](https://top.gg/bot/${client.user.id})
-    `,
+[top.gg](https://top.gg/bot/${client.user.id})
+`,
         }
       )
-      .setFooter(`2020 - 2021 ${author.tag}`);
+      .setFooter(`2020 - 2021 ${author.tag} | ${botInfo.cmdsExecuted.toLocaleString()} commands executed`);
     interaction.reply({ embeds: [infoEmbed] });
   },
 };

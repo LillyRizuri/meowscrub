@@ -20,7 +20,9 @@ module.exports = {
       .addFields(
         {
           name: "Getting Started",
-          value: `Use \`${await util.getPrefix(guild.id)}help\` to let the bot provide the full list of commands available. Hope you utilize all commands present in there.`,
+          value: `Use \`${await util.getPrefix(
+            guild.id
+          )}help\` to let the bot provide the full list of commands available. Hope you utilize all commands present in there.`,
         },
         {
           name: "Needing help or get involved in our community?",
@@ -55,7 +57,7 @@ module.exports = {
         await channelToSend.send(
           "This server is blacklisted. Why even bother?"
         );
-      } else if (guild.members.cache.filter((m) => m.user.bot).size > 30) {
+      } else if (guild.members.cache.filter((m) => m.user.bot).size > 50) {
         await channelToSend.send(
           "This server has too many bots. Please remove any that's unnecessary."
         );
@@ -64,8 +66,7 @@ module.exports = {
       }
     }
 
-    if (results || guild.members.cache.filter((m) => m.user.bot).size > 30) {
+    if (results || guild.members.cache.filter((m) => m.user.bot).size > 50)
       await guild.leave();
-    }
   },
 };
