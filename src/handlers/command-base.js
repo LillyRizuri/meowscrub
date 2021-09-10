@@ -6,9 +6,10 @@ const humanizeDuration = require("humanize-duration");
 
 const util = require("../util/util");
 
+const botInfoSchema = require("../models/bot-info-schema");
 const settingsSchema = require("../models/settings-schema");
 const tagsSchema = require("../models/tags-schema");
-const userBlacklistSchema = require("../models/user-blacklist-schema");
+// const userBlacklistSchema = require("../models/user-blacklist-schema");
 
 const { denyEmoji } = require("../assets/json/tick-emoji.json");
 const modPerms = require("../assets/json/mod-permissions.json");
@@ -357,25 +358,40 @@ module.exports.listen = (client) => {
         args = message.content.replace(pattern, "").replace(/\s+/, "");
       }
 
-      callback(client, message, args).catch((err) => {
-        const dateTimeOptions = {
-          weekday: "short",
-          year: "numeric",
-          month: "short",
-          day: "numeric",
-          hour: "numeric",
-          minute: "numeric",
-          timeZoneName: "short",
-        };
+      callback(client, message, args)
+        .then(async () => {
+          let botInfo = await botInfoSchema.findOne();
+          if (!botInfo) {
+            await new botInfoSchema({
+              cmdsExecuted: 0,
+              cmdsExecutedFails: 0,
+            }).save();
 
-        const currentDate = new Date().toLocaleDateString(
-          "en-US",
-          dateTimeOptions
-        );
+            botInfo = await botInfoSchema.findOne();
+          }
+          await botInfoSchema.updateOne({
+            cmdsExecuted: botInfo.cmdsExecuted + 1,
+          });
+        })
+        .catch(async (err) => {
+          const dateTimeOptions = {
+            weekday: "short",
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+            hour: "numeric",
+            minute: "numeric",
+            timeZoneName: "short",
+          };
 
-        console.log(err);
-        return message.channel.send(
-          `
+          const currentDate = new Date().toLocaleDateString(
+            "en-US",
+            dateTimeOptions
+          );
+
+          console.log(err);
+          message.channel.send(
+            `
 An unexpected error occurred whie executing the command.
 You shouldn't receive an error like this. Please contact my owner and report the error with the text below.
 \`\`\`
@@ -387,8 +403,21 @@ Last Ran: ${currentDate}
 ${err}
 \`\`\`
           `
-        );
-      });
+          );
+
+          let botInfo = await botInfoSchema.findOne();
+          if (!botInfo) {
+            await new botInfoSchema({
+              cmdsExecuted: 0,
+              cmdsExecutedFails: 0,
+            }).save();
+
+            botInfo = await botInfoSchema.findOne();
+          }
+          await botInfoSchema.updateOne({
+            cmdsExecutedFails: botInfo.cmdsExecutedFails + 1,
+          });
+        });
     }
   });
 };

@@ -1,4 +1,7 @@
 const Discord = require("discord.js");
+
+const botInfoSchema = require("../../models/bot-info-schema");
+
 const { version } = require("../../../package.json");
 const { dependencies } = require("../../../package.json");
 
@@ -37,6 +40,15 @@ module.exports = {
 
     const discordJSVer = dependencies["discord.js"].replace("^", "");
 
+    let botInfo = await botInfoSchema.findOne();
+    if (!botInfo) {
+      await new botInfoSchema({
+        cmdsExecuted: 0,
+      }).save();
+
+      botInfo = await botInfoSchema.findOne();
+    }
+
     const infoEmbed = new Discord.MessageEmbed()
       .setColor("RANDOM")
       .setAuthor(
@@ -69,6 +81,10 @@ module.exports = {
           name: "Online for",
           value: `${days} days, ${hours} hrs, ${minutes} min, ${seconds} sec`,
           inline: true,
+        },
+        {
+          name: "Command Execution",
+          value: `${botInfo.cmdsExecuted.toLocaleString()} Success | ${botInfo.cmdsExecutedFails.toLocaleString()} Failed`,
         },
         {
           name: "Links",

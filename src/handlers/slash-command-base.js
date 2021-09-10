@@ -4,7 +4,8 @@
 const modPerms = require("../assets/json/mod-permissions.json");
 const normalPerms = require("../assets/json/normal-permissions.json");
 
-const userBlacklistSchema = require("../models/user-blacklist-schema");
+const botInfoSchema = require("../models/bot-info-schema");
+// const userBlacklistSchema = require("../models/user-blacklist-schema");
 
 const { denyEmoji } = require("../assets/json/tick-emoji.json");
 
@@ -246,25 +247,40 @@ module.exports.listen = (client) => {
         });
     }
 
-    callback(client, interaction).catch((err) => {
-      const dateTimeOptions = {
-        weekday: "short",
-        year: "numeric",
-        month: "short",
-        day: "numeric",
-        hour: "numeric",
-        minute: "numeric",
-        timeZoneName: "short",
-      };
+    callback(client, interaction)
+      .then(async () => {
+        let botInfo = await botInfoSchema.findOne();
+        if (!botInfo) {
+          await new botInfoSchema({
+            cmdsExecuted: 0,
+            cmdsExecutedFails: 0,
+          }).save();
 
-      const currentDate = new Date().toLocaleDateString(
-        "en-US",
-        dateTimeOptions
-      );
+          botInfo = await botInfoSchema.findOne();
+        }
+        await botInfoSchema.updateOne({
+          cmdsExecuted: botInfo.cmdsExecuted + 1,
+        });
+      })
+      .catch(async (err) => {
+        const dateTimeOptions = {
+          weekday: "short",
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+          hour: "numeric",
+          minute: "numeric",
+          timeZoneName: "short",
+        };
 
-      console.log(err);
-      return interaction.channel.send({
-        content: `
+        const currentDate = new Date().toLocaleDateString(
+          "en-US",
+          dateTimeOptions
+        );
+
+        console.log(err);
+        interaction.channel.send({
+          content: `
 An unexpected error occurred whie executing the command.
 You shouldn't receive an error like this. Please contact my owner and report the error with the text below.
 \`\`\`
@@ -276,8 +292,21 @@ Last Ran: ${currentDate}
 ${err}
 \`\`\`
           `,
-        ephemeral: true,
+          ephemeral: true,
+        });
+
+        let botInfo = await botInfoSchema.findOne();
+        if (!botInfo) {
+          await new botInfoSchema({
+            cmdsExecuted: 0,
+            cmdsExecutedFails: 0,
+          }).save();
+
+          botInfo = await botInfoSchema.findOne();
+        }
+        await botInfoSchema.updateOne({
+          cmdsExecutedFails: botInfo.cmdsExecutedFails + 1,
+        });
       });
-    });
   });
 };

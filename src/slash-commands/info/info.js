@@ -1,6 +1,10 @@
 const Discord = require("discord.js");
 const { SlashCommandBuilder } = require("@discordjs/builders");
+
+const botInfoSchema = require("../../models/bot-info-schema");
+
 const { version } = require("../../../package.json");
+const { dependencies } = require("../../../package.json");
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -34,6 +38,17 @@ module.exports = {
     const totalGuild = client.guilds.cache.size;
     const totalMembers = client.users.cache.filter((u) => !u.bot).size;
 
+    const discordJSVer = dependencies["discord.js"].replace("^", "");
+
+    let botInfo = await botInfoSchema.findOne();
+    if (!botInfo) {
+      await new botInfoSchema({
+        cmdsExecuted: 0,
+      }).save();
+
+      botInfo = await botInfoSchema.findOne();
+    }
+
     const infoEmbed = new Discord.MessageEmbed()
       .setColor("RANDOM")
       .setAuthor(
@@ -49,7 +64,7 @@ module.exports = {
         },
         {
           name: "Library",
-          value: "[discord.js v13](https://discord.js.org/)",
+          value: `[discord.js@${discordJSVer}](https://discord.js.org/)`,
           inline: true,
         },
         {
@@ -66,6 +81,10 @@ module.exports = {
           name: "Online for",
           value: `${days} days, ${hours} hrs, ${minutes} min, ${seconds} sec`,
           inline: true,
+        },
+        {
+          name: "Command Execution",
+          value: `${botInfo.cmdsExecuted.toLocaleString()} Success | ${botInfo.cmdsExecutedFails.toLocaleString()} Failed`,
         },
         {
           name: "Links",
