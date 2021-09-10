@@ -94,11 +94,18 @@ module.exports = {
     let userStatus = "";
     let userPresenceState = "";
 
-    if (member.presence.activities[0]) {
+    if (member.presence) {
       userStatus = member.presence.status
         .replace("dnd", "Do Not Disturb")
         .toProperCase();
+    } else {
+      userStatus = "Offline";
+    }
 
+    if (
+      member.presence &&
+      member.presence.activities.length > 0
+    ) {
       userPresence = member.presence.activities[0].name;
 
       if (member.presence.activities[0].state) {
@@ -107,7 +114,6 @@ module.exports = {
         userPresenceState = "";
       }
     } else {
-      userStatus = "Offline";
       userPresence = "None";
     }
 
