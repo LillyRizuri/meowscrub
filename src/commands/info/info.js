@@ -83,10 +83,6 @@ module.exports = {
           inline: true,
         },
         {
-          name: "Command Execution",
-          value: `${botInfo.cmdsExecuted.toLocaleString()} Success | ${botInfo.cmdsExecutedFails.toLocaleString()} Failed`,
-        },
-        {
           name: "Links",
           value: `
 [Bot Invite](${clientInvite}) | [Source Code](https://github.com/scrubthispie/meowscrub) | [Server Invite](${process.env.DISCORDINVITE})    
@@ -99,7 +95,7 @@ module.exports = {
 `,
         }
       )
-      .setFooter(`2020 - 2021 ${author.tag}`);
+      .setFooter(`2020 - 2021 ${author.tag} | ${botInfo.cmdsExecuted.toLocaleString()} commands executed`);
     message.channel.send({ embeds: [infoEmbed] });
   },
 };

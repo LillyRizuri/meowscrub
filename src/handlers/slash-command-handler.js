@@ -76,6 +76,6 @@ module.exports = async (client) => {
     }
   }
 
-  await registerSlashCommands(true);
+  await registerSlashCommands(false);
   commandBase.listen(client);
 };

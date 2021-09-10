@@ -364,7 +364,6 @@ module.exports.listen = (client) => {
           if (!botInfo) {
             await new botInfoSchema({
               cmdsExecuted: 0,
-              cmdsExecutedFails: 0,
             }).save();
 
             botInfo = await botInfoSchema.findOne();
@@ -404,19 +403,6 @@ ${err}
 \`\`\`
           `
           );
-
-          let botInfo = await botInfoSchema.findOne();
-          if (!botInfo) {
-            await new botInfoSchema({
-              cmdsExecuted: 0,
-              cmdsExecutedFails: 0,
-            }).save();
-
-            botInfo = await botInfoSchema.findOne();
-          }
-          await botInfoSchema.updateOne({
-            cmdsExecutedFails: botInfo.cmdsExecutedFails + 1,
-          });
         });
     }
   });
