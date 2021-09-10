@@ -15,7 +15,7 @@ module.exports = {
   format: "<channelCategoryID>",
   examples: ["setticket 123456789012345678", "setticket disable"],
   clientPermissions: ["EMBED_LINKS"],
-  userPermissions: ["ADMINISTRATOR"],
+  userPermissions: ["MANAGE_GUILD"],
   singleArgs: true,
   cooldown: 5,
   guildOnly: true,

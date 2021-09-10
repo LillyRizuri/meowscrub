@@ -11,7 +11,7 @@ module.exports = {
   description: "Disable a command to prevent members from running them.",
   format: "<commandName>",
   examples: ["disable pokedex", "disable docs"],
-  userPermissions: ["ADMINISTRATOR"],
+  userPermissions: ["MANAGE_GUILD"],
   singleArgs: true,
   cooldown: 5,
   guildOnly: true,

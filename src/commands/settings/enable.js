@@ -11,7 +11,7 @@ module.exports = {
   description: "Enable a command from its disabled state.",
   format: "<commandName>",
   examples: ["enable pokedex", "enable docs"],
-  userPermissions: ["ADMINISTRATOR"],
+  userPermissions: ["MANAGE_GUILD"],
   singleArgs: true,
   cooldown: 5,
   guildOnly: true,

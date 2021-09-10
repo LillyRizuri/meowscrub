@@ -14,7 +14,7 @@ module.exports = {
   // eslint-disable-next-line quotes
   details: 'This includes: "ban, kick, mute, unmute, warn, delwarn"',
   clientPermissions: ["EMBED_LINKS"],
-  userPermissions: ["ADMINISTRATOR"],
+  userPermissions: ["MANAGE_GUILD"],
   cooldown: 5,
   guildOnly: true,
   callback: async (client, message) => {

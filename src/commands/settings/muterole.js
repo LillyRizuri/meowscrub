@@ -15,7 +15,7 @@ module.exports = {
   format: "[@role | roleName | roleID]",
   examples: ["muterole @Muted", "muterole disable"],
   clientPermissions: ["EMBED_LINKS"],
-  userPermissions: ["ADMINISTRATOR"],
+  userPermissions: ["MANAGE_GUILD"],
   singleArgs: true,
   cooldown: 5,
   guildOnly: true,

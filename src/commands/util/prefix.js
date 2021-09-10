@@ -38,10 +38,10 @@ module.exports = {
           denyEmoji + " You can't change prefix in direct messages."
         );
 
-      if (!message.member.permissions.has("ADMINISTRATOR"))
+      if (!message.member.permissions.has("MANAGE_GUILD"))
         return message.reply(
           denyEmoji +
-            " This command requires you to also have these permissions: `Administrator` in order to use this command."
+            " This command requires you to also have these permissions: `Manage Guild` in order to use this command."
         );
     }
 

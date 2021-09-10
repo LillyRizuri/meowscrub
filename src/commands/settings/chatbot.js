@@ -15,7 +15,7 @@ module.exports = {
   format: "<#channel | channelID>",
   examples: ["setchatbot #chatbot", "setchatbot disable"],
   clientPermissions: ["EMBED_LINKS"],
-  userPermissions: ["ADMINISTRATOR"],
+  userPermissions: ["MANAGE_GUILD"],
   singleArgs: true,
   cooldown: 5,
   guildOnly: true,
