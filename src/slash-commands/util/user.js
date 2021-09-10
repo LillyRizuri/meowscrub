@@ -52,6 +52,7 @@ module.exports = {
     "user permissions @frockles",
     "user info @frockles",
   ],
+  guildOnly: true,
   callback: async (client, interaction) => {
     const target = interaction.options.getUser("user")
       ? interaction.options.getUser("user")
