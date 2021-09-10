@@ -11,7 +11,8 @@ module.exports = {
   memberName: "close",
   group: "ticket",
   description: "Close & delete an existing ticket created by me.",
-  details: "Leave the parameter blank to let me identify the channel the command was ran in.",
+  details:
+    "Leave the parameter blank to let me identify the channel the command was ran in.",
   format: "[#channel | channelID]",
   examples: ["close #frockles-4339", "close 866721249640448071"],
   clientPermissions: ["MANAGE_CHANNELS"],
@@ -52,11 +53,6 @@ module.exports = {
       guildId: message.guild.id,
     });
 
-    function formatInt(int) {
-      if (int < 10) return `0${int}`;
-      return int;
-    }
-
     if (guildSettings && guildSettings.settings.transcriptLog) {
       const transcriptChannel = message.guild.channels.cache.get(
         guildSettings.settings.transcriptLog
@@ -67,14 +63,8 @@ module.exports = {
           "Can't find the current transcript log channel. Maybe it was deleted."
         );
       } else if (transcriptChannel) {
-        const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-        const today = new Date();
-        const time =
-          formatInt(today.getHours()) +
-          ":" +
-          formatInt(today.getMinutes()) +
-          ":" +
-          formatInt(today.getSeconds());
+        const today = Math.trunc(new Date().getTime() / 1000);
+        const time = `<t:${today}:F>`;
 
         const fileName = `${ticketCreator.username}-${ticketCreator.discriminator}.txt`;
 
@@ -85,7 +75,7 @@ module.exports = {
         );
 
         await transcriptChannel.send({
-          content: `\`[${time} ${timezone}]\` ❌ **${ticketCreator.tag} (${ticketCreator.id})**'s ticket has been closed by **${message.author.tag} (${message.author.id})**.\nThe full transcript is down below:`,
+          content: `[${time}]\n❌ **${ticketCreator.tag} (${ticketCreator.id})**'s ticket has been closed by **${message.author.tag} (${message.author.id})**.\nThe full transcript is down below:`,
           files: [transcriptFile],
         });
 
