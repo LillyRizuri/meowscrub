@@ -2,7 +2,7 @@ const Discord = require("discord.js");
 const fetch = require("node-fetch");
 
 module.exports = {
-  aliases: ["invite"],
+  aliases: ["invite", "vote"],
   memberName: "invite",
   group: "misc",
   description: "Generate an invite link to invite me to your server.",
