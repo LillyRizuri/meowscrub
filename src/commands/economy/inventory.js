@@ -59,7 +59,6 @@ module.exports = {
 
     if (!results || results.inventory.length === 0)
       inventory = "There's nothing here :(";
-
     else
       inventory = results.inventory
         .sort((a, b) => a.name.localeCompare(b.name))
@@ -73,56 +72,45 @@ module.exports = {
 
     const splitString = util.splitString(inventory, 15);
 
-    if (splitString.length === 1) {
+    const embeds = [];
+    for (const stringPart of splitString) {
       const embed = new Discord.MessageEmbed()
         .setColor("RANDOM")
-        .setAuthor("a-z sort!")
         .setTitle(`${target.username}'s inventory`)
-        .setDescription(inventory)
+        .setDescription(stringPart)
+        .setFooter("a-z sort!")
         .setTimestamp();
-
-      return message.channel.send({ embeds: [embed] });
-    } else if (splitString.length > 1) {
-      const embeds = [];
-      for (let i = 0; i < splitString.length; i++) {
-        const embed = new Discord.MessageEmbed()
-          .setColor("RANDOM")
-          .setAuthor("a-z sort!")
-          .setTitle(`${target.username}'s inventory`)
-          .setDescription(splitString[i])
-          .setTimestamp();
-        embeds.push(embed);
-      }
-
-      pagination({
-        embeds: embeds,
-        author: message.author,
-        channel: message.channel,
-        fastSkip: true,
-        time: 60000,
-        button: [
-          {
-            name: "first",
-            emoji: emoji.firstEmoji,
-            style: "PRIMARY",
-          },
-          {
-            name: "previous",
-            emoji: emoji.leftEmoji,
-            style: "PRIMARY",
-          },
-          {
-            name: "next",
-            emoji: emoji.rightEmoji,
-            style: "PRIMARY",
-          },
-          {
-            name: "last",
-            emoji: emoji.lastEmoji,
-            style: "PRIMARY",
-          },
-        ],
-      });
+      embeds.push(embed);
     }
+
+    pagination({
+      embeds: embeds,
+      author: message.author,
+      channel: message.channel,
+      fastSkip: true,
+      time: 60000,
+      button: [
+        {
+          name: "first",
+          emoji: emoji.firstEmoji,
+          style: "PRIMARY",
+        },
+        {
+          name: "previous",
+          emoji: emoji.leftEmoji,
+          style: "PRIMARY",
+        },
+        {
+          name: "next",
+          emoji: emoji.rightEmoji,
+          style: "PRIMARY",
+        },
+        {
+          name: "last",
+          emoji: emoji.lastEmoji,
+          style: "PRIMARY",
+        },
+      ],
+    });
   },
 };
