@@ -16,13 +16,20 @@ module.exports = {
   cooldown: 5,
   singleArgs: true,
   callback: async (client, message, args) => {
-    let searchString = args ? args : "";
-    const queue = await client.distube.getQueue(message);
-    if (!searchString && queue) {
-      searchString = queue.songs[0].name;
-    } else if (!searchString && !queue) {
+    let searchString = args;
+
+    if (message.guild) {
+      const queue = await client.distube.getQueue(message);
+      if (!searchString && queue) {
+        searchString = queue.songs[0].name;
+      } else if (!searchString && !queue) {
+        return message.reply(
+          emoji.missingEmoji + " The search query is blank."
+        );
+      }
+    } else if (!searchString)
       return message.reply(emoji.missingEmoji + " The search query is blank.");
-    }
+
     const options = {
       apiKey: process.env.GENIUS,
       title: searchString,

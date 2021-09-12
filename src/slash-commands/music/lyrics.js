@@ -19,16 +19,22 @@ module.exports = {
   examples: ["lyrics here comes the sun"],
   callback: async (client, interaction) => {
     let searchString = interaction.options.getString("search-string");
-    const queue = await client.distube.getQueue(interaction);
 
-    if (!searchString && queue) {
-      searchString = queue.songs[0].name;
-    } else if (!searchString && !queue) {
+    if (interaction.guild) {
+      const queue = await client.distube.getQueue(interaction);
+      if (!searchString && queue) {
+        searchString = queue.songs[0].name;
+      } else if (!searchString && !queue) {
+        return interaction.reply({
+          content: emoji.missingEmoji + " The search query is blank.",
+          ephemeral: true,
+        });
+      }
+    } else if (!searchString)
       return interaction.reply({
         content: emoji.missingEmoji + " The search query is blank.",
         ephemeral: true,
       });
-    }
 
     const options = {
       apiKey: process.env.GENIUS,
