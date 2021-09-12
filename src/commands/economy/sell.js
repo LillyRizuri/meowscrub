@@ -36,6 +36,9 @@ module.exports = {
         emoji.denyEmoji + ` There's no item called: \`${args[0]}\``
       );
 
+    if (!item.sellPrice)
+      return message.reply(emoji.denyEmoji + " You can't sell that item.");
+
     const results = await economySchema.findOne({
       userId: message.author.id,
     });
