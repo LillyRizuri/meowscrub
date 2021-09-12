@@ -146,10 +146,13 @@ module.exports = {
         }
       }
 
-      let itemPrice;
+      let itemPrice = "";
+      if (item.price) itemPrice = `¢${item.price.toLocaleString()}`;
+      else if (!item.price) itemPrice = "Not in stock";
 
-      if (item.price) itemPrice = item.price.toLocaleString();
-      else if (!item.price) itemPrice = "Not available to purchase";
+      let sellPrice = "";
+      if (item.sellPrice) sellPrice = `¢${item.sellPrice.toLocaleString()}`;
+      else if (!item.sellPrice) sellPrice = "Not able to be sold";
 
       const embed = new Discord.MessageEmbed()
         .setTitle(`${item.name.toProperCase()} ${owned}`)
@@ -158,11 +161,11 @@ module.exports = {
         .setDescription(
           `${
             item.description
-          }\n• Buy: \`¢${itemPrice}\`\n• Sell: \`¢${item.sellPrice.toLocaleString()}\``
+          }\n• Buy: \`${itemPrice}\`\n• Sell: \`${sellPrice}\``
         )
         .setTimestamp();
 
-      message.channel.send(embed);
+      message.channel.send({ embeds: [embed] });
     }
   },
 };
