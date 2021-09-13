@@ -48,6 +48,7 @@ module.exports = {
           item("fishingrod").emoji +
             ` You brought back ${numberOfFish} fish(es) after hours of fishing!`
         );
+        await economy.bankCapIncrease(message.author.id);
         break;
       }
     }
