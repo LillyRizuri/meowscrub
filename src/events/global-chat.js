@@ -76,24 +76,26 @@ module.exports = {
             " It seems like I somehow can't accerss this global chat channel properly. Please contact your nearest server manager to give me these permissions:\n`Send Messages, Embed Links, View Channel, Read Message History`"
         );
       }
-      // await message.delete();
+
+      await message.delete();
+
       // const msg = await message.reply(
       //   `The chat is closed due to a potential raider. For more information, please get in touch wtih **${botOwner.tag}**.`
       // );
+      // return setTimeout(() => msg.delete(), 5000);
 
-      // setTimeout(() => {
-      //   msg.delete();
-      // }, 5000);
-      // return;
       // If the target is blacklisted, return
       const results = await userBlacklistSchema.findOne({
         userId: message.author.id,
       });
 
-      if (results)
-        return message.channel.send(
+      if (results) {
+        const msg = await message.channel.send(
           `**${message.author.toString()}**, You are blacklisted from using this functionality. For that, your message won't be delivered.`
         );
+
+        return setTimeout(() => msg.delete(), 5000);
+      }
 
       // find global chat data for an user
       let gcInfo = await globalChatSchema.findOne({
@@ -101,20 +103,25 @@ module.exports = {
       });
 
       // if there isn't one, do not advance any further into the code
-      if (!gcInfo)
-        return message.reply(`
-**Hold Up!**
+      if (!gcInfo) {
+        const msg = await message.channel.send(`
+${message.author.toString()}, **Hold Up!**
 If you receive this messaage while trying to use Global Chat, you probably haven't read through Global Chat's Notice yet.
 Please do so by using the \`${await util.getPrefix(
           message.guild.id
-        )}globalchat-notice\` command, then you may proceed through the next step provided by the command.
-`);
+        )}globalchat-notice\` command, then you may proceed through the next step provided by the command.`);
+
+        return setTimeout(() => msg.delete(), 10000);
+      }
 
       // if the target's message is over 1024 characters, return
-      if (message.content.length > 1024)
-        return message.channel.send(
+      if (message.content.length > 1024) {
+        const msg = await message.channel.send(
           `**${message.author.toString()}**, Your message musn't be more than 1024 characters.`
         );
+
+        return setTimeout(() => msg.delete(), 5000);
+      }
 
       // check if the target is a bot staff
       const isBotStaff = await botStaffSchema.findOne({
@@ -127,28 +134,38 @@ Please do so by using the \`${await util.getPrefix(
       if (client.isOwner(message.author) || isBotStaff) {
       } else if (gcInfo.messageCount < requiredMsgForVerification) {
         const urlify = util.urlify(message.content);
-        if (urlify !== message.content)
-          return message.channel.send(
+        if (urlify !== message.content) {
+          const msg = await message.channel.send(
             `**${message.author.toString()}**, Links are not allowed for new members using this chat.`
           );
+
+          return setTimeout(() => msg.delete(), 5000);
+        }
       }
 
       if (
         referralDomains.some((v) => message.content.toLowerCase().includes(v))
       ) {
-        return message.channel.send(
+        const msg = await message.channel.send(
           `**${message.author.toString()}**, Referral links are prohibited for all members.`
         );
+
+        return setTimeout(() => msg.delete(), 5000);
       }
 
       const urlify = util.urlify(message.content);
       if (urlify !== message.content) {
-        if (!safeDomains.some((v) => message.content.toLowerCase().includes(v)))
-          return message.channel.send(
+        if (
+          !safeDomains.some((v) => message.content.toLowerCase().includes(v))
+        ) {
+          const msg = await message.channel.send(
             `${message.author.toString()}, That site you posted isn't one of the safe domains.\nIf the site is safe, consider suggesting **${
               botOwner.tag
             }** to add it into the list of safe domains.`
           );
+
+          return setTimeout(() => msg.delete(), 5000);
+        }
       }
 
       let placeholderMsg = message.content.toLowerCase();
@@ -157,19 +174,24 @@ Please do so by using the \`${await util.getPrefix(
       }
 
       for (const profanity of profanities) {
-        if (placeholderMsg.includes(profanity))
-          return message.channel.send(
-            `**${message.author}**, Watch your language.`
+        if (placeholderMsg.includes(profanity)) {
+          const msg = await message.channel.send(
+            `**${message.author.toString()}**, Watch your language.`
           );
+
+          return setTimeout(() => msg.delete(), 5000);
+        }
       }
 
       // if the target is in cooldown, return
       const cooldown = gcCooldowns.get(message.author.id);
       if (cooldown) {
         const remaining = humanizeDuration(cooldown - Date.now());
-        return message.channel.send(
-          `**${message.author}**, You are in cooldown for ${remaining}.`
+        const msg = await message.channel.send(
+          `**${message.author.toString()}**, You are in cooldown for ${remaining}.`
         );
+
+        return setTimeout(() => msg.delete(), 5000);
       }
 
       // check if the target is a bot owner/staff
@@ -235,8 +257,6 @@ Please do so by using the \`${await util.getPrefix(
 
       sameUserOld = sameUserLog;
       sameUserLog = message.author.id;
-
-      await message.delete();
 
       // for each guilds that the client was in
       client.guilds.cache.forEach(async (guild) => {
