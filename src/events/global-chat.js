@@ -14,16 +14,25 @@ const emoji = require("../assets/json/tick-emoji.json"),
   profanities = require("../assets/json/profanities.json"),
   whitelistedWords = require("../assets/json/whitelisted-words.json");
 
-let sameUserOld = "",
-  sameUserLog = "",
-  currentGCChannel = "";
+let userLogCopy = "",
+  userLog = "",
+  currentGCChannel = "",
+  timeout;
 
 module.exports = {
   name: "messageCreate",
   async execute(message, client) {
     if (!message.guild) return;
     const botOwner = await client.users.fetch(client.owner[0]);
-    const requiredMsgForVerification = 100;
+    const msgCountForApproval = 100;
+
+    function initTimeout() {
+      timeout = setTimeout(() => {
+        userLog = "";
+        timeout = null;
+      }, 420000);
+    }
+
     try {
       if (client.cache.globalChat[message.guild.id]) {
         currentGCChannel = client.cache.globalChat[message.guild.id];
@@ -132,7 +141,7 @@ Please do so by using the \`${await util.getPrefix(
       // if the bot sees 1 or more differences, it will think that a newbie sent 1 or more links
       // eslint-disable-next-line no-empty
       if (client.isOwner(message.author) || isBotStaff) {
-      } else if (gcInfo.messageCount < requiredMsgForVerification) {
+      } else if (gcInfo.messageCount < msgCountForApproval) {
         const urlify = util.urlify(message.content);
         if (urlify !== message.content) {
           const msg = await message.channel.send(
@@ -249,14 +258,20 @@ Please do so by using the \`${await util.getPrefix(
         badgeDisplayed = badge.developer;
       } else if (isBotStaff) {
         badgeDisplayed = badge.staff;
-      } else if (gcInfo.messageCount < requiredMsgForVerification) {
+      } else if (gcInfo.messageCount < msgCountForApproval) {
         badgeDisplayed = badge.newbie;
       } else {
         badgeDisplayed = badge.verified;
       }
 
-      sameUserOld = sameUserLog;
-      sameUserLog = message.author.id;
+      userLogCopy = userLog;
+      userLog = message.author.id;
+
+      if (timeout) clearTimeout(timeout);
+
+      console.log(timeout);
+
+      initTimeout();
 
       // for each guilds that the client was in
       client.guilds.cache.forEach(async (guild) => {
@@ -283,7 +298,7 @@ Please do so by using the \`${await util.getPrefix(
         let usernamePart = "";
 
         // check the guild is/isn't a guild test
-        if (sameUserLog !== sameUserOld) {
+        if (userLog !== userLogCopy) {
           if (!process.env.GUILD_TEST || guild.id !== process.env.GUILD_TEST) {
             usernamePart = `_ _\n[ ${badgeDisplayed} **\`${message.author.tag}\` - \`${message.guild.name}\`** ]`;
           } else if (guild.id === process.env.GUILD_TEST) {
@@ -291,7 +306,7 @@ Please do so by using the \`${await util.getPrefix(
 _ _\n[ ${badgeDisplayed} **\`${message.author.tag}\` - \`${message.guild.name}\`** ]
 **userID: \`${message.author.id}\` - guildID: \`${message.guild.id}\`**`;
           }
-        } else if (sameUserLog === sameUserOld) {
+        } else if (userLog === userLogCopy) {
           usernamePart = "";
         }
 
@@ -308,7 +323,7 @@ _ _\n[ ${badgeDisplayed} **\`${message.author.tag}\` - \`${message.guild.name}\`
 
         // eslint-disable-next-line no-empty
         if (client.isOwner(message.author) || isBotStaff) {
-        } else if (gcInfo.messageCount < requiredMsgForVerification) {
+        } else if (gcInfo.messageCount < msgCountForApproval) {
           const prohibitedMsg =
             "*Can't send attachments due to the status of being a newbie.*";
           return await channel
