@@ -39,7 +39,7 @@ module.exports = (client, commandOptions) => {
     callback,
   } = commandOptions;
 
-  memberName = data.name.toLowerCase().split(/\s+/).join("-");
+  memberName = data.name;
   if (data.description) description = data.description;
 
   const initialFormat = [];

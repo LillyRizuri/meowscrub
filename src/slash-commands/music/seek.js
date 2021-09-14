@@ -13,7 +13,7 @@ module.exports = {
     .addStringOption((option) =>
       option
         .setName("timestamp")
-        .setDescription("A video timestamp")
+        .setDescription("A video timestamp ( hh:mm:ss | mm:ss | ss )")
         .setRequired(true)
     ),
   group: "music",
@@ -75,7 +75,7 @@ module.exports = {
       }
     }
 
-    if (isNaN(seconds) || !Number.isInteger(seconds))
+    if (isNaN(seconds) || !Number.isInteger(seconds) || seconds < 0)
       return interaction.reply({ content: notTimestampMsg, ephemeral: true });
 
     await client.distube.seek(interaction, seconds);

@@ -252,11 +252,9 @@ __**Select available command categories in ${message.guild || "this DM"}.**__`
                 )
                 .map(
                   (cmd) =>
-                    `[**${cmd.aliases[0]}${
+                    `•  \`${cmd.aliases[0]}${
                       cmd.format ? ` ${cmd.format}` : ""
-                    }**](https://tryitands.ee/)\n└─${cmd.description}${
-                      cmd.nsfw ? " (NSFW)" : ""
-                    }`
+                    }\`\n${cmd.description}${cmd.nsfw ? " (NSFW)" : ""}`
                 )
                 .join("\n\n")
                 .toString()

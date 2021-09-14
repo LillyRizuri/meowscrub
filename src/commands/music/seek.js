@@ -65,16 +65,15 @@ module.exports = {
       }
     }
 
-    if (isNaN(seconds) || !Number.isInteger(seconds))
+    if (isNaN(seconds) || !Number.isInteger(seconds) || seconds < 0)
       return message.reply(notTimestampMsg);
 
     await client.distube.seek(message, seconds);
     await message.channel.send(
-      emoji.successEmoji + ` Moved the playhead to **${new Date(
-        seconds * 1000
-      )
-        .toISOString()
-        .substr(11, 8)}**.`
+      emoji.successEmoji +
+        ` Moved the playhead to **${new Date(seconds * 1000)
+          .toISOString()
+          .substr(11, 8)}**.`
     );
   },
 };

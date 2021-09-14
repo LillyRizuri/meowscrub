@@ -20,9 +20,7 @@ module.exports = {
         if (song.duration === 0)
           try {
             song.duration = await getAudioDurationInSeconds(song.url);
-            song.formattedDuration = util.formatDuration(
-              song.duration * 1000
-            );
+            song.formattedDuration = util.formatDuration(song.duration * 1000);
           } catch (err) {}
 
         try {
@@ -66,9 +64,7 @@ module.exports = {
         if (song.duration === 0)
           try {
             song.duration = await getAudioDurationInSeconds(song.url);
-            song.formattedDuration = util.formatDuration(
-              song.duration * 1000
-            );
+            song.formattedDuration = util.formatDuration(song.duration * 1000);
           } catch (err) {}
 
         let estimatedTime = util.formatDuration(

@@ -13,17 +13,23 @@ module.exports = {
   singleArgs: true,
   guildOnly: true,
   callback: async (client, message, args) => {
-    function isFileImage(file) {
-      return file && file.contentType.split("/")[0] === "image";
+    function isAudioFile(file) {
+      return file && file.contentType.split("/")[0] === "audio";
+    }
+
+    function isVideoFile(file) {
+      return file && file.contentType.split("/")[0] === "video";
     }
 
     if (message.attachments.first()) {
       const attachment = message.attachments.first();
 
-      if (isFileImage(attachment))
+      // eslint-disable-next-line no-empty
+      if (isAudioFile(attachment) || isVideoFile(attachment)) {
+      } else
         return message.reply(
           emoji.denyEmoji +
-            " That's an IMAGE. I'm not going to put that in a queue."
+            " That's NOT an audio file. I'm not going to put that in a queue."
         );
     }
 

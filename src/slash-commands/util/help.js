@@ -41,7 +41,10 @@ module.exports = {
           )
           .setTitle(command.description.trim())
           .setDescription(help)
-          .addField(`${command.type} Format`, `⠀• ${command.memberName}${cmdFormat}`)
+          .addField(
+            `${command.type} Format`,
+            `⠀• ${command.memberName}${cmdFormat}`
+          )
           .setFooter("<required> | [optional]")
           .setTimestamp();
 
@@ -258,11 +261,9 @@ __**Select available command categories in ${
               )
               .map(
                 (cmd) =>
-                  `[**${cmd.memberName}${
+                  `•  \`${cmd.memberName}${
                     cmd.format ? ` ${cmd.format}` : ""
-                  }**](https://tryitands.ee/)\n└─${cmd.description}${
-                    cmd.nsfw ? " (NSFW)" : ""
-                  }`
+                  }\`\n${cmd.description}${cmd.nsfw ? " (NSFW)" : ""}`
               )
               .join("\n\n")
               .toString()
