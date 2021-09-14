@@ -6,7 +6,7 @@ const ticketSchema = require("../../models/ticket-schema");
 const emoji = require("../../assets/json/tick-emoji.json");
 
 module.exports = {
-  aliases: ["ticket", "suppport"],
+  aliases: ["ticket", "support"],
   memberName: "ticket",
   group: "ticket",
   description: "Open a ticket to communicate with staff members.",
