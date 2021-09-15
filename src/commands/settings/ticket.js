@@ -6,14 +6,14 @@ const emoji = require("../../assets/json/tick-emoji.json");
 const color = require("../../assets/json/colors.json");
 
 module.exports = {
-  aliases: ["setticket", "ticketcategory", "ticketparent"],
-  memberName: "setticket",
+  aliases: ["ticket", "set-ticket", "ticket-channel"],
+  memberName: "ticket",
   group: "settings",
-  description: "Set a category to host ticket channels for this server.",
+  description: "Set the channel for me to send the ticket panel.",
   details:
     "Replace the syntax with `disable` if you wish to remove the configuration.",
-  format: "<channelCategoryID>",
-  examples: ["setticket 123456789012345678", "setticket disable"],
+  format: "<#channel | channelID>",
+  examples: ["setticket #ticket", "setticket disable"],
   clientPermissions: ["EMBED_LINKS"],
   userPermissions: ["MANAGE_GUILD"],
   singleArgs: true,
@@ -21,7 +21,9 @@ module.exports = {
   guildOnly: true,
   callback: async (client, message, args) => {
     const guildId = message.guild.id;
-    const channel = message.guild.channels.cache.get(args);
+    const channel =
+      message.mentions.channels.first() ||
+      message.guild.channels.cache.get(args);
 
     switch (args.toLowerCase()) {
       default: {
@@ -31,15 +33,36 @@ module.exports = {
               " No valid channel found for the configuration."
           );
 
-        if (channel.type !== "GUILD_CATEGORY")
+        if (channel.type !== "GUILD_TEXT")
           return message.reply(
-            emoji.denyEmoji + " It isn't a valid category channel ID"
+            emoji.denyEmoji + " It isn't a valid text channel."
           );
 
         if (!channel.viewable)
           return message.reply(
             emoji.denyEmoji + " I can't view your specified channel."
           );
+
+        const ticketEmbed = new Discord.MessageEmbed()
+          .setAuthor(`${client.user.username}'s Ticket Panel`, client.user.displayAvatarURL())
+          .setColor("RANDOM")
+          .setDescription(
+            "To create a ticket, please interact with the button below.\n**Do not abuse it in any way.**"
+          )
+          .setFooter("Only open a ticket when you need to.");
+
+        const row = new Discord.MessageActionRow().addComponents(
+          new Discord.MessageButton()
+            .setStyle("SECONDARY")
+            .setCustomId(client.ticketButtonId)
+            .setEmoji("📩")
+            .setLabel("Open a Ticket")
+        );
+
+        const msg = await channel.send({
+          embeds: [ticketEmbed],
+          components: [row],
+        });
 
         await settingsSchema.findOneAndUpdate(
           {
@@ -48,7 +71,8 @@ module.exports = {
           {
             guildId,
             $set: {
-              "settings.ticketCategory": channel.id,
+              "settings.ticketChannel.channelId": channel.id,
+              "settings.ticketChannel.messageId": msg.id,
             },
           },
           {
@@ -60,11 +84,11 @@ module.exports = {
           .setColor(color.green)
           .setDescription(
             emoji.successEmoji +
-              ` **Set the Ticket Category Channel to:** \`${channel.name} - ${channel.id})\`
+              ` **Set the Ticket Channel to:** ${channel}
 
-
-Remember to set the category's user permissions for staffs accordingly.
-And, you may want to use the \`transcript-log\` command to log every ticket channel's all messages.
+⠀• Remember to set the channel's user permissions for staffs accordingly so that the bot would let staffs access all tickets.
+(View Channel, Send Messages, Read Message History, Manage Channels)
+⠀• You may want to use the \`transcript-log\` command to log every ticket channel's messages.
 `
           );
         message.channel.send({ embeds: [confirmationEmbed] });
@@ -88,7 +112,8 @@ And, you may want to use the \`transcript-log\` command to log every ticket chan
           {
             guildId,
             $set: {
-              "settings.ticketCategory": null,
+              "settings.ticketChannel.channelId": null,
+              "settings.ticketChannel.messageId": null,
             },
           },
           {
@@ -100,7 +125,7 @@ And, you may want to use the \`transcript-log\` command to log every ticket chan
           .setColor(color.green)
           .setDescription(
             emoji.successEmoji +
-              " **Removed the configuration for the Ticket Category Channel.**"
+              " **Removed the configuration for the Ticket Channel.**"
           );
         message.channel.send({ embeds: [confirmationRemovalEmbed] });
         return;
@@ -110,19 +135,16 @@ And, you may want to use the \`transcript-log\` command to log every ticket chan
           guildId,
         });
 
-        if (!results || !results.settings.ticketCategory) {
+        if (!results || !results.settings.ticketChannel.channelId) {
           return message.reply(
             emoji.missingEmoji + " The category channel ID hasn't been set yet."
           );
-        } else if (results && results.settings.ticketCategory) {
-          const ticketCategoryName = message.guild.channels.cache.get(
-            results.ticketCategory
-          ).name;
+        } else if (results && results.settings.ticketChannel.channelId) {
           const channelEmbed = new Discord.MessageEmbed()
             .setColor(color.green)
             .setDescription(
               emoji.successEmoji +
-                ` **Current Chatbot Channel Configuration:** \`${ticketCategoryName} - ${results.settings.ticketCategory}\``
+                ` **Current Chatbot Channel Configuration:** <#${results.settings.ticketChannel.channelId}>`
             );
           message.channel.send({ embeds: [channelEmbed] });
         }

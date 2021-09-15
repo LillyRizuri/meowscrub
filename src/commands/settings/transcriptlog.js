@@ -10,7 +10,7 @@ module.exports = {
   memberName: "transcriptlog",
   group: "settings",
   description:
-    "Set a channel for ticket transcript logging. Must have a ticket category channel set up.",
+    "Set a channel for ticket transcript logging. Must have a ticket channel set up.",
   details:
     "Replace the syntax with `disable` if you wish to remove the configuration.",
   format: "<#channel | channelID>",
@@ -30,9 +30,9 @@ module.exports = {
       guildId,
     });
 
-    if (!guildSettings || !guildSettings.settings.ticketCategory)
+    if (!guildSettings || !guildSettings.settings.ticketChannel.channelId)
       return message.reply(
-        "<:scrubred:797476323169533963> You must have a ticket category channel set up with the `setticket` command."
+        emoji.denyEmoji + " You must have a ticket channel set up with the `setticket` command."
       );
 
     switch (args.toLowerCase()) {

@@ -14,7 +14,10 @@ const settingsSchema = mongoose.Schema({
       prefix: null,
       chatbotChannel: null,
       suggestionChannel: null,
-      ticketCategory: null,
+      ticketChannel: {
+        channelId: null,
+        messageId: null
+      },
       transcriptLog: null,
       globalChat: null,
       muteRole: null,

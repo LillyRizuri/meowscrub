@@ -43,6 +43,7 @@ mongoose
 client.cache = {
   globalChat: {},
 };
+client.ticketButtonId = "openTicket";
 client.owner = process.env.OWNERS.split(",");
 client.commandGroups = [
   ["context", "Context Menu Commands", "<:context_menu:883737356283293726>"],
@@ -60,7 +61,7 @@ client.commandGroups = [
   ["settings", "Server Settings", "<:gear:877813686180405248>"],
   ["soundboard", "Soundboard!", "🎹"],
   ["tags", "Tags / Custom Commands", "<:console:880332764266758204>"],
-  ["ticket", "Ticket-Related Commands", "🎫"],
+  ["ticket", "Ticket Managing Tools", "📩"],
   ["util", "Utility", "🔧"],
 ];
 client.discordTogether = new DiscordTogether(client);

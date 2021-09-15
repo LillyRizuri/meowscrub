@@ -20,7 +20,7 @@ module.exports = {
     let output = "";
 
     for (let i = 0; i < results.length; i++) {
-      const { reason, channelId, userId, locked } = results[i];
+      const { channelId, userId, locked } = results[i];
 
       const existingChannel = message.guild.channels.cache.get(channelId);
 
@@ -37,7 +37,7 @@ module.exports = {
           .replace("true", "Yes")
           .replace("false", "No");
 
-        output += `**+ <#${channelId}> (${channelId})**\n⠀• Reason: ${reason}\n⠀• Member: <@${userId}> (${userId})\n⠀• Locked: ${lockState}\n\n`;
+        output += `**+ <#${channelId}> (${channelId})**\n⠀• Member: <@${userId}> (${userId})\n⠀• Locked: ${lockState}\n\n`;
       }
     }
 
