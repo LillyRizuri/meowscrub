@@ -1,5 +1,6 @@
 const { SlashCommandBuilder } = require("@discordjs/builders");
 const Discord = require("discord.js");
+const RadioBrowser = require("radio-browser");
 
 const util = require("../../util/util");
 
@@ -9,16 +10,16 @@ const abortId = "cancelSearch";
 
 module.exports = {
   data: new SlashCommandBuilder()
-    .setName("search")
-    .setDescription("Search for music on the selection pane!")
+    .setName("station")
+    .setDescription("Search for a radio station on the selection pane!")
     .addStringOption((option) =>
       option
         .setName("search-string")
-        .setDescription("Input to search for music")
+        .setDescription("Input to search for radio stations")
         .setRequired(true)
     ),
   group: "music",
-  examples: ["search daft punk"],
+  examples: ["station hip-hop"],
   clientPermissions: ["EMBED_LINKS"],
   guildOnly: true,
   callback: async (client, interaction) => {
@@ -72,13 +73,14 @@ module.exports = {
       });
 
     interaction.reply(
-      `🔍 **Searching for: \`${music}\` and adding selections...**`
+      `🔍 **Searching for station: \`${music}\` and adding selections...**`
     );
 
-    const results = await client.distube.search(music, {
-      safeSearch: true,
-      limit: 25,
-    });
+    const results = (
+      await RadioBrowser.searchStations({
+        name: music,
+      })
+    ).slice(0, 25);
 
     if (results.length === 0)
       return interaction.channel.send(
@@ -88,25 +90,20 @@ module.exports = {
     const component1 = (state) =>
       new Discord.MessageActionRow().addComponents(
         new Discord.MessageSelectMenu()
-          .setCustomId("searchMenu")
+          .setCustomId("searchRadioStation")
           .setPlaceholder(
             state ? "Selection unavailable." : "Awaiting for music selection..."
           )
           .setMinValues(1)
           .setDisabled(state)
           .addOptions(
-            results.map((song, id) => {
-              let duration = "";
-              if (song.duration === 0) {
-                duration = "Live";
-              } else {
-                duration = song.formattedDuration;
-              }
-
+            results.map((station, id) => {
               return {
-                label: util.trim(song.name, 100),
+                label: util.trim(station.name, 100),
                 value: id.toString(),
-                description: `${song.uploader.name} - ${duration}`,
+                description: `Language: ${
+                  station.language ? station.language.toProperCase() : "Unknown"
+                }`,
               };
             })
           )
@@ -122,8 +119,7 @@ module.exports = {
       );
 
     const initialMessage = await interaction.channel.send({
-      content:
-        "Please choose single, or multiple songs below.",
+      content: "Please choose a single station below.",
       components: [component1(false), component2(false)],
     });
 
@@ -141,8 +137,6 @@ module.exports = {
             components: [component1(true), component2(true)],
           });
           return;
-          // eslint-disable-next-line no-empty
-        } else {
         }
 
         await inter.deferUpdate();
@@ -151,14 +145,20 @@ module.exports = {
           components: [component1(true), component2(true)],
         });
 
-        for (const value of inter.values) {
-          const chosenSong = results[value];
+        for (let i = 0; i < inter.values.length; i++) {
+          const chosenStation = results[i];
+          const urlStream = chosenStation.url_resolved;
           if (queue) queue.searched = true;
 
-          await client.distube.playVoiceChannel(voiceChannel, chosenSong, {
+          await client.distube.playVoiceChannel(voiceChannel, urlStream, {
             textChannel: interaction.channel,
             member: interaction.member,
           });
+
+          queue = await client.distube.getQueue(interaction);
+          queue.songs[i].name = chosenStation.name;
+          queue.songs[i].isLive = true;
+          queue.songs[i].formattedDuration = "Live";
 
           if (!queue) {
             queue = await client.distube.getQueue(interaction);
@@ -168,18 +168,16 @@ module.exports = {
 
         if (inter.values.length === 1) {
           const [value] = inter.values;
-          await initialMessage.edit(
-            `🎶 Queued **${results[value].name} - ${results[value].formattedDuration}**`
-          );
+          await initialMessage.edit(`🎶 Queued **${results[value].name}**`);
         } else {
           await initialMessage.edit(
-            `🎶 **Added ${inter.values.length} song(s) to the server queue.**`
+            `🎶 **Added ${inter.values.length} station(s) to the server queue.**`
           );
         }
       })
       .catch(async () => {
         await initialMessage.edit({
-          content: "**No chosen song after 1 minute, operation canceled.**",
+          content: "**No chosen station after 1 minute, operation canceled.**",
           components: [component1(true), component2(true)],
         });
       });
