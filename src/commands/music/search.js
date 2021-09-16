@@ -163,7 +163,7 @@ module.exports = {
       })
       .catch(async () => {
         await initialMessage.edit({
-          content: "**No chosen song after 1 minute, operation canceled.**",
+          content: "**No chosen song after 1 minute, operation cancelled.**",
           components: [component1(true), component2(true)],
         });
       });
