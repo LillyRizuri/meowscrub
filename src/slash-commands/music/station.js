@@ -145,9 +145,9 @@ module.exports = {
           components: [component1(true), component2(true)],
         });
 
-        for (let i = 0; i < inter.values.length; i++) {
-          const chosenStation = results[i];
-          const urlStream = chosenStation.url_resolved;
+        for (const value of inter.values) {
+          const chosenStation = results[value];
+          const urlStream = chosenStation.url_resolved.replace(/\/+$/, "");
           if (queue) queue.searched = true;
 
           await client.distube.playVoiceChannel(voiceChannel, urlStream, {
@@ -156,9 +156,11 @@ module.exports = {
           });
 
           queue = await client.distube.getQueue(interaction);
-          queue.songs[i].name = chosenStation.name;
-          queue.songs[i].isLive = true;
-          queue.songs[i].formattedDuration = "Live";
+          const playedSong = queue.songs.find((song) => song.url === urlStream);
+
+          playedSong.name = chosenStation.name;
+          playedSong.isLive = true;
+          playedSong.formattedDuration = "Live";
 
           if (!queue) {
             queue = await client.distube.getQueue(interaction);
@@ -177,7 +179,7 @@ module.exports = {
       })
       .catch(async () => {
         await initialMessage.edit({
-          content: "**No chosen station after 1 minute, operation canceled.**",
+          content: "**No chosen station after 1 minute, operation cancelled.**",
           components: [component1(true), component2(true)],
         });
       });
