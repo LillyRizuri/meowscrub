@@ -6,6 +6,7 @@ meowscrub is the codename for the bot.
 
 ## Self-hosting:
 ### Before you begin:
+  - Make sure you've created an application in Discord Developer Portal.
   - Make sure you've installed:
     - [Node.JS](https://nodejs.org/) v16.6.0 or higher (discord.js requires that)
     - [Git](https://git-scm.com/downloads) for cloning my repository
