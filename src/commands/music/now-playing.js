@@ -25,7 +25,7 @@ module.exports = {
     let videoProgressBar = "";
 
     if (queue.songs[0].isLive) {
-      currentPlayhead = " ◉ LIVE: ";
+      currentPlayhead = "◉ LIVE: ";
       videoProgressBar = progressbar.splitBar(10, 10, 20, "▬", slider)[0];
     } else if (
       queue.filters &&
