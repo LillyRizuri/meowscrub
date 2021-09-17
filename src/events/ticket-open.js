@@ -12,13 +12,13 @@ module.exports = {
     if (!interaction.inGuild()) return;
     if (interaction.customId !== client.ticketButtonId) return;
 
-    const settings = await settingsSchema.findOne({
+    const guildSettings = await settingsSchema.findOne({
       guildId: interaction.guildId,
     });
 
-    if (!settings || !settings.settings.ticketChannel) return;
+    if (!guildSettings || !guildSettings.settings.ticketChannel) return;
 
-    const ticketChannel = settings.settings.ticketChannel;
+    const ticketChannel = guildSettings.settings.ticketChannel;
 
     if (interaction.channelId !== ticketChannel.channelId) return;
     if (interaction.message.id !== ticketChannel.messageId) return;
@@ -111,7 +111,13 @@ Thank you for reaching out to the staff team. Please wait patiently for the staf
 ⠀• Ticket Channel: ${channel} (${channelId})
 ⠀• Created by: ${interaction.user} (${userId})
           `,
-      });
+      })
+      .setTimestamp();
+
+    if (guildSettings.settings.transcriptLog)
+      ticketResponseEmbed.setFooter(
+        "◉ This conversation can be monitored or recorded for reviewing purposes."
+      );
 
     await channel.send({
       content: `${interaction.user.toString()}, Welcome!`,
