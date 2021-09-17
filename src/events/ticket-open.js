@@ -87,6 +87,11 @@ module.exports = {
 
     const channelId = channel.id;
 
+    await channel.permissionOverwrites.edit(client.user, {
+      SEND_MESSAGES: true,
+      VIEW_CHANNEL: true,
+    });
+
     await channel.permissionOverwrites.edit(interaction.guildId, {
       VIEW_CHANNEL: false,
     });
