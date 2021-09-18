@@ -5,12 +5,12 @@ const settingsSchema = require("../../models/settings-schema");
 const emoji = require("../../assets/json/tick-emoji.json");
 
 module.exports = {
-  aliases: ["disable"],
-  memberName: "disable",
+  aliases: ["enable"],
+  memberName: "enable",
   group: "settings",
-  description: "Disable a command to prevent members from running them.",
+  description: "Enable a command from its disabled state.",
   format: "<commandName>",
-  examples: ["disable pokedex", "disable docs"],
+  examples: ["enable pokedex", "enable docs"],
   userPermissions: ["MANAGE_GUILD"],
   singleArgs: true,
   cooldown: 5,
@@ -19,7 +19,7 @@ module.exports = {
   callback: async (client, message, args) => {
     if (!args)
       return message.reply(
-        emoji.missingEmoji + " Please specify what command should be disabled."
+        emoji.missingEmoji + " Please specify what command should be enabled."
       );
 
     const commands = util.findCommands(args.toLowerCase());
@@ -49,40 +49,23 @@ module.exports = {
 
     const command = commands[0];
 
-    if (command.guarded)
-      return message.reply(
-        emoji.denyEmoji + " That command can't be disabled."
-      );
-
-    let settings = await settingsSchema.findOne({
+    const settings = await settingsSchema.findOne({
       guildId: message.guild.id,
     });
 
-    if (!settings || !settings.commands) {
-      await settingsSchema.findOneAndUpdate(
-        {
-          guildId: message.guild.id,
-        },
-        {
-          commands: {},
-        },
-        {
-          upsert: true,
-        }
-      );
+    const errMessage = emoji.denyEmoji + " That command is already enabled.";
+
+    if (!settings || !settings.commands) return message.reply(errMessage);
+
+    if (command.memberName in settings.commands) {
+      if (settings.commands[command.memberName])
+        return message.reply(errMessage);
+    } else {
+      return message.reply(errMessage);
     }
 
-    settings = await settingsSchema.findOne({
-      guildId: message.guild.id,
-    });
-
-    if (command.memberName in settings.commands)
-      if (!settings.commands[command.memberName])
-        return message.reply(
-          emoji.denyEmoji + " That command is already disabled."
-        );
-
-    settings.commands[command.memberName] = false;
+    settings.commands[command.memberName] = true;
+    client.commandsState[message.guild.id][command.memberName] = true;
     await settingsSchema.findOneAndUpdate(
       {
         guildId: message.guild.id,
@@ -95,7 +78,7 @@ module.exports = {
 
     await message.reply(
       emoji.successEmoji +
-        ` Successfully disabled the **${command.memberName}** command.`
+        ` Successfully enabled the **${command.memberName}** command.`
     );
   },
 };

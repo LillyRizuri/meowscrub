@@ -19,7 +19,7 @@ module.exports = {
   description: "Read the Global Chat's Notice.",
   cooldown: 5,
   callback: async (client, message) => {
-    const botOwner = await client.users.fetch(client.owner[0]);
+    const botOwner = await client.users.fetch(client.settings.owner[0]);
     let notice = `
 + The Global Chat was built to be fun, but it needs your cooperation to help keeping it fun and cozy for everyone.
 

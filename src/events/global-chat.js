@@ -23,7 +23,7 @@ module.exports = {
   name: "messageCreate",
   async execute(message, client) {
     if (!message.guild) return;
-    const botOwner = await client.users.fetch(client.owner[0]);
+    const botOwner = await client.users.fetch(client.settings.owner[0]);
     const msgCountForApproval = 100;
 
     function initTimeout() {

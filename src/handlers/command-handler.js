@@ -14,13 +14,13 @@ module.exports = async (client) => {
   const commandBase = require(`./${baseFile}`);
 
   async function readCommands(dir) {
-    const files = fs.readdirSync(path.join(__dirname, dir));
+    const files = fs.readdirSync(dir);
     for (const file of files) {
-      const stat = fs.lstatSync(path.join(__dirname, dir, file));
+      const stat = fs.lstatSync(path.join(dir, file));
       if (stat.isDirectory()) {
         readCommands(path.join(dir, file));
       } else if (file !== baseFile) {
-        const option = require(path.join(__dirname, dir, file));
+        const option = require(path.join(dir, file));
 
         const newAliases = [];
         for (let i = 0; i < option.aliases.length; i++) {
@@ -67,7 +67,7 @@ module.exports = async (client) => {
   }
 
   await loadPrefixes();
-  await readCommands("../commands");
+  await readCommands(client.settings.commandsPath);
   await commandBase.listen(client);
 
   if (client.commands.size !== arrayOfCommands.length)

@@ -182,6 +182,18 @@ module.exports.listen = (client) => {
     //     ephemeral: true,
     //   });
 
+    if (interaction.guild) {
+      const commandsState = client.commandsState[interaction.guild.id];
+
+      if (commandsState)
+        if (memberName in commandsState)
+          if (!commandsState[memberName])
+            return interaction.reply({
+              content: denyEmoji + " That command is disabled in this server.",
+              ephemeral: true,
+            });
+    }
+
     if (ownerOnly)
       if (!client.isOwner(interaction.user))
         return interaction.reply({

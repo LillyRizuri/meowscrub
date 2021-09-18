@@ -3,13 +3,13 @@ const fs = require("fs");
 
 module.exports = (client) => {
   function readListeners(dir) {
-    const files = fs.readdirSync(path.join(__dirname, dir));
+    const files = fs.readdirSync(dir);
     for (const file of files) {
-      const stat = fs.lstatSync(path.join(__dirname, dir, file));
+      const stat = fs.lstatSync(path.join(dir, file));
       if (stat.isDirectory()) {
         readListeners(path.join(dir, file));
       } else {
-        const listenerFile = require(path.join(__dirname, dir, file));
+        const listenerFile = require(path.join(dir, file));
         if (listenerFile.once) {
           client.once(listenerFile.name, (...args) =>
             listenerFile.execute(...args, client)
@@ -23,5 +23,5 @@ module.exports = (client) => {
     }
   }
 
-  readListeners("../events");
+  readListeners(client.settings.eventsPath);
 };

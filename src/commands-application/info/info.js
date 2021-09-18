@@ -1,4 +1,5 @@
 const Discord = require("discord.js");
+const { SlashCommandBuilder } = require("@discordjs/builders");
 
 const botInfoSchema = require("../../models/bot-info-schema");
 
@@ -6,13 +7,12 @@ const { version } = require("../../../package.json");
 const { dependencies } = require("../../../package.json");
 
 module.exports = {
-  aliases: ["info", "botinfo"],
-  memberName: "info",
+  data: new SlashCommandBuilder()
+    .setName("info")
+    .setDescription("Display the client's stats."),
   group: "info",
-  description: "Display the client's stats.",
   clientPermissions: ["EMBED_LINKS"],
-  cooldown: 5,
-  callback: async (client, message) => {
+  callback: async (client, interaction) => {
     let totalSeconds = client.uptime / 1000;
     const days = Math.floor(totalSeconds / 86400);
     totalSeconds %= 86400;
@@ -33,10 +33,9 @@ module.exports = {
     const memTotalInMB = (memTotal / 1024 / 1024).toFixed(2);
 
     const memUsedPercentage = ((memUsed / memTotal) * 100).toFixed(2) + "%";
-    const author = await client.users.fetch(client.owner[0]);
+    const author = await client.users.fetch(client.settings.owner[0]);
 
     const totalGuild = client.guilds.cache.size;
-    const totalMembers = client.users.cache.filter((u) => !u.bot).size;
 
     const discordJSVer = dependencies["discord.js"].replace("^", "");
 
@@ -68,8 +67,8 @@ module.exports = {
           inline: true,
         },
         {
-          name: "Total Servers & Members",
-          value: `${totalGuild.toLocaleString()} Servers | ${totalMembers.toLocaleString()} Members`,
+          name: "Total Servers",
+          value: `${totalGuild.toLocaleString()} Servers`,
           inline: true,
         },
         {
@@ -96,6 +95,6 @@ module.exports = {
         }
       )
       .setFooter(`2020 - 2021 ${author.tag} | ${botInfo.cmdsExecuted.toLocaleString()} commands executed`);
-    message.channel.send({ embeds: [infoEmbed] });
+    interaction.reply({ embeds: [infoEmbed] });
   },
 };

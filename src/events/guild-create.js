@@ -6,7 +6,7 @@ const { embedcolor } = require("../assets/json/colors.json");
 module.exports = {
   name: "guildCreate",
   async execute(guild, client) {
-    const botOwner = await client.users.fetch(client.owner[0]);
+    const botOwner = await client.users.fetch(client.settings.owner[0]);
     const clientInvite = client.generateInvite({
       scopes: ["applications.commands", "bot"],
       // eslint-disable-next-line no-undef

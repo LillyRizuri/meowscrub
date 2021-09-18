@@ -243,13 +243,11 @@ module.exports.listen = (client) => {
       //   );
 
       if (message.guild) {
-        const settings = await settingsSchema.findOne({
-          guildId: message.guild.id,
-        });
+        const commandsState = client.commandsState[message.guild.id];
 
-        if (settings && settings.commands)
-          if (memberName in settings.commands)
-            if (!settings.commands[memberName])
+        if (commandsState)
+          if (memberName in commandsState)
+            if (!commandsState[memberName])
               return message.reply(
                 denyEmoji + " That command is disabled in this server."
               );

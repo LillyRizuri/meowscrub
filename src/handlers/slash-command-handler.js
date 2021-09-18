@@ -12,14 +12,14 @@ module.exports = async (client) => {
   const baseFile = "slash-command-base.js";
   const commandBase = require(`./${baseFile}`);
 
-  function readSlashCommands(dir) {
-    const files = fs.readdirSync(path.join(__dirname, dir));
+  function readApplicationCommands(dir) {
+    const files = fs.readdirSync(dir);
     for (const file of files) {
-      const stat = fs.lstatSync(path.join(__dirname, dir, file));
+      const stat = fs.lstatSync(path.join(dir, file));
       if (stat.isDirectory()) {
-        readSlashCommands(path.join(dir, file));
+        readApplicationCommands(path.join(dir, file));
       } else {
-        let option = require(path.join(__dirname, dir, file));
+        let option = require(path.join(dir, file));
         option = commandBase(client, option);
         if (option.data.type === 2 || option.data.type === 3) {
           arrayOfCommands.push(option.data);
@@ -44,11 +44,11 @@ module.exports = async (client) => {
     });
   }
 
-  readSlashCommands("../slash-commands");
+  readApplicationCommands(client.settings.applicationCommandsPath);
 
   const rest = new REST({ version: "9" }).setToken(process.env.TOKEN);
 
-  async function registerSlashCommands(globalCommand = false) {
+  async function registerApplicationCommands(globalCommand = false) {
     try {
       // for (const command of await client.api.applications(client.user.id).commands.get()) {
       //   client.api.applications(client.user.id).commands(command.id).delete();
@@ -76,6 +76,6 @@ module.exports = async (client) => {
     }
   }
 
-  await registerSlashCommands(true);
+  await registerApplicationCommands(true);
   commandBase.listen(client);
 };

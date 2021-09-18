@@ -10,7 +10,7 @@ module.exports = {
   async execute(interaction, client) {
     if (!interaction.isButton()) return;
     if (!interaction.inGuild()) return;
-    if (interaction.customId !== client.ticketButtonId) return;
+    if (interaction.customId !== client.settings.ticketButtonId) return;
 
     const guildSettings = await settingsSchema.findOne({
       guildId: interaction.guildId,

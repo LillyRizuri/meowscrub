@@ -13,6 +13,7 @@ const Discord = require("discord.js");
 const DisTube = require("distube");
 const { DiscordTogether } = require("discord-together");
 const mongoose = require("mongoose");
+const path = require("path");
 
 const client = new Discord.Client({
   allowedMentions: {
@@ -43,8 +44,17 @@ mongoose
 client.cache = {
   globalChat: {},
 };
-client.ticketButtonId = "openTicket";
-client.owner = process.env.OWNERS.split(",");
+
+client.commandsState = {};
+
+client.settings = {
+  ticketButtonId: "openTicket",
+  commandsPath: path.join(__dirname, "commands-legacy"),
+  applicationCommandsPath: path.join(__dirname, "commands-application"),
+  eventsPath: path.join(__dirname, "events"),
+  owner: process.env.OWNERS.split(","),
+};
+
 client.commandGroups = [
   ["context", "Context Menu Commands", "<:context_menu:883737356283293726>"],
   ["covid", "Covid-Related Commands", "<:virus:877817262692769813>"],
@@ -64,7 +74,9 @@ client.commandGroups = [
   ["ticket", "Ticket Managing Tools", "📩"],
   ["util", "Utility", "🔧"],
 ];
+
 client.discordTogether = new DiscordTogether(client);
+
 client.distube = new DisTube.default(client, {
   emitAddSongWhenCreatingQueue: false,
   emitAddListWhenCreatingQueue: false,
@@ -73,6 +85,7 @@ client.distube = new DisTube.default(client, {
   updateYouTubeDL: true,
   youtubeCookie: process.env.YTCOOKIE,
 });
+
 client.isOwner = function isOwner(user) {
   user = client.users.resolve(user);
   if (!user) throw new Error("Unable to resolve user.");
@@ -89,6 +102,24 @@ require("./handlers/event-handler")(client);
 client.on("ready", async () => {
   await require("./handlers/command-handler")(client);
   await require("./handlers/slash-command-handler")(client);
+
+  const settingsSchema = require("./models/settings-schema");
+
+  async function loadCommandsState() {
+    for (const guild of client.guilds.cache) {
+      const guildId = guild[1].id;
+      const result = await settingsSchema.findOne({
+        guildId,
+      });
+
+      if (result && result.commands)
+        client.commandsState[guildId] = result.commands;
+    }
+
+    client.emit("debug", "Loaded all command states for all guilds.");
+  }
+
+  await loadCommandsState();
 
   console.log(
     "Initialized frockles (meowscrub) successfully. Give it a warm welcome."
