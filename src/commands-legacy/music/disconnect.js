@@ -28,9 +28,9 @@ module.exports = {
           " You need to be in the same VC with me in order to continue."
       );
 
-    if (client.playSongLog)
+    if (client.cache.playSongLog[message.guild.id])
       try {
-        await client.playSongLog.delete();
+        await client.cache.playSongLog[message.guild.id].delete();
       // eslint-disable-next-line no-empty
       } catch (err) {}
 

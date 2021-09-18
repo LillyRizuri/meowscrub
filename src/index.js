@@ -43,6 +43,7 @@ mongoose
 
 client.cache = {
   globalChat: {},
+  playSongLog: {},
 };
 
 client.commandsState = {};

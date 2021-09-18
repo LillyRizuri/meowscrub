@@ -8,9 +8,7 @@ const { green, what } = require("../assets/json/colors.json");
 module.exports = {
   name: "ready",
   async execute(client) {
-    client.playSongLog;
     client.distube
-
       .on("initQueue", (queue) => {
         queue.autoplay = false;
         queue.volume = 100;
@@ -24,8 +22,8 @@ module.exports = {
           } catch (err) {}
 
         try {
-          if (!client.playSongLog) {
-          } else if (client.playSongLog) await client.playSongLog.delete();
+          if (!client.cache.playSongLog[queue.textChannel.guildId]) {
+          } else if (client.cache.playSongLog[queue.textChannel.guildId]) await client.cache.playSongLog[queue.textChannel.guildId].delete();
         } catch (err) {}
 
         song.name = decodeURIComponent(song.name);
@@ -54,7 +52,7 @@ module.exports = {
   `
           );
         }
-        client.playSongLog = await queue.textChannel.send({
+        client.cache.playSongLog[queue.textChannel.guildId] = await queue.textChannel.send({
           embeds: [playingEmbed],
         });
       })
@@ -142,8 +140,8 @@ Estimated Time Until Playing: **${estimatedTime}**
 
       .on("empty", async (queue) => {
         try {
-          if (!client.playSongLog) {
-          } else if (client.playSongLog) await client.playSongLog.delete();
+          if (!client.cache.playSongLog[queue.textChannel.guildId]) {
+          } else if (client.cache.playSongLog[queue.textChannel.guildId]) await client.cache.playSongLog[queue.textChannel.guildId].delete();
         } catch (err) {}
         queue.textChannel.send(
           "<:scrubnull:797476323533783050> **The VC I'm in is empty. Leaving the channel...**"
@@ -152,8 +150,8 @@ Estimated Time Until Playing: **${estimatedTime}**
 
       .on("noRelated", async (queue) => {
         try {
-          if (!client.playSongLog) {
-          } else if (client.playSongLog) await client.playSongLog.delete();
+          if (!client.cache.playSongLog[queue.textChannel.guildId]) {
+          } else if (client.cache.playSongLog[queue.textChannel.guildId]) await client.cache.playSongLog[queue.textChannel.guildId].delete();
         } catch (err) {}
         queue.textChannel.send(
           "<:scrubnull:797476323533783050> **No related music can be found. Attempting to leave the VC...**"
@@ -162,8 +160,8 @@ Estimated Time Until Playing: **${estimatedTime}**
 
       .on("finish", async (queue) => {
         try {
-          if (!client.playSongLog) {
-          } else if (client.playSongLog) await client.playSongLog.delete();
+          if (!client.cache.playSongLog[queue.textChannel.guildId]) {
+          } else if (client.cache.playSongLog[queue.textChannel.guildId]) await client.cache.playSongLog[queue.textChannel.guildId].delete();
         } catch (err) {}
         queue.textChannel.send(
           "<:scrubnull:797476323533783050> **The queue is now empty. Leaving the VC...**"

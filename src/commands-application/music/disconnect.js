@@ -38,9 +38,9 @@ module.exports = {
         ephemeral: true,
       });
 
-    if (client.playSongLog)
+    if (client.cache.playSongLog[interaction.guild.id])
       try {
-        await client.playSongLog.delete();
+        await client.cache.playSongLog[interaction.guild.id].delete();
         // eslint-disable-next-line no-empty
       } catch (err) {}
 
