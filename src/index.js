@@ -90,9 +90,9 @@ client.distube = new DisTube.default(client, {
 client.isOwner = function isOwner(user) {
   user = client.users.resolve(user);
   if (!user) throw new Error("Unable to resolve user.");
-  if (typeof client.owner === "string") return user.id === client.owner;
-  if (client.owner instanceof Array) return client.owner.includes(user.id);
-  if (client.owner instanceof Set) return client.owner.has(user.id);
+  if (typeof client.settings.owner === "string") return user.id === client.settings.owner;
+  if (client.settings.owner instanceof Array) return client.settings.owner.includes(user.id);
+  if (client.settings.owner instanceof Set) return client.settings.owner.has(user.id);
   throw new Error("The owner option is an unknown value.");
 };
 
