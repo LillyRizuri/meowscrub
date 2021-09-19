@@ -71,7 +71,6 @@ client.commandGroups = [
   ["owner-only", "Owner-Only Tools", "👮‍♂️"],
   ["settings", "Server Settings", "<:gear:877813686180405248>"],
   ["soundboard", "Soundboard!", "🎹"],
-  ["tags", "Tags / Custom Commands", "<:console:880332764266758204>"],
   ["ticket", "Ticket Managing Tools", "📩"],
   ["util", "Utility", "🔧"],
 ];
@@ -115,6 +114,7 @@ client.on("ready", async () => {
 
       if (result && result.commands)
         client.commandsState[guildId] = result.commands;
+      else client.commandsState[guildId] = {};
     }
 
     client.emit("debug", "Loaded all command states for all guilds.");

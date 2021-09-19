@@ -5,6 +5,7 @@ const modPerms = require("../assets/json/mod-permissions.json");
 const normalPerms = require("../assets/json/normal-permissions.json");
 
 const botInfoSchema = require("../models/bot-info-schema");
+const settingsSchema = require("../models/settings-schema");
 // const userBlacklistSchema = require("../models/user-blacklist-schema");
 
 const { denyEmoji } = require("../assets/json/tick-emoji.json");
@@ -181,6 +182,22 @@ module.exports.listen = (client) => {
     //       " You are blacklisted from accessing my stuff. The only way for you to use my functionality again is to appeal.",
     //     ephemeral: true,
     //   });
+
+    if (interaction.guild)
+      if (!client.commandsState[interaction.guild.id]) {
+        const result = await settingsSchema.findOne({
+          guildId: interaction.guild.id,
+        });
+
+        if (result && result.commands)
+          client.commandsState[interaction.guild.id] = result.commands;
+        else client.commandsState[interaction.guild.id] = {};
+
+        client.emit(
+          "debug",
+          `Loaded all command states for the guild ${interaction.guild.id}`
+        );
+      }
 
     if (interaction.guild) {
       const commandsState = client.commandsState[interaction.guild.id];

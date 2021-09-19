@@ -8,7 +8,7 @@ const util = require("../util/util");
 
 const botInfoSchema = require("../models/bot-info-schema");
 const settingsSchema = require("../models/settings-schema");
-const tagsSchema = require("../models/tags-schema");
+// const tagsSchema = require("../models/tags-schema");
 // const userBlacklistSchema = require("../models/user-blacklist-schema");
 
 const { denyEmoji } = require("../assets/json/tick-emoji.json");
@@ -160,13 +160,30 @@ module.exports.listen = (client) => {
         client.guildPrefixes[message.guild.id] = result;
         client.emit(
           "debug",
-          `Loaded the prefix for the guild with this Id ${message.guild.id}: ${
+          `Loaded the prefix for the guild ${message.guild.id}: ${
             client.guildPrefixes[message.guild.id]
           }`
         );
       }
+
       prefix = client.guildPrefixes[message.guild.id] || process.env.PREFIX;
     } else prefix = process.env.PREFIX;
+
+    if (message.guild)
+      if (!client.commandsState[message.guild.id]) {
+        const result = await settingsSchema.findOne({
+          guildId: message.guild.id,
+        });
+
+        if (result && result.commands)
+          client.commandsState[message.guild.id] = result.commands;
+        else client.commandsState[message.guild.id] = {};
+
+        client.emit(
+          "debug",
+          `Loaded all command states for the guild ${message.guild.id}`
+        );
+      }
 
     function escapeRegex(string) {
       return string.replace(/[|\\{}()[\]^$+*?.]/g, "\\$&");
@@ -194,22 +211,27 @@ module.exports.listen = (client) => {
       let text = message.content.replace(patternRemovePrefix, "").split(/\s+/);
 
       // check if it's a custom command
-      if (message.guild) {
-        const tagsConfig = await tagsSchema.findOne({
-          guildId: message.guild.id,
-        });
+      // if (message.guild) {
+      //   const tagsConfig = await tagsSchema.findOne({
+      //     guildId: message.guild.id,
+      //   });
 
-        if (tagsConfig) {
-          const tag = tagsConfig.tags.find(
-            (i) => i.name.toLowerCase() === text[0].toLowerCase()
-          );
+      //   if (tagsConfig) {
+      //     const tag = tagsConfig.tags.find(
+      //       (i) => i.name.toLowerCase() === text[0].toLowerCase()
+      //     );
 
-          if (tag) message.channel.send(tag.response);
-        }
-      }
+      //     if (tag) message.channel.send(tag.response);
+      //   }
+      // }
 
       const command = allCommands[text[0].toLowerCase()];
-      if (!command) return;
+      if (!command) {
+        return message.reply(
+          denyEmoji +
+            ` Unknown command. Please use \`${prefix}help\` or \`@${client.user.tag} help\` to view the command list.`
+        );
+      }
 
       const {
         aliases,
