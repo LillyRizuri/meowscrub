@@ -75,9 +75,20 @@ module.exports = {
           " The muted role was set, but couldn't be found anywhere.\nMaybe the role got deleted?"
       );
 
-    const results = await mutedSchema.findOne({
+    let results = await mutedSchema.findOne({
       guildId: message.guild.id,
     });
+
+    if (!results) {
+      await new mutedSchema({
+        guildId: message.guild.id,
+        users: member.id,
+      }).save();
+
+      results = await mutedSchema.findOne({
+        guildId: message.guild.id,
+      });
+    }
 
     const index = results.users.findIndex((prop) => prop === member.id);
     if (index !== -1)
@@ -85,15 +96,8 @@ module.exports = {
         emoji.denyEmoji + ` **${member.user.tag}** is already muted.`
       );
 
-    if (results) {
-      results.users.push(member.id);
-      results.save();
-    } else if (!results) {
-      await new mutedSchema({
-        guildId: message.guild.id,
-        users: member.id,
-      }).save();
-    }
+    if (results) results.users.push(member.id);
+    results.save();
 
     if (message.guild.members.resolve(member.user.id)) {
       if (
@@ -107,10 +111,17 @@ module.exports = {
         );
 
       if (!member.roles.cache.has(mutedRole.id))
-        await member.roles.add(
-          mutedRole,
-          `By ${message.author.tag}: ${reason}`
-        );
+        try {
+          await member.roles.add(
+            mutedRole,
+            `By ${message.author.tag}: ${reason}`
+          );
+        } catch (err) {
+          return message.reply(
+            emoji.denyEmoji +
+              " It seems like I can't reach the Muted role.\nMake sure the role is under my highest role so that I could access it."
+          );
+        }
 
       if (guildSettings && guildSettings.dmPunishment) {
         const dmReasonEmbed = new Discord.MessageEmbed()

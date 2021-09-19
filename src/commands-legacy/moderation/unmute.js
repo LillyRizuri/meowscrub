@@ -119,10 +119,17 @@ module.exports = {
     );
 
     if (message.guild.members.resolve(member.user.id)) {
-      await member.roles.remove(
-        mutedRole,
-        `From ${message.author.tag}: ${reason}`
-      );
+      try {
+        await member.roles.remove(
+          mutedRole,
+          `From ${message.author.tag}: ${reason}`
+        );
+      } catch (err) {
+        return message.reply(
+          emoji.denyEmoji +
+            " It seems like I can't reach the Muted role.\nMake sure the role is under my highest role so that I could access it."
+        );
+      }
 
       if (guildSettings && guildSettings.settings.dmPunishment) {
         const dmReasonEmbed = new Discord.MessageEmbed()
