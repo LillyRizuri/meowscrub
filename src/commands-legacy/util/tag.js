@@ -3,7 +3,7 @@ const tagsSchema = require("../../models/tags-schema");
 const emoji = require("../../assets/json/tick-emoji.json");
 
 module.exports = {
-  aliases: ["tag"],
+  aliases: ["tag", "t"],
   memberName: "tag",
   group: "util",
   description: "Manage custom commands in the current server.",
@@ -176,7 +176,7 @@ All available methods:
             .join(", ");
 
         message.channel.send(
-          `**__All tags in ${message.guild.name}:__**\n${tagsList}`
+          `**__All tags in \`${message.guild.name}\`:__**\n${tagsList}`
         );
         break;
       }
