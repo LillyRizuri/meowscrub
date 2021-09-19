@@ -102,10 +102,7 @@ module.exports = {
       userStatus = "Offline";
     }
 
-    if (
-      member.presence &&
-      member.presence.activities.length > 0
-    ) {
+    if (member.presence && member.presence.activities.length > 0) {
       userPresence = member.presence.activities[0].name;
 
       if (member.presence.activities[0].state) {
