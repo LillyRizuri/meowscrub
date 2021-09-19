@@ -297,20 +297,20 @@ module.exports = {
             {
               name: "User Details",
               value: `
-  • ID: \`${target.id}\`
-  • Username: \`${target.tag}\`
-  • Created: \`${createdAt} (${moment(target.createdTimestamp).fromNow()})\` 
-  • Is Bot: \`${isBot}\`
-  `,
+• ID: \`${target.id}\`
+• Username: \`${target.tag}\`
+• Created: \`${createdAt} (${moment(target.createdTimestamp).fromNow()})\` 
+• Is Bot: \`${isBot}\`
+`,
             },
             {
               name: "Member Details",
               value: `
-  • Nickname: \`${nickname}\`
-  • Roles [${member.roles.cache.size - 1}]: ${rolemap}        
-  • Joined: \`${joinedTimestamp} (${moment(member.joinedTimestamp).fromNow()})\`
-  • Status: \`${userStatus}\`  
-  • Top Activity: \`${userPresence}${userPresenceState}\`
+• Nickname: \`${nickname}\`
+• Roles [${member.roles.cache.size - 1}]: ${rolemap}        
+• Joined: \`${joinedTimestamp} (${moment(member.joinedTimestamp).fromNow()})\`
+• Status: \`${userStatus}\`  
+• Top Activity: \`${userPresence}${userPresenceState}\`
                       `,
             }
           )
