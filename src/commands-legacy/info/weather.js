@@ -12,7 +12,7 @@ module.exports = {
   examples: ["weather hanoi"],
   clientPermissions: ["EMBED_LINKS"],
   singleArgs: true,
-  cooldown: 5,
+  cooldown: 3,
   callback: async (client, message, args) => {
     if (!args)
       return message.reply(

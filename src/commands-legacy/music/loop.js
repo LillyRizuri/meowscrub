@@ -9,7 +9,7 @@ module.exports = {
     "Running the command with no arguments and the command output will display the current music repeat config.",
   format: "[ song | queue | off ]",
   examples: ["loop song", "loop queue", "loop off"],
-  cooldown: 5,
+  cooldown: 3,
   singleArgs: true,
   guildOnly: true,
   callback: async (client, message, args) => {

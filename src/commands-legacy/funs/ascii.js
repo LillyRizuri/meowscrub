@@ -9,7 +9,7 @@ module.exports = {
   description:
     "Create ASCII art using your input. Won't look pretty on mobile though.",
   format: "<string>",
-  cooldown: 5,
+  cooldown: 3,
   singleArgs: true,
   callback: async (client, message, args) => {
     function asciiText(text) {

@@ -5,7 +5,7 @@ module.exports = {
   memberName: "catfact",
   group: "info",
   description: "Share a random fact about cats.",
-  cooldown: 5,
+  cooldown: 3,
   callback: async (client, message) => {
     const json = await fetch("https://some-random-api.ml/facts/cat").then(
       (res) => res.json()

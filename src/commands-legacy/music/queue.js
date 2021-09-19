@@ -9,7 +9,7 @@ module.exports = {
   group: "music",
   description: "Display the server's music queue.",
   clientPermissions: ["EMBED_LINKS"],
-  cooldown: 5,
+  cooldown: 3,
   guildOnly: true,
   callback: async (client, message) => {
     const queue = await client.distube.getQueue(message);

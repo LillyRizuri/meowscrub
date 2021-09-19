@@ -1,9 +1,6 @@
-const Discord = require("discord.js");
-
 const settingsSchema = require("../../models/settings-schema");
 
 const emoji = require("../../assets/json/tick-emoji.json");
-const color = require("../../assets/json/colors.json");
 
 module.exports = {
   aliases: ["global", "setglobal", "global-chat"],
@@ -14,10 +11,9 @@ module.exports = {
     "Replace the syntax with `disable` if you wish to remove the configuration.",
   format: "<#channel | channelID>",
   examples: ["setglobal #global", "setglobal disable"],
-  clientPermissions: ["EMBED_LINKS"],
   userPermissions: ["MANAGE_GUILD"],
   singleArgs: true,
-  cooldown: 5,
+  cooldown: 3,
   guildOnly: true,
   callback: async (client, message, args) => {
     const guildId = message.guild.id;
@@ -60,13 +56,9 @@ module.exports = {
         );
         client.cache.globalChat[message.guild.id] = channel.id;
 
-        const confirmationEmbed = new Discord.MessageEmbed()
-          .setColor(color.green)
-          .setDescription(
-            emoji.successEmoji +
-              ` **Set the Global Chat Channel to:** ${channel}`
-          );
-        message.channel.send({ embeds: [confirmationEmbed] });
+        message.channel.send(
+          emoji.successEmoji + ` **Set the Global Chat Channel to:** ${channel}`
+        );
         break;
       }
       case "disable": {
@@ -87,13 +79,10 @@ module.exports = {
         );
         client.cache.globalChat[message.guild.id] = null;
 
-        const confirmationRemovalEmbed = new Discord.MessageEmbed()
-          .setColor(color.green)
-          .setDescription(
-            emoji.successEmoji +
-              " **Removed the configuration for the Global Chat.**"
-          );
-        message.channel.send({ embeds: [confirmationRemovalEmbed] });
+        message.channel.send(
+          emoji.successEmoji +
+            " **Removed the configuration for the Global Chat.**"
+        );
         return;
       }
       case "": {
@@ -101,19 +90,15 @@ module.exports = {
           guildId,
         });
 
-        if (!results || !results.settings.globalChat) {
+        if (!results || !results.settings.globalChat)
           return message.reply(
             emoji.missingEmoji + " The text channel hasn't been set yet."
           );
-        } else if (results && results.settings.globalChat) {
-          const channelEmbed = new Discord.MessageEmbed()
-            .setColor(color.green)
-            .setDescription(
-              emoji.successEmoji +
-                ` **Current Global Chat Channel Configuration:** <#${results.settings.globalChat}>`
-            );
-          message.channel.send({ embeds: [channelEmbed] });
-        }
+        else if (results && results.settings.globalChat)
+          message.channel.send(
+            emoji.successEmoji +
+              ` **Current Global Chat Channel Configuration:** <#${results.settings.globalChat}>`
+          );
         break;
       }
     }

@@ -17,7 +17,7 @@ module.exports = {
   memberName: "globalchat-notice",
   group: "misc",
   description: "Read the Global Chat's Notice.",
-  cooldown: 5,
+  cooldown: 3,
   callback: async (client, message) => {
     const botOwner = await client.users.fetch(client.settings.owner[0]);
     let notice = `

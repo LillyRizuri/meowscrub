@@ -9,7 +9,7 @@ module.exports = {
   description: "Move the playhead by providing a video timestamp.",
   format: "< hh:mm:ss | mm:ss | ss >",
   examples: ["seek 26", "seek 10:40", "seek 01:25:40"],
-  cooldown: 5,
+  cooldown: 3,
   singleArgs: true,
   guildOnly: true,
   callback: async (client, message, args) => {

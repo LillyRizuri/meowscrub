@@ -14,7 +14,7 @@ module.exports = {
     "roleinfo 694239225226199070",
   ],
   clientPermissions: ["EMBED_LINKS"],
-  cooldown: 5,
+  cooldown: 3,
   singleArgs: true,
   guildOnly: true,
   callback: async (client, message, args) => {

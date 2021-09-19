@@ -17,7 +17,7 @@ module.exports = {
   clientPermissions: ["EMBED_LINKS"],
   userPermissions: ["MANAGE_GUILD"],
   singleArgs: true,
-  cooldown: 5,
+  cooldown: 3,
   guildOnly: true,
   callback: async (client, message, args) => {
     const guildId = message.guild.id;
@@ -44,7 +44,10 @@ module.exports = {
           );
 
         const ticketEmbed = new Discord.MessageEmbed()
-          .setAuthor(`${client.user.username}'s Ticket Panel`, client.user.displayAvatarURL())
+          .setAuthor(
+            `${client.user.username}'s Ticket Panel`,
+            client.user.displayAvatarURL()
+          )
           .setColor("RANDOM")
           .setDescription(
             "To create a ticket, please interact with the button below.\n**Do not abuse it in any way.**"
@@ -121,13 +124,11 @@ module.exports = {
             useFindAndModify: false,
           }
         );
-        const confirmationRemovalEmbed = new Discord.MessageEmbed()
-          .setColor(color.green)
-          .setDescription(
-            emoji.successEmoji +
-              " **Removed the configuration for the Ticket Channel.**"
-          );
-        message.channel.send({ embeds: [confirmationRemovalEmbed] });
+
+        message.channel.send(
+          emoji.successEmoji +
+            " **Removed the configuration for the Ticket Channel.**"
+        );
         return;
       }
       case "": {
@@ -135,19 +136,15 @@ module.exports = {
           guildId,
         });
 
-        if (!results || !results.settings.ticketChannel.channelId) {
+        if (!results || !results.settings.ticketChannel.channelId)
           return message.reply(
             emoji.missingEmoji + " The category channel ID hasn't been set yet."
           );
-        } else if (results && results.settings.ticketChannel.channelId) {
-          const channelEmbed = new Discord.MessageEmbed()
-            .setColor(color.green)
-            .setDescription(
-              emoji.successEmoji +
-                ` **Current Chatbot Channel Configuration:** <#${results.settings.ticketChannel.channelId}>`
-            );
-          message.channel.send({ embeds: [channelEmbed] });
-        }
+        else if (results && results.settings.ticketChannel.channelId)
+          message.channel.send(
+            emoji.successEmoji +
+              ` **Current Chatbot Channel Configuration:** <#${results.settings.ticketChannel.channelId}>`
+          );
         break;
       }
     }

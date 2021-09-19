@@ -9,7 +9,7 @@ module.exports = {
   description: "Move the playhead by rewinding a certain amount of time.",
   format: "< hh:mm:ss | mm:ss | ss >",
   examples: ["rewind 26", "rewind 05:20", "rewind 01:11:15"],
-  cooldown: 5,
+  cooldown: 3,
   singleArgs: true,
   guildOnly: true,
   callback: async (client, message, args) => {

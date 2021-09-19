@@ -13,7 +13,7 @@ module.exports = {
   examples: ["enable pokedex", "enable docs"],
   userPermissions: ["MANAGE_GUILD"],
   singleArgs: true,
-  cooldown: 5,
+  cooldown: 3,
   guildOnly: true,
   guarded: true,
   callback: async (client, message, args) => {

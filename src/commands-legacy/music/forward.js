@@ -9,7 +9,7 @@ module.exports = {
   description: "Move the playhead by forwarding a certain amount of time.",
   format: "< hh:mm:ss | mm:ss | ss >",
   examples: ["forward 26", "forward 05:20", "forward 01:11:15"],
-  cooldown: 5,
+  cooldown: 3,
   singleArgs: true,
   guildOnly: true,
   callback: async (client, message, args) => {

@@ -9,7 +9,7 @@ module.exports = {
   details: "We don't endorse murder in any shape or form, remember that.",
   format: "<@user>",
   examples: ["kill @frockles#4339"],
-  cooldown: 5,
+  cooldown: 3,
   singleArgs: true,
   guildOnly: true,
   callback: async (client, message) => {

@@ -11,7 +11,7 @@ module.exports = {
   group: "music",
   description:
     "Display what music I'm playing, and the current playhead location.",
-  cooldown: 5,
+  cooldown: 3,
   guildOnly: true,
   callback: async (client, message) => {
     const queue = await client.distube.getQueue(message);

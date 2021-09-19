@@ -11,7 +11,7 @@ module.exports = {
   format: "<emojiName>",
   examples: ["emoji :what:"],
   clientPermissions: ["ATTACH_FILES"],
-  cooldown: 5,
+  cooldown: 3,
   singleArgs: true,
   callback: async (client, message, args) => {
     if (!args)

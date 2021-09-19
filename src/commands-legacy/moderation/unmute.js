@@ -15,7 +15,7 @@ module.exports = {
   examples: ["unmute @frockles forgiven"],
   clientPermissions: ["MANAGE_ROLES", "EMBED_LINKS"],
   userPermissions: ["MANAGE_ROLES"],
-  cooldown: 5,
+  cooldown: 3,
   singleArgs: false,
   guildOnly: true,
   callback: async (client, message, args) => {

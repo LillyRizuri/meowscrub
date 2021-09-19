@@ -14,7 +14,7 @@ module.exports = {
   examples: ["ban @frockles broken a rule"],
   clientPermissions: ["KICK_MEMBERS", "EMBED_LINKS"],
   userPermissions: ["KICK_MEMBERS"],
-  cooldown: 5,
+  cooldown: 3,
   singleArgs: false,
   guildOnly: true,
   callback: async (client, message, args) => {

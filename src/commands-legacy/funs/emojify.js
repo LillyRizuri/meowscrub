@@ -28,7 +28,7 @@ module.exports = {
   group: "funs",
   description: "Emoji-ify your text!",
   format: "<string>",
-  cooldown: 5,
+  cooldown: 3,
   singleArgs: true,
   callback: async (client, message, args) => {
     if (!args)

@@ -13,7 +13,7 @@ module.exports = {
   examples: ["lock #frockles-4339", "lock 866721249640448071"],
   clientPermissions: ["MANAGE_CHANNELS"],
   userPermissions: ["MANAGE_CHANNELS"],
-  cooldown: 5,
+  cooldown: 3,
   singleArgs: true,
   guildOnly: true,
   callback: async (client, message, args) => {

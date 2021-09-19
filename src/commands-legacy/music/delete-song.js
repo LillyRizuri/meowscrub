@@ -9,7 +9,7 @@ module.exports = {
   details: "List the queue to know which one to remove first.",
   format: "<musicID>",
   examples: ["delete-song 2"],
-  cooldown: 5,
+  cooldown: 3,
   singleArgs: true,
   guildOnly: true,
   callback: async (client, message, args) => {

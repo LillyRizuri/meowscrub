@@ -12,7 +12,7 @@ All effects can be found here: https://distube.js.org/#/docs/DisTube/beta/typede
   // eslint-disable-next-line quotes
   format: '[filterName | "off"]',
   examples: ["filter vaporwave"],
-  cooldown: 5,
+  cooldown: 3,
   singleArgs: true,
   guildOnly: true,
   callback: async (client, message, args) => {

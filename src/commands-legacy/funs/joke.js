@@ -5,7 +5,7 @@ module.exports = {
   memberName: "joke",
   group: "funs",
   description: "Tell jokes!",
-  cooldown: 5,
+  cooldown: 3,
   callback: async (client, message) => {
     const result = await fetch(
       "https://v2.jokeapi.dev/joke/Any?blacklistFlags=nsfw,religious,political,racist,sexist,explicit"

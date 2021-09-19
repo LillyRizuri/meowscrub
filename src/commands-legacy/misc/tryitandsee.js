@@ -4,7 +4,7 @@ module.exports = {
   group: "misc",
   description: "Try it and see.",
   clientPermissions: ["EMBED_LINKS"],
-  cooldown: 5,
+  cooldown: 3,
   callback: async (client, message) => {
     message.channel.send("https://tryitands.ee/");
   },

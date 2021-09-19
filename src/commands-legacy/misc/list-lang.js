@@ -5,7 +5,7 @@ module.exports = {
   memberName: "list-lang",
   group: "misc",
   description: "Display all languages that are supported by Google Translate.",
-  cooldown: 5,
+  cooldown: 3,
   callback: async (client, message) => {
     const allIsoLanguages = Object.keys(languages);
     const langList = [];

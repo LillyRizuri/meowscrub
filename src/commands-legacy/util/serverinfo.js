@@ -14,7 +14,7 @@ module.exports = {
   format: "[guildID]",
   examples: ["serverinfo", "serverinfo 692346925428506777"],
   clientPermissions: ["EMBED_LINKS"],
-  cooldown: 5,
+  cooldown: 3,
   singleArgs: true,
   guildOnly: true,
   callback: async (client, message, args) => {

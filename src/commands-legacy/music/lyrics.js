@@ -13,7 +13,7 @@ module.exports = {
   format: "<searchString>",
   examples: ["lyrics here comes the sun"],
   clientPermissions: ["EMBED_LINKS"],
-  cooldown: 5,
+  cooldown: 3,
   singleArgs: true,
   callback: async (client, message, args) => {
     let searchString = args;

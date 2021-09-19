@@ -20,7 +20,7 @@ module.exports = {
     "MANAGE_CHANNELS",
     "READ_MESSAGE_HISTORY",
   ],
-  cooldown: 5,
+  cooldown: 3,
   singleArgs: true,
   guildOnly: true,
   callback: async (client, message, args) => {

@@ -12,7 +12,7 @@ module.exports = {
   format: "<countryName> <provinceName>",
   examples: ["cprovince canada ontario"],
   clientPermissions: ["EMBED_LINKS"],
-  cooldown: 5,
+  cooldown: 3,
   callback: async (client, message, args) => {
     const dateTimeOptions = {
       weekday: "long",

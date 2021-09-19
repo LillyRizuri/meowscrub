@@ -20,7 +20,7 @@ module.exports = {
   ],
   clientPermissions: ["MANAGE_CHANNELS", "EMBED_LINKS"],
   userPermissions: ["MANAGE_CHANNELS"],
-  cooldown: 5,
+  cooldown: 3,
   singleArgs: false,
   guildOnly: true,
   callback: async (client, message, args) => {

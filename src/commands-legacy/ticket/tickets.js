@@ -10,7 +10,7 @@ module.exports = {
   group: "ticket",
   description: "Display open and locked tickets.",
   userPermissions: ["MANAGE_MESSAGES"],
-  cooldown: 5,
+  cooldown: 3,
   guildOnly: true,
   callback: async (client, message) => {
     let results = await ticketSchema.find({

@@ -10,7 +10,7 @@ module.exports = {
   format: "[@user | userID]",
   examples: ["avatar", "avatar @frockles", "avatar 693832549943869493"],
   singleArgs: true,
-  cooldown: 5,
+  cooldown: 3,
   callback: async (client, message, args) => {
     let target;
     try {

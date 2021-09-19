@@ -18,7 +18,7 @@ module.exports = {
   examples: ["warn @frockles spamming"],
   clientPermissions: ["EMBED_LINKS"],
   userPermissions: ["BAN_MEMBERS"],
-  cooldown: 5,
+  cooldown: 3,
   singleArgs: false,
   guildOnly: true,
   callback: async (client, message, args) => {

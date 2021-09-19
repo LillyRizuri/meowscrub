@@ -6,7 +6,7 @@ module.exports = {
   group: "info",
   description: "Use this command to not kill yourself, fortunately.",
   clientPermissions: ["EMBED_LINKS"],
-  cooldown: 5,
+  cooldown: 3,
   callback: async (client, message) => {
     const suicideHotlineEmbed = new Discord.MessageEmbed()
       .setColor("#ff0000")

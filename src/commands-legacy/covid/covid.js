@@ -15,7 +15,7 @@ module.exports = {
   format: "[countryName]",
   examples: ["covid", "covid usa"],
   clientPermissions: ["EMBED_LINKS"],
-  cooldown: 5,
+  cooldown: 3,
   singleArgs: true,
   callback: async (client, message, args) => {
     const dateTimeOptions = {

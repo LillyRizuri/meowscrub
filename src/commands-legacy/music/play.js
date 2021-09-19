@@ -9,7 +9,7 @@ module.exports = {
   format: "<searchString | videoAttachment | audioAttachment>",
   examples: ["play very noise"],
   clientPermissions: ["EMBED_LINKS"],
-  cooldown: 5,
+  cooldown: 3,
   singleArgs: true,
   guildOnly: true,
   callback: async (client, message, args) => {

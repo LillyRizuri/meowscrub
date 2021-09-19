@@ -6,7 +6,7 @@ module.exports = {
   memberName: "anime-quote",
   group: "misc",
   description: "Retrieve a random anime quote.",
-  cooldown: 5,
+  cooldown: 3,
   callback: async (client, message) => {
     const json = await fetch("https://some-random-api.ml/animu/quote").then(
       (res) => res.json()

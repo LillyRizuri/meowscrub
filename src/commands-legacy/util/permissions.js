@@ -14,7 +14,7 @@ module.exports = {
   format: "[@user | userID]",
   examples: ["permissions @frockles", "permissions 693832549943869493"],
   clientPermissions: ["EMBED_LINKS"],
-  cooldown: 5,
+  cooldown: 3,
   singleArgs: true,
   guildOnly: true,
   callback: async (client, message, args) => {

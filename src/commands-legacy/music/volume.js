@@ -9,7 +9,7 @@ module.exports = {
     "Leave the argument blank to show the current audio volume of the server queue.",
   format: "[number]",
   examples: ["volume 80"],
-  cooldown: 5,
+  cooldown: 3,
   singleArgs: true,
   guildOnly: true,
   callback: async (client, message, args) => {

@@ -5,7 +5,7 @@ module.exports = {
   memberName: "leave",
   group: "music",
   description: "Stop the music playback and leave the voice channel.",
-  cooldown: 5,
+  cooldown: 3,
   guildOnly: true,
   callback: async (client, message) => {
     const queue = await client.distube.getQueue(message);

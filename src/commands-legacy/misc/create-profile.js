@@ -8,7 +8,7 @@ module.exports = {
   memberName: "create-profile",
   group: "misc",
   description: "Create a profile for Global Chat.",
-  cooldown: 5,
+  cooldown: 3,
   hidden: true,
   callback: async (client, message) => {
     const gcInfo = await globalChatSchema.findOne({

@@ -14,7 +14,7 @@ module.exports = {
     "base64 encode never gonna give you up",
     "base64 decode bmV2ZXIgZ29ubmEgZ2l2ZSB5b3UgdXA=",
   ],
-  cooldown: 5,
+  cooldown: 3,
   callback: async (client, message, args) => {
     if (!args[0])
       return message.reply(

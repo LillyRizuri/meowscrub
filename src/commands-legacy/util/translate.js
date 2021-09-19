@@ -14,7 +14,7 @@ module.exports = {
   format: "[-language] <string>",
   examples: ["translate -en xin chào", "translate -vi hello", "translate hola"],
   clientPermissions: ["EMBED_LINKS"],
-  cooldown: 5,
+  cooldown: 3,
   singleArgs: true,
   callback: async (client, message, args) => {
     let textToTranslate = "";

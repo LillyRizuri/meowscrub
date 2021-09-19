@@ -9,7 +9,7 @@ module.exports = {
   group: "images",
   description: "Dog.",
   clientPermissions: ["EMBED_LINKS"],
-  cooldown: 5,
+  cooldown: 3,
   callback: async (client, message) => {
     const result = await fetch("https://dog.ceo/api/breeds/image/random").then(
       (res) => res.json()

@@ -14,7 +14,7 @@ module.exports = {
     "The command may be part of a command name or a whole command name. If it isn't specified, all available commands will be listed.",
   format: "[commandName]",
   examples: ["help", "help prefix"],
-  cooldown: 5,
+  cooldown: 3,
   singleArgs: true,
   guarded: true,
   callback: async (client, message, args) => {

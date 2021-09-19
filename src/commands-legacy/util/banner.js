@@ -11,7 +11,7 @@ module.exports = {
   format: "[@user | userID]",
   examples: ["banner", "banner @frockles", "banner 693832549943869493"],
   singleArgs: true,
-  cooldown: 5,
+  cooldown: 3,
   callback: async (client, message, args) => {
     let target;
     try {

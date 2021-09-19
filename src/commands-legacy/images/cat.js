@@ -9,7 +9,7 @@ module.exports = {
   group: "images",
   description: "Cat.",
   clientPermissions: ["EMBED_LINKS"],
-  cooldown: 5,
+  cooldown: 3,
   callback: async (client, message) => {
     const result = await fetch(
       "https://api.thecatapi.com/v1/images/search"

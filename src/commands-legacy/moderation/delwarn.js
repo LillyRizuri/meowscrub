@@ -17,7 +17,7 @@ module.exports = {
   examples: ["delwarn 279a5851-71fa-4b85-9b25-6d938af16b02 apologized"],
   clientPermissions: ["EMBED_LINKS"],
   userPermissions: ["BAN_MEMBERS"],
-  cooldown: 5,
+  cooldown: 3,
   singleArgs: false,
   guildOnly: true,
   callback: async (client, message, args) => {

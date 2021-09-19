@@ -9,7 +9,7 @@ module.exports = {
   examples: ["nick @frockles ManagedNIckname.mp4"],
   clientPermissions: ["MANAGE_NICKNAMES", "EMBED_LINKS"],
   userPermissions: ["MANAGE_NICKNAMES"],
-  cooldown: 5,
+  cooldown: 3,
   singleArgs: false,
   guildOnly: true,
   callback: async (client, message, args) => {

@@ -7,7 +7,7 @@ module.exports = {
   group: "covid",
   description: "Displays top 10 countries with the most cases of COVID-19.",
   clientPermissions: ["EMBED_LINKS"],
-  cooldown: 5,
+  cooldown: 3,
   callback: async (client, message) => {
     message.channel.send("🔍 **Fetching top countries...**");
 

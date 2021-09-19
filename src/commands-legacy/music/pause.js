@@ -6,7 +6,7 @@ module.exports = {
   group: "music",
   description: "Pause/Resume the music playback.",
   details: "Running the command while the player is paused will resume it.",
-  cooldown: 5,
+  cooldown: 3,
   guildOnly: true,
   callback: async (client, message) => {
     const queue = await client.distube.getQueue(message);

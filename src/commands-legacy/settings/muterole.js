@@ -17,7 +17,7 @@ module.exports = {
   clientPermissions: ["EMBED_LINKS"],
   userPermissions: ["MANAGE_GUILD"],
   singleArgs: true,
-  cooldown: 5,
+  cooldown: 3,
   guildOnly: true,
   callback: async (client, message, args) => {
     const guildId = message.guild.id;
@@ -78,13 +78,11 @@ module.exports = {
             useFindAndModify: false,
           }
         );
-        const confirmationRemovalEmbed = new Discord.MessageEmbed()
-          .setColor(color.green)
-          .setDescription(
-            emoji.successEmoji +
-              " **Removed the configuration for the Muted Role.**"
-          );
-        message.channel.send({ embeds: [confirmationRemovalEmbed] });
+
+        message.channel.send(
+          emoji.successEmoji +
+            " **Removed the configuration for the Muted Role.**"
+        );
         break;
       }
       case "": {
@@ -92,19 +90,14 @@ module.exports = {
           guildId,
         });
 
-        if (!results || !results.settings.muteRole) {
+        if (!results || !results.settings.muteRole)
           return message.reply(
-            "<:scrubnull:797476323533783050> The muted role hasn't been set yet."
+            emoji.missingEmoji + " The muted role hasn't been set yet."
           );
-        } else if (results && results.settings.muteRole) {
-          const channelEmbed = new Discord.MessageEmbed()
-            .setColor(color.green)
-            .setDescription(
-              emoji.successEmoji +
-                ` **Current Muted Role Configuration:** <@&${results.settings.muteRole}>`
-            );
-          message.channel.send({ embeds: [channelEmbed] });
-        }
+        else if (results && results.settings.muteRole)
+          message.channel.send(
+            emoji.successEmoji + ` **Current Muted Role Configuration:** <@&${results.settings.muteRole}>`
+          );
         break;
       }
     }

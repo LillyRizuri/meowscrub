@@ -6,7 +6,7 @@ module.exports = {
   group: "music",
   description:
     "Skip a song if there's more than 1 song in the queue, or the queue has autoplay enabled.",
-  cooldown: 5,
+  cooldown: 3,
   guildOnly: true,
   callback: async (client, message) => {
     const queue = await client.distube.getQueue(message);

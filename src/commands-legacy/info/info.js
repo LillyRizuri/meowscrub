@@ -11,7 +11,7 @@ module.exports = {
   group: "info",
   description: "Display the client's stats.",
   clientPermissions: ["EMBED_LINKS"],
-  cooldown: 5,
+  cooldown: 3,
   callback: async (client, message) => {
     let totalSeconds = client.uptime / 1000;
     const days = Math.floor(totalSeconds / 86400);

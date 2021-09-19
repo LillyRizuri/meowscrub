@@ -8,7 +8,7 @@ module.exports = {
   group: "funs",
   description: "Fight to begone.",
   format: "<@user>",
-  cooldown: 5,
+  cooldown: 3,
   singleArgs: true,
   guildOnly: true,
   callback: async (client, message) => {

@@ -6,7 +6,7 @@ module.exports = {
   memberName: "invite",
   group: "misc",
   description: "Generate an invite link to invite me to your server.",
-  cooldown: 5,
+  cooldown: 3,
   callback: async (client, message) => {
     const resJson = await fetch(
       `https://top.gg/api/bots/${client.user.id}/check?userId=${message.author.id}`,

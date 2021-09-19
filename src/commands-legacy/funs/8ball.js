@@ -26,7 +26,7 @@ module.exports = {
   memberName: "8ball",
   group: "funs",
   description: "Ask the 8-ball.",
-  cooldown: 5,
+  cooldown: 3,
   singleArgs: true,
   callback: async (client, message, args) => {
     if (!args) {

@@ -5,7 +5,7 @@ module.exports = {
   memberName: "autoplay",
   group: "music",
   description: "Enable/Disable autoplay by running the command.",
-  cooldown: 5,
+  cooldown: 3,
   guildOnly: true,
   callback: async (client, message) => {
     let mode = null;

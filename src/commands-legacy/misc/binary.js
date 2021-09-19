@@ -13,7 +13,7 @@ module.exports = {
     "binary never",
     "binary decode 01101110 01100101 01110110 01100101 01110010",
   ],
-  cooldown: 5,
+  cooldown: 3,
   callback: async (client, message, args) => {
     if (!args[0])
       return message.reply(

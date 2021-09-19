@@ -13,7 +13,7 @@ module.exports = {
   examples: ["wikipedia vietnam", "wikipedia phone"],
   clientPermissions: ["EMBED_LINKS"],
   singleArgs: true,
-  cooldown: 5,
+  cooldown: 3,
   callback: async (client, message, args) => {
     if (!args)
       return message.reply(emoji.missingEmoji + " Type in a search query now.");

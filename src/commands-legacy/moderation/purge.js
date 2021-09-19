@@ -12,7 +12,7 @@ module.exports = {
   examples: ["purge 25", "purge 60 @frockles"],
   clientPermissions: ["MANAGE_MESSAGES", "READ_MESSAGE_HISTORY", "EMBED_LINKS"],
   userPermissions: ["MANAGE_MESSAGES", "READ_MESSAGE_HISTORY"],
-  cooldown: 5,
+  cooldown: 3,
   singleArgs: false,
   guildOnly: true,
   callback: async (client, message, args) => {

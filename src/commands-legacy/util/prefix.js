@@ -14,7 +14,7 @@ module.exports = {
   format: '[prefix | "default"]',
   examples: ["prefix", "prefix +", "prefix omg!", "prefix default"],
   singleArgs: true,
-  cooldown: 5,
+  cooldown: 3,
   guarded: true,
   callback: async (client, message, args) => {
     if (!args) {

@@ -5,7 +5,7 @@ module.exports = {
   memberName: "shuffle",
   group: "music",
   description: "Shuffle all music from the existing server queue.",
-  cooldown: 5,
+  cooldown: 3,
   guildOnly: true,
   callback: async (client, message) => {
     const queue = await client.distube.getQueue(message);

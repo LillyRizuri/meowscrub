@@ -4,14 +4,14 @@ const fetch = require("node-fetch");
 const emoji = require("../../assets/json/tick-emoji.json");
 
 module.exports = {
-  aliases: ["pokedex", "pokemon", "pkmn"],
-  memberName: "pokedex",
+  aliases: ["pokemon", "pokedex", "pkmn"],
+  memberName: "pokemon",
   group: "info",
   description: "Search for a Pokémon's information.",
   format: "<searchString>",
   examples: ["pokedex pikachu"],
   clientPermissions: ["EMBED_LINKS"],
-  cooldown: 5,
+  cooldown: 3,
   singleArgs: true,
   callback: async (client, message, args) => {
     if (!args)

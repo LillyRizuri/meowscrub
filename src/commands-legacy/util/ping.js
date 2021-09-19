@@ -3,7 +3,6 @@ module.exports = {
   memberName: "ping",
   group: "util",
   description: "Pong! Check the bot's ping to the Discord server.",
-  cooldown: 5,
   callback: async (client, message) => {
     const pingMessage = await message.reply("Ping...");
     return pingMessage.edit(

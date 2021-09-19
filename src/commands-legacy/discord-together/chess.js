@@ -9,7 +9,7 @@ module.exports = {
   description: "Generate an invite to play Chess together!",
   details:
     "The command would generate an invite in the voice channel you're in.",
-  cooldown: 5,
+  cooldown: 3,
   guildOnly: true,
   callback: async (client, message) => {
     const voiceChannel = message.member.voice.channel;

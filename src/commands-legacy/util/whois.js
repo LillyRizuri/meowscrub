@@ -14,7 +14,7 @@ module.exports = {
   format: "[@user | userID]",
   examples: ["whois @frockles"],
   clientPermissions: ["EMBED_LINKS"],
-  cooldown: 5,
+  cooldown: 3,
   singleArgs: true,
   callback: async (client, message, args) => {
     let target;

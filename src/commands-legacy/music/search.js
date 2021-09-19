@@ -14,7 +14,7 @@ module.exports = {
   format: "<searchString>",
   examples: ["search daft punk"],
   clientPermissions: ["EMBED_LINKS"],
-  cooldown: 5,
+  cooldown: 3,
   singleArgs: true,
   guildOnly: true,
   callback: async (client, message, args) => {
