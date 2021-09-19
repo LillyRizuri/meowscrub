@@ -10,7 +10,7 @@ module.exports = {
     });
 
     if (!guildSettings || !guildSettings.settings.transcriptLog) return;
-    if (!guildSettings.settings.ticketChannel.channelId) return;
+    if (!guildSettings.settings.ticketChannel || !guildSettings.settings.ticketChannel.channelId) return;
 
     const ticketProfile = await ticketSchema.findOne({
       guildId: message.guild.id,
