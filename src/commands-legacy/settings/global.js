@@ -1,6 +1,8 @@
 const settingsSchema = require("../../models/settings-schema");
 
 const emoji = require("../../assets/json/tick-emoji.json");
+const badge = require("../../assets/json/badge-emoji.json");
+const markdownChars = require("../../assets/json/markdown-char.json");
 
 module.exports = {
   aliases: ["global", "setglobal", "global-chat"],
@@ -39,6 +41,10 @@ module.exports = {
             emoji.denyEmoji + " I can't view your specified channel."
           );
 
+        const lastSettings = await settingsSchema.findOne({
+          guildId,
+        });
+
         await settingsSchema.findOneAndUpdate(
           {
             guildId,
@@ -59,6 +65,66 @@ module.exports = {
         message.channel.send(
           emoji.successEmoji + ` **Set the Global Chat Channel to:** ${channel}`
         );
+
+        for (const markdownChar of markdownChars) {
+          message.guild.name.replaceAll(markdownChar, `\\${markdownChar}`);
+        }
+
+        const badgeDisplayed = badge.bot;
+
+        client.cache.userLogCopy = client.cache.userLog;
+        client.cache.userLog = client.user.id;
+
+        if (lastSettings && lastSettings.settings.globalChat) break;
+        client.guilds.cache.forEach(async (guild) => {
+          let otherGCChannel;
+          if (client.cache.globalChat[guild.id]) {
+            otherGCChannel = client.cache.globalChat[guild.id];
+          } else if (!client.cache.globalChat[guild.id]) {
+            // fetch to see if the guild that the client chose have a global chat channel
+            const otherGuildRes = await settingsSchema.findOne({
+              guildId: guild.id,
+            });
+
+            if (!otherGuildRes || !otherGuildRes.settings.globalChat) return;
+
+            client.cache.globalChat[guild.id] =
+              otherGuildRes.settings.globalChat;
+            otherGCChannel = client.cache.globalChat[guild.id];
+          }
+
+          const ch = guild.channels.cache.get(otherGCChannel);
+
+          // if there's none, return
+          if (!ch) return;
+
+          let usernamePart = "";
+
+          if (client.cache.userLog !== client.cache.userLogCopy) {
+            if (
+              !process.env.GUILD_TEST ||
+              guild.id !== process.env.GUILD_TEST
+            ) {
+              usernamePart = `_ _\n[ ${badgeDisplayed} **\`${client.user.tag}\` - \`${message.guild.name}\`** ]`;
+            } else if (guild.id === process.env.GUILD_TEST) {
+              usernamePart = `
+_ _\n[ ${badgeDisplayed} **\`${client.user.tag}\` - \`${message.guild.name}\`** ]
+**userID: \`${client.user.id}\` - guildID: \`${message.guild.id}\`**`;
+            }
+          } else if (client.cache.userLog === client.cache.userLogCopy) {
+            usernamePart = "";
+          }
+
+          await ch
+            .send(
+              `${usernamePart}\nWelcome to Global Chat, **${message.guild.name}**.`
+            )
+            .catch((err) => {
+              message.channel.send(
+                `Can't deliver the message to **${guild}** for: ${err}`
+              );
+            });
+        });
         break;
       }
       case "disable": {

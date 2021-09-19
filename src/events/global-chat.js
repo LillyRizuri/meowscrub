@@ -14,9 +14,7 @@ const emoji = require("../assets/json/tick-emoji.json"),
   profanities = require("../assets/json/profanities.json"),
   whitelistedWords = require("../assets/json/whitelisted-words.json");
 
-let userLogCopy = "",
-  userLog = "",
-  currentGCChannel = "",
+let currentGCChannel = "",
   timeout;
 
 module.exports = {
@@ -28,7 +26,7 @@ module.exports = {
 
     function initTimeout() {
       timeout = setTimeout(() => {
-        userLog = "";
+        client.cache.userLog = "";
         timeout = null;
       }, 420000);
     }
@@ -261,12 +259,10 @@ Please do so by using the \`${await util.getPrefix(
       badgeDisplayed = badge.verified;
     }
 
-    userLogCopy = userLog;
-    userLog = message.author.id;
+    client.cache.userLogCopy = client.cache.userLog;
+    client.cache.userLog = message.author.id;
 
     if (timeout) clearTimeout(timeout);
-
-    console.log(timeout);
 
     initTimeout();
 
@@ -295,7 +291,7 @@ Please do so by using the \`${await util.getPrefix(
       let usernamePart = "";
 
       // check the guild is/isn't a guild test
-      if (userLog !== userLogCopy) {
+      if (client.cache.userLog !== client.cache.userLogCopy) {
         if (!process.env.GUILD_TEST || guild.id !== process.env.GUILD_TEST) {
           usernamePart = `_ _\n[ ${badgeDisplayed} **\`${message.author.tag}\` - \`${message.guild.name}\`** ]`;
         } else if (guild.id === process.env.GUILD_TEST) {
@@ -303,7 +299,7 @@ Please do so by using the \`${await util.getPrefix(
 _ _\n[ ${badgeDisplayed} **\`${message.author.tag}\` - \`${message.guild.name}\`** ]
 **userID: \`${message.author.id}\` - guildID: \`${message.guild.id}\`**`;
         }
-      } else if (userLog === userLogCopy) {
+      } else if (client.cache.userLog === client.cache.userLogCopy) {
         usernamePart = "";
       }
 

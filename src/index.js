@@ -44,6 +44,8 @@ mongoose
 client.cache = {
   globalChat: {},
   playSongLog: {},
+  userLog: "",
+  userLogCopy: "",
 };
 
 client.commandsState = {};
