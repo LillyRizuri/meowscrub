@@ -11,11 +11,12 @@ module.exports = {
 All available methods:
 - add <name> <response>
 - del <tagName>
+- info <tagName>
 - list
 - <tagName> 
   `,
   format: "<method> <...arguments>",
-  examples: ["tag add hi hello", "tag del hi", "tag list", "tag hi"],
+  examples: ["tag add hi hello", "tag del hi", "tag info hi", "tag list", "tag hi"],
   cooldown: 3,
   singleArgs: true,
   guildOnly: true,
@@ -42,7 +43,7 @@ All available methods:
     if (!firstArg)
       return message.reply(
         emoji.missingEmoji +
-          " You must provide one of these methods first:\n`add <name> <response>` | `del <tagName>` | `list` | `<tagName>`"
+          " You must provide one of these methods first:\n`add <name> <response>` | `del <tagName>` | `info <tagName>` | `list` | `<tagName>`"
       );
 
     switch (firstArg) {
@@ -50,6 +51,7 @@ All available methods:
         if (!haveRequiredPerm()) return;
         const name = argsSplit[1] ? argsSplit[1].toLowerCase() : "";
         const response = args.replace(firstArg, "").replace(name, "").trim();
+        const authorId = message.author.id;
 
         const tagsConfig = await tagsSchema.findOne({
           guildId: message.guild.id,
@@ -91,6 +93,7 @@ All available methods:
         const params = {
           name,
           response,
+          authorId,
         };
 
         await tagsSchema.findOneAndUpdate(
@@ -124,13 +127,13 @@ All available methods:
               " Please specify an existing custom command's name."
           );
 
-        const results = await tagsSchema.findOne({
+        const tagsConfig = await tagsSchema.findOne({
           guildId: message.guild.id,
         });
 
         if (
-          !results ||
-          !results.tags.some((i) => i.name.toLowerCase() === name)
+          !tagsConfig ||
+          !tagsConfig.tags.some((i) => i.name.toLowerCase() === name)
         )
           return message.reply(
             emoji.denyEmoji +
@@ -157,6 +160,39 @@ All available methods:
         await message.reply(
           emoji.successEmoji +
             ` Successfully deleted a custom command with this name: \`${name}\`.`
+        );
+        break;
+      }
+      case "info": {
+        const name = argsSplit[1] ? argsSplit[1].toLowerCase() : "";
+
+        if (!name)
+          return message.reply(
+            emoji.missingEmoji +
+              " Please specify an existing custom command's name."
+          );
+
+        const tagsConfig = await tagsSchema.findOne({
+          guildId: message.guild.id,
+        });
+
+        if (
+          !tagsConfig ||
+          !tagsConfig.tags.some((i) => i.name.toLowerCase() === name)
+        )
+          return message.reply(
+            emoji.denyEmoji +
+              " That command doesn't exist. What are you planning?"
+          );
+
+        const tag = tagsConfig.tags.find(
+          (i) => i.name.toLowerCase() === name
+        );
+
+        message.channel.send(
+          `**__Tag \`${tag.name}\`:__** Created by \`${
+            (await client.users.fetch(tag.authorId)).tag
+          }\``
         );
         break;
       }
@@ -197,7 +233,11 @@ All available methods:
               emoji.denyEmoji +
                 " That command doesn't exist. What are you planning?"
             );
-        }
+        } else
+          message.reply(
+            emoji.denyEmoji +
+              " That command doesn't exist. What are you planning?"
+          );
         break;
       }
     }
