@@ -4,7 +4,6 @@ const {
   denyEmoji,
   successEmoji,
 } = require("../../assets/json/tick-emoji.json");
-const defaultPrefix = process.env.PREFIX;
 
 module.exports = {
   aliases: ["prefix"],
@@ -17,6 +16,7 @@ module.exports = {
   cooldown: 3,
   guarded: true,
   callback: async (client, message, args) => {
+    const defaultPrefix = client.settings.defaultPrefix;
     if (!args) {
       const prefix = message.guild
         ? await util.getPrefix(message.guild.id)

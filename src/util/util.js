@@ -123,7 +123,7 @@ module.exports.prefixChange = async (guildId, prefix) => {
 
 module.exports.getPrefix = async (guildId) => {
   const settingsSchema = require("../models/settings-schema");
-  const defaultPrefix = process.env.PREFIX;
+  const defaultPrefix = client.settings.defaultPrefix;
   let prefix;
   if (guildId) {
     const results = await settingsSchema.findOne({
@@ -134,7 +134,7 @@ module.exports.getPrefix = async (guildId) => {
       ? results.settings.prefix
       : defaultPrefix;
   } else {
-    prefix = process.env.PREFIX;
+    prefix = client.settings.defaultPrefix;
   }
 
   return prefix;

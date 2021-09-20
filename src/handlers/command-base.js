@@ -166,8 +166,8 @@ module.exports.listen = (client) => {
         );
       }
 
-      prefix = client.guildPrefixes[message.guild.id] || process.env.PREFIX;
-    } else prefix = process.env.PREFIX;
+      prefix = client.guildPrefixes[message.guild.id] || client.settings.defaultPrefix;
+    } else prefix = client.settings.defaultPrefix;
 
     if (message.guild)
       if (!client.commandsState[message.guild.id]) {

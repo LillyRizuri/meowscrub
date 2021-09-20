@@ -31,9 +31,19 @@ const client = new Discord.Client({
   // intents: 32767,
 });
 
+client.settings = {
+  defaultPrefix: process.env.PREFIX,
+  mongoConnectionPath: process.env.MONGO,
+  ticketButtonId: "openTicket",
+  commandsPath: path.join(__dirname, "commands-legacy"),
+  applicationCommandsPath: path.join(__dirname, "commands-application"),
+  eventsPath: path.join(__dirname, "events"),
+  owner: process.env.OWNERS.split(","),
+};
+
 // Connecting to MongoDB
 mongoose
-  .connect(process.env.MONGO, {
+  .connect(client.settings.mongoConnectionPath, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
@@ -49,14 +59,6 @@ client.cache = {
 };
 
 client.commandsState = {};
-
-client.settings = {
-  ticketButtonId: "openTicket",
-  commandsPath: path.join(__dirname, "commands-legacy"),
-  applicationCommandsPath: path.join(__dirname, "commands-application"),
-  eventsPath: path.join(__dirname, "events"),
-  owner: process.env.OWNERS.split(","),
-};
 
 client.commandGroups = [
   ["context", "Context Menu Commands", "<:context_menu:883737356283293726>"],
@@ -91,9 +93,15 @@ client.distube = new DisTube.default(client, {
 client.isOwner = function isOwner(user) {
   user = client.users.resolve(user);
   if (!user) throw new Error("Unable to resolve user.");
-  if (typeof client.settings.owner === "string") return user.id === client.settings.owner;
-  if (client.settings.owner instanceof Array) return client.settings.owner.includes(user.id);
-  if (client.settings.owner instanceof Set) return client.settings.owner.has(user.id);
+  if (typeof client.settings.owner === "string")
+    return user.id === client.settings.owner;
+
+  if (client.settings.owner instanceof Array)
+    return client.settings.owner.includes(user.id);
+
+  if (client.settings.owner instanceof Set)
+    return client.settings.owner.has(user.id);
+
   throw new Error("The owner option is an unknown value.");
 };
 
