@@ -18,7 +18,9 @@ module.exports = {
   guarded: true,
   callback: async (client, message, args) => {
     if (!args) {
-      const prefix = await util.getPrefix(message.guild.id);
+      const prefix = message.guild
+        ? await util.getPrefix(message.guild.id)
+        : defaultPrefix;
       return message.reply(
         `${
           prefix
