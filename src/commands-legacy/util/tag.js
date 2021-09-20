@@ -16,7 +16,13 @@ All available methods:
 - <tagName> 
   `,
   format: "<method> <...arguments>",
-  examples: ["tag add hi hello", "tag del hi", "tag info hi", "tag list", "tag hi"],
+  examples: [
+    "tag add hi hello",
+    "tag del hi",
+    "tag info hi",
+    "tag list",
+    "tag hi",
+  ],
   cooldown: 3,
   singleArgs: true,
   guildOnly: true,
@@ -185,9 +191,7 @@ All available methods:
               " That command doesn't exist. What are you planning?"
           );
 
-        const tag = tagsConfig.tags.find(
-          (i) => i.name.toLowerCase() === name
-        );
+        const tag = tagsConfig.tags.find((i) => i.name.toLowerCase() === name);
 
         message.channel.send(
           `**__Tag \`${tag.name}\`:__** Created by \`${
@@ -216,7 +220,6 @@ All available methods:
         );
         break;
       }
-
       default: {
         const tagsConfig = await tagsSchema.findOne({
           guildId: message.guild.id,
