@@ -1,5 +1,5 @@
-const settingsSchema = require("../models/settings-schema");
-const ticketSchema = require("../models/ticket-schema");
+const settingsSchema = require("../../models/settings-schema");
+const ticketSchema = require("../../models/ticket-schema");
 
 module.exports = {
   name: "messageCreate",

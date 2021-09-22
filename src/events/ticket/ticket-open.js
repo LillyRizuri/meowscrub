@@ -1,9 +1,9 @@
 const Discord = require("discord.js");
 
-const settingsSchema = require("../models/settings-schema");
-const ticketSchema = require("../models/ticket-schema");
+const settingsSchema = require("../../models/settings-schema");
+const ticketSchema = require("../../models/ticket-schema");
 
-const emoji = require("../assets/json/tick-emoji.json");
+const emoji = require("../../assets/json/tick-emoji.json");
 
 module.exports = {
   name: "interactionCreate",
