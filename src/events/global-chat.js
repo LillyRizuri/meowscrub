@@ -7,7 +7,8 @@ const humanizeDuration = require("humanize-duration"),
 
 const gcCooldowns = new Map();
 
-const emoji = require("../assets/json/tick-emoji.json"),
+const markdownChars = require("../assets/json/markdown-char.json"),
+  emoji = require("../assets/json/tick-emoji.json"),
   badge = require("../assets/json/badge-emoji.json"),
   referralDomains = require("../assets/json/referral-domains.json"),
   safeDomains = require("../assets/json/safe-domains.json"),
@@ -79,7 +80,7 @@ module.exports = {
     } else {
       return message.reply(
         emoji.denyEmoji +
-          " It seems like I somehow can't accerss this global chat channel properly. Please contact your nearest server manager to give me these permissions:\n`Send Messages, Embed Links, View Channel, Read Message History`"
+          " It seems like I somehow can't access this global chat channel properly. Please contact your nearest server manager to give me these permissions:\n`Send Messages, Embed Links, View Channel, Read Message History`"
       );
     }
 
@@ -103,8 +104,12 @@ module.exports = {
       return setTimeout(() => msg.delete(), 5000);
     }
 
+    // get the first message attachment
+    const attachment = message.attachments.first();
+    if (!attachment) if (!message.content) return;
+
     // find global chat data for an user
-    let gcInfo = await globalChatSchema.findOne({
+    const gcInfo = await globalChatSchema.findOne({
       userId: message.author.id,
     });
 
@@ -209,23 +214,10 @@ Please do so by using the \`${await util.getPrefix(
       }, 3000);
     }
 
-    // update the message count
-    await globalChatSchema.findOneAndUpdate(
-      {
-        userId: message.author.id,
-      },
-      {
-        userId: message.author.id,
-        messageCount: gcInfo.messageCount + 1,
-      },
-      {
-        upsert: true,
-      }
-    );
-
-    gcInfo = await globalChatSchema.findOne({
-      userId: message.author.id,
-    });
+    let authorTag = message.author.tag;
+    for (const markdownChar of markdownChars) {
+      authorTag = authorTag.replaceAll(markdownChar, `\\${markdownChar}`);
+    }
 
     // transform all user mentions in message content to usernames and tags
     let modifiedMessageContent;
@@ -240,10 +232,6 @@ Please do so by using the \`${await util.getPrefix(
         message.content = modifiedMessageContent;
       });
     }
-
-    // get the first message attachment
-    const attachment = message.attachments.first();
-    if (!attachment) if (!message.content) return;
 
     // depends on account status, have a designated badge append with their username
     let badgeDisplayed = "";
@@ -265,6 +253,10 @@ Please do so by using the \`${await util.getPrefix(
     if (timeout) clearTimeout(timeout);
 
     initTimeout();
+
+    const createdTimestamp = `<t:${Math.trunc(
+      message.createdTimestamp / 1000
+    )}>`;
 
     // for each guilds that the client was in
     client.guilds.cache.forEach(async (guild) => {
@@ -292,13 +284,9 @@ Please do so by using the \`${await util.getPrefix(
 
       // check the guild is/isn't a guild test
       if (client.cache.userLog !== client.cache.userLogCopy) {
-        if (!process.env.GUILD_TEST || guild.id !== process.env.GUILD_TEST) {
-          usernamePart = `_ _\n[ ${badgeDisplayed} **\`${message.author.tag}\` - \`${message.guild.name}\`** ]`;
-        } else if (guild.id === process.env.GUILD_TEST) {
-          usernamePart = `
-_ _\n[ ${badgeDisplayed} **\`${message.author.tag}\` - \`${message.guild.name}\`** ]
-**userID: \`${message.author.id}\` - guildID: \`${message.guild.id}\`**`;
-        }
+        usernamePart = `_ _\n${emoji.bracket2} ${badgeDisplayed} **${authorTag} ${emoji.bracket} ${createdTimestamp}**`;
+        if (guild.id === process.env.GUILD_TEST)
+          usernamePart += `\n**userID: \`${message.author.id}\` - guildID: \`${message.guild.id}\`**`;
       } else if (client.cache.userLog === client.cache.userLogCopy) {
         usernamePart = "";
       }
@@ -370,5 +358,19 @@ _ _\n[ ${badgeDisplayed} **\`${message.author.tag}\` - \`${message.guild.name}\`
           }
         });
     });
+
+    // update the message count
+    await globalChatSchema.findOneAndUpdate(
+      {
+        userId: message.author.id,
+      },
+      {
+        userId: message.author.id,
+        messageCount: gcInfo.messageCount + 1,
+      },
+      {
+        upsert: true,
+      }
+    );
   },
 };

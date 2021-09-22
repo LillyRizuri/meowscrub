@@ -66,16 +66,22 @@ module.exports = {
           emoji.successEmoji + ` **Set the Global Chat Channel to:** ${channel}`
         );
 
+        let guildName = message.guild.name;
         for (const markdownChar of markdownChars) {
-          message.guild.name.replaceAll(markdownChar, `\\${markdownChar}`);
+          guildName = guildName.replaceAll(markdownChar, `\\${markdownChar}`);
         }
+
+        if (lastSettings && lastSettings.settings.globalChat) break;
 
         const badgeDisplayed = badge.bot;
 
         client.cache.userLogCopy = client.cache.userLog;
         client.cache.userLog = client.user.id;
 
-        if (lastSettings && lastSettings.settings.globalChat) break;
+        const createdTimestamp = `<t:${Math.trunc(
+          message.createdTimestamp / 1000
+        )}>`;
+
         client.guilds.cache.forEach(async (guild) => {
           let otherGCChannel;
           if (client.cache.globalChat[guild.id]) {
@@ -101,23 +107,16 @@ module.exports = {
           let usernamePart = "";
 
           if (client.cache.userLog !== client.cache.userLogCopy) {
-            if (
-              !process.env.GUILD_TEST ||
-              guild.id !== process.env.GUILD_TEST
-            ) {
-              usernamePart = `_ _\n[ ${badgeDisplayed} **\`${client.user.tag}\` - \`${message.guild.name}\`** ]`;
-            } else if (guild.id === process.env.GUILD_TEST) {
-              usernamePart = `
-_ _\n[ ${badgeDisplayed} **\`${client.user.tag}\` - \`${message.guild.name}\`** ]
-**userID: \`${client.user.id}\` - guildID: \`${message.guild.id}\`**`;
-            }
+            usernamePart = `_ _\n${emoji.bracket2} ${badgeDisplayed} **${client.user.tag} ${emoji.bracket} ${createdTimestamp}**`;
+            if (guild.id === process.env.GUILD_TEST)
+              usernamePart += `\n**userID: \`${client.user.id}\` - guildID: \`${message.guild.id}\`**`;
           } else if (client.cache.userLog === client.cache.userLogCopy) {
             usernamePart = "";
           }
 
           await ch
             .send(
-              `${usernamePart}\nWelcome to Global Chat, **${message.guild.name}**.`
+              `${usernamePart}\nWelcome to Global Chat, **${guildName}**.`
             )
             .catch((err) => {
               message.channel.send(
