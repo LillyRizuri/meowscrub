@@ -57,7 +57,7 @@ module.exports = {
         const row = new Discord.MessageActionRow().addComponents(
           new Discord.MessageButton()
             .setStyle("SECONDARY")
-            .setCustomId(client.ticketButtonId)
+            .setCustomId(client.settings.ticketButtonId)
             .setEmoji("📩")
             .setLabel("Open a Ticket")
         );
