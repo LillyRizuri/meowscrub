@@ -5,7 +5,7 @@ const botStaffSchema = require("../../models/bot-staff-schema");
 const emoji = require("../../assets/json/tick-emoji.json");
 
 module.exports = {
-  aliases: ["serverinfo", "guildinfo", "svinfo"],
+  aliases: ["serverinfo", "guildinfo", "server", "guild"],
   memberName: "serverinfo",
   group: "util",
   description: "Display informations related to this server.",
@@ -20,12 +20,9 @@ module.exports = {
   callback: async (client, message, args) => {
     let guild;
     const dateTimeOptions = {
-      weekday: "short",
       year: "numeric",
       month: "short",
       day: "numeric",
-      hour: "numeric",
-      minute: "numeric",
       timeZoneName: "short",
     };
 
@@ -64,9 +61,14 @@ module.exports = {
 
     const allBoosts = guild.premiumSubscriptionCount.toLocaleString();
 
+    const serverTierSplit = guild.premiumTier
+      .replace("NONE", "TIER_0")
+      .split("_");
     const serverTier = guild.premiumTier
-      .replace("NONE", "Tier 0")
-      .replace("TIER_", "Tier ");
+      .replace("NONE", "TIER_0")
+      .replace(serverTierSplit[1], `**${serverTierSplit[1]}**`)
+      .replaceAll("_", " ")
+      .toProperCase();
 
     const memberCount = (
       guild.memberCount - guild.members.cache.filter((m) => m.user.bot).size
@@ -79,8 +81,8 @@ module.exports = {
     const maximumMembers = guild.maximumMembers.toLocaleString();
 
     const guildDescription = guild.description
-      ? `${guild.description}`
-      : "None";
+      ? `"${guild.description}"`
+      : "No server description found.";
 
     const rulesChannel = guild.channels.cache.get(guild.rulesChannelId)
       ? `#${guild.channels.cache.get(guild.rulesChannelId).name}`
@@ -110,14 +112,14 @@ module.exports = {
     let afkTimeout = "";
     if (guild.afkChannelId) {
       afkChannel = `"${guild.channels.cache.get(guild.afkChannelId).name}"`;
-      afkTimeout = ` - ${guild.afkTimeout}s Timeout`;
+      afkTimeout = `(${guild.afkTimeout}s Timeout)`;
     } else if (!guild.afkChannelId) {
       afkChannel = "None";
     }
 
     const defaultMsgNotif = guild.defaultMessageNotifications
-      .replace("ALL_MESSAGES", "all messages")
-      .replace("ONLY_MENTIONS", "only @mentions");
+      .replace("ALL_MESSAGES", "All Messages")
+      .replace("ONLY_MENTIONS", "Only @mentions");
 
     const explicitContentFilter = guild.explicitContentFilter
       .split("_")
@@ -143,37 +145,80 @@ module.exports = {
       .setColor("RANDOM")
       .setAuthor(`Reports for: ${guild.name}`, guild.iconURL())
       .setThumbnail(guild.iconURL({ format: "png", dynamic: true }))
+      .setDescription(guildDescription)
       .addFields(
         {
-          name: "Overview",
-          value: `
-• Owner: \`${serverOwner.tag} | ID: ${serverOwner.id}\`
-• Created: \`${createdAt} (${createdAtFromNow})\`
-• Description: \`${guildDescription}\`
-• \`${memberCount} Member(s) | ${botCount} Bot(s) | Maximum of ${maximumMembers} members\`
-• \`${allRoles} Role(s) | ${allEmojis} Emoji(s) | ${allBoosts} Boost(s) | ${serverTier}\`
-• \`Everyone will receive ${defaultMsgNotif} by default\`   
-          `,
+          name: "Owner",
+          value: serverOwner.toString(),
+          inline: true,
         },
         {
-          name: "Server Protection",
-          value: `
-• Verification Level: \`${verificationLevel}\`
-• Explicit Content Filter: \`${explicitContentFilter}\`
-          `,
+          name: "Created",
+          value: `${createdAt} (${createdAtFromNow})`,
+          inline: true,
+        },
+        {
+          name: "All Members",
+          value: `• **${memberCount}** Member(s)\n• **${botCount}** Bot(s)\n• **${maximumMembers}** Max`,
+          inline: true,
+        },
+        {
+          name: "No. of Roles",
+          value: allRoles,
+          inline: true,
+        },
+        {
+          name: "No. of Emojis",
+          value: allEmojis,
+          inline: true,
+        },
+        // {
+        //   name: "Members Cap",
+        //   value: maximumMembers,
+        //   inline: true,
+        // },
+        {
+          name: "Boosts",
+          value: `**${allBoosts}** Boost(s) | ${serverTier}`,
+          inline: true,
+        },
+        {
+          name: "Default Msg. Notif.",
+          value: defaultMsgNotif,
+          inline: true,
+        },
+        {
+          name: "Verification Level",
+          value: verificationLevel,
+          inline: true,
+        },
+        {
+          name: "Explicit Content Filter",
+          value: explicitContentFilter,
+          inline: true,
         },
         {
           name: "All Channels",
           value: `
-• Rules Channel: \`${rulesChannel}\`
-• System Channel: \`${systemChannel}\`          
-• AFK Voice Channel: \`${afkChannel}${afkTimeout}\`
-• \`${textChannels} Text Ch. | ${voiceChannels} Voice Ch. | ${parentChannels} Category Ch. | ${newsChannels} News Ch.\`
+• Rules Channel: **${rulesChannel}**
+• System Channel: **${systemChannel}**
+• AFK Voice Channel: **${afkChannel}**\n${afkTimeout}
           `,
+          inline: true,
+        },
+        {
+          name: "Channels Count",
+          value: `
+• **${textChannels}** Text Channels
+• **${voiceChannels}** Voice Channels
+• **${newsChannels}** Announcement Channels
+• **${parentChannels}** Categories
+          `,
+          inline: true,
         },
         {
           name: "Community Features",
-          value: `• \`${communityFeatures}\``,
+          value: `${communityFeatures}`,
         }
       )
       .setFooter(`GuildID: ${guild.id}`)
