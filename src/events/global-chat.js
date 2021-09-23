@@ -59,30 +59,30 @@ module.exports = {
     ) {
     } else return;
 
-    const channelPermissions = message.channel.permissionsFor(
-      message.client.user
-    );
+    const channelPerms = message.channel
+      .permissionsFor(client.user.id)
+      .toArray();
 
-    const canSendMessages = channelPermissions.has("SEND_MESSAGES");
-    const canSendEmbed = channelPermissions.has("EMBED_LINKS");
-    const canViewChannel = channelPermissions.has("VIEW_CHANNEL");
-    const canReadMsgHistory = channelPermissions.has("READ_MESSAGE_HISTORY");
-    const canManageMessages = channelPermissions.has("MANAGE_MESSAGES");
+    const requiredPerms = [
+      "MANAGE_MESSAGES",
+      "SEND_MESSAGES",
+      "VIEW_CHANNEL",
+      "READ_MESSAGE_HISTORY",
+    ];
+    const clientMissingPerms = [];
 
-    if (
-      canSendMessages &&
-      canSendEmbed &&
-      canViewChannel &&
-      canReadMsgHistory &&
-      canManageMessages
-      // eslint-disable-next-line no-empty
-    ) {
-    } else {
+    for (const permission of requiredPerms) {
+      if (!channelPerms.includes(permission))
+        clientMissingPerms.push(permission.split("_").join(" ").toProperCase());
+    }
+
+    if (clientMissingPerms.length > 0)
       return message.reply(
         emoji.denyEmoji +
-          " It seems like I somehow can't access this global chat channel properly. Please contact your nearest server manager to give me these permissions:\n`Send Messages, Embed Links, View Channel, Read Message History`"
+          ` I need to have the following permission(s): \`${clientMissingPerms.join(
+            ","
+          )}\` in order to initialise Global Chat properly.\nPlease report this to the staffs.`
       );
-    }
 
     await message.delete();
 
@@ -284,7 +284,7 @@ Please do so by using the \`${await util.getPrefix(
 
       // check the guild is/isn't a guild test
       if (client.cache.userLog !== client.cache.userLogCopy) {
-        usernamePart = `_ _\n${emoji.bracket2} ${badgeDisplayed} **${authorTag} ${emoji.bracket} ${createdTimestamp}**`;
+        usernamePart = `_ _\n**${emoji.bracket2} ${badgeDisplayed} ${authorTag} ${emoji.bracket} ${createdTimestamp}**`;
         if (guild.id === process.env.GUILD_TEST)
           usernamePart += `\n**userID: \`${message.author.id}\` - guildID: \`${message.guild.id}\`**`;
       } else if (client.cache.userLog === client.cache.userLogCopy) {
