@@ -97,6 +97,7 @@ module.exports = (client, commandOptions) => {
 
   if (!group)
     throw new Error(`The command ${memberName} must belong in a group.`);
+
   if (typeof group !== "string")
     throw new Error(
       `The command ${memberName} must have the group as a string.`
