@@ -58,6 +58,8 @@ module.exports = {
     const allRoles = (guild.roles.cache.size - 1).toLocaleString();
 
     const allEmojis = guild.emojis.cache.size.toLocaleString();
+    const normalEmojis = guild.emojis.cache.filter((e) => !e.animated).size;
+    const animatedEmojis = guild.emojis.cache.filter((e) => e.animated).size;
 
     const allBoosts = guild.premiumSubscriptionCount.toLocaleString();
 
@@ -84,12 +86,14 @@ module.exports = {
       ? `"${guild.description}"`
       : "No server description found.";
 
+    const allChannels = guild.channels.cache.size;
+
     const rulesChannel = guild.channels.cache.get(guild.rulesChannelId)
-      ? `#${guild.channels.cache.get(guild.rulesChannelId).name}`
+      ? guild.channels.cache.get(guild.rulesChannelId)
       : "None";
 
     const systemChannel = guild.channels.cache.get(guild.systemChannelId)
-      ? `#${guild.channels.cache.get(guild.systemChannelId).name}`
+      ? guild.channels.cache.get(guild.systemChannelId)
       : "None";
 
     const textChannels = guild.channels.cache.filter(
@@ -111,7 +115,7 @@ module.exports = {
     let afkChannel = "";
     let afkTimeout = "";
     if (guild.afkChannelId) {
-      afkChannel = `"${guild.channels.cache.get(guild.afkChannelId).name}"`;
+      afkChannel = guild.channels.cache.get(guild.afkChannelId);
       afkTimeout = `(${guild.afkTimeout}s Timeout)`;
     } else if (!guild.afkChannelId) {
       afkChannel = "None";
@@ -145,12 +149,17 @@ module.exports = {
       .setColor("RANDOM")
       .setAuthor(`Reports for: ${guild.name}`, guild.iconURL())
       .setThumbnail(guild.iconURL({ format: "png", dynamic: true }))
-      .setDescription(guildDescription)
+      .setDescription(
+        `**${allBoosts}** Boost(s) | ${serverTier}\n${guildDescription}`
+      )
       .addFields(
         {
           name: "Owner",
-          value: serverOwner.toString(),
-          inline: true,
+          value: `${serverOwner.tag} (${serverOwner.id})`,
+        },
+        {
+          name: `${guild.memberCount}/${maximumMembers} Members`,
+          value: `**${memberCount}** Member(s) | **${botCount}** Bot(s)`,
         },
         {
           name: "Created",
@@ -158,8 +167,8 @@ module.exports = {
           inline: true,
         },
         {
-          name: "All Members",
-          value: `• **${memberCount}** Member(s)\n• **${botCount}** Bot(s)\n• **${maximumMembers}** Max`,
+          name: `${allEmojis} Emoji(s)`,
+          value: `• **${normalEmojis}** Normal\n• **${animatedEmojis}** Animated`,
           inline: true,
         },
         {
@@ -168,37 +177,15 @@ module.exports = {
           inline: true,
         },
         {
-          name: "No. of Emojis",
-          value: allEmojis,
-          inline: true,
-        },
-        // {
-        //   name: "Members Cap",
-        //   value: maximumMembers,
-        //   inline: true,
-        // },
-        {
-          name: "Boosts",
-          value: `**${allBoosts}** Boost(s) | ${serverTier}`,
-          inline: true,
+          name: "Server Settings & Protection",
+          value: `
+• Verification Level: **${verificationLevel}**
+• Explicit Content Filter: **${explicitContentFilter}**
+• Default Message Notification: **${defaultMsgNotif}**
+          `
         },
         {
-          name: "Default Msg. Notif.",
-          value: defaultMsgNotif,
-          inline: true,
-        },
-        {
-          name: "Verification Level",
-          value: verificationLevel,
-          inline: true,
-        },
-        {
-          name: "Explicit Content Filter",
-          value: explicitContentFilter,
-          inline: true,
-        },
-        {
-          name: "All Channels",
+          name: "Channel Config.",
           value: `
 • Rules Channel: **${rulesChannel}**
 • System Channel: **${systemChannel}**
@@ -207,7 +194,7 @@ module.exports = {
           inline: true,
         },
         {
-          name: "Channels Count",
+          name: `${allChannels} Channel(s)`,
           value: `
 • **${textChannels}** Text Channels
 • **${voiceChannels}** Voice Channels
