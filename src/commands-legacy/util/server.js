@@ -5,8 +5,8 @@ const botStaffSchema = require("../../models/bot-staff-schema");
 const emoji = require("../../assets/json/tick-emoji.json");
 
 module.exports = {
-  aliases: ["serverinfo", "guildinfo", "server", "guild"],
-  memberName: "serverinfo",
+  aliases: ["server", "guild", "serverinfo", "guildinfo"],
+  memberName: "server",
   group: "util",
   description: "Display informations related to this server.",
   details:

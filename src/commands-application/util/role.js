@@ -1,37 +1,21 @@
+const { SlashCommandBuilder } = require("@discordjs/builders");
 const Discord = require("discord.js");
 
-const emoji = require("../../assets/json/tick-emoji.json");
-
 module.exports = {
-  aliases: ["roleinfo", "role"],
-  memberName: "roleinfo",
+  data: new SlashCommandBuilder()
+    .setName("role")
+    .setDescription("Displays a specified role's information.")
+    .addRoleOption((option) =>
+      option
+        .setName("role")
+        .setDescription("The specified role")
+        .setRequired(true)
+    ),
   group: "util",
-  description: "Displays a specified role's information.",
-  format: "[@role | roleName | roleID]",
-  examples: [
-    "roleinfo Member",
-    "roleinfo @Member",
-    "roleinfo 694239225226199070",
-  ],
-  clientPermissions: ["EMBED_LINKS"],
-  cooldown: 3,
-  singleArgs: true,
+  examples: ["role @Member", "role 694239225226199070"],
   guildOnly: true,
-  callback: async (client, message, args) => {
-    if (!args)
-      return message.reply(emoji.missingEmoji + "There's no role to be found.");
-
-    const role =
-      message.mentions.roles.first() ||
-      message.guild.roles.cache.find(
-        (e) => e.name.toLowerCase().trim() == args.toLowerCase().trim()
-      ) ||
-      message.guild.roles.cache.find((e) => e.id === args);
-
-    if (!role)
-      return message.reply(
-        emoji.denyEmoji + "Huh. I can't find the role you were looking for."
-      );
+  callback: async (client, interaction) => {
+    const role = interaction.options.getRole("role");
 
     const roleInfoEmbed = new Discord.MessageEmbed()
       .setTitle(role.name)
@@ -50,7 +34,7 @@ module.exports = {
           .replace("true", "Yes")
           .replace("false", "No")}\`  
 • Position: \`${role.position}\`  
-                `,
+              `,
       });
 
     switch (role.members.size) {
@@ -69,6 +53,6 @@ module.exports = {
         break;
     }
 
-    message.channel.send({ embeds: [roleInfoEmbed] });
+    interaction.reply({ embeds: [roleInfoEmbed] });
   },
 };

@@ -10,7 +10,7 @@ module.exports = {
     "All flags you can use at the end of the command argument:\n@user, bots, embeds",
   format: "<number> [flags]",
   examples: ["purge 25", "purge 60 @frockles"],
-  clientPermissions: ["MANAGE_MESSAGES", "READ_MESSAGE_HISTORY", "EMBED_LINKS"],
+  clientPermissions: ["MANAGE_MESSAGES", "READ_MESSAGE_HISTORY"],
   userPermissions: ["MANAGE_MESSAGES", "READ_MESSAGE_HISTORY"],
   cooldown: 3,
   singleArgs: false,
@@ -85,7 +85,7 @@ module.exports = {
         await message.channel.send(
           message.author.toString() +
             emoji.successEmoji +
-            `Successfully cleaned **${
+            ` Successfully cleaned **${
               messagesDeleted.size
             }** message(s) with these filters: \`${filterUsed.join(", ")}\``
         );

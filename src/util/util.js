@@ -144,7 +144,23 @@ module.exports.round = (number, decimals) => {
   return Number(Math.round(number + "e" + decimals) + "e-" + decimals);
 };
 
-module.exports.urlify = (string) => {
+module.exports.hasDiscordInvite = (string = "") => {
+  const pattern =
+    /(h(\s+)*t(\s+)*t(\s+)*p(\s+)*(s*)(\s+)*:(\s+)*\/(\s+)*\/(\s+)*)*d(\s+)*i(\s+)*s(\s+)*c(\s+)*o(\s+)*r(\s+)*d(\s+)*(\s+)*\.(\s+)*(i(\s+)*o|g(\s+)*g|p(\s+)*l(\s+)*u(\s+)*s|l(\s+)*i(\s+)*n(\s+)*k)(\s+)*\/(\s+)*\w{1,10}/gi;
+
+  const strSplit = string.split(" ");
+  const testArray = [];
+
+  for (const strPiece of strSplit) {
+    const patternReplace = strPiece.replace(pattern, "");
+    testArray.push(patternReplace);
+  }
+
+  if (testArray.join(" ") !== string) return true;
+  else return false;
+};
+
+module.exports.hasURL = (string = "") => {
   // not suitable
   // const pattern = new RegExp(
   //   "^(https?:\\/\\/)?" + // protocol
@@ -162,16 +178,13 @@ module.exports.urlify = (string) => {
   const strSplit = string.split(" ");
   const testArray = [];
 
-  for (let i = 0; i < strSplit.length; i++) {
-    const strPiece = strSplit[i];
-    const patternReplace = strPiece.replace(pattern, function (url) {
-      // eslint-disable-next-line quotes
-      return '<a href="' + url + '">' + url + "</a>";
-    });
+  for (const strPiece of strSplit) {
+    const patternReplace = strPiece.replace(pattern, "");
     testArray.push(patternReplace);
   }
 
-  return testArray.join(" ");
+  if (testArray.join(" ") !== string) return true;
+  else return false;
 };
 
 module.exports.splitString = (string = "", numberOfLines = Number) => {

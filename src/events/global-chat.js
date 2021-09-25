@@ -139,13 +139,13 @@ Please do so by using the \`${await util.getPrefix(
       userId: message.author.id,
     });
 
+    const hasURL = util.hasURL(message.content);
     // urlify the message content so that the bot can see the difference
     // if the bot sees 1 or more differences, it will think that a newbie sent 1 or more links
     // eslint-disable-next-line no-empty
     if (client.isOwner(message.author) || isBotStaff) {
     } else if (gcInfo.messageCount < msgCountForApproval) {
-      const urlify = util.urlify(message.content);
-      if (urlify !== message.content) {
+      if (hasURL) {
         const msg = await message.channel.send(
           `**${message.author.toString()}**, Links are not allowed for new members using this chat.`
         );
@@ -164,8 +164,7 @@ Please do so by using the \`${await util.getPrefix(
       return setTimeout(() => msg.delete(), 5000);
     }
 
-    const urlify = util.urlify(message.content);
-    if (urlify !== message.content) {
+    if (hasURL) {
       if (!safeDomains.some((v) => message.content.toLowerCase().includes(v))) {
         const msg = await message.channel.send(
           `${message.author.toString()}, That site you posted isn't one of the safe domains.\nIf the site is safe, consider suggesting **${
@@ -175,6 +174,15 @@ Please do so by using the \`${await util.getPrefix(
 
         return setTimeout(() => msg.delete(), 5000);
       }
+    }
+
+    const hasDiscordInvite = util.hasDiscordInvite(message.content);
+    if (hasDiscordInvite) {
+      const msg = await message.channel.send(
+        `**${message.author.toString()}**, Server invites are strictly prohibited.\nDon't even try circumventing, the staffs will ban you off immediately.`
+      );
+
+      return setTimeout(() => msg.delete(), 5000);
     }
 
     let placeholderMsg = message.content.toLowerCase();
