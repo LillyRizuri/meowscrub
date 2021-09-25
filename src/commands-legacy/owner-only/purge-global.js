@@ -151,7 +151,7 @@ Abusing this command is considered Discord API abuse, so do not execute the comm
                       errorMessages += ` • Error in "${channel.guild.name}": ${e}\n`;
                   }
                   if (i === channels.length - 1) resolve(successes);
-                }, i * 1000);
+                }, 2000);
               });
             });
 

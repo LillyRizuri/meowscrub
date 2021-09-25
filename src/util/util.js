@@ -173,7 +173,7 @@ module.exports.hasURL = (string = "") => {
   // ); // fragment locator
 
   const pattern =
-    /^((ftp|http|https):\/\/)?(www\.)?([^\s$.?#]+)\.([^...|js|exp\s]{2,})/gm;
+    /^((ftp|http|https):\/\/)?(www\.)?([^\s$.?#]+)\.([^\s]{2,})/gm;
 
   const strSplit = string.split(" ");
   const testArray = [];
@@ -183,6 +183,7 @@ module.exports.hasURL = (string = "") => {
     testArray.push(patternReplace);
   }
 
+  console.log(testArray.join(" "), string);
   if (testArray.join(" ") !== string) return true;
   else return false;
 };
